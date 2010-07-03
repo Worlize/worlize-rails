@@ -1,0 +1,77 @@
+class RoomsController < ApplicationController
+  
+  before_filter :require_user
+  
+  def enter
+    @room = Room.find(params[:id])
+    @user = current_user
+    s = current_user.interactivity_session || InteractivitySession.new
+    if s.update_attributes(
+        :username => @user.username,
+        :user_guid => @user.guid,
+        :room_guid => @room.guid,
+        :world_guid => @room.world.guid,
+        :server_id => 1
+      )
+      flash[:notice] = "Room #{@room.name} entered."
+    else
+      flash[:notice] = "Unable to enter room #{@room.name}."
+    end
+    redirect_to world_rooms_url(@room.world)
+  end
+
+  def show
+  end
+
+  def index
+    @world = World.find(params[:world_id])
+    @rooms = @world.rooms
+  end
+
+  def edit
+    @world = World.find(params[:world_id])
+    @room = @world.rooms.find(params[:id])
+  end
+
+  def new
+    @world = World.find(params[:world_id])
+    @room = @world.rooms.new(:world => @world)
+  end
+
+  def update
+    @world = World.find(params[:world_id])
+    @room = @world.rooms.find(params[:id])
+    if @room.update_attributes(params[:room])
+      flash[:notice] = "Room #{@room.name} successfully updated."
+      redirect_to world_rooms_url(@world)
+    else
+      flash[:notice] = "Unable to update room #{@room.name}"
+      render :edit
+    end
+  end
+
+  def create
+    @world = World.find(params[:world_id])
+    @room = @world.rooms.new(params[:room])
+    if @room.save
+      flash[:notice] = "Room #{@room.name} successfully saved."
+      redirect_to world_rooms_url(@world)
+    else
+      flash[:notice] = "Unable to create room #{@room.name}."
+      render :new
+    end
+  end
+
+  def destroy
+    @world = World.find(params[:world_id])
+    @room = @world.rooms.find(params[:id])
+    if @room.destroy
+      flash[:notice] = "Room #{@room.name} successfully deleted"
+      redirect_to world_rooms_url(@world)
+    else
+      flash[:notice] = "Unable to delete room #{@room.name}"
+      redirect_to world_rooms_url(@world)
+    end
+  end
+
+end

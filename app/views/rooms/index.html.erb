@@ -1,0 +1,27 @@
+<h1><%= @world.name %> - Rooms</h1>
+<% if @rooms.length > 0 %>
+  <table width="300">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for room in @rooms %>
+      <tr>
+        <td><%= room.name %></td>
+        <td>
+        <%= link_to "Edit", edit_world_room_path(@world, room) %> |
+        <%= link_to "Enter", enter_room_path(room), :method => :post %> |
+        <%= link_to "Delete",  world_room_path(@world, room), :method => :delete, :confirm => "Are you sure?" %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <h2>There are no rooms in this worlz</h2>
+<% end %>
+
+<%= link_to "New Room", new_world_room_path(@world) %><br/>
+<%= link_to "Worlz List", worlds_path %>

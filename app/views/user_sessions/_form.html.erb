@@ -1,0 +1,27 @@
+<%= form_for @user_session, :url => user_session_path do |f| %>
+  <% if @user_session.errors.any? %>
+  <div id="errorExplanation">
+    <h2><%= pluralize(@user_session.errors.count, "error") %> prevented login:</h2>
+    <ul>
+    <% @user_session.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+  <% end %>
+  <br/>
+  <table>
+    <tr>
+      <td><%= f.label :username %></td>
+      <td><%= f.text_field :username %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :password %></td>
+      <td><%= f.password_field :password %></td>
+    </tr>
+  </table>
+  <br/>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

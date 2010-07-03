@@ -1,0 +1,316 @@
+/* @override 
+	file:///Users/turtle/Desktop/WorlizeParking/css/styles.css
+	http://localhost:3000/stylesheets/styles.css
+*/
+
+html {
+	background: #000 url(/images/background.jpg) no-repeat center top;
+	width:100%;
+}
+
+@font-face {
+	font-family: 'SansationRegular';
+	src: url('Sansation_Regular-webfont.eot');
+	src: local('☺'), url('Sansation_Regular-webfont.woff') format('woff'), url('Sansation_Regular-webfont.ttf') format('truetype'), url('Sansation_Regular-webfont.svg#webfont') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+a {
+	color: #000;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #555;
+}
+
+header {
+	display: block;
+    text-align: center;
+}
+
+header img {
+	margin: 75px 0px 0px;
+}
+
+header h2 {
+	margin: -70px 0px 30px;
+    font: 36px/40px 'SansationRegular', Arial, sans-serif;letter-spacing: 0;
+	color: #000;
+}
+
+header h3 {
+	font: 24px/30px 'SansationRegular', Arial, sans-serif;letter-spacing: 0;
+	margin: 0px 0px 0px;
+	color: #686767;
+}
+
+footer {
+	width: 100%;
+	display: block;
+	margin: 50px 0px 100px;
+	font: 18px/18px 'SansationRegular', Arial, sans-serif;
+	text-align: center;
+}
+
+footer p#links {
+	display: block;
+	letter-spacing: 0;
+}
+
+footer p#links img {
+	margin: -9px 20px 0px;
+	vertical-align: middle;
+}
+
+footer p#copyright {
+	margin: 95px 0px 0px;
+	color: #666;
+	font-size: 14px;
+}
+
+#thankYou {
+	display: block;
+	position: fixed;
+	top: 100px;
+	left: 200px;
+	width: 540px;
+	height: 462px;
+	background : url(/images/signup-thankyou.png);
+}
+
+#thankYou .closeButton {
+	display: block;
+	position: absolute;
+	width: 121px;
+	height: 38px;
+	top: 360px;
+	left: 330px;
+	cursor: pointer;
+}
+
+#registrationForm {
+	display: block;
+	position: fixed;
+	width: 740px;
+	height: 462px;
+	background : url(/images/signup-form.png) no-repeat;
+}
+
+#developerForm {
+	display: block;
+	position: fixed;
+	width: 740px;
+	height: 462px;
+	background : url(/images/developers.png) no-repeat;
+}
+
+
+#registrationForm h1,
+#registrationForm p,
+#developerForm h1,
+#developerForm p {
+	text-indent: -20000px;
+}
+
+.closeButton {
+	display: block;
+	position: absolute;
+	width: 121px;
+	height: 38px;
+	top: 360px;
+	left: 330px;
+	cursor: pointer;
+}
+.closeButton:hover {
+	background: #FFF;
+	opacity: 0.1;
+	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=10);
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=10)";
+}
+
+
+.closeButtonCorner {
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	background: url(/images/fancy_close.png);
+	top: 39px;
+	left: 471px;
+	cursor: pointer;
+}
+
+#registrationForm input[type='text'], #developerForm input[type='text'] {
+	position: absolute;
+	border: none;
+	background: none;
+	padding: 0px 5px;
+	font-family: Helvetica, Arial, Geneva, sans-serif;
+	font-size: 18px;
+	color: #025976;
+}
+
+#registrationForm .name_field, #developerForm .name_field {
+	top: 217px;
+	left: 167px;
+	width: 264px;
+	height: 25px;
+}
+
+#registrationForm .email_field, #developerForm .email_field {
+	top: 253px;
+	left: 167px;
+	width: 264px;
+	height: 25px;
+}
+
+#registrationForm .twitter_field, #developerForm .twitter_field {
+	top: 289px;
+	left: 167px;
+	width: 174px;
+	height: 25px;
+}
+
+#registrationForm .beta_field {
+	top: 326px;
+	left: 206px;
+	width: 135px;
+	height: 25px;
+}
+
+#developerForm .company_field {
+    top: 326px;
+	left: 196px;
+	width: 145px;
+	background: #FAA;
+	height: 25px;
+}
+
+#registrationForm .submit_button, #developerForm .submit_button {
+	position: absolute;
+	top: 362px;
+	left: 321px;
+}
+
+#registrationForm .errorBubble, #developerForm .errorBubble {
+	position: absolute;
+	font-family: SansationRegular, Helvetica, Arial, Geneva, sans-serif;
+	font-size: 17px;
+	color: #FFF;
+	text-shadow: #361111 1px 1px 1px;
+
+}
+
+.errorBubble .leftEdge {
+	position: absolute;
+	top: 0px;
+	left: -46px;
+	width: 46px;
+	height: 57px;
+	background: url(/images/error-bubble-left.png) no-repeat;
+}
+
+.errorBubble .middle {
+	position: relative;
+	height: 45px;
+	text-indent: -25px;
+	padding-top: 11px;
+	background: url(/images/error-bubble-middle.png) repeat-x;
+}
+
+.errorBubble .rightEdge {
+	position: absolute;
+	top:0px;
+	right: -23px;
+	width: 23px;
+	height: 45px;
+	background: url(/images/error-bubble-right.png) no-repeat;
+}
+
+#registrationForm .nameError, #developerForm .nameError {
+	top: 187px;
+	left: 454px;
+	position: absolute;
+}
+
+#registrationForm .emailError, #developerForm .emailError {
+	top: 225px;
+	left: 454px;
+	position: absolute;
+}
+
+#contactUs {
+	position: fixed;
+	width: 540px;
+	height: 462px;
+	background: url(/images/contact.png);
+	font-family: SansationRegular;
+	font-size: 20px;
+}
+
+#contactUs h1 {
+	text-indent: -20000px;
+}
+
+#contactUs h2 {
+	margin: 165px 0px 30px 97px;
+	font-size: 25px;
+}
+
+#contactUs p {
+	margin: 0px 100px 0px;
+}
+
+#contactUs a {
+	color: #015f7e;
+	font-weight: bold;
+}
+
+#contactUs a:hover {
+	text-decoration: underline;
+}
+
+#pressWrapper {
+	background: #FFF;
+	width: 900px;
+	margin: 30px auto;
+	border: 2px solid black;
+	padding: 15px;
+}
+
+#pressCorner > h1 {
+	font: 28px SansationRegular;
+	color: #0995d7;
+	margin: 10px 0px;
+}
+
+#pressWrapper a {
+	color: #0995d7;
+}
+
+#pressRelease {
+	display: block;
+	padding: 30px;
+	font-family: Arial, Helvetica, "Helvetica Neue", Geneva, sans-serif;
+}
+
+#pressRelease > h1 {
+	text-align: center;
+	font-size: 23px;
+	padding: 0px 100px;
+}
+
+#pressRelease > h2 {
+	text-align: center;
+	font-size:  18px;
+	padding: 10px 100px 20px;
+}
+
+#pressRelease p {
+	margin: 20px 0px;
+}
+
+#pressRelease .boilerPlate > h1, #pressRelease .mediaContact > h1 {
+	font-weight:bold
+}

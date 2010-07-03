@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  guid: MyString
+  name: MyString
+  world_id: 
+
+two:
+  guid: MyString
+  name: MyString
+  world_id: 

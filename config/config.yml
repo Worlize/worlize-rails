@@ -1,0 +1,27 @@
+global:
+    redis_servers:
+        presence:
+            host: localhost
+            db: 0
+        room_server_assignments:
+            host: localhost
+            db: 1
+        room_definitions:
+            host: localhost
+            db: 2
+        cache:
+            host: localhost
+            db: 3
+        pubsub:
+            host: localhost
+            db: 4
+        rails_session:
+            host: localhost
+            db: 5
+        assets:
+            host: localhost
+            db: 6
+production: {}
+development: {}
+test: {}
+

@@ -1,0 +1,30 @@
+<h1><%= @world.name %> - Edit room</h1>
+<section class="form">
+  <%= form_for [:world, @room], :url => world_room_url(@world, @room), :method => :put do |f| %>
+    <% if @room.errors.any? %>
+    <div class="errorExplanation">
+      <h2><%= pluralize(@room.errors.count, "error") %> prohibited this room from being saved:</h2>
+      <ul>
+      <% @room.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+    <% end %>
+  
+    <table width="550">
+      <tr>
+        <td class="fieldLabel">
+          <%= f.label :name %>
+        </td>
+        <td class="fieldCell">
+          <%= f.text_field :name %>
+        </td>
+      </tr>
+    </table>
+    <br/>
+    <%= f.submit %>
+  <% end %>
+</section>
+
+<%= link_to "Back to rooms", world_rooms_path(@world) %>

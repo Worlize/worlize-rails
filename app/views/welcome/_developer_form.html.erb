@@ -1,0 +1,23 @@
+<section id="developerForm" style="display:none;">
+  <h1>Join our Beta</h1>
+  <p>Enter your name and email and we'll notify you when you're accepted!</p>
+  <div class="closeButtonCorner"></div>
+  <%= form_for(@developerRegistration, :html => { :id => "developerRegistrationForm" }) do |f| %>
+      <%= f.text_field :name, :class => "name_field" %>
+      <%= f.text_field :email, :class => "email_field" %>
+      <%= f.text_field :twitter, :class => "twitter_field" %>
+      <%= f.text_field :company, :class => "company_field" %>
+      <%= f.hidden_field :developer, :value => true %>
+      <%= image_submit_tag "join-button.png", :class => 'submit_button' %>
+  <% end %>
+  <div class="nameError errorBubble" style="display:none;">
+    <div class="leftEdge"></div>
+    <div class="rightEdge"></div>
+    <div class="middle">Name is required.</div>
+  </div>
+  <div class="emailError errorBubble" style="display:none;">
+    <div class="leftEdge"></div>
+    <div class="rightEdge"></div>
+    <div class="middle">Email is not valid.</div>
+  </div>
+</section>

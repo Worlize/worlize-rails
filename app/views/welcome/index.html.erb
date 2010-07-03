@@ -1,0 +1,182 @@
+<header>
+  <img src="/images/worlize-logo.png" alt="Worlize®">
+  <h2>Your world realized.</h2>
+  <h3>Coming Fall 2010</h3>
+</header>
+<%= render 'registration_form' %>
+<%= render 'contact_us' %>
+<%= render 'developer_form' %>
+<footer>
+  <p id="links">
+    <a href="/registrations/new" id="joinBetaLink">Join our Beta</a>
+    <img src="/images/bullet.png" alt="">
+    <a href="/press/release">Press Corner</a>
+    <img src="/images/bullet.png" alt="">
+    <a href="/registrations/new?developer=true" id="developersLink">Developers</a>
+    <img src="/images/bullet.png" alt="">
+    <a href="#" id="contactLink">Contact</a>
+  </p>
+  <p id="copyright">Copyright © 2010 Worlize Inc.</p>
+</footer>
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function(event) {
+    function showForm() {
+      var windowWidth = $(window).width();
+      var windowHeight = $(window).height();
+      var width = 540;
+      var height = 462;
+
+      var position = {
+        left: windowWidth/2 - width/2,
+        top: windowHeight/2 - height/2
+      };
+
+      $('#registrationForm').css(position);
+      $('#registrationForm').fadeIn('fast');
+      $('#registrationForm form input[type="text"]').val("");
+      $('#registrationForm .emailError').hide();
+      $('#registrationForm .nameError').hide();
+    }
+    
+    function showDeveloperForm() {
+      var windowWidth = $(window).width();
+      var windowHeight = $(window).height();
+      var width = 540;
+      var height = 462;
+
+      var position = {
+        left: windowWidth/2 - width/2,
+        top: windowHeight/2 - height/2
+      };
+
+      $('#developerForm').css(position);
+      $('#developerForm').fadeIn('fast');
+      $('#developerForm form input[type="text"]').val("");
+      $('#developerForm .emailError').hide();
+      $('#developerForm .nameError').hide();
+    }
+    
+    function showContact() {
+      var windowWidth = $(window).width();
+      var windowHeight = $(window).height();
+      var width = 540;
+      var height = 462;
+
+      var position = {
+        left: windowWidth/2 - width/2,
+        top: windowHeight/2 - height/2
+      };
+
+      $('#contactUs').css(position);
+      $('#contactUs').fadeIn('fast');
+    }
+    
+    function fadeContact() {
+      $('#contactUs').fadeOut('fast');      
+    }
+
+    function fadeForm() {
+      $('#registrationForm, #thankYou').fadeOut('fast');      
+    }
+    
+    function fadeDeveloperForm() {
+      $('#developerForm, #thankYou').fadeOut('fast');      
+    }
+    
+    function closeForm() {
+      $('#registrationForm, #developerForm, #thankYou').hide();
+    }
+    
+    function showThankYou() {
+      var windowWidth = $(window).width();
+      var windowHeight = $(window).height();
+      var width = 540;
+      var height = 462;
+
+      var position = {
+        left: windowWidth/2 - width/2,
+        top: windowHeight/2 - height/2
+      };
+
+      $('#thankYou').css(position);
+      $('#thankYou').show();
+    }
+
+
+    $('a#joinBetaLink').click(function(event) {
+      event.preventDefault();
+      showForm();
+    });
+    
+    $('a#developersLink').click(function(event) {
+      event.preventDefault();
+      showDeveloperForm();
+    });
+    
+    $('a#contactLink').click(function(event) {
+      event.preventDefault();
+      showContact();
+    });
+    
+    $('#registrationForm .closeButtonCorner, #thankYou .closeButton, #thankYou .closeButtonCorner').click(function(event) {
+      fadeForm();
+    });
+    
+    $('#developerForm .closeButtonCorner, #thankYou .closeButton, #thankYou .closeButtonCorner').click(function(event) {
+      fadeDeveloperForm();
+    });
+    
+    $('#contactUs .closeButtonCorner, #contactUs .closeButton').click(function(event) {
+      fadeContact();
+    });
+    
+    $('#registrationForm .email_field').keydown(function(event) {
+      $('#registrationForm .emailError').fadeOut('fast');
+    });
+    
+    $('#registrationForm .name_field').keydown(function(event) {
+      $('#registrationForm .nameError').fadeOut('fast');
+    });
+    
+    $('#developerForm .email_field').keydown(function(event) {
+      $('#developerForm .emailError').fadeOut('fast');
+    });
+    
+    $('#developerForm .name_field').keydown(function(event) {
+      $('#developerForm .nameError').fadeOut('fast');
+    });
+    
+    $('#registrationForm form, #developerForm form').submit(function(event) {
+      var self = this;
+      $('#registration_developer').val('true');
+      $.ajax({
+        url: "/registrations",
+        dataType: "json",
+        type: "post",
+        data: $(this).serialize(),
+        success: function(data) {
+          if (data.success) {
+            closeForm();
+            showThankYou();
+          }
+          else {
+            if (data.errors.name) {
+              $(self).parent().children('.nameError').fadeIn('fast');
+            }
+            else {
+              $(self).parent().children('.nameError').fadeOut('fast');
+            }
+            if (data.errors.email) {
+              $(self).parent().children('.emailError').fadeIn('fast');
+            }
+            else {
+              $(self).parent().children('.emailError').fadeOut('fast');
+            }
+          }
+        }
+      });
+      return false;
+    });
+  });
+
+</script>
