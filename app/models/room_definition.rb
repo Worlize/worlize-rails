@@ -13,7 +13,6 @@ class RoomDefinition < RedisModel
 
   validates :guid, :presence => true
   validates :world_guid, :presence => true
-  validates :background_asset, :presence => true
 
   before_create :assign_guid
   

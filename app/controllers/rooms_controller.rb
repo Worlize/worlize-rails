@@ -13,6 +13,12 @@ class RoomsController < ApplicationController
         :world_guid => @room.world.guid,
         :server_id => 1
       )
+      Worlize::PubSub.publish('control:interact4', {
+        :msg => "instantiate_room",
+        :data => {
+          :room_guid => @room.guid
+        }
+      })
       flash[:notice] = "Room #{@room.name} entered."
     else
       flash[:notice] = "Unable to enter room #{@room.name}."
