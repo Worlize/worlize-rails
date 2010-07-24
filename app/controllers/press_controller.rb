@@ -1,2 +1,0 @@
-class PressController < ApplicationController
-end
