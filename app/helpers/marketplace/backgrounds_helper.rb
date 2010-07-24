@@ -1,0 +1,2 @@
+module Marketplace::BackgroundsHelper
+end

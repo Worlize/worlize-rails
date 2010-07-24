@@ -1,2 +1,4 @@
-require "#{Rails.root}/lib/pub_sub.rb"
-require "#{Rails.root}/lib/redis_model.rb"
+require "redis_connection_pool"
+require "pub_sub"
+require "redis_model"
+require "interact_server_manager"

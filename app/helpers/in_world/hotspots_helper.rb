@@ -1,0 +1,2 @@
+module InWorld::HotspotsHelper
+end

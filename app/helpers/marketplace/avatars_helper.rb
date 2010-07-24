@@ -1,0 +1,2 @@
+module Marketplace::AvatarsHelper
+end

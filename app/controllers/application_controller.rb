@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery
+  protect_from_forgery :secret => Rails.application.config.secret_token
   layout 'application'
   
   helper :all

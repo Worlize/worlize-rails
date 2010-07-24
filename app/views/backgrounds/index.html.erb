@@ -1,0 +1,12 @@
+<h1>Background Image Assets</h1>
+
+  <% for background in @backgrounds do %>
+  <p><%= link_to background.name, background_path(background) %></p>
+  <% end %>
+
+  <% if @backgrounds.length == 0 %>
+  <p>There are no backgrounds to show</p>
+  <% end %>
+  
+<br/>
+<%= link_to "New Background", new_background_path %>

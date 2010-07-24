@@ -1,4 +1,7 @@
 global:
+    initial_currency:
+        coins: 15000
+        bucks: 50
     redis_servers:
         presence:
             host: localhost
@@ -21,6 +24,9 @@ global:
         assets:
             host: localhost
             db: 6
+        currency:
+            host: localhost
+            db: 7
 production: {}
 development: {}
 test: {}

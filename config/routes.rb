@@ -1,21 +1,35 @@
 Worlize::Application.routes.draw do |map|
 
   resources :registrations
-  
-  match 'press/release', :to => "press#release"
+  resources :backgrounds
 
   root :to => "welcome#index"
 
-  resources :users
-  resources :worlds do
-    resources :rooms do
+  namespace "marketplace" do
+    resources :backgrounds do
       member do
-        post :enter
+        post :buy
+        get :buy
+        put :test
+      end
+    end
+  end
+
+  resources :users
+  
+  namespace "admin" do
+    resources :worlds do
+      resources :rooms do
+        member do
+          post :enter
+        end
       end
     end
   end
   
   resources :rooms do
+    resources :hotspots, :controller => 'in_world/hotspots'
+    resources :objects, :controller => 'in_world/objects'
     member do
       post :enter
     end
@@ -25,6 +39,8 @@ Worlize::Application.routes.draw do |map|
   match 'login' => 'user_sessions#new', :as => :login
   match 'logout' => 'user_sessions#destroy', :as => :logout
   match 'signup' => 'users#new', :as => :signup
+
+  match 'enter', :to => "welcome#enter", :as => :enter_world
   
 
   # The priority is based upon order of creation:

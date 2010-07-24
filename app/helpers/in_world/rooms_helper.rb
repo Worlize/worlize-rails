@@ -1,0 +1,2 @@
+module InWorld::RoomsHelper
+end

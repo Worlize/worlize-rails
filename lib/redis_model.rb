@@ -11,7 +11,7 @@ class RedisModel
   end
 
   def self.attribute_list
-    @attribute_list ||= {}
+    @attribute_list ||= []
   end
   
   def self.redis_server(newValue)
@@ -38,16 +38,21 @@ class RedisModel
     @schema_version
   end
 
-  def self.initialize_attributes(*attrs)
+  def self.create_accessor(attribute_name)
+    attribute_name = attribute_name.to_s
     # Build accessors with hooks into ActiveModel::Dirty
-    self.attribute_list = attrs
+    define_method attribute_name, lambda { attributes[attribute_name] }
+    define_method "#{attribute_name}=", lambda { |newvalue|
+      self.send "#{attribute_name}_will_change!"
+      attributes[attribute_name] = newvalue
+    }
+  end
+
+  def self.initialize_attributes(*attrs)
+    self.attribute_list ||= []
+    self.attribute_list.concat attrs
     self.attribute_list.each do |attribute|
-      attribute_name = attribute.to_s
-      define_method attribute_name, lambda { attributes[attribute_name] }
-      define_method "#{attribute_name}=", lambda { |newvalue|
-        self.send "#{attribute_name}_will_change!"
-        attributes[attribute_name] = newvalue
-      }
+      self.create_accessor(attribute)
     end
     define_attribute_methods self.attribute_list
     define_model_callbacks :create, :update, :destroy
@@ -157,21 +162,16 @@ class RedisModel
     nil
   end
   
-  def self.redis
-    @r ||= begin
-      r = Redis.new(
-        :host => Worlize.config['redis_servers'][self.get_redis_server]['host'] || 'localhost',
-        :port => Worlize.config['redis_servers'][self.get_redis_server]['port'] || 6379
-      )
-      r.select Worlize.config['redis_servers'][self.get_redis_server]['db']
-      r
-    end
-  end
+
   
   private
 
   def redis
     self.class.redis
+  end
+  
+  def self.redis
+    Worlize::RedisConnectionPool.get_client(self.get_redis_server)
   end
 
   def _actually_save

@@ -9,7 +9,123 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100628010435) do
+ActiveRecord::Schema.define(:version => 20100721013841) do
+
+  create_table "avatar_instances", :force => true do |t|
+    t.string   "guid",       :limit => 36
+    t.integer  "avatar_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "avatar_instances", ["guid"], :name => "index_avatar_instances_on_guid"
+
+  create_table "avatars", :force => true do |t|
+    t.string   "guid",         :limit => 36
+    t.integer  "creator_id"
+    t.string   "name",         :limit => 64
+    t.integer  "offset_x",     :limit => 8
+    t.integer  "offset_y",     :limit => 8
+    t.integer  "width",        :limit => 8
+    t.integer  "height",       :limit => 8
+    t.boolean  "active",                     :default => true
+    t.integer  "sale_coins"
+    t.string   "image"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "sale_bucks"
+    t.integer  "return_coins"
+  end
+
+  add_index "avatars", ["guid"], :name => "index_avatars_on_guid"
+
+  create_table "background_instances", :force => true do |t|
+    t.string   "guid",          :limit => 36
+    t.integer  "background_id"
+    t.integer  "room_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "background_instances", ["guid"], :name => "index_background_instances_on_guid"
+
+  create_table "backgrounds", :force => true do |t|
+    t.integer  "creator_id"
+    t.string   "guid",         :limit => 36
+    t.string   "name",         :limit => 64
+    t.integer  "width",        :limit => 8
+    t.integer  "height",       :limit => 8
+    t.boolean  "active",                     :default => true
+    t.integer  "sale_coins"
+    t.string   "image"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "sale_bucks"
+    t.integer  "return_coins"
+  end
+
+  add_index "backgrounds", ["guid"], :name => "index_backgrounds_on_guid"
+
+  create_table "in_world_object_instances", :force => true do |t|
+    t.string   "guid",               :limit => 36
+    t.integer  "in_world_object_id"
+    t.integer  "user_id"
+    t.integer  "room_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "in_world_object_instances", ["guid"], :name => "index_in_world_object_instances_on_guid"
+
+  create_table "in_world_objects", :force => true do |t|
+    t.string   "guid",         :limit => 36
+    t.integer  "creator_id"
+    t.string   "name",         :limit => 64
+    t.integer  "offset_x",     :limit => 8
+    t.integer  "offset_y",     :limit => 8
+    t.integer  "width",        :limit => 8
+    t.integer  "height",       :limit => 8
+    t.boolean  "active",                     :default => true
+    t.integer  "sale_coins"
+    t.string   "image"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "sale_bucks"
+    t.integer  "return_coins"
+  end
+
+  add_index "in_world_objects", ["guid"], :name => "index_in_world_objects_on_guid"
+
+  create_table "prop_instances", :force => true do |t|
+    t.string   "guid",       :limit => 36
+    t.integer  "prop_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "prop_instances", ["guid"], :name => "index_prop_instances_on_guid"
+
+  create_table "props", :force => true do |t|
+    t.string   "guid",         :limit => 36
+    t.integer  "creator_id"
+    t.string   "name",         :limit => 64
+    t.integer  "offset_x",     :limit => 8
+    t.integer  "offset_y",     :limit => 8
+    t.integer  "width",        :limit => 8
+    t.integer  "height",       :limit => 8
+    t.boolean  "active",                     :default => true
+    t.integer  "sale_coins"
+    t.string   "image"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "sale_bucks"
+    t.integer  "return_coins"
+  end
+
+  add_index "props", ["guid"], :name => "index_props_on_guid"
 
   create_table "registrations", :force => true do |t|
     t.string   "name"
@@ -42,6 +158,23 @@ ActiveRecord::Schema.define(:version => 20100628010435) do
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
+  create_table "taggings", :force => true do |t|
+    t.integer  "tag_id"
+    t.integer  "taggable_id"
+    t.string   "taggable_type"
+    t.integer  "tagger_id"
+    t.string   "tagger_type"
+    t.string   "context"
+    t.datetime "created_at"
+  end
+
+  add_index "taggings", ["tag_id"], :name => "index_taggings_on_tag_id"
+  add_index "taggings", ["taggable_id", "taggable_type", "context"], :name => "index_taggings_on_taggable_id_and_taggable_type_and_context"
+
+  create_table "tags", :force => true do |t|
+    t.string "name"
+  end
 
   create_table "users", :force => true do |t|
     t.string   "guid",                :limit => 36

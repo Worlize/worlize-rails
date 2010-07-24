@@ -1,5 +1,6 @@
 source :rubygems
 
+gem 'mongrel'
 gem 'rails', '3.0.0.beta4'
 
 # Bundle edge Rails instead:
@@ -7,17 +8,33 @@ gem 'rails', '3.0.0.beta4'
 
 #gem 'sqlite3-ruby', :require => 'sqlite3'
 
+
 gem 'mysql'
 gem 'guid'
 gem 'redis'
 gem 'yajl-ruby', :require => 'yajl'
+gem 'acts-as-taggable-on'
+gem 'RedCloth'
+gem 'carrierwave', :git => 'git://github.com/jnicklas/carrierwave.git'
+gem 'rmagick', :require => 'RMagick'
+gem 'aws'
 
-# gem 'authlogic', '2.1.5'
-gem "authlogic", :git => "git://github.com/odorcicd/authlogic.git", :branch => "rails3"
+#gem 'aws-s3', :require => 'aws/s3'
+#gem 'right_aws'
+#gem 'paperclip'
 
-# gem 'redis-store', '1.0.0.beta2' # seems to be broken
-    # redis-store sets all sesison id's to "true" -- wtf?!
-# gem 'redis-session-store'
+# I applied a couple manual fixes to be able to use the official release of
+# authlogic rather than an unknown and less-maintained fork.
+# gem "authlogic", :git => "git://github.com/odorcicd/authlogic.git", :branch => "rails3"
+
+gem 'authlogic', '2.1.5'
+
+# seems to be broken: sets all sesison id's to "true" -- wtf?!
+#gem 'redis-store', '1.0.0.beta2'
+
+# This version doesn't even initialize properly in rails 3
+#gem 'redis-store', :git => "git://github.com/jodosha/redis-store.git", :branch => "master"
+
 
 # Use unicorn as the web server
 # gem 'unicorn'
@@ -29,7 +46,6 @@ gem "authlogic", :git => "git://github.com/odorcicd/authlogic.git", :branch => "
 # gem 'bj'
 # gem 'nokogiri', '1.4.1'
 # gem 'sqlite3-ruby', :require => 'sqlite3'
-gem 'aws-s3', :require => 'aws/s3'
 
 # Bundle gems for certain environments:
 # gem 'rspec', :group => :test

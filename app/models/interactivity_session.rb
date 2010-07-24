@@ -14,6 +14,7 @@ class InteractivitySession
                   :world_guid,
                   :room_guid,
                   :username,
+                  :server_id
                  ]
   
   @@schema_version = 1
@@ -160,14 +161,7 @@ class InteractivitySession
   end
   
   def self.redis
-    @r ||= begin
-      r = Redis.new(
-        :host => Worlize.config['redis_servers']['presence']['host'] || 'localhost',
-        :port => Worlize.config['redis_servers']['presence']['port'] || 6379
-      )
-      r.select Worlize.config['redis_servers']['presence']['db']
-      r
-    end
+    Worlize::RedisConnectionPool.get_client('presence')
   end
   
   private
