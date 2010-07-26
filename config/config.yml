@@ -27,6 +27,9 @@ global:
         currency:
             host: localhost
             db: 7
+        preferences:
+            host: localhost
+            db: 8
 production: {}
 development: {}
 test: {}

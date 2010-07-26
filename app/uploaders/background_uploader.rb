@@ -28,7 +28,8 @@ class BackgroundUploader < CarrierWave::Uploader::Base
   end
   
   version :medium do
-    process :resize_to_fill => [275, 165]
+    # process :resize_to_fill => [275, 165]
+    process :resize_to_fill => [200, 120]
   end
 
   # Process files as they are uploaded.

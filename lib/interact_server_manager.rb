@@ -33,7 +33,11 @@ module Worlize
     end
 
     def find_least_loaded_server_id
-      sorted_servers = active_servers.sort_by { |server| server['user_count'] }
+      server_list = active_servers
+      if server_list.empty?
+        raise RuntimeError, "There are no interactivity servers running."
+      end
+      sorted_servers = server_list.sort_by { |server| server['user_count'] }
       sorted_servers.first['server_id']
     end
 

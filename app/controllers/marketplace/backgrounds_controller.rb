@@ -12,7 +12,7 @@ class Marketplace::BackgroundsController < ApplicationController
         :sale_bucks => background.sale_bucks,
         :thumbnail => background.image.thumb.url,
         :medium => background.image.medium.url,
-        :image => background.image.url
+        :fullsize => background.image.url
       }
     end
     

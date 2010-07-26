@@ -17,6 +17,8 @@ Worlize::Application.routes.draw do |map|
 
   resources :users
   
+  resource :preferences
+  
   namespace "admin" do
     resources :worlds do
       resources :rooms do
