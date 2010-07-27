@@ -1,0 +1,2 @@
+module MyLocker::BackgroundsHelper
+end

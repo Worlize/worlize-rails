@@ -1,7 +1,6 @@
 Worlize::Application.routes.draw do |map|
 
   resources :registrations
-  resources :backgrounds
 
   root :to => "welcome#index"
 
@@ -14,12 +13,17 @@ Worlize::Application.routes.draw do |map|
       end
     end
   end
+  
+  namespace "my_locker" do
+    resources :backgrounds
+  end
 
   resources :users
   
   resource :preferences
   
   namespace "admin" do
+    resources :backgrounds
     resources :worlds do
       resources :rooms do
         member do
