@@ -2,32 +2,40 @@ class RoomsController < ApplicationController
   
   before_filter :require_user
   
-  def show
-    redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
-    room_definition_text = redis.hget 'roomDefinition', params[:id]
-
-    if room_definition_text
-      begin
-        room_definition = Yajl::Parser.parse(room_definition_text)
-        success = true
-      rescue
-        error_description = 'Unable to decode room definition'
-        success = false
+  def index
+    world = World.find_by_guid(params[:world_id])
+    if world
+      rooms = world.rooms.map do |room|
+        {
+          :name => room.name,
+          :guid => room.guid,
+          :user_count => (rand * 15).round
+        }
       end
-    else
-      error_description = 'Unable to locate room definition.'
-      success = false
-    end
-    
-    room_definition[:guid] = params[:id]
 
-    if success
       render :json => Yajl::Encoder.encode({
-        :success => success,
-        :data => room_definition
+        :success => true,
+        :data => rooms
       })
     else
-      render :json => Yajl::Encoder.encode({ :success => false, :description => error_description })
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => "There is no such world."
+      })
+    end
+  end
+  
+  def show
+    room_definition = RoomDefinition.find(params[:id])
+    
+    if room_definition
+      render :json => Yajl::Encoder.encode({
+        :success => true,
+        # make sure to include hotspots in the output
+        :data => room_definition.serializable_hash.merge({'hotspots' => room_definition.hotspots})
+      })
+    else
+      render :json => Yajl::Encoder.encode({ :success => false, :description => "Unable to load room" })
     end
     
   end
@@ -35,8 +43,6 @@ class RoomsController < ApplicationController
   def enter
     if params[:id].length == 36
       @room = Room.find_by_guid(params[:id])
-    else
-      @room = Room.find(params[:id])
     end
     @user = current_user
     interact_server_id = Worlize::InteractServerManager.instance.server_for_room(@room.guid)
@@ -54,7 +60,7 @@ class RoomsController < ApplicationController
           redirect_to enter_world_url
         end
         format.json do
-          render :json => { :success => true, :server_id => interact_server_id }
+          render :json => { :success => true, :interactivity_session => s.serializable_hash }
         end
       else
         format.html do
@@ -96,7 +102,10 @@ class RoomsController < ApplicationController
     
     if params[:background_instance_guid]
       bi = BackgroundInstance.find_by_guid(params[:background_instance_guid])
-      room.background_instance = bi if bi
+      unless bi.nil?
+        room.background_instance = bi
+        room.room_definition.background = bi.background.image.url
+      end
     end
     
     if room.save

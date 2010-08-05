@@ -31,13 +31,17 @@ module Worlize
       end
       assigned_server_id
     end
+    
+    def broadcast_to_room(room_guid, message)
+      Worlize::PubSub.publish("room:#{room_guid}", Yajl::Encoder.encode(message))
+    end
 
     def find_least_loaded_server_id
       server_list = active_servers
       if server_list.empty?
         raise RuntimeError, "There are no interactivity servers running."
       end
-      sorted_servers = server_list.sort_by { |server| server['user_count'] }
+      sorted_servers = server_list.sort_by { |server| server['session_count'] }
       sorted_servers.first['server_id']
     end
 

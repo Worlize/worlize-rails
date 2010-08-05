@@ -33,6 +33,12 @@ Worlize::Application.routes.draw do |map|
     end
   end
   
+  resources :worlds do
+    resources :rooms do
+      
+    end
+  end
+  
   resources :rooms do
     resources :hotspots, :controller => 'in_world/hotspots'
     resources :objects, :controller => 'in_world/objects'

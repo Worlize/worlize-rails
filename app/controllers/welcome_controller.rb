@@ -10,10 +10,10 @@ class WelcomeController < ApplicationController
   
   def enter
     @configJSON = Yajl::Encoder.encode({
-      "userGuid" => current_user.guid,
-      "sessionGuid" => current_user.interactivity_session.guid,
-      "userName" => current_user.username,
-      "authenticityToken" => form_authenticity_token
+      "user_guid" => current_user.guid,
+      "username" => current_user.username,
+      "interactivity_session" => current_user.interactivity_session.serializable_hash,
+      "authenticity_token" => form_authenticity_token
     })
     render :enter, :layout => false
   end

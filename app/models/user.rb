@@ -12,6 +12,14 @@ class User < ActiveRecord::Base
     #config options here
   end
   
+  def can_edit?(item)
+    if item.respond_to? 'can_be_edited_by?'
+      item.can_be_edited_by?(self)
+    else
+      false
+    end
+  end
+  
   def coins
     redis = Worlize::RedisConnectionPool.get_client(:currency)
     redis.get("coins:#{self.guid}").to_i

@@ -9,6 +9,9 @@ Worlize::Application.configure do
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
 
+  # Log deprecation notices
+  config.active_support.deprecation = :log
+
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
   config.action_view.debug_rjs             = true
@@ -16,6 +19,5 @@ Worlize::Application.configure do
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
-  
-  config.foo = "bar"
+
 end

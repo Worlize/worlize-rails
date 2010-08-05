@@ -47,7 +47,7 @@ class RedisModel
       attributes[attribute_name] = newvalue
     }
   end
-
+  
   def self.initialize_attributes(*attrs)
     self.attribute_list ||= []
     self.attribute_list.concat attrs
@@ -64,7 +64,8 @@ class RedisModel
   
   def set_attributes(attributes = {})
     attributes.each do |name, value|
-      send("#{name}=", value) if self.class.attribute_list.include?(name.to_sym)
+      method_name = "#{name.to_s}="
+      send(method_name, value) if self.respond_to?(method_name)
     end
   end
   
@@ -178,7 +179,7 @@ class RedisModel
     return false unless valid?
     success = false
     begin
-      hash = self.serializable_hash.merge({ "schema_version" => self.class.get_schema_version })
+      hash = self.serializable_hash.merge({ "_sv_" => self.class.get_schema_version })
       redis.hset self.class.get_redis_hash_key, guid, Yajl::Encoder.encode(hash)
         success = true
     rescue
