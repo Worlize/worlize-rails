@@ -19,6 +19,8 @@ gem 'carrierwave', :git => 'git://github.com/jnicklas/carrierwave.git'
 gem 'rmagick', :require => 'RMagick'
 gem 'aws'
 
+gem 'acts_as_list'
+
 #gem 'aws-s3', :require => 'aws/s3'
 #gem 'right_aws'
 #gem 'paperclip'
