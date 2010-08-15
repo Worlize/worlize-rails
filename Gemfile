@@ -1,6 +1,6 @@
 source :rubygems
 
-gem 'mongrel'
+#gem 'mongrel'
 gem 'rails', '3.0.0.rc'
 
 # Bundle edge Rails instead:
@@ -39,7 +39,7 @@ gem 'authlogic', '2.1.5'
 
 
 # Use unicorn as the web server
-# gem 'unicorn'
+gem 'unicorn'
 
 # Deploy with Capistrano
 # gem 'capistrano'
