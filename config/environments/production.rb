@@ -3,7 +3,9 @@ Worlize::Application.configure do
 
   # The production environment is meant for finished, "live" apps.
   # Code is not reloaded between requests
-  config.cache_classes = true
+  # FIXME: This should be true in production but there seems to be a small bug with
+  # this feature in rails 3 rc1 at the moment....
+  config.cache_classes = false
 
   # Full error reports are disabled and caching is turned on
   config.consider_all_requests_local       = false
@@ -30,6 +32,9 @@ Worlize::Application.configure do
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
   config.serve_static_assets = true
+  
+  # Notify deprecation notices
+  config.active_support.deprecation = :notify
 
   # Enable serving of images, stylesheets, and javascripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"

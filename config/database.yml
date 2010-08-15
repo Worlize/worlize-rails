@@ -20,7 +20,7 @@ test:
 production:
   adapter: mysql
   encoding: utf8
-  database: worlize_production
+  database: worlize_development
   username: worlize
-  password: f0934c3jfj
-  socket: /var/run/mysqld/mysqld.sock
+  password: abcdefg
+  socket: /tmp/mysql.sock

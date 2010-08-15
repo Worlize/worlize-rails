@@ -46,54 +46,55 @@ class InWorld::ObjectsController < ApplicationController
     })
   end
   
-  def update
-    x = params[:x]
-    y = params[:y]
-    dest = params[:dest] if params[:dest] && params[:dest].length == 36
-    redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
-
-    oi_guid = params[:id]    
-    world = current_user.worlds.first
-    room = world.rooms.find_by_guid(params[:room_id])
-    if room && oi_guid
-    
-      begin
-        rd = Yajl::Parser.parse(redis.hget('roomDefinition', room.guid))
-        object_instances = rd['object_instances'] || []
-      
-        object_instances.each do |instance|
-          if instance['guid'] == oi_guid
-            instance['x'] = x if x
-            instance['y'] = y if y
-            if dest
-              instance['dest'] = dest
-            else
-              instance.delete('dest')
-            end
-            break
-          end
-        end
-      
-        redis.hset('roomDefinition', room.guid, Yajl::Encoder.encode(rd))
-        Worlize::PubSub.publish(
-          "room:#{self.guid}",
-          '{"msg":"room_definition_updated"}'
-        )
-      
-        render :json => Yajl::Encoder.encode({
-          :success => true
-        }) and return
-      rescue => e
-        render :json => Yajl::Encoder.encode({
-          :success => false,
-          :description => e.message
-        }) and return
-      end
-      
-    render :json => Yajl::Encoder.encode({
-      :success => false
-    })
-  end
+  # FIXME: Track down the syntax error in here and re-enable it
+  # def update
+  #   x = params[:x]
+  #   y = params[:y]
+  #   dest = params[:dest] if params[:dest] && params[:dest].length == 36
+  #   redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
+  # 
+  #   oi_guid = params[:id]    
+  #   world = current_user.worlds.first
+  #   room = world.rooms.find_by_guid(params[:room_id])
+  #   if room && oi_guid
+  #   
+  #     begin
+  #       rd = Yajl::Parser.parse(redis.hget('roomDefinition', room.guid))
+  #       object_instances = rd['object_instances'] || []
+  #     
+  #       object_instances.each do |instance|
+  #         if instance['guid'] == oi_guid
+  #           instance['x'] = x if x
+  #           instance['y'] = y if y
+  #           if dest
+  #             instance['dest'] = dest
+  #           else
+  #             instance.delete('dest')
+  #           end
+  #           break
+  #         end
+  #       end
+  #     
+  #       redis.hset('roomDefinition', room.guid, Yajl::Encoder.encode(rd))
+  #       Worlize::PubSub.publish(
+  #         "room:#{self.guid}",
+  #         '{"msg":"room_definition_updated"}'
+  #       )
+  #     
+  #       render :json => Yajl::Encoder.encode({
+  #         :success => true
+  #       }) and return
+  #     rescue => e
+  #       render :json => Yajl::Encoder.encode({
+  #         :success => false,
+  #         :description => e.message
+  #       }) and return
+  #     end
+  #     
+  #   render :json => Yajl::Encoder.encode({
+  #     :success => false
+  #   })
+  # end
   
   def destroy
     world = current_user.worlds.first
