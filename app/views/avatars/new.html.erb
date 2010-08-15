@@ -1,0 +1,6 @@
+<h1>Upload an Avatar</h1>
+
+<%= form_for @avatar, :html => { :multipart => true } do |f| %>
+  <%= f.file_field :test_upload %><br/><br/>
+  <%= submit_tag %>
+<% end %>

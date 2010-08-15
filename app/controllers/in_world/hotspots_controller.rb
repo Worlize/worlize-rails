@@ -112,29 +112,52 @@ class InWorld::HotspotsController < ApplicationController
 
       if hotspot
         # If we've found it, update it and re-pack and store the array
-        hotspot['x'] = params[:x].to_i
-        hotspot['y'] = params[:y].to_i
-        if params[:points]
-          begin
-            points = Yajl::Parser.parse(params[:points])
-            if points.instance_of?(Array) && points.length <= 50 && points.length > 2
-              hotspot['points'] = points
+        
+        # Updating position?
+        if params[:x] && params[:y]
+          hotspot['x'] = params[:x].to_i
+          hotspot['y'] = params[:y].to_i
+          if params[:points]
+            begin
+              points = Yajl::Parser.parse(params[:points])
+              if points.instance_of?(Array) && points.length <= 50 && points.length > 2
+                hotspot['points'] = points
+              end
+            rescue
             end
-          rescue
+          end
+          room.room_definition.hotspots = hotspots
+          success = true
+          Worlize::InteractServerManager.instance.broadcast_to_room(room.guid, {
+            :msg => 'hotspot_moved',
+            :data => {
+              :guid => hotspot_guid,
+              :x => hotspot['x'],
+              :y => hotspot['y'],
+              :points => hotspot['points']
+            }
+          })
+          
+        # Updating destination?
+        elsif params[:dest]
+          if params[:dest].length > 0
+            dest_room = Room.find_by_guid(params[:dest])
+            if dest_room
+              hotspot['dest'] = dest_room.guid
+              success = true
+              room.room_definition.hotspots = hotspots
+              broadcast_hotspot_dest_updated(room.guid, hotspot_guid, hotspot['dest'])
+            else
+              success = false
+              description = "There is no such destination room"
+            end
+          else
+            success = true
+            hotspot.delete('dest')
+            room.room_definition.hotspots = hotspots
+            broadcast_hotspot_dest_updated(room.guid, hotspot_guid, nil)
           end
         end
-        redis.hset 'hotspots', room.guid, Yajl::Encoder.encode(hotspots)
-        success = true
-        
-        Worlize::InteractServerManager.instance.broadcast_to_room(room.guid, {
-          :msg => 'hotspot_moved',
-          :data => {
-            :guid => hotspot_guid,
-            :x => hotspot['x'],
-            :y => hotspot['y'],
-            :points => hotspot['points']
-          }
-        })
         
       else
         success = false
@@ -159,6 +182,59 @@ class InWorld::HotspotsController < ApplicationController
   end
   
   def destroy
+    room = Room.find_by_guid(params[:room_id])
+    hotspot_guid = params[:id]
+    if room
+      rd = room.room_definition
+      hotspots = rd.hotspots
+      
+      found_hotspot = false
+      
+      hotspots.each do |hotspot|
+        if hotspot['guid'] == hotspot_guid
+          found_hotspot = true
+          break
+        end
+      end
+      
+      if found_hotspot
+        rd.hotspots = rd.hotspots.select do |hotspot|
+          hotspot['guid'] != hotspot_guid
+        end
+        
+        Worlize::InteractServerManager.instance.broadcast_to_room(
+          room.guid,
+          {
+            :msg => "hotspot_removed",
+            :data => {
+              :guid => hotspot_guid
+            }
+          }
+        )
+        
+        render :json => Yajl::Encoder.encode({
+          :success => true
+        }) and return
+      end
+    end
     
+    render :json => Yajl::Encoder.encode({
+      :success => false
+    })
+  end
+  
+  private
+  
+  def broadcast_hotspot_dest_updated(room_guid, hotspot_guid, dest)
+    Worlize::InteractServerManager.instance.broadcast_to_room(
+      room_guid,
+      {
+        :msg => "hotspot_dest_updated",
+        :data => {
+          :guid => hotspot_guid,
+          :dest => dest
+        }
+      }
+    )
   end
 end

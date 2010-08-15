@@ -22,10 +22,15 @@ module Worlize
       end
     end
     
+    def active_server_ids
+      active_servers.map { |server_info| server_info['server_id'] }
+    end
+    
     def server_for_room(room_guid)
       r = Worlize::RedisConnectionPool.get_client('presence')
       assigned_server_id = r.hget 'serverForRoom', room_guid
-      unless assigned_server_id
+      
+      unless assigned_server_id && active_server_ids.include?(assigned_server_id)
         assigned_server_id = find_least_loaded_server_id
         r.hset 'serverForRoom', room_guid, assigned_server_id
       end

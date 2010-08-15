@@ -22,6 +22,8 @@ Worlize::Application.routes.draw do |map|
   
   resource :preferences
   
+  resources :avatars
+  
   namespace "admin" do
     resources :backgrounds
     resources :worlds do

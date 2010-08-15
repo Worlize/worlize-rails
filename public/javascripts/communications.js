@@ -7,17 +7,6 @@ function WorlizeCommunications(options) {
   this.socket = null;
   this.eventListeners = {};
 
-  this.socket = new io.Socket();
-
-  this.socket.addEvent('message', function(data) {
-    self.dispatchEvent('message', data);
-  });
-  this.socket.addEvent('connect', function() {
-    self.dispatchEvent('connect');
-  });
-  this.socket.addEvent('disconnect', function() {
-    self.dispatchEvent('disconnect');
-  });
 }
 
 WorlizeCommunications.getInstance = function() {
@@ -33,16 +22,34 @@ WorlizeCommunications.prototype = {
     if (this.socket && this.socket.connected) {
       this.disconnect();
     }
-
+    
     if (!serverid) {
       throw new Error("You must specify a server id");
     }
 
     this.socket = new io.Socket(null, {
-      // transports: ['xhr-polling'],
+      transports: ['websocket', 'flashsocket'],
       rememberTransport: false,
       resource: serverid,
       port:80
+    });
+
+    this.socket.addEvent('message', function(data) {
+      var decodedMessage;
+      try {
+          decodedMessage = JSON.parse(data)
+      }
+      catch(e) {
+        /* do nothing */
+        return;
+      }
+      self.dispatchEvent('message', decodedMessage);
+    });
+    this.socket.on('connect', function() {
+      self.dispatchEvent('connect');
+    });
+    this.socket.addEvent('disconnect', function() {
+      self.dispatchEvent('disconnect');
     });
 
     this.currentServerId = serverid;
@@ -58,7 +65,7 @@ WorlizeCommunications.prototype = {
     this.socket.disconnect();
   },
   send: function(message) {
-    this.socket.send(message);
+    this.socket.send(JSON.stringify(message));
   },
   
   addEventListener: function(event, closure) {

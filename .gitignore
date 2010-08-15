@@ -1,4 +1,5 @@
 .bundle
+Gemfile.lock
 public/uploads
 db/*.sqlite3
 log/*.log
