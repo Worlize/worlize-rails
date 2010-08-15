@@ -3,9 +3,7 @@ Worlize::Application.configure do
 
   # The production environment is meant for finished, "live" apps.
   # Code is not reloaded between requests
-  # FIXME: This should be true in production but there seems to be a small bug with
-  # this feature in rails 3 rc1 at the moment....
-  config.cache_classes = false
+  config.cache_classes = true
 
   # Full error reports are disabled and caching is turned on
   config.consider_all_requests_local       = false
