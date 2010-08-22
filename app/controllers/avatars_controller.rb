@@ -9,11 +9,13 @@ class AvatarsController < ApplicationController
   end
   
   def create
-    file_in = params[:avatar][:test_upload]
-    File.open("/Users/turtle/Desktop/" + file_in.original_filename, 'w') do |file|
+    file_in = params[:filedata]
+    File.open("/Users/turtle/Desktop/uploaded-" + file_in.original_filename, 'w') do |file|
       file.write(file_in.read)
     end
-    redirect_to new_avatar_url
+    render :json => Yajl::Encoder.encode({
+      :success => true
+    })
   end
 
 end
