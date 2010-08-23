@@ -2,11 +2,13 @@ class User < ActiveRecord::Base
   before_create :assign_guid
   after_create :initialize_currency
   
-  has_many :worlds
-  has_many :background_instances
-  has_many :in_world_object_instances
-  has_many :avatar_instances
-  has_many :prop_instances
+  has_many :worlds, :dependent => :destroy
+  has_many :background_instances, :dependent => :nullify
+  has_many :in_world_object_instances, :dependent => :nullify
+  has_many :avatar_instances, :dependent => :nullify
+  has_many :prop_instances, :dependent => :nullify
+  
+  has_many :avatars, :foreign_key => 'creator_id', :dependent => :nullify
   
   acts_as_authentic do |c|
     #config options here

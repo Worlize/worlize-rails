@@ -2,7 +2,7 @@ class World < ActiveRecord::Base
   before_create :assign_guid
 
   belongs_to :user
-  has_many :rooms
+  has_many :rooms, :dependent => :destroy
   
   validates :name, :presence => true
 

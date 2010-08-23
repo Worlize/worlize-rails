@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery :secret => Rails.application.config.secret_token
+  protect_from_forgery :secret => Worlize::Application.config.secret_token
   layout 'application'
   
   helper :all

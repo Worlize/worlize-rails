@@ -1,15 +1,16 @@
-# This file is auto-generated from the current state of the database. Instead of editing this file, 
-# please use the migrations feature of Active Record to incrementally modify your database, and
-# then regenerate this schema definition.
+# This file is auto-generated from the current state of the database. Instead 
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your database schema. If you need
-# to create the application database on another system, you should be using db:schema:load, not running
-# all the migrations from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# Note that this schema.rb definition is the authoritative source for your 
+# database schema. If you need to create the application database on another
+# system, you should be using db:schema:load, not running all the migrations
+# from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100721013841) do
+ActiveRecord::Schema.define(:version => 20100823010212) do
 
   create_table "avatar_instances", :force => true do |t|
     t.string   "guid",       :limit => 36
@@ -36,6 +37,7 @@ ActiveRecord::Schema.define(:version => 20100721013841) do
     t.datetime "updated_at"
     t.integer  "sale_bucks"
     t.integer  "return_coins"
+    t.boolean  "on_sale",                    :default => false
   end
 
   add_index "avatars", ["guid"], :name => "index_avatars_on_guid"
@@ -64,6 +66,7 @@ ActiveRecord::Schema.define(:version => 20100721013841) do
     t.datetime "updated_at"
     t.integer  "sale_bucks"
     t.integer  "return_coins"
+    t.boolean  "on_sale",                    :default => false
   end
 
   add_index "backgrounds", ["guid"], :name => "index_backgrounds_on_guid"
@@ -94,6 +97,7 @@ ActiveRecord::Schema.define(:version => 20100721013841) do
     t.datetime "updated_at"
     t.integer  "sale_bucks"
     t.integer  "return_coins"
+    t.boolean  "on_sale",                    :default => false
   end
 
   add_index "in_world_objects", ["guid"], :name => "index_in_world_objects_on_guid"
@@ -123,6 +127,7 @@ ActiveRecord::Schema.define(:version => 20100721013841) do
     t.datetime "updated_at"
     t.integer  "sale_bucks"
     t.integer  "return_coins"
+    t.boolean  "on_sale",                    :default => false
   end
 
   add_index "props", ["guid"], :name => "index_props_on_guid"

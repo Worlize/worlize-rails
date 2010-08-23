@@ -14,8 +14,9 @@ Worlize::Application.routes.draw do |map|
     end
   end
   
-  namespace "my_locker" do
+  namespace "locker" do
     resources :backgrounds
+    resources :avatars
   end
 
   resources :users

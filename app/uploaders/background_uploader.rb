@@ -10,6 +10,16 @@ class BackgroundUploader < CarrierWave::Uploader::Base
   #storage :file
   storage :s3
 
+  if Rails.env == 'production'
+    define_method 's3_bucket', lambda {
+      'worlize_backgrounds'
+    }
+  else
+    define_method 's3_bucket', lambda {
+      'worlize_backgrounds_dev'
+    }
+  end
+
   # Override the directory where uploaded files will be stored
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
@@ -25,6 +35,10 @@ class BackgroundUploader < CarrierWave::Uploader::Base
   
   version :thumb do
     process :resize_to_fill => [133, 80]
+  end
+  
+  version :square_thumb do
+    process :resize_to_fill => [80, 80]
   end
   
   version :medium do

@@ -1,5 +1,5 @@
 class Prop < ActiveRecord::Base
-  has_many :prop_instances
+  has_many :prop_instances, :dependent => :destroy
   belongs_to :creator, :class_name => 'User'
   
   before_create :assign_guid
