@@ -1,21 +1,16 @@
 class AvatarsController < ApplicationController
-
-  def new
-    @avatar = Avatar.new
-  end
-  
   def show
-    
-  end
-  
-  def create
-    file_in = params[:filedata]
-    File.open("/Users/turtle/Desktop/uploaded-" + file_in.original_filename, 'w') do |file|
-      file.write(file_in.read)
+    avatar = Avatar.find_by_guid(params[:id])
+    if avatar
+      render :json => Yajl::Encoder.encode({
+        :success => true,
+        :data => avatar.hash_for_api
+      })
+    else
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => "Unable to find the specified avatar"
+      })
     end
-    render :json => Yajl::Encoder.encode({
-      :success => true
-    })
   end
-
 end
