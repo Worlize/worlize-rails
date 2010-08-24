@@ -2,8 +2,8 @@
 
 rails_env = ENV['RAILS_ENV'] || 'production'
 
-# 8 workers and 1 master (github runs 16 workers)
-worker_processes (rails_env == 'production' ? 8 : 4)
+# 6 workers and 1 master (github runs 16 workers)
+worker_processes (rails_env == 'production' ? 6 : 4)
 
 # Load rails and app into the master before forking workers
 # for super-fast worker spawn times
