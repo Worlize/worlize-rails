@@ -1,13 +1,12 @@
 class Locker::AvatarsController < ApplicationController
 
   def index
-    avatar_instances = current_user.avatar_instances
-    avatars = avatar_instances.map { |ai| ai.avatar.hash_for_api }
+    avatar_instances = current_user.avatar_instances.all(:include => [:avatar, :user])
       
     render :json => Yajl::Encoder.encode({
       :success => true,
-      :count => avatars.length,
-      :data => avatars
+      :count => avatar_instances.length,
+      :data => avatar_instances.map { |ai| ai.hash_for_api }
     })
   end
   
@@ -29,7 +28,7 @@ class Locker::AvatarsController < ApplicationController
       if (ai.persisted?)
         render :json => Yajl::Encoder.encode({
           :success => true,
-          :data => @avatar.hash_for_api
+          :data => ai.hash_for_api
         })
       else
         render :json => Yajl::Encoder.encode({
@@ -44,6 +43,21 @@ class Locker::AvatarsController < ApplicationController
         :errors => @avatar.errors
       })
     end
+  end
+  
+  def destroy
+    avatar_instance = current_user.avatar_instances.find_by_guid(params[:id])
+    num_instances_remaining = avatar_instance.avatar.avatar_instances.count
+    if num_instances_remaining == 1
+      # destroy the avatar itself if this is its last instance
+      avatar_instance.avatar.destroy
+    else
+      # otherwise just destroy the instance
+      avatar_instance.destroy
+    end
+    render :json => Yajl::Encoder.encode({
+      :success => true
+    })
   end
   
 end

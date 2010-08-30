@@ -10,7 +10,7 @@ class AvatarsController < ApplicationController
       render :json => Yajl::Encoder.encode({
         :success => false,
         :description => "Unable to find the specified avatar"
-      })
+      }), :status => 404
     end
   end
 end
