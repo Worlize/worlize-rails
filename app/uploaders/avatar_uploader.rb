@@ -29,7 +29,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
   process :resize_to_limit => [400, 400]
   
   version :thumb do
-    process :resize_and_pad => [80, 80]
+    process :resize_and_pad => [80, 80, :transparent]
   end
   
   version :medium do
