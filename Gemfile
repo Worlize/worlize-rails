@@ -29,7 +29,7 @@ gem 'acts_as_list'
 # authlogic rather than an unknown and less-maintained fork.
 # gem "authlogic", :git => "git://github.com/odorcicd/authlogic.git", :branch => "rails3"
 
-gem 'authlogic', '2.1.5'
+gem 'authlogic', '2.1.6'
 
 # seems to be broken: sets all sesison id's to "true" -- wtf?!
 #gem 'redis-store', '1.0.0.beta2'

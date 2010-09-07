@@ -14,6 +14,16 @@ class User < ActiveRecord::Base
     #config options here
   end
   
+  def permissions
+    if self.admin?
+      [
+        :may_author_everything
+      ]
+    else
+      []
+    end
+  end
+  
   def can_edit?(item)
     if item.respond_to? 'can_be_edited_by?'
       item.can_be_edited_by?(self)
