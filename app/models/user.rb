@@ -97,6 +97,11 @@ class User < ActiveRecord::Base
     InteractivitySession.find_by_user_guid(self.guid)
   end
   
+  def reset_appearance!
+    redis = Worlize::RedisConnectionPool.get_client(:presence)
+    redis.del("userState:#{self.guid}")
+  end
+  
   private
   def assign_guid()
     self.guid = Guid.new.to_s

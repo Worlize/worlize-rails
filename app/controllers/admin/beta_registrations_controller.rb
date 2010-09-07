@@ -3,7 +3,7 @@ class Admin::BetaRegistrationsController < ApplicationController
   before_filter :require_admin
     
   def index
-    @registrations = Registration.paginate(:page => params[:page], :order => 'created_at DESC', :per_page => 10)
+    @registrations = Registration.paginate(:page => params[:page], :order => 'created_at DESC')
   end
   
   def build_account

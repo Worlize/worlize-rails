@@ -20,6 +20,7 @@ class UserSessionsController < ApplicationController
 
     respond_to do |format|
       if @user_session.save
+        @user_session.user.reset_appearance!
         format.html { redirect_back_or_default(root_url) }
       else
         format.html { render :action => "new" }
