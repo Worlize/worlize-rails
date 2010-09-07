@@ -42,6 +42,10 @@ header h1 {
 	box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 }
 
+#loginLinks span.username {
+	padding: 0px 25px 0px 0px;
+}
+
 #flashNotice {
 	margin: 0px 0px 10px;
 	padding: 10px 20px;
@@ -123,3 +127,28 @@ div.errorExplanation ul li {
 }
 
 /* @end */
+
+/* @group Will Paginate */
+
+div.pagination {
+	margin: 15px 0px 5px;
+}
+
+div.pagination a, div.pagination span, div.pagination em {
+	padding: 2px 8px;
+}
+
+div.pagination a, div.pagination span {
+	background-color: #bbc3d4;
+}
+
+div.pagination em {
+	background-color: #88ca6e;
+}
+
+div.pagination span.disabled {
+	color: #666;
+}
+
+/* @end */
+

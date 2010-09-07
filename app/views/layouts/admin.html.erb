@@ -16,6 +16,9 @@
     <header>
       <div id="loginLinks">
         <% if current_user %>
+          <span class="username">
+            Logged in as <%= current_user.username %>
+          </span>
           <%= link_to "Logout", logout_path %>
         <% else %>
           <%= link_to "Sign Up", new_user_path %> |

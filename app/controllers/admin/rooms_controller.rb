@@ -1,7 +1,7 @@
 class Admin::RoomsController < ApplicationController
   layout 'admin'
   
-  before_filter :require_user
+  before_filter :require_admin
   
   def index
     @world = World.find(params[:world_id])

@@ -19,6 +19,7 @@ gem 'carrierwave', :git => 'git://github.com/jnicklas/carrierwave.git'
 gem 'rmagick', :require => 'RMagick'
 gem 'aws'
 
+gem "will_paginate", "~> 3.0.pre2"
 gem 'acts_as_list'
 
 #gem 'aws-s3', :require => 'aws/s3'

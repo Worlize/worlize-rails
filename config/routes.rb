@@ -26,6 +26,11 @@ Worlize::Application.routes.draw do |map|
   resources :avatars
   
   namespace "admin" do
+    resources :beta_registrations do
+      member do
+        post 'build_account'
+      end
+    end
     resources :backgrounds
     resources :worlds do
       resources :rooms do

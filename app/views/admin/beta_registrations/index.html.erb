@@ -1,0 +1,27 @@
+<h1>Beta Registrations</h1>
+
+<% if @registrations.count > 0 %>
+<table class="datagrid">
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Twitter</th>
+    <th>Developer</th>
+    <th>Time</th>
+    <th>Actions</th>
+  </tr>
+  <% for registration in @registrations %>
+  <tr class="<%= cycle('even','odd') %>">
+    <td><%= registration.name %></td>
+    <td><%= registration.email %></td>
+    <td><%= registration.twitter %></td>
+    <td><%= registration.developer ? 'yes' : '' %></td>
+    <td><%= registration.created_at.strftime("%B %d, %Y %I:%M %p") %></td>
+    <td><%= link_to "Create Account", build_account_admin_beta_registration_url(registration), :method => 'post' %></td>
+  </tr>
+  <% end %>
+</table>
+<%= will_paginate @registrations %>
+<% else %>
+<h2>There are no registrations to show</h2>
+<% end %>
