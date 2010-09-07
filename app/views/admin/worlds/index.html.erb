@@ -1,16 +1,16 @@
-<h1>Worlz Listing</h1>
+<h1>Worlds</h1>
 
 <% if @worlds.length > 0 %>
-  <table width="300">
+  <table class="datagrid" width="500">
     <thead>
       <tr>
-        <th>Name</th>
+        <th width="300">Name</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <% for world in @worlds %>
-      <tr>
+      <tr class="<%= cycle('even','odd') %>">
         <td><%= world.name %></td>
         <td>
           <%= link_to "Rooms", admin_world_rooms_path(world) %> |

@@ -1,15 +1,15 @@
 <h1><%= @world.name %> - Rooms</h1>
 <% if @rooms.length > 0 %>
-  <table width="300">
+  <table class="datagrid" width="500">
     <thead>
       <tr>
-        <th>Name</th>
+        <th width="300">Name</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <% for room in @rooms %>
-      <tr>
+      <tr class="<%= cycle('even','odd') %>">
         <td><%= room.name %></td>
         <td>
         <%= link_to "Edit", edit_admin_world_room_path(@world, room) %> |
