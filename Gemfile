@@ -17,7 +17,7 @@ gem 'acts-as-taggable-on'
 gem 'RedCloth'
 gem 'carrierwave', :git => 'git://github.com/jnicklas/carrierwave.git'
 gem 'rmagick', :require => 'RMagick'
-gem 'aws'
+gem 'fog'
 
 gem "will_paginate", "~> 3.0.pre2"
 gem 'acts_as_list'
