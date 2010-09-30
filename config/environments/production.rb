@@ -35,12 +35,7 @@ Worlize::Application.configure do
   config.active_support.deprecation = :notify
   
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    :address        => "127.0.0.1",
-    :port           => 25,
-    :domain         => "worlize.com"
-  }
+  config.action_mailer.delivery_method = :sendmail
 
   # Enable serving of images, stylesheets, and javascripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
