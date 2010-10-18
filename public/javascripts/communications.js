@@ -1,17 +1,16 @@
 flashName = "FlashPalace";
-
-io.setPath("/socket-io/");
+worlizeDebug = false;
 
 function WorlizeCommunications(options) {
   var self = this;
   this.socket = null;
   this.eventListeners = {};
-
+  this.debug = options && options['debug'] && window.console && window.console.log;
 }
 
 WorlizeCommunications.getInstance = function() {
   if (!WorlizeCommunications.instance) {
-    WorlizeCommunications.instance = new WorlizeCommunications();
+    WorlizeCommunications.instance = new WorlizeCommunications({debug: worlizeDebug || false});
   }
   return WorlizeCommunications.instance;
 };
@@ -29,12 +28,16 @@ WorlizeCommunications.prototype = {
 
     this.socket = new io.Socket(null, {
       transports: ['websocket', 'flashsocket'],
+      // transports: ['xhr-multipart','xhr-polling'],
       rememberTransport: false,
       resource: serverid,
       port:80
     });
 
     this.socket.addEvent('message', function(data) {
+      if (self.debug) {
+        console.log("Incoming Message",data);
+      }
       var decodedMessage;
       try {
           decodedMessage = JSON.parse(data)
@@ -46,9 +49,15 @@ WorlizeCommunications.prototype = {
       self.dispatchEvent('message', decodedMessage);
     });
     this.socket.on('connect', function() {
+      if (self.debug) {
+        console.log("Connected");
+      }
       self.dispatchEvent('connect');
     });
     this.socket.addEvent('disconnect', function() {
+      if (self.debug) {
+        console.log("Disconnected");
+      }
       self.dispatchEvent('disconnect');
     });
 
