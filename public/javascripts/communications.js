@@ -1,4 +1,4 @@
-flashName = "FlashPalace";
+flashName = "FlashClient";
 worlizeDebug = false;
 
 function WorlizeCommunications(options) {
