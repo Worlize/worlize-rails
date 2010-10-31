@@ -1,6 +1,7 @@
 .bundle
 Gemfile.lock
 public/uploads
+public/flash
 db/*.sqlite3
 log/*.log
 tmp/**/*
