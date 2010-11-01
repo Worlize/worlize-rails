@@ -44,11 +44,19 @@
         <% end %>
       </div>
 
-      <h1>Worlize</h1>
+      <h1><%= link_to "Worlize", admin_index_path %></h1>
     </header>
+
+    <%= render :partial => 'admin/menu' %>
+
     <% if flash[:notice] %> 
     <section id="flashNotice">
       <%= flash[:notice] %>
+    </section>
+    <% end %>
+    <% if flash[:error] %> 
+    <section id="flashError">
+      <%= flash[:error] %>
     </section>
     <% end %>
 

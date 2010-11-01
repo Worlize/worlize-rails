@@ -25,12 +25,15 @@ Worlize::Application.routes.draw do |map|
   
   resources :avatars
   
+  match 'admin' => 'admin#index', :as => :admin_index
+  
   namespace "admin" do
     resources :beta_registrations do
       member do
-        post 'build_account'
+        get 'build_account'
       end
     end
+    resources :users
     resources :backgrounds
     resources :worlds do
       resources :rooms do

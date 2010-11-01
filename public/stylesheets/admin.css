@@ -1,3 +1,5 @@
+/* @override http://localhost/stylesheets/admin.css */
+
 /* 
   HTML5 ✰ Boilerplate 
   
@@ -159,6 +161,7 @@ button, input, select, textarea { margin: 0; }
 input:valid, textarea:valid   {  }
 input:invalid, textarea:invalid { 
       border-radius: 1px;
+      -moz-border-radius: 1px;
     -moz-box-shadow: 0px 0px 5px red; 
  -webkit-box-shadow: 0px 0px 5px red; 
          box-shadow: 0px 0px 5px red;
@@ -257,12 +260,18 @@ header h1 {
 	text-shadow: #dce3f4 0 1px 0;
 }
 
+header h1 a {
+	color: #000 !important;
+	text-decoration: none !important;
+}
+
 #loginLinks {
 	float: right;
 	margin: 15px 0px;
 	background-color: #d6dded;
 	padding: 5px 15px;
 	border-radius: 5px;
+	-moz-border-radius: 5px;
 	-webkit-box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 	-moz-box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 	box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
@@ -277,15 +286,29 @@ header h1 {
 	padding: 10px 20px;
 	background-color: #c5e3c5;
 	border-radius: 10px;
+	-moz-border-radius: 10px;
 	-webkit-box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 	-moz-box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 	box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+}
+
+#flashError {
+	margin: 0px 0px 10px;
+	padding: 10px 20px;
+	background-color: #f1cfd9;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	-moz-box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	color: #000;
 }
 
 #pageContent {
 	margin: 0px 0px 30px;
 	padding: 20px;
 	border-radius: 10px;
+	-moz-border-radius: 10px;
 	background-color: #d6dded;
 	-webkit-box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 	-moz-box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
@@ -323,6 +346,86 @@ table.datagrid tr.odd td {
 	background-color: #d5dbe7;
 }
 
+#quickStats {
+	padding: 15px;
+	background: #acb4c8;
+}
+#quickStats h1 {
+	font-size: 123.1%;
+}
+
+label {
+	display: block;
+	font-weight: bold;
+}
+
+.formfield {
+	margin: 0px 0px 12px;
+}
+
+form .actionButtons {
+	clear: both;
+}
+
+input[type=submit], button {
+	background-color: #6a738a;
+	font-size: 80%;
+	color: #e3ebff;
+	border: 1px solid #373c49;
+	text-shadow: #000 0 1px 1px;
+	font-weight: bold;
+	vertical-align: baseline;
+	border-radius:4px;
+	moz-border-radius:4px;
+}
+
+input[type=submit].big, button.big {
+	padding: 4px 10px;
+	margin: 0px 10px;
+	font-size: 100%;
+}
+
+input[type=submit]:hover, button:hover {
+	background-color: #3e4351;
+}
+
+/* @group Admin Nav */
+
+nav#adminNav {
+	margin: 0px 0px 10px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	padding: 8px;
+	background-color: #444a59;
+	color: #feffff;
+	-webkit-box-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+	-moz-box-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+	box-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+}
+
+nav#adminNav a {
+	display: block;
+	color: #d6dded;
+	padding: 4px 8px;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	text-shadow: #000 0 1px 1px;
+}
+
+nav#adminNav a:hover {
+	background: #000;
+	text-decoration: none;
+}
+
+nav#adminNav li {
+	float: left;
+	margin: 0px 5px;
+}
+
+/* @end */
+
+
+
 /* @group Rails Error Explanations */
 
 div.errorExplanation {
@@ -331,6 +434,7 @@ div.errorExplanation {
 	text-shadow: #cfd1d6 0 1px 0;
 	margin: 0px 0px 10px;
 	border-radius: 10px;
+	-moz-border-radius: 10px;
 	-webkit-box-shadow: 1px 1px 1px rgba(0,0,0,0.3);
 	-moz-box-shadow: 1px 1px 1px rgba(0,0,0,0.3);
 	box-shadow: 1px 1px 1px rgba(0,0,0,0.3);

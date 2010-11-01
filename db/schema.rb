@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100907050525) do
+ActiveRecord::Schema.define(:version => 20101101014820) do
 
   create_table "avatar_instances", :force => true do |t|
     t.string   "guid",       :limit => 36
@@ -198,6 +198,7 @@ ActiveRecord::Schema.define(:version => 20100907050525) do
     t.integer  "failed_login_count"
     t.integer  "login_count"
     t.boolean  "admin",                             :default => false
+    t.string   "twitter"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"
