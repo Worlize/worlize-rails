@@ -18,6 +18,7 @@ gem 'RedCloth'
 gem 'carrierwave', :git => 'git://github.com/jnicklas/carrierwave.git'
 gem 'rmagick', :require => 'RMagick'
 gem 'fog'
+gem 'omniauth'
 
 gem "will_paginate", "~> 3.0.pre2"
 gem 'acts_as_list'

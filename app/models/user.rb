@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
   before_create :assign_guid
   after_create :initialize_currency
   
+  has_many :authentications
+  
   has_many :worlds, :dependent => :destroy
   has_many :background_instances, :dependent => :nullify
   has_many :in_world_object_instances, :dependent => :nullify
