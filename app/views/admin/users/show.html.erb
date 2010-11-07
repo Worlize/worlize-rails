@@ -5,3 +5,16 @@
 <%= link_to @user.twitter, "http://www.twitter.com/#{@user.twitter}" %>
 <% end %>
 
+<br>
+<h2>Linked Services</h2>
+<% if @user.authentications %>
+  <% @user.authentications.each do |authentication| %>
+  <div>
+    <%= authentication.provider.capitalize %>, uid: <%= authentication.uid %>
+      (<%= link_to "Unlink", authentication_path(authentication), :method => :delete %>)
+  </div>
+  <% end %>
+<% else %>
+  <p>There are no linked services</p>
+<% end %>
+

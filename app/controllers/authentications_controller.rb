@@ -89,7 +89,7 @@ class AuthenticationsController < ApplicationController
     @authentication.destroy
 
     respond_to do |format|
-      format.html { redirect_to(authentications_url) }
+      format.html { redirect_to(admin_user_url(@authentication.user)) }
       format.xml  { head :ok }
     end
   end
