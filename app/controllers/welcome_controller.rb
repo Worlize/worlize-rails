@@ -1,11 +1,8 @@
 class WelcomeController < ApplicationController
-  layout "prelaunch"
   
   before_filter :require_user, :only => [:enter]
   
   def index
-    @registration = Registration.new
-    @developerRegistration = Registration.new
   end
   
   def enter
