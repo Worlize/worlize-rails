@@ -1,0 +1,15 @@
+@font-face {
+	font-family: 'PTSansNarrowBold';
+	src: url('../fonts/pt-sans/PTN77F-webfont.eot');
+	src: local('☺'), url('../fonts/pt-sans/PTN77F-webfont.woff') format('woff'), url('../fonts/pt-sans/PTN77F-webfont.ttf') format('truetype'), url('../fonts/pt-sans/PTN77F-webfont.svg#webfontSAYAwFVt') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'PTSansNarrowRegular';
+	src: url('../fonts/pt-sans/PTN57F-webfont.eot');
+	src: local('☺'), url('../fonts/pt-sans/PTN57F-webfont.woff') format('woff'), url('../fonts/pt-sans/PTN57F-webfont.ttf') format('truetype'), url('../fonts/pt-sans/PTN57F-webfont.svg#webfontzjaCm4lR') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
