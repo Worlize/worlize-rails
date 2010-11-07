@@ -1,0 +1,16 @@
+<div class="login-form">
+  <div>
+    sign in
+    <a href="/auth/facebook"><img src="/images/login-form-small-facebook-icon.png"></a>
+    <a href="/auth/twitter"><img src="/images/login-form-small-twitter-icon.png"></a>
+    <small>or</small>
+
+  </div>
+  <div>
+    <%= form_for new_user_session_object, :url => user_session_path do |form| %>
+      <%= form.text_field :username, :placeholder => "worlize name", :size => 13 %>
+      <%= form.password_field :password, :placeholder => "password", :size => 13 %>
+      <%= submit_tag "sign in" %>
+    <% end %>
+  </div>
+</div>

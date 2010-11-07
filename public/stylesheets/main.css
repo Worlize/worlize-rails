@@ -101,8 +101,6 @@ body, select, input, textarea {
   color: #444; 
   /* set your base font here, to apply evenly */
   /* font-family: Georgia, serif;  */   
-  font: 17px/23px 'PTSansNarrowRegular', Arial, sans-serif;
-
 }
 
 /* Headers (h1,h2,etc) have no default font-size or margin,
@@ -123,7 +121,7 @@ a:hover { color: #777; }
 ul, ol { margin-left: 1.8em; }
 ol { list-style-type: decimal; }
 
-small { font-size: 85%; }
+small { font-size: 80%; }
 strong, th { font-weight: bold; }
 
 td, td img { vertical-align: top; } 
@@ -149,7 +147,6 @@ textarea { overflow: auto; } /* thnx ivannikolic! www.sitepoint.com/blogs/2010/0
    by: Thierry Koblentz tjkdesign.com/ez-css/css/base.css  */
 input[type="radio"] { vertical-align: text-bottom; }
 input[type="checkbox"] { vertical-align: bottom; }
-input[type="text"], input[type="password"] { vertical-align: baseline; }
 .ie7 input[type="checkbox"] { vertical-align: baseline; }
 .ie6 input { vertical-align: text-bottom; }
 
@@ -228,9 +225,34 @@ button {  width: auto; overflow: visible; }
 
 
 
- /* Primary Styles
-    Author: 
- */
+ /* Primary Styles */
+
+input[type=text],
+input[type=password] {
+	background-color: #F0F0F0;
+	border: 1px solid #888;
+	padding: 2px 5px;
+	color: #4c443c;
+	font: 11pt Helvetica, Arial, sans-serif;
+}
+
+label {
+	padding: 2px 5px;
+	color: #4c443c;
+	font: 11pt Helvetica, Arial, sans-serif;
+	vertical-align: middle;
+}
+
+input[type=submit], button {
+	background: #000;
+	color: #FFF;
+	border: none;
+	border-radius:8px;
+	-webkit-border-radius:8px;
+	-moz-border-radius:8px;
+	padding: 3px 10px;
+	font: 11pt Helvetica, Arial, sans-serif;
+}
 
 #container {
 	width: 100%;
@@ -243,96 +265,6 @@ button {  width: auto; overflow: visible; }
 	margin: 105px auto 100px;
 }
 
-/* @group Homepage */
-
-#homepage-login {
-	text-align: center;
-	color: #555;
-	font: 29px/27px 'PTSansNarrowBold', Arial, sans-serif;
-}
-#homepage-login a {
-	text-decoration: none;
-}
-#homepage-login a:hover {
-	text-decoration: underline;
-}
-
-#homepage-login small {
-	font-size: 70%;
-	padding: 0px 10px;
-}
-#homepage-login img {
-	padding-bottom: 10px;
-	vertical-align: middle;
-}
-#homepage-login img:hover {
-	opacity: 0.7;
-}
-
-#homepage-character {
-	width: 850px;
-	height: 370px;
-	margin: 0px auto 10px;
-}
-
-#registration_name {
-	background: url(/images/homepage-form/name-placeholder.png) no-repeat;
-	padding: 5px 0px -4px 50px;
-}
-
-#homepage_login_layer {
-	position: relative;
-	z-index: 5000;
-	width: 460px;
-	margin: 0px auto 20px;
-	background: #e7e1da;
-	background: rgba(231,225,218,0.9);
-	padding: 10px;
-	border-radius:10px;
-	-moz-border-radius:10px;
-	-webkit-border-radius:10px;
-	border: 1px solid #c0beb9;
-	-webkit-box-shadow: 1px 2px 8px rgba(0,0,0,0.35);
-	-moz-box-shadow: 1px 2px 8px rgba(0,0,0,0.35);
-}
-
-#homepage_login_layer h1 {
-	font: 25px/30px 'PTSansNarrowBold', Arial, sans-serif;
-	margin: 0px 0px 10px;
-}
-
-#homepage_login_layer .formField {
-	float: left;
-	margin: 0px 5px;
-}
-
-#homepage_login_layer input[type=text],
-#homepage_login_layer input[type=password] {
-	background-color: #f7f5f2;
-}
-
-#homepage_login_layer input[type=submit] {
-	float: right;
-	background: #000;
-	color: #FFF;
-	border: none;
-	border-radius:8px;
-	-webkit-border-radius:8px;
-	-moz-border-radius:8px;
-	padding: 3px 10px;
-}
-
-#homepage_login_layer input[type=submit]:hover,
-#homepage_login_layer input[type=submit]:focus {
-	background: #b5aa99;
-}
-
-#homepage_login_layer input[type=submit]:active {
-	background: #e3d5c0;
-}
-
-/* @end */
-
 
 
 /* @group Header */
@@ -344,6 +276,42 @@ header {
 	width: 100%;
 	height: 123px;
 	z-index: 1000;
+}
+
+#header-logged-in {
+	padding: 10px;
+	float: right;
+}
+
+#header-logged-in,
+#header-logged-in a {
+	color: #8e8d86;
+}
+
+header .login-form {
+	float: right;
+	color: #555;
+	font: 16pt/22pt 'PTSansNarrowBold', Arial, sans-serif;
+}
+
+header .login-form input {
+	vertical-align: -2px;
+}
+
+header .login-form div {
+	float: left;
+	margin: 5px;
+}
+
+header .login-form img {
+	vertical-align: bottom;
+}
+header .login-form img:hover {
+	opacity: 0.8;
+}
+
+header .login-form form {
+	
 }
 
 /* @end */
@@ -407,9 +375,92 @@ footer nav a {
 
 /* @end */
 
+/* @group Homepage */
+
+#homepage-login {
+	text-align: center;
+	color: #555;
+	font: 29px/27px 'PTSansNarrowBold', Arial, sans-serif;
+}
+#homepage-login a {
+	text-decoration: none;
+}
+#homepage-login a:hover {
+	text-decoration: underline;
+}
+
+#homepage-login small {
+	font-size: 70%;
+	padding: 0px 10px;
+}
+#homepage-login img {
+	padding-bottom: 10px;
+	vertical-align: middle;
+}
+#homepage-login img:hover {
+	opacity: 0.7;
+}
+
+#homepage-character {
+	width: 850px;
+	height: 370px;
+	margin: 0px auto 10px;
+}
+
+#registration_name {
+	background: url(/images/homepage-form/name-placeholder.png) no-repeat;
+	padding: 5px 0px -4px 50px;
+}
+
+#homepage_login_layer {
+	position: relative;
+	z-index: 5000;
+	width: 490px;
+	margin: 0px auto 20px;
+	background: #e7e1da;
+	background: rgba(231,225,218,0.9);
+	padding: 10px;
+	border-radius:10px;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	border: 1px solid #c0beb9;
+	-webkit-box-shadow: 1px 2px 8px rgba(0,0,0,0.35);
+	-moz-box-shadow: 1px 2px 8px rgba(0,0,0,0.35);
+}
 
 
+#homepage_login_layer input[type=password] {
+	width: 90px;
+}
+#homepage_login_layer input[type=text] {
+	width: 120px;
+}
 
+#homepage_login_layer h1 {
+	font: 25px/30px 'PTSansNarrowBold', Arial, sans-serif;
+	margin: 0px 0px 10px;
+}
+
+#homepage_login_layer .formField {
+	float: left;
+	margin: 0px 5px;
+}
+
+#homepage_login_layer input[type=text],
+#homepage_login_layer input[type=password] {
+	background-color: #f7f5f2;
+}
+
+#homepage_login_layer input[type=submit]:hover,
+#homepage_login_layer input[type=submit]:focus {
+	background: #b5aa99;
+}
+
+#homepage_login_layer input[type=submit]:active {
+	background: #e3d5c0;
+}
+
+/* @end */
 
 /*
  * Media queries for responsive design

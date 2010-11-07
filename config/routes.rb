@@ -2,11 +2,13 @@ Worlize::Application.routes.draw do |map|
 
   match '/auth/:provider/callback' => 'authentications#create'
 
+  root :to => "welcome#index"
+  
+  match '/press(/:action)', { :controller => :press }
+
   resources :authentications
 
   resources :registrations
-
-  root :to => "welcome#index"
 
   namespace "marketplace" do
     resources :backgrounds do

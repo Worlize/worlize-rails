@@ -4,13 +4,10 @@
 
 
 
-
 jQuery('document').ready(function() {
-  $('#homepage_login_link').click(function(event) {
-    event.preventDefault();
-    $('#homepage_login_layer').fadeIn();
-    $('#user_session_username').focus();
-  });
+  if (!Modernizr.input.placeholder) {
+    jQuery('input[type=text], input[type=password], textarea').placehold('placeholder');
+  }
 });
 
 

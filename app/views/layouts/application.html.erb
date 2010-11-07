@@ -13,7 +13,11 @@
        Remove this if you use the .htaccess -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>Worlize - Your World Realized</title>
+  <% if content_for?(:title) %>
+    <title><%= yield(:title) %> - Worlize</title>
+  <% else %>
+    <title>Worlize - Your World Realized</title>
+  <% end %>
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -29,6 +33,10 @@
   <!-- CSS : implied media="all" -->
   <link rel="stylesheet" href="/stylesheets/main.css?v=2">
  
+  <style type="text/css">
+  <%= yield :extra_styles %>
+  </style>
+ 
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
   <script src="/javascripts/libs/modernizr-1.6.min.js"></script>
   
@@ -40,7 +48,11 @@
 
   <div id="container">
     <header>
-      
+        <% if current_user %>
+          <%= render :partial => 'layouts/logged_in_header' %>
+        <% elsif !@home_page %>
+          <%= render :partial => 'layouts/log_in_form_header' %>
+        <% end %>
     </header>
 
     <% if flash[:notice] %>
@@ -76,6 +88,7 @@
   <script src="/javascripts/plugins.js"></script>
   <script src="/javascripts/script.js"></script>
   
+  <%= yield :page_script %>
   
   <!--[if lt IE 7 ]>
     <script src="javascripts/libs/dd_belatedpng.js"></script>

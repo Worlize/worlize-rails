@@ -1,3 +1,5 @@
+<% @home_page = true %>
+
 <div id="homepage-character">
   <img src="/images/homepage-jellies/<%= @character_name %>.jpg" alt="<%= @saying %>">
 </div>
@@ -5,15 +7,15 @@
 <div id="homepage_login_layer" style="display:none;">
   <%= form_for @user_session, :url => user_session_path do |f| %>
   <div class="formField">
-    <%= f.label :username %>
+    <%= f.label :username, "username" %>
     <%= f.text_field :username, :size => 15 %>
   </div>
   <div class="formField">
-    <%= f.label :password %>
+    <%= f.label :password, "password" %>
     <%= f.password_field :password, :size => 15 %>
   </div>
   <div class="formField">
-    <%= f.submit "Sign in" %>
+    <%= f.submit "sign in" %>
   </div>
   <% end %>
   <div style="clear:both;"></div>
@@ -29,4 +31,14 @@
 
 </div>
 
-
+<% content_for :page_script do %>
+<script>
+jQuery('document').ready(function() {
+  $('#homepage_login_link').click(function(event) {
+    event.preventDefault();
+    $('#homepage_login_layer').fadeIn();
+    $('#user_session_username').focus();
+  });
+});
+</script>
+<% end %>
