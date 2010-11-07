@@ -10,4 +10,3 @@ doc/**/*
 .DS_Store
 **/.DS_Store
 *.swf
-config/initializers/omniauth.rb
