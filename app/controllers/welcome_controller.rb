@@ -18,6 +18,10 @@ class WelcomeController < ApplicationController
     @saying = characters[@character_name]
   end
   
+  def about
+    
+  end
+  
   def enter
     @configJSON = Yajl::Encoder.encode({
       "user_guid" => current_user.guid,
@@ -29,4 +33,5 @@ class WelcomeController < ApplicationController
     })
     render :enter, :layout => false
   end
+
 end

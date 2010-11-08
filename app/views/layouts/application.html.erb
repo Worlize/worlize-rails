@@ -50,7 +50,7 @@
     <header>
         <% if current_user %>
           <%= render :partial => 'layouts/logged_in_header' %>
-        <% elsif !@home_page %>
+        <% elsif !@hide_login_bar %>
           <%= render :partial => 'layouts/log_in_form_header' %>
         <% end %>
     </header>
@@ -70,9 +70,9 @@
       <nav>
         <ul>
           <li><a href="/">Home</a></li>
-          <li><a href="#">About</a></li>
+          <li><%= link_to 'About', about_path %></li>
           <li><a href="#">Press</a></li>
-          <li><a href="#">Our Blog</a></li>
+          <li><a href="http://blog.worlize.com/">Our Blog</a></li>
         </ul>
       </nav>
       <div class="copyright">© 2010 Worlize Inc.</div>

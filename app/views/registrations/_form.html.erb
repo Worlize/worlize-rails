@@ -1,7 +1,7 @@
 <%= form_for(@registration, :html => {:class => 'standard_form'}) do |f| %>
   <% if @registration.errors.any? %>
-  <div id="errorExplanation">
-    <h2><%= pluralize(@registration.errors.count, "error") %> prohibited this registration from being saved:</h2>
+  <div class="errorExplanation">
+    <h2>Oops!</h2>
     <ul>
     <% @registration.errors.full_messages.each do |msg| %>
       <li><%= msg %></li>

@@ -1,0 +1,114 @@
+<% content_for :extra_styles do %>
+#about_header {
+  position: relative;
+  width: 850px;
+  margin: 0px auto;
+}
+#about_header h1 {
+  font-size: 80pt;
+  line-height: 60pt;
+  position:absolute;
+  top: 60px;
+  left: 350px;
+  text-align:right;
+}
+#about_header h2 {
+  font-family: PTSansNarrowRegular;
+  font-size: 30pt;
+  position: absolute;
+  top: 150px;
+  left: 350px;
+}
+#about_header h3 {
+  font-family: PTSansNarrowRegular;
+  font-size: 15pt;
+  position: absolute;
+  top: 200px;
+  right: 50px;
+}
+#about_header h3 a {
+  text-decoration: none;
+  color: #656464;
+}
+#about_header h3 a:hover {
+  color: #888;
+}
+
+#about_content img.infographic {
+  display: block;
+  margin: 40px auto 0px;
+}
+
+.infographic-descriptions {
+  text-align:center;
+}
+.infographic-descriptions .panel {
+  width: 230px;
+  float:left;
+}
+#about_content .infographic-descriptions .panel h1 {
+  font: 18pt/18pt PTSansNarrowBold, Helvetica, Arial, sans-serif;
+}
+.infographic-descriptions .panel p {
+  
+}
+
+
+.infographic-descriptions .panel1 {
+  margin-left: 65px;
+}
+.infographic-descriptions .panel2 {
+  margin-left: 120px;
+}
+.infographic-descriptions .panel3 {
+  margin-left: 75px;
+}
+
+#about_content h1 {
+  text-align:center;
+  margin: 30px auto 5px;
+  font-family: PTSansNarrowBold;
+  font-size: 35pt;
+}
+
+#about_content h1 a {
+  text-decoration: none;
+}
+
+#about_content h2 {
+  text-align: center;
+  font-family: PTSansNarrowRegular;
+  font-size: 18pt;
+  color: #9a9a9a;
+}
+
+<% end %>
+<div id="about_header">
+  <%= image_tag 'characters/bob.jpg' %>
+  <h1 style="color:#78d1f1;">I am Bob...</h1>
+  <h2 style="color:#656464;">You were asking about Worlize?</h2>
+  <h3><a href="#">Watch Video</a></h3>
+</div>
+
+<div id="about_content">
+  <%= image_tag "about_infographic.jpg", :class => "infographic" %>
+  <div class="infographic-descriptions">
+    <div class="panel panel1">
+      <h1>Upload Anything!</h1>
+      <p>Turn any image or photo you have into your own world.</p>
+    </div>
+    <div class="panel panel2">
+      <h1>Customize Your World!</h1>
+      <p>Upload additional images as objects, props and avatars.</p>
+    </div>
+    <div class="panel panel3">
+      <h1>Connect With Your Friends</h1>
+      <p>Come together with your friends to visit and make new memories.</p>
+    </div>
+  </div>
+  <div style="clear:both; width:0px; height:0px;">&nbsp;</div>
+  
+  <h1><%= link_to 'Join In!   It’s Free, Fun and Easy!', new_registration_path %></h1>
+  <h2>Create a world for YOUR friends and family to get to together, play games and have fun!</h2>
+</div>
+

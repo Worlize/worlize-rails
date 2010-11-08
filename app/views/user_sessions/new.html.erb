@@ -1,3 +1,74 @@
-<h1>Login</h1>
+<% @hide_login_bar = true %>
 
-<%= render 'form' %>
+<% content_for :extra_styles do %>
+#login_header {
+  position: relative;
+  width: 735px;
+  height: 240px;
+  margin: 0px auto 40px;
+}
+#login_header img.character {
+  position: absolute;
+  left: 330px;
+  top: 0px;
+}
+#login_header h1 {
+  position: absolute;
+  left: 0px;
+  top: 55px;
+  font-size: 80pt;
+}
+#login_header h2 {
+  position: absolute;
+  text-align: right;
+  right: 0px;
+  bottom: 0px;
+  font-size: 40pt;
+}
+.login_alternative {
+  color: #747474;
+  font: 16pt/16pt PTSansNarrowBold, Helvetica, Arial, sans-serif;
+}
+.login_alternative div {
+    text-align: center;
+    margin: 0px 10px 0px 0px;
+}
+.login_alternative small {
+  color: #969696;
+}
+.login_alternative img:hover {
+  opacity: 0.8;
+}
+#login_form td.actions input[type=submit] {
+	vertical-align: baseline;
+	margin: 0px 0px 0px 10px;
+}
+
+<% end %>
+
+<div id="login_header">
+  <%= image_tag 'characters/sign-in.jpg', :class => 'character' %>
+  <h1 style="color:#969696;">Sign-in</h1>
+  <h2 style="color:#525252;">...we have <span style="color:#969696;">missed you!</span></h2>
+</div>
+
+<div id="page_content">
+  <section id="login_form">
+    <h1 class="light"><small><span class="accent_color_2">welcome</span></small><br>
+      back...</h1>
+      
+    <div class="form_container">
+      <%= render 'form' %>
+    </div>
+    
+    <div class="login_alternative">
+      <div style="float:left;">
+        <small>or</small><br>
+        Log-in with:
+      </div>
+      <a href="/auth/facebook"><img src="/images/homepage-facebook-icon.png" alt="Log in with Facebook"></a>
+      <a href="/auth/twitter"><img src="/images/homepage-twitter-icon.png" alt="Log in with Twitter"></a>
+    </div>
+    
+  </section>
+</div>

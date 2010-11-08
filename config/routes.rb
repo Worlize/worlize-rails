@@ -5,6 +5,8 @@ Worlize::Application.routes.draw do |map|
   root :to => "welcome#index"
   
   match '/press(/:action)', { :controller => :press }
+  
+  match '/about' => 'welcome#about', :as => :about
 
   resources :authentications
 

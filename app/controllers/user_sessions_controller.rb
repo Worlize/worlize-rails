@@ -1,5 +1,4 @@
 class UserSessionsController < ApplicationController
-  layout 'admin'
   # GET /user_sessions
   # GET /user_sessions.xml
   

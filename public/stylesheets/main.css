@@ -229,11 +229,17 @@ button {  width: auto; overflow: visible; }
 
 input[type=text],
 input[type=password] {
+	outline: none;
 	background-color: #F0F0F0;
 	border: 1px solid #888;
 	padding: 2px 5px;
 	color: #4c443c;
 	font: 11pt Helvetica, Arial, sans-serif;
+}
+
+input[type=text]:focus,
+input[type=password]:focus {
+	background-color: #FFF;
 }
 
 label {
@@ -297,8 +303,41 @@ h1, h2, h3, h4, h5, h6 {
 
 /* @group Form Styles */
 
+/* @group Errors */
+
+.errorExplanation {
+	border: 1px solid #f1dede;
+	padding: 15px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;	
+	margin: -15px 0px 20px;
+	background: #ffebeb url(/images/error-jelly.png) no-repeat 15px 15px;
+}
+
+
+.errorExplanation h2 {
+	margin: 0px 5px 15px 65px;
+	color: #9d0002;
+	font-size: 24pt;
+}
+
+.errorExplanation {
+	margin-top: 10px;
+	list-style-type: decimal;
+	list-style-position: inside;
+	color: #c00000;
+}
+
+.field_with_errors input {
+	background-color: #ffebeb;
+}
+
+
+/* @end */
+
 .standard_form label {
-	color: #ff7936;
+	color: #747474;
 	display: block;
 	font: 18pt/20pt PTSansNarrowBold, Helvetica, Arial, sans-serif;
 	margin-bottom: 2px;
@@ -341,7 +380,9 @@ section h1 {
 	padding: 0px 60px 0px 0px;
 	font: 35pt/33pt PTSansNarrowBold, Helvetica, Arial, sans-serif;
 }
-
+section h1.light {
+	color: #969696;
+}
 section h1 small {
 	font-size: 22pt;
 	line-height: 22pt;
@@ -349,6 +390,9 @@ section h1 small {
 
 .accent_color_1 {
 	color: #78d1f1;
+}
+.accent_color_2 {
+	color: #d09d81;
 }
 
 /* @end */
@@ -506,8 +550,6 @@ footer nav a {
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;
 	border: 1px solid #c0beb9;
-	-webkit-box-shadow: 1px 2px 8px rgba(0,0,0,0.35);
-	-moz-box-shadow: 1px 2px 8px rgba(0,0,0,0.35);
 }
 
 
@@ -526,11 +568,6 @@ footer nav a {
 #homepage_login_layer .formField {
 	float: left;
 	margin: 0px 5px;
-}
-
-#homepage_login_layer input[type=text],
-#homepage_login_layer input[type=password] {
-	background-color: #f7f5f2;
 }
 
 

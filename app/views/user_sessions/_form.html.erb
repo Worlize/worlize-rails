@@ -1,27 +1,24 @@
-<%= form_for @user_session, :url => user_session_path do |f| %>
+<%= form_for @user_session, :url => user_session_path, :html => {:class => 'standard_form'} do |f| %>
   <% if @user_session.errors.any? %>
   <div class="errorExplanation">
-    <h2>Unable to log in:</h2>
-    <ul>
-    <% @user_session.errors.full_messages.each do |msg| %>
-      <li><%= msg %></li>
-    <% end %>
-    </ul>
+    <h2>Oops!</h2>
+    <p>Your username or password was incorrect.</p>
   </div>
   <% end %>
-  <br/>
+
   <table>
     <tr>
-      <td><%= f.label :username %></td>
+      <td style="text-align: right;"><%= f.label :username, 'Username:' %></td>
       <td><%= f.text_field :username %></td>
     </tr>
     <tr>
-      <td><%= f.label :password %></td>
+      <td style="text-align: right;"><%= f.label :password, 'Password:' %></td>
       <td><%= f.password_field :password %></td>
     </tr>
+    <tr>
+      <td colspan="2" style="text-align: right;" class="actions">
+        <%= link_to 'Not a member?', new_registration_path %> <%= f.submit 'sign in' %>
+      </td>
+    </tr>
   </table>
-  <br/>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
 <% end %>

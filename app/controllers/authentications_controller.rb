@@ -63,7 +63,7 @@ class AuthenticationsController < ApplicationController
       user.save(:validate => false)
       UserSession.create(authentication.user)
     end
-    redirect_to admin_index_url
+    redirect_to root_url
   end
 
   # PUT /authentications/1
