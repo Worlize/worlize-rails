@@ -1,7 +1,7 @@
 class RegistrationsController < ApplicationController
   # GET /registrations
   # GET /registrations.xml
-  before_filter :require_user, :except => :create
+  before_filter :require_user, :except => [:create, :new]
   
   def index
     @registrations = Registration.all

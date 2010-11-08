@@ -243,8 +243,21 @@ label {
 	vertical-align: middle;
 }
 
+input[type=submit]:hover,
+input[type=submit]:focus,
+button:hover,
+button:focus {
+	background: #b5aa99;
+}
+
+input[type=submit]:active,
+button:active {
+	background: #e3d5c0;
+}
+
+
 input[type=submit], button {
-	background: #000;
+	background: #555555;
 	color: #FFF;
 	border: none;
 	border-radius:8px;
@@ -265,6 +278,80 @@ input[type=submit], button {
 	margin: 105px auto 100px;
 }
 
+h1, h2, h3, h4, h5, h6 {
+	font-family: PTSansNarrowBold;
+}
+
+/* @group Beta Registration Page */
+#signup_form .form_container {
+	width: 300px;
+	margin: 0px auto;
+}
+
+#signup_form input[type=text] {
+	width: 290px;
+}
+
+
+/* @end */
+
+/* @group Form Styles */
+
+.standard_form label {
+	color: #ff7936;
+	display: block;
+	font: 18pt/20pt PTSansNarrowBold, Helvetica, Arial, sans-serif;
+	margin-bottom: 2px;
+}
+.standard_form input,
+.standard_form button {
+	font-size: 15pt;
+	padding: 4px;
+	margin-bottom: 15px;
+}
+
+.standard_form input[type=submit],
+.standard_form button {
+	font-size: 12pt;
+	padding: 4px 14px;
+	border-radius: 12px;
+}
+
+/* @end */
+
+
+
+/* @group Section Column Styling */
+
+section {
+	width: 450px;
+	margin: 10px 0px 10px 330px;
+	padding: 10px;
+}
+
+section p {
+
+}
+
+section h1 {
+	position: absolute;
+	right: 660px;
+	text-align: left;
+	margin-top: -15px;
+	padding: 0px 60px 0px 0px;
+	font: 35pt/33pt PTSansNarrowBold, Helvetica, Arial, sans-serif;
+}
+
+section h1 small {
+	font-size: 22pt;
+	line-height: 22pt;
+}
+
+.accent_color_1 {
+	color: #78d1f1;
+}
+
+/* @end */
 
 
 /* @group Header */
@@ -285,7 +372,7 @@ header {
 
 #header-logged-in,
 #header-logged-in a {
-	color: #8e8d86;
+	color: #787771;
 }
 
 header .login-form {
@@ -407,11 +494,6 @@ footer nav a {
 	margin: 0px auto 10px;
 }
 
-#registration_name {
-	background: url(/images/homepage-form/name-placeholder.png) no-repeat;
-	padding: 5px 0px -4px 50px;
-}
-
 #homepage_login_layer {
 	position: relative;
 	z-index: 5000;
@@ -451,14 +533,6 @@ footer nav a {
 	background-color: #f7f5f2;
 }
 
-#homepage_login_layer input[type=submit]:hover,
-#homepage_login_layer input[type=submit]:focus {
-	background: #b5aa99;
-}
-
-#homepage_login_layer input[type=submit]:active {
-	background: #e3d5c0;
-}
 
 /* @end */
 

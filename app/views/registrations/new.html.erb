@@ -1,5 +1,42 @@
-<h1>New registration</h1>
+<% content_for :extra_styles do %>
+  #registration_header {
+    position: relative;
+    width: 800px;
+    margin: 0px auto;
+  }
+  #registration_header h1 {
+    font-size: 80pt;
+    line-height: 60pt;
+    position:absolute;
+    top: 60px;
+    right: 0px;
+    text-align:right;
+  }
+  #registration_header h2 {
+    font-family: PTSansNarrowRegular;
+    font-size: 20pt;
+    position: absolute;
+    top: 150px;
+    right: 0px;
+    text-align:right;
+  }
+<% end %>
 
-<%= render 'form' %>
+<div id="registration_header">
+  <%= image_tag 'characters/reggie.jpg' %>
+  <h1 style="color:#969696;">we're in <span style="color:#525252;">beta</span></h1>
+  <h2 style="color:#c0c0c0;">Oh Boy...!</h2>
+</div>
 
-<%= link_to 'Back', registrations_path %>
+<div id="page_content">
+  <section id="signup_form">
+    <h1><small><span class="accent_color_1">sign-up</span></small><br>
+      Form...</h1>
+      <div class="form_container">
+        <%= render 'form' %>
+      </div>
+  </section>
+  
+  
+</div>
+
