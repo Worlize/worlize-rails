@@ -1,4 +1,4 @@
-<%= form_for(@registration, :html => {:class => 'standard_form'}) do |f| %>
+<%= form_for(@registration, :remote => true,  :html => {:class => 'standard_form'}) do |f| %>
   <% if @registration.errors.any? %>
   <div class="errorExplanation">
     <h2>Oops!</h2>

@@ -20,6 +20,18 @@
     right: 0px;
     text-align:right;
   }
+  .beta-signup-thankyou h2 {
+    font-family: PTSansNarrowRegular;
+    font-size: 20pt;
+    line-height: 25pt;
+    color: #444;
+  }
+  .beta-signup-thankyou p {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 12pt;
+    line-height: 15pt;
+    color: #666;
+  }
 <% end %>
 
 <div id="registration_header">
@@ -33,10 +45,12 @@
     <h1><small><span class="accent_color_1">sign-up</span></small><br>
       Form...</h1>
       <div class="form_container">
-        <%= render 'form' %>
+        <% if @registration.persisted? %>
+          <%= render :partial => 'thankyou' %>
+        <% else %>
+          <%= render 'form' %>
+        <% end %>
       </div>
   </section>
-  
-  
 </div>
 

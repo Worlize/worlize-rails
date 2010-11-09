@@ -1,0 +1,5 @@
+<% if @registration.persisted? %>
+$('#signup_form .form_container').html("<%= escape_javascript(render(:partial => 'thankyou')) %>");
+<% else %>
+$('#signup_form .form_container').html("<%= escape_javascript(render(:partial => 'form')) %>");
+<% end %>
