@@ -288,6 +288,31 @@ h1, h2, h3, h4, h5, h6 {
 	font-family: PTSansNarrowBold;
 }
 
+/* @group 404 */
+
+.error404 {
+	text-align: center;
+	color: #797979;
+}
+.error404 a {
+	color: #797979;
+}
+.error404 a:hover {
+	color: #444;
+}
+.error404 h4 {
+	font-family: PTSansNarrowRegular;
+	font-size: 18pt;
+	line-height: 28pt;
+}
+
+.error404 h3 {
+	font-family: PTSansNarrowRegular;
+	font-size: 24pt;
+}
+
+/* @end */
+
 /* @group Beta Registration Page */
 #signup_form .form_container {
 	width: 300px;
