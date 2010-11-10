@@ -313,6 +313,31 @@ h1, h2, h3, h4, h5, h6 {
 
 /* @end */
 
+/* @group 500 */
+
+.error500 {
+	font-family: PTSansNarrowBold, Helvetica, Arial, sans-serif;
+}
+
+.error500 {
+	position: relative;
+	margin: 0px auto;
+	text-align: center;
+}
+
+.error500 .bannerContainer img {
+	display: block;
+	margin: 0px auto;
+}
+
+.error500 h2 {
+	margin: 15pt 0px;
+	font-size: 20pt;
+	color: #bfbfbf;
+}
+
+/* @end */
+
 /* @group Beta Registration Page */
 #signup_form .form_container {
 	width: 300px;
