@@ -8,9 +8,11 @@ Worlize::Application.routes.draw do |map|
   
   match '/about' => 'welcome#about', :as => :about
 
-  resources :authentications
-
   resources :registrations
+  
+  resource "profile" do
+    resources "authentications"
+  end
 
   namespace "marketplace" do
     resources :backgrounds do
