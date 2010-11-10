@@ -2,6 +2,9 @@ class AuthenticationsController < ApplicationController
   # GET /authentications
   # GET /authentications.xml
   
+  before_filter :require_user
+  
+  
   def index
     @authentications = current_user.authentications if current_user
 
