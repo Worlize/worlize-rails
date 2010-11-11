@@ -426,7 +426,7 @@ section > p {
 section h1 {
 	position: absolute;
 	right: 690px;
-	text-align: left;
+	text-align: right;
 	margin-top: -15px;
 	padding: 0px 60px 0px 0px;
 	font: 35pt/33pt PTSansNarrowBold, Helvetica, Arial, sans-serif;
