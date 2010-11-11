@@ -1,6 +1,7 @@
 Worlize::Application.routes.draw do |map|
 
   match '/auth/:provider/callback' => 'authentications#create'
+  match '/auth/failure' => 'authentications#failure'
 
   root :to => "welcome#index"
   

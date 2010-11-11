@@ -2,8 +2,7 @@ class AuthenticationsController < ApplicationController
   # GET /authentications
   # GET /authentications.xml
   
-  before_filter :require_user
-  
+  before_filter :require_user, :except => [ :create, :failure ]
   
   def index
     @authentications = current_user.authentications if current_user
@@ -24,6 +23,13 @@ class AuthenticationsController < ApplicationController
       format.html # show.html.erb
       format.xml  { render :xml => @authentication }
       format.json { render :json => @authentication }
+    end
+  end
+
+  def failure
+    flash[:error] = "Your authentication was unsuccessful."
+    respond_to do |format|
+      format.html { redirect_to current_user ? profile_authentications_url : root_url }
     end
   end
 
