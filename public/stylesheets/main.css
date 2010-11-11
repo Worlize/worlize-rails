@@ -418,8 +418,9 @@ section {
 	padding: 10px;
 }
 
-section p {
-
+section > p {
+	margin-bottom: 12pt;
+	line-height: 14pt;
 }
 
 section h1 {
@@ -438,11 +439,22 @@ section h1 small {
 	line-height: 22pt;
 }
 
-.accent_color_1 {
+section h2 {
+	font-family: PTSansNarrowRegular, "Helvetica Condensed", "Arial Narrow", Arial, sans-serif;
+	font-size: 13pt;
+}
+
+.accent-color-1 {
 	color: #78d1f1;
 }
-.accent_color_2 {
+.accent-color-1-dark {
+	color: #549ab3;
+}
+.accent-color-2 {
 	color: #d09d81;
+}
+.accent-color-3 {
+	color: #a697e6;
 }
 
 /* @end */

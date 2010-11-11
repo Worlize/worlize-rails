@@ -6,3 +6,58 @@
 </script>
 <% end %>
 
+<% content_for :extra_styles do %>
+#press-header {
+  display: block;
+  position: relative;
+  width: 850px;
+  height: 227px;
+  margin: 0px auto 30px;
+}
+
+#press-header h1 {
+  font-size: 80pt;
+  line-height: 80pt;
+  position: absolute;
+  left: 0px;
+  top: 40px;
+}
+#press-header h2 {
+  font-size: 22pt;
+  line-height: 22pt;
+  font-family: PTSansNarrowRegular, Helvetica, Arial, sans-serif;
+  color: #c0c0c0;
+  position: absolute;
+  left: 380px;
+  top: 140px;
+}
+#press-header .light {
+  color: #969696;  
+}
+#press-header small {
+  font-size: 58pt;
+}
+#press-header img {
+  float: right;
+}
+<% end %>
+
+<div id="press-header">
+  <img src="/images/characters/press.jpg" width="287" height="227">
+  <h1><span class="light">yes,&nbsp;</span> <small>I am</small> P.R.</h1>
+  <h2>unfortunately...</h2>
+</div>
+
+<section id="the-pitch">
+  <h1><small class="accent-color-1">the</small><br>
+      PITCH...</h1>
+  <h2 class="accent-color-1-dark">Pre-Baked Worlize Script...</h2>
+  <p>My name is P.R., I’d like to introduce you to the fantastic, one of a kind, cutting-edge, ground breaking, awesome Worlize.</p>
+  <p>Yes, that’s pronounced “whirl'-ize” (or for the rest of the world “whirl'-ise.”)</p>
+  <p>Worlize revolutionizes social gaming by bringing in a new level of customization and interaction like never before!<br>
+   (If they are laughing - go to section B of the pitch guide, then continue).</p>
+  <p>I’d love to setup a demo for you if you have the time sometime this year?</p>
+  <p>(If no - call day and night, email constantly and stalk until a yes)<br>
+     (If yes - don’t faint.   <strong>Setup a demo and fill out <%= link_to 'this form here', new_registration_path %></strong>)</p>
+</section>
+
