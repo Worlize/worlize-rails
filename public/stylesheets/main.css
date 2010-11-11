@@ -341,7 +341,7 @@ h1, h2, h3, h4, h5, h6 {
 /* @group Beta Registration Page */
 #signup_form .form_container {
 	width: 300px;
-	margin: 0px auto;
+	margin: 0px 0px 0px 150px;
 }
 
 #signup_form input[type=text] {
@@ -414,7 +414,7 @@ h1, h2, h3, h4, h5, h6 {
 
 section {
 	width: 450px;
-	margin: 10px 0px 10px 330px;
+	margin: 10px 0px 10px 280px;
 	padding: 10px;
 }
 
@@ -425,7 +425,7 @@ section > p {
 
 section h1 {
 	position: absolute;
-	right: 660px;
+	right: 690px;
 	text-align: left;
 	margin-top: -15px;
 	padding: 0px 60px 0px 0px;
@@ -456,9 +456,45 @@ section h2 {
 .accent-color-3 {
 	color: #a697e6;
 }
+.accent-color-4 {
+	color: #7fd66b;
+}
+.accent-color-5 {
+	color: #f390d6;
+}
+.accent-color-6 {
+	color: #d4cd58;
+}
 
 /* @end */
 
+/* @group Floating Nav */
+nav.right-floating-menu {
+  display: block;
+  position: absolute;
+  width: 170px;
+  left: 730px;
+  text-align: right;
+}
+nav.right-floating-menu h1 {
+	font-size: 18pt;
+	line-height: 25pt;
+	color: #9d9d9d;
+}
+nav.right-floating-menu a {
+	text-decoration: none;
+	font: 13pt/15pt PTSansNarrowBold;
+}
+nav.right-floating-menu li:hover {
+	color: #AAA;
+	list-style-position: inside;
+	list-style-type: disc;
+}
+nav.right-floating-menu a:hover {
+	color: #AAA;
+}
+
+/* @end */
 
 /* @group Header */
 
