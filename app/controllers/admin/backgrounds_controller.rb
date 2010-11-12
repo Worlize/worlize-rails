@@ -1,4 +1,6 @@
 class Admin::BackgroundsController < ApplicationController
+  layout 'admin'
+  
   def show
     @background = Background.find(params[:id])
   end
