@@ -1,9 +1,0 @@
-development:
-    access_key_id: AKIAJKPRGV6PIKIHNRZA
-    secret_access_key: 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
-production:
-    access_key_id: AKIAJKPRGV6PIKIHNRZA
-    secret_access_key: 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
-test:
-    access_key_id: AKIAJKPRGV6PIKIHNRZA
-    secret_access_key: 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
