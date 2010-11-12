@@ -10,15 +10,9 @@ class BackgroundUploader < CarrierWave::Uploader::Base
   #storage :file
   storage :s3
 
-  if Rails.env == 'production'
-    define_method 's3_bucket', lambda {
-      'worlize_backgrounds'
-    }
-  else
-    define_method 's3_bucket', lambda {
-      'worlize_backgrounds_dev'
-    }
-  end
+  define_method 's3_bucket', lambda {
+    "#{Worlize.config['amazon']['bucket_name_prefix']}backgrounds"
+  }
 
   # Override the directory where uploaded files will be stored
   # This is a sensible default for uploaders that are meant to be mounted:

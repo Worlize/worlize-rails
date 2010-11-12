@@ -2,6 +2,11 @@ global:
     initial_currency:
         coins: 15000
         bucks: 50
+# Update this amazon information as appropriate...
+# the values here are merely examples.
+    amazon:
+        access_key_id: AKIAJKPRGV6PIKIHNRZA
+        secret_access_key: Bg6+T2gixYsdvS/DLygL9v4Pm4auB6uIdw9hX/3W
     redis_servers:
         presence:
             host: localhost
@@ -30,7 +35,13 @@ global:
         preferences:
             host: localhost
             db: 8
-production: {}
-development: {}
-test: {}
+production:
+    amazon:
+        bucket_name_prefix: worlize_
+development:
+    amazon:
+        bucket_name_prefix: worlize_dev_
+test:
+    amazon:
+        bucket_name_prefix: worlize_test_
 
