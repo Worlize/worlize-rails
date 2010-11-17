@@ -174,3 +174,6 @@ DEPENDENCIES
   unicorn
   will_paginate (~> 3.0.pre2)
   yajl-ruby
+
+METADATA
+  version: 1.0.6
