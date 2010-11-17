@@ -1,4 +1,7 @@
-/* @override http://www.worlize.com/stylesheets/main.css?v=2 */
+/* @override 
+	http://www.worlize.com/stylesheets/main.css?v=2
+	http://localhost/stylesheets/main.css?v=2
+*/
 
 /* @group Boilerplate */
 
@@ -338,6 +341,27 @@ h1, h2, h3, h4, h5, h6 {
 
 /* @end */
 
+/* @group Press Section */
+
+section#in-the-news {
+	width: 500px;
+}
+
+.news-brief-quote {
+	float: left;
+	text-align: center;
+	margin: 0px 10px 50px;
+}
+
+.news-brief-quote > h1 {
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight: lighter;
+	font-size: 10pt;
+	margin: 0px 0px 5px;
+}
+
+/* @end */
+
 /* @group Beta Registration Page */
 #signup_form .form_container {
 	width: 300px;
@@ -423,7 +447,7 @@ section > p {
 	line-height: 14pt;
 }
 
-section h1 {
+section > h1 {
 	position: absolute;
 	right: 690px;
 	text-align: right;
@@ -431,15 +455,15 @@ section h1 {
 	padding: 0px 30px 0px 0px;
 	font: 35pt/33pt PTSansNarrowBold, Helvetica, Arial, sans-serif;
 }
-section h1.light {
+section > h1.light {
 	color: #969696;
 }
-section h1 small {
+section > h1 small {
 	font-size: 22pt;
 	line-height: 22pt;
 }
 
-section h2 {
+section > h2 {
 	font-family: PTSansNarrowRegular, "Helvetica Condensed", "Arial Narrow", Arial, sans-serif;
 	font-size: 13pt;
 }
