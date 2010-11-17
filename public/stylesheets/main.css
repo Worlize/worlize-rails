@@ -353,7 +353,7 @@ section#in-the-news {
 	margin: 0px 10px 50px;
 }
 
-.news-brief-quote > h1 {
+.news-brief-quote > p {
 	font-family: Helvetica, Arial, sans-serif;
 	font-weight: lighter;
 	font-size: 10pt;
