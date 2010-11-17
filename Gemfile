@@ -1,7 +1,7 @@
 source :rubygems
 
 #gem 'mongrel'
-gem 'rails', '3.0.1'
+gem 'rails', '3.0.3'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
