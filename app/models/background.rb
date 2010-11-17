@@ -1,5 +1,6 @@
 class Background < ActiveRecord::Base
   has_many :background_instances, :dependent => :destroy
+  has_many :users, :through => :background_instances
   belongs_to :creator, :class_name => 'User'
   before_create :assign_guid
 

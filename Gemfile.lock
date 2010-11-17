@@ -1,9 +1,10 @@
 GIT
   remote: git://github.com/jnicklas/carrierwave.git
-  revision: 43ab0bc20edffe7106434c54c502c015c9972d5e
+  revision: 7157a0ed628808225744b25798ba10841c929bc1
+  branch: 0.5.0
   specs:
     carrierwave (0.5.0)
-      activesupport (~> 3.0)
+      activesupport (~> 3.0.0)
 
 GEM
   remote: http://rubygems.org/
