@@ -21,9 +21,8 @@ class RegistrationsController < ApplicationController
 
     respond_to do |format|
       if @registration.save
-        if !@registration.developer
-          Notifier.beta_full_email(@registration).deliver
-        end
+        Notifier.beta_full_email(@registration).deliver
+        JessicaNotifier.beta_full_email(@registration).deliver
         format.html { render :action => 'new' }
         format.js
         format.xml  { render :xml => @registration, :status => :created, :location => @registration }
