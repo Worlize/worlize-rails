@@ -2,7 +2,16 @@
 
 <% content_for :page_script do %>
 <script>
-  
+  jQuery(function($) {
+    $('nav.right-floating-menu a').click(function(event){
+      event.preventDefault();
+      var href = event.target.href;
+      var index = href.indexOf("#");
+      href = href.slice(index+1);
+      var target = $("a[name=" + href + "]").first();
+      $('html,body').animate({scrollTop: target.offset().top-115},'slow');
+    });
+  });
 </script>
 <% end %>
 
@@ -41,97 +50,224 @@
   float: right;
 }
 
-
 <% end %>
 
-<div id="press-header">
-  <img src="/images/characters/press.jpg" width="287" height="227">
-  <h1><span class="light">yes,&nbsp;</span> <small>I am</small> P.R.</h1>
-  <h2>unfortunately...</h2>
+<div id="press-page">
+
+  <div id="press-header">
+    <img src="/images/characters/press.jpg" width="287" height="227">
+    <h1><span class="light">yes,&nbsp;</span> <small>I am</small> P.R.</h1>
+    <h2>unfortunately...</h2>
+  </div>
+
+  <nav class="right-floating-menu">
+    <h1>Boring Stuff</h1>
+    <ul>
+      <li><a href="#in-the-news">In the News</a></li>
+      <li><a href="#press-releases">Press Releases</a></li>
+      <li><a href="#background">Background</a></li>
+      <li><a href="#executive-bios">Executive Bios</a></li>
+      <li><a href="#image-gallery">Image Gallery</a></li>
+      <li><a href="#contact">Contact</a></li>      
+    </ul>
+  </nav>
+
+  <a name="the-pitch"></a>
+  <section id="the-pitch">
+    <h1><small class="accent-color-1">the</small><br>
+        PITCH</h1>
+    <h2 class="accent-color-1-dark">Pre-Baked Worlize Script...</h2>
+    <p>My name is P.R., I’d like to introduce you to the fantastic, one of a kind, cutting-edge, ground breaking, awesome Worlize.</p>
+    <p>Yes, that’s pronounced “whirl'-ize” (or for the rest of the world “whirl'-ise.”)</p>
+    <p>Worlize revolutionizes social gaming by bringing in a new level of customization and interaction like never before!<br>
+     (If they are laughing - go to section B of the pitch guide, then continue).</p>
+    <p>I’d love to setup a demo for you if you have the time sometime this year?</p>
+    <p>(If no - call day and night, email constantly and stalk until a yes)<br>
+       (If yes - don’t faint.   <strong>Setup a demo and fill out <%= link_to 'this form here', new_registration_path %></strong>)</p>
+  </section>
+
+  <a name="in-the-news"></a>
+  <section id="in-the-news">
+    <h1><small class="accent-color-2">in the</small><br>
+        NEWS</h1>
+    <div class="news-brief-quote">
+      <a href="http://venturebeat.com/2010/06/28/worlize-expands-team-for-social-gaming-platform/">
+        <p>"Worlize is kicking..."</p>
+        <%= image_tag 'press/venturebeat-logo.png' %>
+      </a>
+    </div>
+    <div class="news-brief-quote">
+      <a href="http://worldsinmotion.biz/2010/06/worlize_launches_beta_for_soci.php">
+        <p>"Tinker with the Worlize..."</p>
+        <%= image_tag 'press/gamasutra-logo.png' %>
+      </a>
+    </div>
+    <div class="news-brief-quote">
+      <a href="http://techcrunch.com/2010/06/16/worlize/">
+        <p>"Beginners can point..."</p>
+        <%= image_tag 'press/techcrunch-logo.png' %>
+      </a>
+    </div>
+    <div class="clearfix"></div>
+  
+    <article>
+      <img class="thumbnail" src="/images/press/techcrunch-logo.png" alt="TechCrunch">
+      <h1>Worlize Is Building A User-Generated Social Gaming Platform, Raises Funding</h1>
+      <h2>by Robin Wauters on Jun 16, 2010</h2>
+      <p>Worlize is kicking off the private beta of what it calls the first user-created social gaming and chat platform for Facebook and other social networks. The service will be kept under wraps until the public launch in Fall 2010, but you can head to the website now to sign up for the public beta release.</p>
+      <div class="readmore"><a href="http://techcrunch.com/2010/06/16/worlize/">Read More</a></div>
+    </article>
+  
+    <article>
+      <img class="thumbnail" src="/images/press/venturebeat-logo.png" alt="VentureBeat">
+      <h1>Worlize expands team for social gaming platform</h1>
+      <h2>by Dean Takahashi on June 28, 2010</h2>
+      <p> Worlize has created a social gaming and chat platform that users can modify to create their own custom two-dimensional games, and now it is expanding 		its team to pull together its formal launch. </p> 
+  		<p> A couple of weeks ago, the Los Angeles-based company announced its private beta launch for the platform on Facebook, Twitter, MySpace and Open Social. It also announced an angel funding round. </p>
+      <div class="readmore"><a href="http://venturebeat.com/2010/06/28/worlize-expands-team-for-social-gaming-platform/">Read More</a></div>
+    </article>
+  
+    <article>
+      <img class="thumbnail" src="/images/press/socaltech-logo.jpg" alt="SocalTech">
+      <h1>Interview with Brian McKelvey, Worlize</h1>
+      <h2>by Benjamin F. Kuo on Jun 23, 2010</h2>
+      <p>Earlier this month, Los Angeles-based startup Worlize (www.worlize.com) announced it had received a seed round of funding, and launched a firm to focus on social gaming and chat. The firm's CEO is Brian McKelvey, who we caught up with recently to learn more about his background, the firm, and the market it hopes to serve.</p>
+      <div class="readmore"><a href="http://www.socaltech.com/interview_with_brian_mckelvey__worlize/s-0029395.html">Read More</a></div>
+    </article>
+  
+    <article>
+      <img class="thumbnail" src="/images/press/gamasutra-logo.png" alt="Worlds In Motion - Gamasutra">
+      <h1>Worlize Launches Beta For Social Gaming Platform, Receives Funding</h1>
+      <h2>June 18, 2010</h2>
+      <p> Worlize launched the private beta for its "user-created social gaming and chat platform" for social networking services like Facebook, MySpace, Twitter, and OpenSocial.</p> 
+  		<p>The Los Angeles-based startup revealed that it also raised initial funding (amount unspecified) from private individuals across the gaming and technology industry, such as Worlize's newly named CFO Greg Diller -- previously a project consultant for Metro-Goldwyn-Mayer and financial reporting manager at Cannon Pictures.</p>
+      <div class="readmore"><a href="http://worldsinmotion.biz/2010/06/worlize_launches_beta_for_soci.php">Read More</a></div>
+    </article>
+  
+    <article>
+      <img class="thumbnail" src="/images/press/socialtimes-logo.jpg" alt="Social Times">
+      <h1>Worlize Is a New Social Network Where Users Make The Games</h1>
+      <h2>by Azam Khan on June 16, 2010</h2>
+      <p> User-generated social game and chat platform provider Worlize has launched the beta version of its software on major social platforms including Facebook, Twitter, Myspace and OpenSocial. In a nutshell, the platform allows users to interact with each other in fun, 2D environments as well as play user-created games with each other. The Los Angeles based company also announced securing $150,000 in angel funding that it will use to continue building out the product and hire talent. Public launch of the platform is not due out until fall but players can still sign up to try out the public beta release.</p>
+      <div class="readmore"><a href="http://www.socialtimes.com/2010/06/worlize-is-a-new-social-network-where-users-make-the-games/">Read More</a></div>
+    </article>
+  
+  
+  </section>
+
+  <a name="press-releases"></a>
+  <section id="press-releases">
+    <h1><small class="accent-color-3">press</small><br>
+        RELEASES</h1>
+
+    <article>
+      <h1>Worlize Announces Private Beta and Initial Funding for Social Gaming Platform</h1>
+      <h2>New Disruptive Worlize Platform Combines User Creativity and Gaming With First-of-Its-Kind Features for Facebook, MySpace, Twitter and OpenSocial</h2>
+      <img class="thumbnail" src="/images/press/ar_launch.jpg" alt="">
+
+      <p><strong>June 16, 2010 - Los Angeles, Ca.  </strong>  Worlize, Inc. today announced the private beta launch of the first user-created social gaming and chat platform for Facebook and social networks including Twitter, MySpace and OpenSocial. The much anticipated new 2D platform, slated for launch in Fall 2010, brings together a new world of interactivity for users, including the ability to play and create their own areas and games. The company has also secured initial funding from private individuals across the gaming and technology spectrum, with investors including Worlize's newly named CFO, Greg Diller.</p> 
+      <div class="readmore"><a href="http://www.marketwire.com/press-release/Worlize-Announces-Private-Beta-and-Initial-Funding-for-Social-Gaming-Platform-1277166.htm">Read More</a></div>
+    </article>
+    
+    <article>
+      <h1>Worlize Signs Former Animax CTO Sabri Sansoy</h1>
+      <h2>Worlize has secured interactive media and gaming veteran, Sabri Sansoy, as Chief Technology Officer for disruptive new social gaming and chat platform.</h2>
+      <img class="thumbnail" src="/images/press/ar_sabri.jpg" alt="Sabri Sansoy, CTO Worlize, Inc.">
+
+      <p><strong>June 29, 2010 - Los Angeles, CA.</strong> Worlize, Inc., the new user-created social gaming and chat platform, today announced Sabri Sansoy has joined as Chief Technology Officer. As former CTO for entertainment and gaming powerhouse Animax Entertainment, Sansoy has led the development of next generation MMORPGs and virtual worlds, as well as orchestrated original game development, publishing and infrastructure.  Prior to Animax Entertainment, Sansoy served as Vice President of Interactive Entertainment Technology at Game Show Network (GSN), leading research and development of innovative technologies to support multiplatform entertainment and gaming initiatives, which has been nominated four times for Emmy awards in interactive television. </p> 
+      <div class="readmore"><a href="http://www.marketwire.com/press-release/Worlize-Announces-Private-Beta-and-Initial-Funding-for-Social-Gaming-Platform-1277166.htm">Read More</a></div>
+    </article>
+    
+  </section>
+
+  <a name="background"></a>
+  <section id="background">
+    <h1><small class="accent-color-4">some</small><br>
+        BACKGROUND</h1>
+
+    <article>
+      <h1>About Worlize</h1>
+      <p>Worlize is the first user-created social gaming and chat platform for Facebook and social networks including Twitter, MySpace and OpenSocial.  The much anticipated new 2D platform, slated for launch in Fall 2010, brings together a new world of interactivity for users, including the ability to play and create their own areas and games. </p> 
+      <p>Within Worlize, beginners have point-and-click access to customizable plug-and-play games, including puzzles, time management and strategy casual games, card and board games, as well as MMORPGs. For advanced users and game developers the company will release the Worlize API in Fall 2010 to allow the creation of highly interactive areas and games within the platform.</p>
+    </article>
+    
+    <article>
+      <h1>About Worlize, Inc.</h1> 
+      <p>The Worlize team is comprised of technology and gaming veterans, including Brian McKelvey, Chief Executive Officer and Founder, and Chief Financial Officer Greg Diller.  McKelvey has over a decade of experience developing and deploying cutting-edge technology within the entertainment and gaming industries. Having designed and deployed applications and casual games for a multitude of corporations including Paramount, Sony Pictures, Lionsgate  and Live Nation.  Chief Financial Officer Greg Diller brings over thirty years of corporate financial and technology expertise, including extensive experience with strategic planning, acquisitions, infrastructure, tax and risk management.   Diller's career has spanned across all facets of the entertainment industry, from The Hollywood Reporter to Cannon Pictures, and most recently, Metro-Goldwyn-Mayer (MGM).</p>
+    </article>
+  </section>
+
+  <a name="executive-bios"></a>
+  <section id="executive-bios">
+    <h1><small class="accent-color-5">executive</small><br>
+        BIOS</h1>
+    <article>
+      <img src="/images/press/ar_brian.jpg" alt="Brian McKelvey, CEO, Worlize Inc.">
+      <h1>Brian McKelvey, Chief Executive Officer and Founder</h1> 
+			<p>Brian McKelvey is the founder and CEO of Worlize, Inc.  Brian has over a decade developing and deploying cutting-edge technology within the entertainment.  McKelvey has led, designed and deployed gaming and web technologies for a multitude of leading companies including Paramount Pictures,  Sony Pictures Entertainment,  Lionsgate, TNT, GSN and Live Nation. McKelvey is currently based in Los Angeles, Ca.</p>
+			<div class="clearfix"></div>
+    </article>
+    
+    <article>
+      <img src="/images/press/ar_greg.jpg" alt="Brian McKelvey, CEO, Worlize Inc.">
+      <h1>Greg Diller, Chief Financial Officer</h1> 
+			<p>Diller brings over thirty years of corporate financial and technology expertise, including extensive experience with strategic planning, infrastructure, tax and risk management.   Diller's career has spanned across the entertainment industry,  from The Hollywood Reporter to Canon Pictures, and most recently, Metro-Goldwyn-Mayer (MGM).  Diller is currently based in Los Angeles, Ca.</p>
+			<div class="clearfix"></div>	
+    </article>
+    
+    <article>
+      <img src="/images/press/ar_sabri.jpg" alt="Brian McKelvey, CEO, Worlize Inc.">
+      <h1>Sabri Sansoy, Chief Technology Officer</h1> 
+			<p>As former CTO for entertainment and gaming powerhouse Animax Entertainment, Sansoy has led the development of next generation MMORPGs, virtual worlds and orchestrated original game development, publishing and infrastructure.  Prior to Animax Entertainment, Sansoy served as Vice President of Interactive Entertainment Technology at GSN. Sansoy holds an undergraduate degree in Astrophysics from the University of New Mexico and a Masters degree in Aeronautics and Astronautics from MIT. Sansoy is based in Los Angeles, Ca.</p>
+			<div class="clearfix"></div>
+    </article>
+    
+    
+    
+  </section>
+
+  <a name="image-gallery"></a>
+  <section id="image-gallery">
+    <h1><small class="accent-color-6">image</small><br>
+        GALLERY</h1>
+
+				<ul class="gallery"> 
+  				<li><a href="/images/press/logo-hires.jpg"><img src="/images/press/logo-thumb.jpg"></a></li> 
+					<li><a href="/images/press/brian-hires.jpg"><img src="/images/press/brian-thumb.jpg"></a></li> 
+					<li><a href="/images/press/greg-hires.jpg"><img src="/images/press/greg-thumb.jpg"></a></li> 
+					<li><a href="/images/press/sabri-hires.jpg"><img src="/images/press/sabri-thumb.jpg"></a></li> 
+				</ul> 
+				<div style="clear:left;"></div>
+
+  </section>
+
+  <a name="contact"></a>
+  <section id="contact">
+    <h1><small class="accent-color-1">establish</small><br>
+        CONTACT</h1>
+    <article>
+      <h1>For Media and Press related requests: 
+				</h1> 
+			<p> 
+			<strong>Jessica Hasson </strong> 
+			</p> 
+			
+			<p>jessica (at) worlize (dot) com
+			</p> 
+			
+			<p> Phone: (323) 710-3556 
+			</p>
+    </article>
+    
+    <article>
+      <h1>For Investor Relations: 
+				</h1> 
+			<p> 
+			<strong>Greg Diller</strong>
+			</p> 
+			
+			<p>greg (at) worlize (dot) com
+			</p>
+    </article>
+
 </div>
-
-<nav class="right-floating-menu">
-  <h1>Boring Stuff</h1>
-  <ul>
-    <li><a href="#in-the-news">In the News</a></li>
-    <li><a href="#press-releases">Press Releases</a></li>
-    <li><a href="#background">Background</a></li>
-    <li><a href="#executive-bios">Executive Bios</a></li>
-    <li><a href="#image-gallery">Image Gallery</a></li>
-    <li><a href="#contact">Contact</a></li>      
-  </ul>
-</nav>
-
-<a name="the-pitch"></a>
-<section id="the-pitch">
-  <h1><small class="accent-color-1">the</small><br>
-      PITCH</h1>
-  <h2 class="accent-color-1-dark">Pre-Baked Worlize Script...</h2>
-  <p>My name is P.R., I’d like to introduce you to the fantastic, one of a kind, cutting-edge, ground breaking, awesome Worlize.</p>
-  <p>Yes, that’s pronounced “whirl'-ize” (or for the rest of the world “whirl'-ise.”)</p>
-  <p>Worlize revolutionizes social gaming by bringing in a new level of customization and interaction like never before!<br>
-   (If they are laughing - go to section B of the pitch guide, then continue).</p>
-  <p>I’d love to setup a demo for you if you have the time sometime this year?</p>
-  <p>(If no - call day and night, email constantly and stalk until a yes)<br>
-     (If yes - don’t faint.   <strong>Setup a demo and fill out <%= link_to 'this form here', new_registration_path %></strong>)</p>
-</section>
-
-<a name="in-the-news"></a>
-<section id="in-the-news">
-  <h1><small class="accent-color-2">in the</small><br>
-      NEWS</h1>
-  <div class="news-brief-quote">
-    <a href="http://techcrunch.com/2010/06/16/worlize/">
-      <p>"Beginners can point..."</p>
-      <%= image_tag 'press/techcrunch-logo.png' %>
-    </a>
-  </div>
-  <div class="news-brief-quote">
-    <a href="http://venturebeat.com/2010/06/28/worlize-expands-team-for-social-gaming-platform/">
-      <p>"Worlize is kicking..."</p>
-      <%= image_tag 'press/venturebeat-logo.png' %>
-    </a>
-  </div>
-  <div class="news-brief-quote">
-    <a href="http://worldsinmotion.biz/2010/06/worlize_launches_beta_for_soci.php">
-      <p>"Tinker with the Worlize..."</p>
-      <%= image_tag 'press/gamasutra-logo.png' %>
-    </a>
-  </div>
-  <div class="clearfix"></div>
-</section>
-
-<a name="press-releases"></a>
-<section id="press-releases">
-  <h1><small class="accent-color-3">press</small><br>
-      RELEASES</h1>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-</section>
-
-<a name="background"></a>
-<section id="background">
-  <h1><small class="accent-color-4">some</small><br>
-      BACKGROUND</h1>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-</section>
-
-<a name="executive-bios"></a>
-<section id="executive-bios">
-  <h1><small class="accent-color-5">executive</small><br>
-      BIOS</h1>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-</section>
-
-<a name="image-gallery"></a>
-<section id="image-gallery">
-  <h1><small class="accent-color-6">image</small><br>
-      GALLERY</h1>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-</section>
-
-<a name="contact"></a>
-<section id="contact">
-  <h1><small class="accent-color-1">establish</small><br>
-      CONTACT</h1>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-</section>

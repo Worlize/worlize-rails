@@ -1,6 +1,7 @@
 /* @override 
 	http://www.worlize.com/stylesheets/main.css?v=2
 	http://localhost/stylesheets/main.css?v=2
+	http://localhost/stylesheets/main.css?v=3
 */
 
 /* @group Boilerplate */
@@ -344,8 +345,11 @@ h1, h2, h3, h4, h5, h6 {
 /* @group Press Section */
 
 section#in-the-news {
-	width: 550px;
 	padding: 0px;
+}
+
+section#the-pitch {
+	width: 450px;
 }
 
 .news-brief-quote {
@@ -365,6 +369,74 @@ section#in-the-news {
 .news-brief-quote a {
 	text-decoration: none;
 }
+
+#press-page article {
+	margin: 0px 0px 50px;
+}
+
+#in-the-news article img {
+	float: none;
+	position: relative;
+	margin: 0px 0px 10px 10px;
+}
+
+#in-the-news article h1 {
+	margin: 0px 0px 0px 10px;
+}
+#press-page #in-the-news article h2 {
+	margin: 0px 0px 0px 10px;
+}
+
+#press-page article h1 {
+	font-size: 14pt;
+	font-family: PTSansNarrowRegular;
+}
+#press-page article h2 {
+	font-size: 10pt;
+	font-family: PTSansNarrowRegular;
+	color: #888;
+	margin: 5px 0px 12px 0px;
+}
+
+
+#press-page #in-the-news article p {
+	margin: 5px 10px 10px;
+}
+#press-page article p {
+	text-align: justify;
+	margin: 5px 0px 10px;
+}
+
+
+#in-the-news .readmore a {
+	margin: 0px 0px 0px 10px;
+}
+#press-page .readmore a {
+	font-weight: bold;
+}
+
+#press-page article img {
+	float: right;
+	margin: 0px 10px 10px 15px;
+}
+
+#press-page ul.gallery {
+	list-style-type: none;
+}
+
+#press-page ul.gallery li {
+	float: left;
+	margin: 10px;
+}
+
+#press-page ul.gallery img {
+	border: 3px solid #DDD;
+}
+
+#press-page ul.gallery img:hover {
+	border: 3px solid #999;
+}
+
 
 /* @end */
 
@@ -443,8 +515,8 @@ section#in-the-news {
 /* @group Section Column Styling */
 
 section {
-	width: 450px;
-	margin: 10px 0px 10px 280px;
+	width: 550px;
+	margin: 10px 0px 50px 280px;
 	padding: 10px;
 }
 
