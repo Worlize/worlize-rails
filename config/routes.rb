@@ -39,6 +39,7 @@ Worlize::Application.routes.draw do |map|
   match 'admin' => 'admin#index', :as => :admin_index
   
   namespace "admin" do
+    resources :authentications
     resources :beta_registrations do
       member do
         get 'build_account'

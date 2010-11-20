@@ -11,7 +11,7 @@
   <% @user.authentications.each do |authentication| %>
   <div>
     <%= authentication.provider.capitalize %>, uid: <%= authentication.uid %>
-      (<%= link_to "Unlink", authentication_path(authentication), :method => :delete %>)
+      (<%= link_to "Unlink", admin_authentication_path(authentication), :method => :delete %>)
   </div>
   <% end %>
 <% else %>
