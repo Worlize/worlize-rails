@@ -336,6 +336,7 @@ table.datagrid th {
 
 table.datagrid th,td {
 	padding: 3px 8px;
+	font-size: 10pt;
 }
 
 table.datagrid td {

@@ -36,13 +36,15 @@ Worlize::Application.routes.draw do |map|
   
   resources :avatars
   
+  resources :invite, :controller => 'Invitations'
+  
   match 'admin' => 'admin#index', :as => :admin_index
   
   namespace "admin" do
     resources :authentications
     resources :beta_registrations do
       member do
-        get 'build_account'
+        post 'invite_user'
       end
     end
     resources :users

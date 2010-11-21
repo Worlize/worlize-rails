@@ -1,8 +1,4 @@
-/* @override 
-	http://www.worlize.com/stylesheets/main.css?v=2
-	http://localhost/stylesheets/main.css?v=2
-	http://localhost/stylesheets/main.css?v=3
-*/
+/* @override http://www.worlize.com/stylesheets/main.css?v=3 */
 
 /* @group Boilerplate */
 
@@ -232,18 +228,25 @@ button {  width: auto; overflow: visible; }
  /* Primary Styles */
 
 input[type=text],
-input[type=password] {
-	outline: none;
+input[type=password],
+select {
 	background-color: #F0F0F0;
 	border: 1px solid #888;
 	padding: 2px 5px;
-	color: #4c443c;
+	outline: none;
+	color: #787571;
 	font: 11pt Helvetica, Arial, sans-serif;
 }
 
 input[type=text]:focus,
-input[type=password]:focus {
+input[type=password]:focus,
+select:focus {
 	background-color: #FFF;
+	color: #000;
+}
+
+select {
+	border-radius: 10px;
 }
 
 label {
@@ -453,6 +456,19 @@ section#the-pitch {
 
 /* @end */
 
+/* @group Beta Invitation */
+
+#beta-invite-form .standard_form {
+	width: 345px;
+}
+
+#beta-invite-form .standard_form {
+	margin: 30px 0px 0px 30px;
+}
+
+
+/* @end */
+
 /* @group Form Styles */
 
 /* @group Errors */
@@ -467,6 +483,13 @@ section#the-pitch {
 	background: #ffebeb url(/images/error-jelly.png) no-repeat 15px 15px;
 }
 
+.errorExplanation ul {
+	margin: 0px 0px 5px 50px;
+}
+
+.errorExplanation ul li {
+	margin: 0px 0px 5px;
+}
 
 .errorExplanation h2 {
 	margin: 0px 5px 15px 65px;
@@ -481,7 +504,8 @@ section#the-pitch {
 	color: #c00000;
 }
 
-.field_with_errors input {
+.field_with_errors input,
+.field_with_errors select {
 	background-color: #ffebeb;
 }
 
@@ -495,10 +519,15 @@ section#the-pitch {
 	margin-bottom: 2px;
 }
 .standard_form input,
-.standard_form button {
+.standard_form button,
+.standard_form select {
 	font-size: 15pt;
 	padding: 4px;
 	margin-bottom: 15px;
+}
+
+.standard_form select {
+	font-size: 15pt;
 }
 
 .standard_form input[type=submit],

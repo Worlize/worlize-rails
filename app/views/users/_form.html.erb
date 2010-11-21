@@ -1,0 +1,39 @@
+<% if @user.errors.any? %>
+<div class="errorExplanation">
+  <h2>Oops!</h2>
+  <ul>
+  <% @user.errors.full_messages.each do |msg| %>
+    <li><%= msg %></li>
+  <% end %>
+  </ul>
+</div>
+<% end %>
+
+<%= form_for(@user, :html => {:class => 'standard_form'}) do |f| %>
+  <%= hidden_field_tag :invite_code, @beta_invitation.invite_code %>
+  <%= f.label :username, 'Worlize Username' %>
+  <%= f.text_field :username %>
+  <%= f.label :password, 'Password' %>
+  <%= f.password_field :password %>
+  <%= f.label :password_confirmation, 'Password Confirmation' %>
+  <%= f.password_field :password_confirmation %>
+  <%= f.label :birthday, 'Birthday' %>
+  <%= f.date_select :birthday, {
+      :start_year => Time.now.year - 100,
+      :end_year => Time.now.year - 8,
+      :order => [ :month, :day, :year ],
+      :prompt => true,
+      :add_month_numbers => true
+  }  %>
+  <%= f.label :first_name, 'First Name' %>
+  <%= f.text_field :first_name %>
+  <%= f.label :last_name, 'Last Name' %>
+  <%= f.text_field :last_name %>
+  <%= f.label :email, 'Email' %>
+  <%= f.text_field :email %>
+  
+  <div style="text-align:right">
+    <%= f.submit 'join' %>
+  </div>
+
+<% end %>

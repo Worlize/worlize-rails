@@ -1,0 +1,5 @@
+<% if @success %>
+$('registration_row_<%= @registration.id %>').remove();
+<% else %>
+$('registration_row_<%= @registration.id %>').update('<td colspan="6">Unable to delete beta registration.</td>');
+<% end %>

@@ -12,6 +12,14 @@ class User < ActiveRecord::Base
   
   has_many :avatars, :foreign_key => 'creator_id', :dependent => :nullify
   
+  validates :first_name, :presence => true
+  validates :last_name, :presence => true
+  validates :birthday, :timeliness => {
+      :before => :thirteen_years_ago,
+      :type => :date
+  }
+  validates :email, { :presence => true }
+  
   acts_as_authentic do |c|
     #config options here
   end

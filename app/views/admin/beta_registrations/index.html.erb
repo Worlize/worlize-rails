@@ -3,7 +3,7 @@
 <% if @registrations.count > 0 %>
 <div>Sort by: <%= link_to "Name", admin_beta_registrations_path(:sort => 'name') %> | <%= link_to "Signup Date", admin_beta_registrations_path(:sort => 'date') %></div>
 <br>
-<table class="datagrid">
+<table class="datagrid" width="100%">
   <tr>
     <th>Name</th>
     <th>Email</th>
@@ -13,13 +13,20 @@
     <th>Actions</th>
   </tr>
   <% for registration in @registrations %>
-  <tr class="<%= cycle('even','odd') %>">
-    <td><%= registration.name %></td>
-    <td><%= registration.email %></td>
-    <td><%= registration.twitter %></td>
-    <td><%= registration.developer ? 'yes' : '' %></td>
-    <td><%= registration.created_at.strftime("%B %d, %Y %I:%M %p") %></td>
-    <td><%= link_to "Create Account", build_account_admin_beta_registration_url(registration) %></td>
+  <tr class="<%= cycle('even','odd') %>" id="registration_row_<%= registration.id %>">
+    <td width="20%">
+      <%- if registration.name -%>
+        <%= registration.name.truncate(25) %>
+      <%- else -%>
+        <%= "#{registration.first_name} #{registration.last_name}".truncate(25) %>
+      <%- end -%>
+    </td>
+    <td width="20%"><%= registration.email.truncate(25) %></td>
+    <td width="10%"><%= registration.twitter %></td>
+    <td width="10%"><%= registration.developer ? 'yes' : '' %></td>
+    <td width="20%"><%= registration.created_at.strftime("%Y-%m-%d %I:%M %p (UTC)") %></td>
+    <td width="20%"><%= link_to "Invite User", invite_user_admin_beta_registration_path(registration), :method => :post, :remote => true %> |
+                    <%= link_to "Delete", admin_beta_registration_path(registration), :method => :delete, :remote => true %></td>
   </tr>
   <% end %>
 </table>

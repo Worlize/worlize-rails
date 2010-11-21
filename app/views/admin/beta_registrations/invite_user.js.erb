@@ -1,0 +1,6 @@
+<% if @registration.name %>
+  <% name = @registraton.name %>
+<% else %>
+  <% name = "#{@registration.first_name} #{@registration.last_name}" %>
+<% end %>
+$('registration_row_<%= @registration.id %>').update('<td colspan="6">Invited user <%= escape_javascript(name) %>.</td>');

@@ -1,31 +1,16 @@
 class UsersController < ApplicationController
   
-  def new
-    @user = User.new
-  end
-
   def create
-    p params[:user]
+    @beta_invitation = BetaInvitation.find_by_invite_code!(params[:invite_code])
     @user = User.new(params[:user])
     if @user.save
       flash[:notice] = "Registration Successful."
-      redirect_to worlds_url
-    else
-      render :action => :new  
-    end
-  end
-
-  def edit
-    @user = User.find(params[:id])
-  end
-
-  def update
-    @user = User.find(params[:id])
-    if @user.update_attributes(params[:user])
-      flash[:notice] = "Successfully updated user."
+      if (@beta_invitation) {
+        @beta_invitation.destroy
+      }
       redirect_to root_url
     else
-      render :action => :edit
+      render "invitations/show"
     end
   end
 
