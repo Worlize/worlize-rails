@@ -1,0 +1,86 @@
+<% title "Social Accounts" %>
+
+<% content_for :extra_styles do %>
+  #authentications-header {
+    position: relative;
+    margin: 0px auto;
+    width: 950px;
+  }
+  #authentications-header table {
+    width: 950px;
+    border-collapse: collapse;
+  }
+  #authentications-header table td {
+    vertical-align: middle;
+    text-align: center;
+  }
+  #authentications-header h1 {
+    color: #525252;
+    font-size: 35pt;
+    line-height: 35pt;
+  }
+  #authentications-header h2 {
+    color: #525252;
+    font-size: 25pt;
+    line-height: 25pt;
+    font-family: PTSansNarrowRegular, Helvetica, Arial, sans-serif;
+  }
+  
+  section#authentications {
+    margin-top: 60px;
+    width: 450px;
+  }
+  section#authentications h2 {
+    font-size: 20pt;
+    line-height: 20pt;
+    color: #525252;
+  }
+  
+  #authentications .connect_links {
+    margin: 30px 0px 15px -40px;
+  }
+  
+  #authentications-header .welcome_name {
+    text-align: right;
+  }
+  
+  #authentications-header .welcome_worlize {
+    text-align: left;
+  }
+<% end %>
+
+<div id="authentications-header">
+  <table>
+    <tr>
+      <td class="welcome_name"><h1>Hi <span style="color:#969696;">(</span><%= current_user.username %><span style="color:#969696;">)</span></h1></td>
+      <td class="welcome_image"><%= image_tag 'characters/welcome-wagon.jpg' %></td>
+      <td class="welcome_worlize"><h2><span style="color:#969696;">Welcome</span> to Worlize!</h2></td>
+    </tr>
+  </table>
+</div>
+
+
+<section id="authentications">
+  <h1><span class="accent-color-1">get</span><br>
+      friends</h1>
+      
+  <h2>Connect with your friends from...</h2>
+  
+  <div class="connect_links">
+    <% if @facebook_connected %>
+      <%= image_tag('socialicons/facebook-connected.jpg') %>  
+    <% else %>
+      <%= link_to image_tag('socialicons/facebook-not-connected.jpg'), '/auth/facebook' %>
+    <% end %>
+
+    <% if @twitter_connected %>
+      <%= image_tag('socialicons/twitter-connected.jpg') %>  
+    <% else %>
+      <%= link_to image_tag('socialicons/twitter-not-connected.jpg'), '/auth/twitter' %>
+    <% end %>
+  </div>
+    
+  <p>Click the above icons to connect Facebook and/or Twitter with your Worlize account.  We’ll bring you right back here when you’re done!</p>
+    
+</section>
+

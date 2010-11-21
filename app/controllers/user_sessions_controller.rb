@@ -20,7 +20,14 @@ class UserSessionsController < ApplicationController
     respond_to do |format|
       if @user_session.save
         @user_session.user.reset_appearance!
-        format.html { redirect_back_or_default(root_url) }
+
+        if @user_session.user.linking_external_accounts?
+          default_url = profile_authentications_url
+        else
+          default_url = root_url
+        end
+
+        format.html { redirect_back_or_default(default_url) }
       else
         format.html { render :action => "new" }
       end

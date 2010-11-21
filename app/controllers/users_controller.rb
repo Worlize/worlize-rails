@@ -8,7 +8,8 @@ class UsersController < ApplicationController
       if (@beta_invitation)
         @beta_invitation.destroy
       end
-      redirect_to root_url
+      @user.first_time_login
+      redirect_to profile_authentications_url
     else
       render "invitations/show"
     end

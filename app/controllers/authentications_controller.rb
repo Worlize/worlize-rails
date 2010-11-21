@@ -7,6 +7,9 @@ class AuthenticationsController < ApplicationController
   def index
     @authentications = current_user.authentications if current_user
 
+    @facebook_connected = current_user.authentications.where(:provider => 'facebook').count > 0
+    @twitter_connected = current_user.authentications.where(:provider => 'twitter').count > 0
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @authentications }
@@ -40,22 +43,23 @@ class AuthenticationsController < ApplicationController
     logger.debug "Authentication Details:\n#{omniauth.to_yaml}\n"
     
     authentication = Authentication.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'])
-    flash[:notice] = "Authentication Successful"
-    if authentication
-      UserSession.create(authentication.user)
-    elsif current_user
-      current_user.authentications.create!(:provider => omniauth['provider'], :uid => omniauth['uid'])
-    else
-      user = User.new
-      if omniauth['provider'] == 'twitter'
-        user.name = omniauth['user_info']['name']
-        user.username = omniauth['user_info']['nickname']
+    if current_user
+      if authentication
+        flash[:alert] = "That #{omniauth['provider'].capitalize} account has already been associated with a Worlize account."
+      else
+        success = current_user.authentications.create(:provider => omniauth['provider'], :uid => omniauth['uid'])
+        if !success
+          flash[:alert] = "Unable to associate your #{omniauth['provider'].capitalize} account."
+        end
       end
-      user.admin = true
-      user.name = omniauth['']
-      user.authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'])
-      user.save(:validate => false)
+      redirect_to profile_authentications_url and return
+
+    elsif authentication
       UserSession.create(authentication.user)
+
+    else
+      session[:omniauth] = omniauth.except('extra')
+      redirect_to new_registration_url and return
     end
     redirect_to root_url
   end

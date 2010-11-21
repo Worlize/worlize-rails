@@ -20,9 +20,25 @@ class User < ActiveRecord::Base
   }
   validates :email, { :presence => true }
   
+  state_machine :initial => :new_user do
+    
+    event :first_time_login do
+      transition :new_user => :linking_external_accounts
+    end
+    
+    event :finish_linking_external_accounts do
+      transition :linking_external_accounts => :user_ready
+    end
+    
+  end
+  
   acts_as_authentic do |c|
     #config options here
   end
+  
+  # def initialize
+  #   super
+  # end
   
   def permissions
     if self.admin?
