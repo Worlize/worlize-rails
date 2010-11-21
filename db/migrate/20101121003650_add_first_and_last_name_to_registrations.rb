@@ -10,7 +10,7 @@ class AddFirstAndLastNameToRegistrations < ActiveRecord::Migration
       if name_parts.length > 1
         registration.last_name = name_parts[name_parts.length-1]
       end
-      registration.save!
+      registration.save(:validate => false)
     end
   end
 
