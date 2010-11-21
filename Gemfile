@@ -22,6 +22,7 @@ gem 'omniauth'
 
 gem "will_paginate", "~> 3.0.pre2"
 gem 'acts_as_list'
+gem 'date_validator'
 
 #gem 'aws-s3', :require => 'aws/s3'
 #gem 'right_aws'

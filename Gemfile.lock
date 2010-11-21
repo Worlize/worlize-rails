@@ -45,6 +45,8 @@ GEM
     authlogic (2.1.6)
       activesupport
     builder (2.1.2)
+    date_validator (0.5.9)
+      activemodel (>= 3.0.0)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     excon (0.2.4)
@@ -164,6 +166,7 @@ DEPENDENCIES
   acts_as_list
   authlogic (= 2.1.6)
   carrierwave!
+  date_validator
   fog
   guid
   mysql
