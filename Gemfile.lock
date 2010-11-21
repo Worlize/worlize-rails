@@ -6,6 +6,13 @@ GIT
     carrierwave (0.5.0)
       activesupport (~> 3.0.0)
 
+GIT
+  remote: git://github.com/pluginaweek/state_machine.git
+  revision: e625d2645a71fb5bc50ca61553b59b4890444508
+  branch: v0.9.4
+  specs:
+    state_machine (0.9.4)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -174,6 +181,7 @@ DEPENDENCIES
   rails (= 3.0.3)
   redis
   rmagick
+  state_machine!
   unicorn
   validates_timeliness (~> 3.0.0)
   will_paginate (~> 3.0.pre2)

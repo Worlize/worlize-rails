@@ -17,6 +17,7 @@ gem 'omniauth'
 gem "will_paginate", "~> 3.0.pre2"
 gem 'acts_as_list'
 gem 'validates_timeliness', '~> 3.0.0'
+gem 'state_machine', :git => 'git://github.com/pluginaweek/state_machine.git', :branch => 'v0.9.4'
 
 # I applied a couple manual fixes to be able to use the official release of
 # authlogic rather than an unknown and less-maintained fork.
