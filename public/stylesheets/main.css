@@ -105,7 +105,7 @@ body, select, input, textarea {
 
 /* Headers (h1,h2,etc) have no default font-size or margin,
    you'll want to define those yourself. */ 
-h1,h2,h3,h4,h5,h6 { font-weight: bold; }
+h1,h2,h3,h4,h5,h6 { font-weight: normal; }
 
 /* always force a scrollbar in non-IE */ 
 html { overflow-y: scroll; }
@@ -294,6 +294,28 @@ input[type=submit], button {
 h1, h2, h3, h4, h5, h6 {
 	font-family: PTSansNarrowBold;
 }
+
+/* @group Flashes */
+
+header {
+
+}
+
+#flash_alert {
+	display: block;
+	position: fixed;
+	top: 10px;
+	left: 70px;
+	width: 500px;
+	padding: 10px;
+	background: #fff1f1;
+	z-index: 300000;
+	border: 1px solid #e9b3b4;
+	border-radius: 10px;
+	-webkit-box-shadow: 0px 2px 8px rgba(0,0,0,0.25);
+}
+
+/* @end */
 
 /* @group 404 */
 

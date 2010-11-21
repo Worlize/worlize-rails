@@ -61,26 +61,30 @@
 
 
 <section id="authentications">
-  <h1><span class="accent-color-1">get</span><br>
+  <h1><small class="accent-color-1">get</small><br>
       friends</h1>
       
   <h2>Connect with your friends from...</h2>
   
   <div class="connect_links">
     <% if @facebook_connected %>
-      <%= image_tag('socialicons/facebook-connected.jpg') %>  
+      <%= image_tag('socialicons/facebook-connected.jpg', :width => '207', :height => '200') %>  
     <% else %>
-      <%= link_to image_tag('socialicons/facebook-not-connected.jpg'), '/auth/facebook' %>
+      <%= link_to image_tag('socialicons/facebook-not-connected.jpg', :width => '207', :height => '200', :alt => 'Connect with Facebook'), '/auth/facebook' %>
     <% end %>
 
     <% if @twitter_connected %>
-      <%= image_tag('socialicons/twitter-connected.jpg') %>  
+      <%= image_tag('socialicons/twitter-connected.jpg', :width => '207', :height => '200') %>  
     <% else %>
-      <%= link_to image_tag('socialicons/twitter-not-connected.jpg'), '/auth/twitter' %>
+      <%= link_to image_tag('socialicons/twitter-not-connected.jpg', :width => '207', :height => '200', :alt => 'Connect with Twitter'), '/auth/twitter' %>
     <% end %>
   </div>
     
   <p>Click the above icons to connect Facebook and/or Twitter with your Worlize account.  We’ll bring you right back here when you’re done!</p>
+    
+  <div class="action_buttons" style="text-align: right;">
+    <%= button_to @can_continue ? 'Continue' : 'Skip', dashboard_path, :method => :get %>
+  </div>
     
 </section>
 

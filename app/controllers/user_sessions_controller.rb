@@ -22,9 +22,9 @@ class UserSessionsController < ApplicationController
         @user_session.user.reset_appearance!
 
         if @user_session.user.linking_external_accounts?
-          default_url = profile_authentications_url
+          default_url = dashboard_authentications_url
         else
-          default_url = root_url
+          default_url = dashboard_url
         end
 
         format.html { redirect_back_or_default(default_url) }

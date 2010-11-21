@@ -40,6 +40,17 @@ class User < ActiveRecord::Base
   #   super
   # end
   
+  def create_world
+    world = self.worlds.create(:name => "#{self.username.capitalize}'s World")
+    
+    # Initialize user's first background instance
+    bi = self.background_instances.create(:background => Background.first)
+    
+    room = world.rooms.create(:name => "Entrance")
+    room.background_instance = bi
+    room.save
+  end
+  
   def permissions
     if self.admin?
       [

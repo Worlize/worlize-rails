@@ -10,6 +10,8 @@ class AuthenticationsController < ApplicationController
     @facebook_connected = current_user.authentications.where(:provider => 'facebook').count > 0
     @twitter_connected = current_user.authentications.where(:provider => 'twitter').count > 0
 
+    @can_continue = @facebook_connected || @twitter_connected
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @authentications }
@@ -32,7 +34,7 @@ class AuthenticationsController < ApplicationController
   def failure
     flash[:error] = "Your authentication was unsuccessful."
     respond_to do |format|
-      format.html { redirect_to current_user ? profile_authentications_url : root_url }
+      format.html { redirect_to current_user ? dashboard_authentications_url : root_url }
     end
   end
 
@@ -52,7 +54,7 @@ class AuthenticationsController < ApplicationController
           flash[:alert] = "Unable to associate your #{omniauth['provider'].capitalize} account."
         end
       end
-      redirect_to profile_authentications_url and return
+      redirect_to dashboard_authentications_url and return
 
     elsif authentication
       UserSession.create(authentication.user)

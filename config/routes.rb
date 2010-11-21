@@ -11,8 +11,8 @@ Worlize::Application.routes.draw do |map|
 
   resources :registrations
   
-  resource "profile" do
-    resources "authentications"
+  resource :dashboard, :controller => :dashboard do
+    resources :authentications
   end
 
   namespace "marketplace" do
@@ -69,6 +69,7 @@ Worlize::Application.routes.draw do |map|
     resources :objects, :controller => 'in_world/objects'
     member do
       post :enter
+      get :enter, :as => :enter_room
     end
   end
 

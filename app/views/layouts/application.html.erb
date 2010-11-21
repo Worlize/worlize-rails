@@ -56,6 +56,12 @@
       <%= flash[:notice] %>
     </div>
     <% end %>
+
+    <% if flash[:alert] %>
+    <div id="flash_alert">
+      <%= flash[:alert] %>
+    </div>
+    <% end %>
     
     <div id="main">
       <%= yield %>

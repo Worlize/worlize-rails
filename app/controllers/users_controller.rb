@@ -9,7 +9,8 @@ class UsersController < ApplicationController
         @beta_invitation.destroy
       end
       @user.first_time_login
-      redirect_to profile_authentications_url
+      @user.create_world
+      redirect_to dashboard_authentications_url
     else
       render "invitations/show"
     end

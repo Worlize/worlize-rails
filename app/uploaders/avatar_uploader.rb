@@ -11,7 +11,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
   storage :s3
   
   define_method 's3_bucket', lambda {
-    "#{Worlize.config['amazon']['bucket_name_prefix']}avatars"
+      Worlize.config['amazon']['avatars_bucket']
   }
 
   

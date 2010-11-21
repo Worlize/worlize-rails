@@ -1,0 +1,79 @@
+<%= title "#{current_user.username}" %>
+
+<% content_for :extra_styles do %>
+#dashboard_header {
+  width: 960px;
+  margin: 0px auto;
+  text-align: center;
+}
+#dashboard_header h1 {
+  font-size: 55pt;
+  line-height: 55pt;
+}
+#dashboard_header h1 small {
+  font-size: 40pt;
+  line-height: 40pt;
+}
+
+#dashboard_header img {
+	vertical-align: middle;
+	margin-left: 20px;
+}
+
+#dashboard-page {
+  width: 960px;
+  margin: 30px auto;
+  text-align: center;
+  font-size: 18pt;
+  line-height: 22pt;
+}
+
+#dashboard-page .enter_world_button {
+	width: 200px;
+	height: 80px;
+	border-radius: 100px;
+	-webkit-border-radius: 100px;
+	-moz-border-radius: 100px;
+	margin: 50px;
+	background-color: #368daf;
+	font-family: PTSansNarrowRegular, Helvetica, Arial, sans-serif;
+	font-size: 24pt;
+	line-height: 24pt;
+}
+
+#dashboard-page .enter_world_button:hover {
+  background-color: #46a6cc;
+  border: 5px solid #368daf;
+}
+
+#dashboard-page .enter_world_button:active {
+  background-color: #1b6b8a;
+  border: 5px solid #368daf;
+}
+
+#dashboard-page h2 {
+
+  font-size: 24pt;
+  line-height: 24pt;
+  color: #969696;
+}
+
+#dashboard-page h3 {
+
+  color: #4c4c4c;
+}
+
+<% end %>
+
+<div id="dashboard_header">
+  <h1><span style="color:#969696;">Hi,</span> <small><%= @user.username %></small>!  <%= image_tag "characters/blusey.jpg", :width => 213, :height => 169, :alt => "Welcome!" %></h1>
+</div>
+
+<div id="dashboard-page">
+  <h2>We're so glad you're here!</h2>
+  <h3>To enter YOUR world and begin creating, click the button below!</h3>
+  
+  <% if @room %>
+    <%= button_to 'Enter Here', enter_room_path(@room.guid), :method => :get, :class => 'enter_world_button' %>
+  <% end %>
+</div>

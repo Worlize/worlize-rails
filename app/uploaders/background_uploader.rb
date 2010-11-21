@@ -11,7 +11,7 @@ class BackgroundUploader < CarrierWave::Uploader::Base
   storage :s3
 
   define_method 's3_bucket', lambda {
-      Worlize.config["amazon"]["backgrounds_bucket_name"]
+      Worlize.config['amazon']['backgrounds_bucket']
   }
 
   # Override the directory where uploaded files will be stored

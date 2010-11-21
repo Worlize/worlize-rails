@@ -41,9 +41,7 @@ class RoomsController < ApplicationController
   end
   
   def enter
-    if params[:id].length == 36
-      @room = Room.find_by_guid(params[:id])
-    end
+    @room = Room.find_by_guid!(params[:id])
     @user = current_user
     interact_server_id = Worlize::InteractServerManager.instance.server_for_room(@room.guid)
     s = current_user.interactivity_session || InteractivitySession.new
