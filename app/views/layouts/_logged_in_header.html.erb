@@ -1,3 +1,7 @@
 <div id="header-logged-in">
-  <strong>Welcome <%= current_user.username %>.</strong> &nbsp;  <small>Not you?  <%= link_to "Sign out", logout_path %></small>
+  <strong>Welcome <%= current_user.username %>.</strong> &nbsp;
+  <% if current_user.admin? %>
+  (<%= link_to "Admin Site", admin_index_path %>)
+  <% end %>
+  <small>Not you?  <%= link_to "Sign out", logout_path %></small>
 </div>
