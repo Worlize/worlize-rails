@@ -7,6 +7,7 @@ class Notifier < ActionMailer::Base
   #   en.actionmailer.notifier.beta_full_email.subject
   #
   def beta_full_email(registration)
+    @registration = registration
     mail :to => registration.email, :subject => 'Aw, you just missed it!'
   end
 end
