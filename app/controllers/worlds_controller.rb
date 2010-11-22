@@ -10,7 +10,6 @@ class WorldsController < ApplicationController
           :guid => world.guid,
           :name => world.name,
           :owner => {
-            :name => owner.name,
             :username => owner.username,
             :guid => owner.guid
           },
