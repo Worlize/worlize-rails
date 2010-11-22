@@ -4,7 +4,6 @@ class UsersController < ApplicationController
     @beta_invitation = BetaInvitation.find_by_invite_code!(params[:invite_code])
     @user = User.new(params[:user])
     if @user.save
-      flash[:notice] = "Registration Successful."
       if (@beta_invitation)
         @beta_invitation.destroy
       end
