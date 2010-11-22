@@ -1,3 +1,6 @@
 [submodule "public/socket.io"]
 	path = public/socket.io
 	url = git@github.com:Worlize/Socket.IO.git
+[submodule "public/client"]
+	path = public/client
+	url = git@github.com:Worlize/worlize-compiled.git
