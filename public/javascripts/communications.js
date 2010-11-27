@@ -31,7 +31,8 @@ WorlizeCommunications.prototype = {
       // transports: ['xhr-multipart','xhr-polling'],
       rememberTransport: false,
       resource: serverid,
-      port:80
+      secure: true,
+      port: 443
     });
 
     this.socket.addEvent('message', function(data) {
