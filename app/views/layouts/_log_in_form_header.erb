@@ -1,8 +1,8 @@
 <div class="login-form">
   <div>
     sign in
-    <a href="/auth/facebook"><img src="/images/login-form-small-facebook-icon.png"></a>
-    <a href="/auth/twitter"><img src="/images/login-form-small-twitter-icon.png"></a>
+    <%= link_to('/auth/facebook', image_tag("login-form-small-facebook-icon.png", :alt => 'Login with Facebook')) %>
+    <%= link_to('/auth/twitter', image_tag("login-form-small-twitter-icon.png", :alt => 'Login with Twitter')) %>
     <small>or</small>
 
   </div>
