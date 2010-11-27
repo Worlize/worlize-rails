@@ -29,7 +29,7 @@ Worlize::Application.configure do
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
-  config.serve_static_assets = true
+  config.serve_static_assets = false
   
   # Notify deprecation notices
   config.active_support.deprecation = :notify
@@ -38,7 +38,7 @@ Worlize::Application.configure do
   config.action_mailer.delivery_method = :sendmail
 
   # Enable serving of images, stylesheets, and javascripts from an asset server
-  # config.action_controller.asset_host = "http://assets.example.com"
+  config.action_controller.asset_host = "https://static.worlize.com"
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
