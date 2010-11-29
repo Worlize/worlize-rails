@@ -26,13 +26,15 @@ WorlizeCommunications.prototype = {
       throw new Error("You must specify a server id");
     }
 
+    var isSecureConnection = document.location.protocol.indexOf('https') != -1;
+
     this.socket = new io.Socket(null, {
       transports: ['websocket', 'flashsocket'],
       // transports: ['xhr-multipart','xhr-polling'],
       rememberTransport: false,
       resource: serverid,
-      secure: true,
-      port: 443
+      secure: isSecureConnection,
+      port: isSecureConnection ? 443 : 80
     });
 
     this.socket.addEvent('message', function(data) {
