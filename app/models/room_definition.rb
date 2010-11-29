@@ -11,6 +11,10 @@ class RoomDefinition < RedisModel
     :object_instances
   )
   
+  define_method 'background', lambda {
+    attributes['background'] || Worlize.config['default_room_background_url']
+  }
+  
   after_update :broadcast_update_notification
   
   validates :guid, :presence => true
@@ -48,7 +52,7 @@ class RoomDefinition < RedisModel
     self.guid = room.guid
     self.world_guid = room.world.guid
     self.name = room.name
-    self.background = room.background_instance.background.image.url unless room.background_instance.nil?
+    self.background = room.background_instance.nil? ? nil : room.background_instance.background.image.url
   end
   
   def broadcast_update_notification
