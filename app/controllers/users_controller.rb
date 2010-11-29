@@ -16,7 +16,22 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
+    @user = User.find_by_guid(params[:id])
+    respond_to do |format|
+      
+      if @user != current_user
+        @object = @user.public_hash_for_api
+      else
+        @object = @user.hash_for_api
+      end
+      
+      format.json do
+        render :json => Yajl::Encoder.encode({
+          :success => true,
+          :data => @object
+        })
+      end
+    end
   end
 
 end

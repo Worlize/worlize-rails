@@ -32,6 +32,32 @@ class User < ActiveRecord::Base
     
   end
   
+  def public_hash_for_api
+    {
+      :guid => self.guid,
+      :username => self.username,
+      :created_at => self.created_at,
+      :admin => self.admin?,
+      :state => self.state
+    }
+  end
+  
+  def hash_for_api
+    self.public_hash_for_api.merge(
+      :first_name => self.first_name,
+      :last_name => self.last_name,
+      :background_slots => self.background_slots,
+      :avatar_slots => self.avatar_slots,
+      :prop_slots => self.prop_slots,
+      :in_world_object_slots => self.in_world_object_slots,
+      :coins => self.coins,
+      :bucks => self.bucks,
+      :twitter => self.twitter,
+      :email => self.email,
+      :birthday => self.birthday
+    )
+  end
+  
   acts_as_authentic do |c|
     #config options here
   end

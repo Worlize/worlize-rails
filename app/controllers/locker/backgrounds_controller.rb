@@ -15,6 +15,7 @@ class Locker::BackgroundsController < ApplicationController
     
     render :json => Yajl::Encoder.encode({
       :success => true,
+      :capacity => current_user.background_slots,
       :count => result.length,
       :data => result
     })
