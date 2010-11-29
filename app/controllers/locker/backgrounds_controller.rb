@@ -21,6 +21,38 @@ class Locker::BackgroundsController < ApplicationController
     })
   end
 
+  def create
+    name = params[:name] || "Background by #{current_user.username}"
+    
+    @background = Background.new(:name => name,
+                         :sale_coins => 0,
+                         :sale_bucks => 0,
+                         :return_coins => 0,
+                         :creator => current_user,
+                         :image => params[:filedata])
+    
+    if @background.save
+      bi = current_user.background_instances.create(:background => @background)
+      if (bi.persisted?)
+        render :json => Yajl::Encoder.encode({
+          :success => true,
+          :data => bi.hash_for_api
+        })
+      else
+        render :json => Yajl::Encoder.encode({
+          :success => false,
+          :description => "Unable to create background instance."
+        })
+      end
+    else
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => "Background is invalid.",
+        :errors => @background.errors
+      })
+    end
+  end
+
   def destroy
     instance = current_user.background_instances.find_by_guid(params[:id])
     instance.destroy
