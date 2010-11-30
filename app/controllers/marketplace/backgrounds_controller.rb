@@ -2,7 +2,7 @@ class Marketplace::BackgroundsController < ApplicationController
   before_filter :require_user
 
   def index
-    backgrounds = Background.where(['active = ?', 1]).order("created_at DESC").limit(50)
+    backgrounds = Background.where(['active = ? AND on_sale = ?', 1, 1]).order("created_at DESC").limit(50)
     
     result = backgrounds.map do |background|
       {
