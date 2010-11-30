@@ -55,8 +55,12 @@ class Locker::BackgroundsController < ApplicationController
 
   def destroy
     instance = current_user.background_instances.find_by_guid(params[:id])
-    instance.destroy
-
+    num_instances_remaining = instance.background.background_instances.count
+    if num_instances_remaining == 1
+      instance.background.destroy
+    else
+      instance.destroy
+    end
     current_user.credit_account :coins => instance.background.return_coins
 
     render :json => Yajl::Encoder.encode({
