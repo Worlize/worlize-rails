@@ -31,6 +31,7 @@ class RoomsController < ApplicationController
     if room_definition
       render :json => Yajl::Encoder.encode({
         :success => true,
+        # FIXME: UGLY HACK!!
         # make sure to include hotspots in the output
         :data => room_definition.serializable_hash.merge({'hotspots' => room_definition.hotspots})
       })
@@ -86,37 +87,55 @@ class RoomsController < ApplicationController
       })
     end
   end
-  
-  def update
-    world = current_user.worlds.first
-    room = world.rooms.find_by_guid(params[:id])
+
+  def set_background
+    success = false
+    error = ""
+    room = Room.find_by_guid!(params[:id])
+    
+    if current_user.can_edit? room
+      updated_background_instances = []
+      if params[:background_instance_guid]
+        background_instance = BackgroundInstance.find_by_guid(params[:background_instance_guid])
+        if background_instance.nil?
+          error = "Unable to find the specified background instance."
+        elsif !background_instance.room.nil?
+          error = "Background already in use in another room."
+        else
+          old_background_instance = room.background_instance
+          room.background_instance = background_instance
+          room.room_definition.background = background_instance.background.image.url
+          success = room.save
+          if old_background_instance
+            old_background_instance.room = nil
+            updated_background_instances.push(old_background_instance.hash_for_api)
+          end
+          updated_background_instances.push(background_instance.hash_for_api)
+          Worlize::InteractServerManager.instance.broadcast_to_room(room.guid, {
+            :msg => 'room_definition_updated'
+          })
+        end
+      end
+
+      render :json => Yajl::Encoder.encode({
+        :success => success,
+        :data => {
+          :updated_background_instances => updated_background_instances
+        }
+      })
+      return
+      
+    else
+      error = "Permission denied"
+    end
     
     render :json => Yajl::Encoder.encode({
-      :success => false,
-      :description => "Unable to locate specified room."
-    }) unless room
-    
-    room.name = params[:name] if params[:name]
-    
-    if params[:background_instance_guid]
-      bi = BackgroundInstance.find_by_guid(params[:background_instance_guid])
-      unless bi.nil?
-        room.background_instance = bi
-        room.room_definition.background = bi.background.image.url
-      end
-    end
-    
-    if room.save
-      render :json => Yajl::Encoder.encode({
-        :success => true
-      })
-    else
-      render :json => Yajl::Encoder.encode({
-        :success => false
-      })
-    end
+      :success => success,
+      :description => error
+    })
   end
-
+  
+  
   def destroy
     world = current_user.worlds.first
     room = world.rooms.find_by_guid(params[:id])

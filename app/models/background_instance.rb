@@ -9,6 +9,10 @@ class BackgroundInstance < ActiveRecord::Base
     {
       :background => self.background.hash_for_api,
       :guid => self.guid,
+      :room => self.room ? {
+        :name => self.room.name,
+        :guid => self.room.guid
+      } : nil,
       :user_guid => self.user.guid
     }
   end

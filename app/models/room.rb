@@ -6,13 +6,14 @@ class Room < ActiveRecord::Base
   before_create :assign_guid
   after_save :update_room_definition
   after_destroy :delete_room_definition
-  
+    
   def room_definition
     @rd ||= (RoomDefinition.find(self.guid) || RoomDefinition.new(:room => self))
   end
 
   def can_be_edited_by?(user)
-    true
+    owner = self.world.user
+    return user == owner
   end
     
   private

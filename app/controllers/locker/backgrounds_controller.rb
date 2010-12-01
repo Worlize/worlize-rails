@@ -2,15 +2,7 @@ class Locker::BackgroundsController < ApplicationController
   before_filter :require_user
   def index
     result = current_user.background_instances.map do |i|
-      background = i.background
-      {
-        :guid => i.guid,
-        :room => i.room ? {
-          :name => i.room.name,
-          :guid => i.room.guid
-        } : nil,
-        :background => background.hash_for_api
-      }
+      i.hash_for_api
     end
     
     render :json => Yajl::Encoder.encode({

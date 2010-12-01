@@ -70,6 +70,7 @@ Worlize::Application.routes.draw do |map|
     member do
       post :enter
       get :enter, :as => :enter_room
+      post :set_background
     end
   end
 
