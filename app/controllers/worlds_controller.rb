@@ -3,26 +3,9 @@ class WorldsController < ApplicationController
   def show
     world = World.find_by_guid(params[:id])
     if world
-      owner = world.user
       render :json => Yajl::Encoder.encode({
         :success => true,
-        :data => {
-          :guid => world.guid,
-          :name => world.name,
-          :owner => {
-            :first_name => owner.first_name,
-            :last_name => owner.last_name,
-            :username => owner.username,
-            :guid => owner.guid
-          },
-          :rooms => world.rooms.map do |room|
-            {
-              :name => room.name,
-              :guid => room.guid,
-              :user_count => (rand * 15).round
-            }
-          end
-        }
+        :data => world.hash_for_api(current_user)
       })
     else
       render :json => Yajl::Encoder.encode({
