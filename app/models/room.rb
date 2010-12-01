@@ -7,6 +7,13 @@ class Room < ActiveRecord::Base
   after_save :update_room_definition
   after_destroy :delete_room_definition
     
+  def hash_for_api(current_user)
+    {
+      :room_definition => self.room_definition.hash_for_api,
+      :can_author => world.user == current_user
+    }
+  end
+    
   def room_definition
     @rd ||= (RoomDefinition.find(self.guid) || RoomDefinition.new(:room => self))
   end

@@ -20,6 +20,12 @@ class RoomDefinition < RedisModel
   validates :guid, :presence => true
   validates :background, :presence => true
   
+  def hash_for_api
+    serializable_hash.merge({
+      :hotspots => self.hotspots
+    })
+  end
+  
   def initialize(attributes = {})
     super
     room_object = attributes[:room] || attributes['room']

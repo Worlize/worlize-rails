@@ -26,14 +26,12 @@ class RoomsController < ApplicationController
   end
   
   def show
-    room_definition = RoomDefinition.find(params[:id])
+    room = Room.find_by_guid(params[:id])
     
-    if room_definition
+    if room
       render :json => Yajl::Encoder.encode({
         :success => true,
-        # FIXME: UGLY HACK!!
-        # make sure to include hotspots in the output
-        :data => room_definition.serializable_hash.merge({'hotspots' => room_definition.hotspots})
+        :data => room.hash_for_api(current_user)
       })
     else
       render :json => Yajl::Encoder.encode({ :success => false, :description => "Unable to load room" })
