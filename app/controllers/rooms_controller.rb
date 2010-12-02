@@ -92,6 +92,27 @@ class RoomsController < ApplicationController
       :description => error_message
     })
   end
+  
+  def update
+    room = Room.find_by_guid(params[:id])
+    if room.world.user == current_user
+      if room.update_attributes(:name => params[:room][:name])
+        render :json => Yajl::Encoder.encode({
+          :success => true
+        }) and return
+      else
+        render :json => Yajl::Encoder.encode({
+          :success => false,
+          :description => room.errors.map { |k,v| "#{k} #{v}" }.join(', ')
+        }) and return
+      end
+    else
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => "Permission Denied"
+      }) and return
+    end
+  end
 
   def set_background
     success = false
@@ -142,13 +163,22 @@ class RoomsController < ApplicationController
   
   
   def destroy
-    world = current_user.worlds.first
-    room = world.rooms.find_by_guid(params[:id])
-    
-    room.destroy if room
-
+    room = Room.find_by_guid!(params[:id])
+    world = room.world
+    description = ''
+    if world.user == current_user
+      room.destroy
+      if room.destroyed?
+        Worlize::InteractServerManager.instance.broadcast_to_room(room.guid, {
+          :msg => 'goto_room',
+          :data => world.rooms.first.guid
+        })
+      end
+    else
+      description = 'Permission denied'
+    end
     render :json => Yajl::Encoder.encode({
-      :success => room ? room.destroyed? : false
+      :success => room.destroyed?
     })
   end
   
