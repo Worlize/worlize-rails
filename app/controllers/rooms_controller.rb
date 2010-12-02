@@ -70,20 +70,27 @@ class RoomsController < ApplicationController
   end
   
   def create
-    world = current_user.worlds.first
-    room = world.rooms.new(:name => params[:name])
-    if room.save
-      render :json => Yajl::Encoder.encode({
-        :success => true,
-        :data => {
-          :room_guid => room.guid
-        }
-      })
+    world = World.find_by_guid(params[:world_id])
+    if (world.user == current_user)
+      room_name = params[:room_name] || 'Untitled Space'
+      room = world.rooms.new(:name => room_name)
+      if room.save
+        render :json => Yajl::Encoder.encode({
+          :success => true,
+          :data => {
+            :room_guid => room.guid
+          }
+        }) and return
+      else
+        error_message = room.errors.map { |k,v| "#{k} #{v}" }.join(", ")
+      end
     else
-      render :json => Yajl::Encoder.encode({
-        :success => false
-      })
+      error_message = "Permission Denied"
     end
+    render :json => Yajl::Encoder.encode({
+      :success => false,
+      :description => error_message
+    })
   end
 
   def set_background
