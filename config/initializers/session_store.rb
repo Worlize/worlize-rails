@@ -1,10 +1,11 @@
 # Be sure to restart your server when you modify this file.
 
-Rails.application.config.session_store :cookie_store, {
-  :key => '_ses',
-  :secure => Rails.env.production?
-}
+# Rails.application.config.session_store :cookie_store, {
+#   :key => '_ses',
+#   :secure => Rails.env.production?
+# }
 
+Rails.application.config.session_store :active_record_store
 
 # Use redis as our session store.
 # Rails.application.config.session_store :redis_session_store
