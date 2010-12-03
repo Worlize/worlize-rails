@@ -10,8 +10,14 @@ class Room < ActiveRecord::Base
   def hash_for_api(current_user)
     {
       :room_definition => self.room_definition.hash_for_api,
+      :user_count => user_count,
       :can_author => world.user == current_user
     }
+  end
+  
+  def user_count
+    redis = Worlize::RedisConnectionPool.get_client(:presence)
+    redis.scard "roomUsers:#{self.guid}"
   end
     
   def room_definition
