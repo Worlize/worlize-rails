@@ -72,7 +72,7 @@ class RoomsController < ApplicationController
   def create
     world = World.find_by_guid(params[:world_id])
     if (world.user == current_user)
-      room_name = params[:room_name] || 'Untitled Space'
+      room_name = params[:room_name] || 'Untitled Area'
       room = world.rooms.new(:name => room_name)
       if room.save
         render :json => Yajl::Encoder.encode({
