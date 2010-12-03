@@ -9,7 +9,7 @@ class RoomsController < ApplicationController
         {
           :name => room.name,
           :guid => room.guid,
-          :user_count => (rand * 15).round
+          :user_count => room.user_count
         }
       end
 

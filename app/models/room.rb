@@ -7,6 +7,13 @@ class Room < ActiveRecord::Base
   after_save :update_room_definition
   after_destroy :delete_room_definition
     
+  def basic_hash_for_api
+    {
+      :name => name,
+      :guid => guid
+    }
+  end
+    
   def hash_for_api(current_user)
     {
       :room_definition => self.room_definition.hash_for_api,
@@ -18,6 +25,11 @@ class Room < ActiveRecord::Base
   def user_count
     redis = Worlize::RedisConnectionPool.get_client(:presence)
     redis.scard "roomUsers:#{self.guid}"
+  end
+  
+  def connected_user_guids
+    redis = Worlize::RedisConnectionPool.get_client(:presence)
+    redis.smembers "roomUsers:#{self.guid}"
   end
     
   def room_definition

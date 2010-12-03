@@ -59,8 +59,9 @@ Worlize::Application.routes.draw do |map|
   end
   
   resources :worlds do
-    resources :rooms do
-      
+    resources :rooms
+    member do
+      get :user_list
     end
   end
   

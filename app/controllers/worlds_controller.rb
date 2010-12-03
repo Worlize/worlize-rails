@@ -15,4 +15,19 @@ class WorldsController < ApplicationController
     end
   end
   
+  def user_list
+    world = World.find_by_guid(params[:id])
+    if world
+      render :json => Yajl::Encoder.encode({
+        :success => true,
+        :data => world.user_list
+      })
+    else
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => "There is no such world."
+      })
+    end
+  end
+  
 end

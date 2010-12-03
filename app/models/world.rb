@@ -21,6 +21,43 @@ class World < ActiveRecord::Base
       end
     }
   end
+  
+  def connected_user_guids
+    user_guids = []
+    self.rooms.each do |room|
+      user_guids.concat(room.connected_user_guids)
+    end
+    user_guids.uniq!
+    user_guids
+  end
+  
+  def user_list
+    user_guids = Array.new
+    rooms_by_user_guid = Hash.new
+    
+    self.rooms.each do |room|
+      room_user_guids = room.connected_user_guids
+      user_guids.concat(room_user_guids)
+      room_user_guids.each do |user_guid|
+        rooms_by_user_guid[user_guid] = room
+      end
+    end
+    user_guids.uniq!
+    
+    users = user_guids.map do |user_guid|
+      User.find_by_guid(user_guid)
+    end
+    users.reject! { |user| user.nil? }
+    users.map do |user|
+      room = rooms_by_user_guid[user.guid]
+      {
+        :room_guid => room.guid,
+        :room_name => room.name,
+        :user_name => user.username,
+        :user_guid => user.guid
+      }
+    end
+  end
 
   private
   def assign_guid()

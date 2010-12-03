@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  
+    
   def create
     @beta_invitation = BetaInvitation.find_by_invite_code!(params[:invite_code])
     @user = User.new(params[:user])
