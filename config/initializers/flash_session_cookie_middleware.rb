@@ -8,11 +8,9 @@ module Worlize
       end
  
       def call(env)
-        if env['HTTP_USER_AGENT'] =~ /^Adobe Flash/
-          req = Rack::Request.new(env)
-          if !req.params['cookie'].nil?
-            env['HTTP_COOKIE'] = req.params['cookie']
-          end
+        req = Rack::Request.new(env)
+        if !req.params['cookie'].nil?
+          env['HTTP_COOKIE'] = req.params['cookie']
         end
     
         @app.call(env)
