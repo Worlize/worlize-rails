@@ -42,7 +42,11 @@
 			swfobject.createCSS("#flashContent", "display:block;text-align:left;");
         </script>
         
+        <script type="text/javascript" charset="utf-8">
+          WEB_SOCKET_SWF_LOCATION = "/socket.io/lib/vendor/web-socket-js/WebSocketMain.swf";
+        </script>
         <script src="/socket.io/socket.io.js" type="text/javascript" charset="utf-8"></script>
+
         <script src="/javascripts/communications.js" type="text/javascript" charset="utf-8"></script>
         <script>
 
@@ -62,7 +66,7 @@
           function configData() {
             return <%= @configJSON.html_safe %>;
           }
-
+          
         </script>
         
     </head>

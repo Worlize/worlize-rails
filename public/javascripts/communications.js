@@ -1,5 +1,5 @@
 flashName = "FlashClient";
-worlizeDebug = false;
+worlizeDebug = true;
 
 function WorlizeCommunications(options) {
   var self = this;
@@ -10,13 +10,17 @@ function WorlizeCommunications(options) {
 
 WorlizeCommunications.getInstance = function() {
   if (!WorlizeCommunications.instance) {
-    WorlizeCommunications.instance = new WorlizeCommunications({debug: worlizeDebug || false});
+    if (worlizeDebug) {
+      console.log("Generating instance");
+    }
+    WorlizeCommunications.instance = new WorlizeCommunications({debug: worlizeDebug});
   }
   return WorlizeCommunications.instance;
 };
 
 WorlizeCommunications.prototype = {
   connect: function(serverid) {
+    console.log("Connecting to " + serverid);
     var self = this;
     if (this.socket && this.socket.connected) {
       this.disconnect();
@@ -27,7 +31,10 @@ WorlizeCommunications.prototype = {
     }
 
     var isSecureConnection = document.location.protocol.indexOf('https') != -1;
-
+    if (this.debug) {
+      console.log("Secure connection: " + isSecureConnection);
+    }
+    
     this.socket = new io.Socket(null, {
       transports: ['websocket', 'flashsocket'],
       // transports: ['xhr-multipart','xhr-polling'],
@@ -71,12 +78,18 @@ WorlizeCommunications.prototype = {
     
   },
   disconnect: function() {
+    if (this.debug) {
+      console.log("Disconnect requested");
+    }
     this.send({
         msg: "disconnect"
     });
     this.socket.disconnect();
   },
   send: function(message) {
+    if (this.debug) {
+      console.log("Sending message: ", message);
+    }
     this.socket.send(JSON.stringify(message));
   },
   
@@ -120,18 +133,20 @@ function getSWF(movieName) {
 }
 
 function worlizeInitialize() {
-  // console.log("initializing worlize communications");
+  if (worlizeDebug) {
+    console.log("initializing worlize communications");
+  }
   comm = WorlizeCommunications.getInstance();
   comm.addEventListener('message', function(data) {
-    // console.log("Whee, data!", data);
+    console.log("Whee, data!", data);
     getSWF(flashName).handleMessage(data);
   });
   comm.addEventListener('connect', function() {
-    // console.log("Connected");
+    console.log("Connected");
     getSWF(flashName).handleConnect();
   });
   comm.addEventListener('disconnect', function() {
-    // console.log("Disconnected");
+    console.log("Disconnected");
     getSWF(flashName).handleDisconnect();
   });            
 }

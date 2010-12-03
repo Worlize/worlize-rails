@@ -1,4 +1,5 @@
 <%= title 'About' %>
+<%= fancybox 'true' %>
 
 <% content_for :extra_styles do %>
 #about_header {
@@ -83,13 +84,30 @@
   font-size: 18pt;
   color: #9a9a9a;
 }
-
+#watchVideoLink {
+  cursor: pointer;
+}
 <% end %>
+
+<% content_for :page_script do %>
+<script>
+  $('#watchVideoLink').click(function(event) {
+    event.preventDefault();
+  });
+  $('#watchVideoLink').fancybox({
+    type: 'iframe',
+    href: 'http://player.vimeo.com/video/17431869?title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1',
+    width: 500,
+    height: 298
+  });
+</script>
+<% end %>
+
 <div id="about_header">
   <%= image_tag 'characters/bob.jpg', :size => '310x245' %>
   <h1 style="color:#78d1f1;">I am Bob...</h1>
   <h2 style="color:#656464;">You were asking about Worlize?</h2>
-  <h3><a href="#">Watch Video</a></h3>
+  <h3><a id="watchVideoLink" href="http://vimeo.com/17431869">Watch Video</a></h3>
 </div>
 
 <div id="about_content">
