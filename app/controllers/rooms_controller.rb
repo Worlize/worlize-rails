@@ -42,7 +42,7 @@ class RoomsController < ApplicationController
   def enter
     @room = Room.find_by_guid!(params[:id])
     @user = current_user
-    interact_server_id = Worlize::InteractServerManager.instance.server_for_room(@room.guid)
+    interact_server_id = @room.interact_server_id
     s = current_user.interactivity_session || InteractivitySession.new
     respond_to do |format|
       if s.update_attributes(

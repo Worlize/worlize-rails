@@ -32,6 +32,10 @@ class Room < ActiveRecord::Base
     redis.smembers "roomUsers:#{self.guid}"
   end
     
+  def interact_server_id
+    Worlize::InteractServerManager.instance.server_for_room(self.guid)
+  end
+  
   def room_definition
     @rd ||= (RoomDefinition.find(self.guid) || RoomDefinition.new(:room => self))
   end
