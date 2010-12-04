@@ -10,6 +10,10 @@ class BackgroundUploader < CarrierWave::Uploader::Base
   #storage :file
   storage :s3
 
+  def s3_cnamed
+    ::Rails.env == 'production'
+  end
+
   define_method 's3_bucket', lambda {
       Worlize.config['amazon']['backgrounds_bucket']
   }

@@ -9,6 +9,10 @@ class AvatarUploader < CarrierWave::Uploader::Base
   # Choose what kind of storage to use for this uploader
   # storage :file
   storage :s3
+
+  def s3_cnamed
+    ::Rails.env == 'production'
+  end
   
   define_method 's3_bucket', lambda {
       Worlize.config['amazon']['avatars_bucket']

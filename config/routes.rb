@@ -28,6 +28,7 @@ Worlize::Application.routes.draw do |map|
   namespace "locker" do
     resources :backgrounds
     resources :avatars
+    resources :in_world_objects
   end
 
   resources :users
