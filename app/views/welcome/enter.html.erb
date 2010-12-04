@@ -7,6 +7,8 @@
         else
           path = '/flash'
         end
+        
+        cache_bust = '2'
     -%>
     <head>
         <title>Worlize</title>         
@@ -34,7 +36,7 @@
             attributes.name = "FlashClient";
             attributes.align = "middle";
             swfobject.embedSWF(
-                "<%= path %>/FlashClient.swf?cb=1", "flashContent", 
+                "<%= path %>/FlashClient.swf?cb=<%= cache_bust %>", "flashContent", 
                 "100%", "100%", 
                 swfVersionStr, xiSwfUrlStr, 
                 flashvars, params, attributes);
@@ -85,13 +87,13 @@
 	   	
        	<noscript>
             <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="FlashClient">
-                <param name="movie" value="<%= path %>/FlashClient.swf?cb=1" />
+                <param name="movie" value="<%= path %>/FlashClient.swf?cb=<%= cache_bust %>" />
                 <param name="quality" value="high" />
                 <param name="bgcolor" value="#ffffff" />
                 <param name="allowScriptAccess" value="sameDomain" />
                 <param name="allowFullScreen" value="true" />
                 <!--[if !IE]>-->
-                <object type="application/x-shockwave-flash" data="<%= path %>/FlashClient.swf?cb=1" width="100%" height="100%">
+                <object type="application/x-shockwave-flash" data="<%= path %>/FlashClient.swf?cb=<%= cache_bust %>" width="100%" height="100%">
                     <param name="quality" value="high" />
                     <param name="bgcolor" value="#ffffff" />
                     <param name="allowScriptAccess" value="sameDomain" />
