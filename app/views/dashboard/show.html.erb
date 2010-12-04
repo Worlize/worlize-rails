@@ -74,6 +74,24 @@
   <h3>To enter YOUR world and begin creating, click the button below!</h3>
   
   <% if @room %>
-    <%= button_to 'Enter Here', enter_room_path(@room.guid), :method => :get, :class => 'enter_world_button' %>
+  <script>
+  function openPopUp() {
+    var maxWidth = 1280;
+    var maxHeight = 1024;
+    var height = Math.min(screen.availHeight, maxHeight);
+    var width = Math.min(screen.availWidth, maxWidth);
+    
+    var x = (screen.availWidth - width) / 2;
+    
+    var worlizePopup = window.open("<%= enter_room_path(@room.guid) %>",
+      "worlizePopup",
+      "status=0,toolbar=0,location=1,menubar=0,directories=0,resizable=1,scrollbars=0,screenX=0,screenY=0,left=0,top=0,width=" + width + ",height=" + height);
+    worlizePopup.focus();
+    worlizePopup.moveTo( x, 0 );
+    worlizePopup.resizeTo( width, height );
+  }
+  </script>
+  
+    <button class="enter_world_button" onclick="openPopUp(); return false;">Enter Here</button>
   <% end %>
 </div>
