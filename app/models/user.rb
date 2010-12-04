@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   before_create :assign_guid
+  before_create :initialize_default_slots
   after_create :initialize_currency
   
   has_many :authentications
@@ -174,6 +175,13 @@ class User < ActiveRecord::Base
     redis = Worlize::RedisConnectionPool.get_client(:currency)
     redis.set "coins:#{self.guid}", Worlize.config['initial_currency']['coins'] || 0
     redis.set "bucks:#{self.guid}", Worlize.config['initial_currency']['bucks'] || 0
+  end
+  
+  def initialize_default_slots
+    self.prop_slots = 20
+    self.background_slots = 20
+    self.avatar_slots = 20
+    self.in_world_object_slots = 20
   end
   
 end
