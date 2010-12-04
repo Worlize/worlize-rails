@@ -6,11 +6,19 @@ class Locker::AvatarsController < ApplicationController
     render :json => Yajl::Encoder.encode({
       :success => true,
       :count => avatar_instances.length,
+      :capacity => current_user.avatar_slots,
       :data => avatar_instances.map { |ai| ai.hash_for_api }
     })
   end
   
   def create
+    if current_user.avatar_slots <= current_user.avatar_instances.count
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => "You cannot upload any more avatars."
+      }) and return
+    end
+    
     @avatar = Avatar.new(:name => "Created by #{current_user.username}",
                          :width => 0,
                          :height => 0,
