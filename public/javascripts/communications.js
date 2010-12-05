@@ -1,5 +1,5 @@
 flashName = "FlashClient";
-worlizeDebug = true;
+worlizeDebug = false;
 
 function WorlizeCommunications(options) {
   var self = this;
@@ -20,7 +20,9 @@ WorlizeCommunications.getInstance = function() {
 
 WorlizeCommunications.prototype = {
   connect: function(serverid) {
-    console.log("Connecting to " + serverid);
+    if (this.debug) {
+      console.log("Connecting to " + serverid);
+    }
     var self = this;
     if (this.socket && this.socket.connected) {
       this.disconnect();
@@ -36,8 +38,7 @@ WorlizeCommunications.prototype = {
     }
     
     this.socket = new io.Socket(null, {
-      transports: ['websocket', 'flashsocket'],
-      // transports: ['xhr-multipart','xhr-polling'],
+      transports: ['websocket','xhr-multipart','htmlfile','xhr-polling'],
       rememberTransport: false,
       resource: serverid,
       secure: isSecureConnection,
@@ -65,6 +66,7 @@ WorlizeCommunications.prototype = {
       self.dispatchEvent('connect');
     });
     this.socket.addEvent('disconnect', function() {
+      // alert("Disconnected!!");
       if (self.debug) {
         console.log("Disconnected");
       }
@@ -138,15 +140,15 @@ function worlizeInitialize() {
   }
   comm = WorlizeCommunications.getInstance();
   comm.addEventListener('message', function(data) {
-    console.log("Whee, data!", data);
+    // console.log("data!", data);
     getSWF(flashName).handleMessage(data);
   });
   comm.addEventListener('connect', function() {
-    console.log("Connected");
+    // console.log("Connected");
     getSWF(flashName).handleConnect();
   });
   comm.addEventListener('disconnect', function() {
-    console.log("Disconnected");
+    // console.log("Disconnected");
     getSWF(flashName).handleDisconnect();
   });            
 }
