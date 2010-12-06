@@ -1,5 +1,6 @@
 source :rubygems
 
+gem 'newrelic_rpm'
 gem 'rails', '3.0.3'
 gem 'SystemTimer'
 gem 'mysql'

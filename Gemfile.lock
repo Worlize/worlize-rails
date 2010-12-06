@@ -84,6 +84,7 @@ GEM
     mysql (2.8.1)
     net-ldap (0.1.1)
     net-ssh (2.0.23)
+    newrelic_rpm (2.13.3)
     nokogiri (1.4.4)
     oa-basic (0.1.6)
       multi_json (~> 0.0.2)
@@ -177,6 +178,7 @@ DEPENDENCIES
   fog
   guid
   mysql
+  newrelic_rpm
   omniauth
   rails (= 3.0.3)
   redis
