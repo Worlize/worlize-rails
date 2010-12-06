@@ -1,138 +1,107 @@
 class InWorld::ObjectsController < ApplicationController
 
   def create
-    x = params[:x] || 0
-    y = params[:y] || 0
-    dest = params[:dest] if params[:dest] && params[:dest].length == 36
-    redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
-    world = current_user.worlds.first
-    room = world.rooms.find_by_guid(params[:room_id])
-    oi = current_user.in_world_object_instances.find_by_guid(params[:id])
-    if oi && room
-      
-      if oi.room
-        render :json => Yajl::Encoder.encode({
-          :success => false,
-          :description => "This object is already in use in room #{oi.room.guid}"
-        }) and return
-      end
-      
-      oi.update_attribute(:room, room)
-      
-      begin
-        rd = Yajl::Parser.parse(redis.hget('roomDefinition', room.guid))
-        object_definition = {
-          :guid => oi.guid,
-          :object => oi.in_world_object.guid,
-          :pos => [x,y]
-        }
-        object_definition[:dest] = dest if dest
-        (rd['object_instances'] ||= []) << object_definition
-        
-        redis.hset('roomDefinition', room.guid, Yajl::Encoder.encode(rd))
-        render :json => Yajl::Encoder.encode({
-          :success => true
-        }) and return
-      rescue => e
-        render :json => Yajl::Encoder.encode({
-          :success => false,
-          :description => e.message
-        }) and return
-      end
+    room = Room.find_by_guid(params[:room_id])
+    if !current_user.can_edit?(room)
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => "Permission denied"
+      }) and return
     end
     
-    render :json => Yajl::Encoder.encode({
-      :success => false
-    })
-  end
-  
-  # FIXME: Track down the syntax error in here and re-enable it
-  # def update
-  #   x = params[:x]
-  #   y = params[:y]
-  #   dest = params[:dest] if params[:dest] && params[:dest].length == 36
-  #   redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
-  # 
-  #   oi_guid = params[:id]    
-  #   world = current_user.worlds.first
-  #   room = world.rooms.find_by_guid(params[:room_id])
-  #   if room && oi_guid
-  #   
-  #     begin
-  #       rd = Yajl::Parser.parse(redis.hget('roomDefinition', room.guid))
-  #       object_instances = rd['object_instances'] || []
-  #     
-  #       object_instances.each do |instance|
-  #         if instance['guid'] == oi_guid
-  #           instance['x'] = x if x
-  #           instance['y'] = y if y
-  #           if dest
-  #             instance['dest'] = dest
-  #           else
-  #             instance.delete('dest')
-  #           end
-  #           break
-  #         end
-  #       end
-  #     
-  #       redis.hset('roomDefinition', room.guid, Yajl::Encoder.encode(rd))
-  #       Worlize::PubSub.publish(
-  #         "room:#{self.guid}",
-  #         '{"msg":"room_definition_updated"}'
-  #       )
-  #     
-  #       render :json => Yajl::Encoder.encode({
-  #         :success => true
-  #       }) and return
-  #     rescue => e
-  #       render :json => Yajl::Encoder.encode({
-  #         :success => false,
-  #         :description => e.message
-  #       }) and return
-  #     end
-  #     
-  #   render :json => Yajl::Encoder.encode({
-  #     :success => false
-  #   })
-  # end
-  
-  def destroy
-    world = current_user.worlds.first
-    room = world.rooms.find_by_guid(params[:room_id])
-    oi_guid = params[:id]
-    oi = InWorldObjectInstance.find_by_guid(oi_guid)
-    if room && oi
-      
-      oi.update_attribute(:room, nil)
+    in_world_object_instance = current_user.in_world_object_instances.find_by_guid(params[:in_world_object_instance_guid])
+
+    if in_world_object_instance
+
+      if in_world_object_instance.room
+        render :json => Yajl::Encoder.encode({
+          :success => false,
+          :description => "This object is already in use in room \"#{in_world_object_instance.room.name}\""
+        }) and return
+      end
       
       begin
-        rd = Yajl::Parser.parse(redis.hget('roomDefinition', room.guid))
-        object_instances = rd['object_instances'] || []
-      
-        object_instances.delete_if do |instance|
-          instance['guid'] == oi_guid
-        end
-      
-        redis.hset('roomDefinition', room.guid, Yajl::Encoder.encode(rd))
-        Worlize::PubSub.publish(
-          "room:#{self.guid}",
-          '{"msg":"room_definition_updated"}'
-        )
-      
+        manager = room.room_definition.in_world_object_manager
+        manager.add_object_instance(in_world_object_instance, params[:x], params[:y])
         render :json => Yajl::Encoder.encode({
           :success => true
         }) and return
-      rescue => e
+      rescue => detail
         render :json => Yajl::Encoder.encode({
           :success => false,
-          :description => e.message
+          :description => detail.message
         }) and return
       end
     end
-    render :json => Yajl::Encoder.encode({
-      :success => false,
-      :description => "You do not own the room specified or it cannot be found"
-    })
+  end
+  
+  def update
+    room = Room.find_by_guid(params[:room_id])
+    if !current_user.can_edit?(room)
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => "Permission denied"
+      }) and return
+    end
+    
+    in_world_object_instance = current_user.in_world_object_instances.find_by_guid(params[:id])
+    
+    if in_world_object_instance
+      begin
+        manager = room.room_definition.in_world_object_manager
+        if params[:x] && params[:y]
+          manager.move_object_instance(in_world_object_instance, params[:x], params[:y])
+        elsif params[:dest]
+          dest = (params[:dest] != 'null') ? params[:dest] : nil
+          manager.update_object_destination(in_world_object_instance, dest)
+        end
+        render :json => Yajl::Encoder.encode({
+          :success => true
+        }) and return
+      rescue => detail
+        render :json => Yajl::Encoder.encode({
+          :success => false,
+          :description => detail.message
+        }) and return
+      end
+    else
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => "Unable to find the specified object instance"
+      }) and return
+    end
+  end
+  
+  def destroy
+    room = Room.find_by_guid(params[:room_id])
+    if !current_user.can_edit?(room)
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => "Permission denied"
+      }) and return
+    end
+    
+    in_world_object_instance = current_user.in_world_object_instances.find_by_guid(params[:id])
+
+    if in_world_object_instance
+      begin
+        manager = room.room_definition.in_world_object_manager
+        manager.remove_object_instance(in_world_object_instance)
+        render :json => Yajl::Encoder.encode({
+          :success => true
+        }) and return
+      rescue => detail
+        render :json => Yajl::Encoder.encode({
+          :success => false,
+          :description => detail.message
+        }) and return
+      end
+    else
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => "You must provide an object instance guid"
+      }) and return
+    end
   end
 
 end

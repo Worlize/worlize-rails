@@ -49,6 +49,13 @@ class Locker::InWorldObjectsController < ApplicationController
   
   def destroy
     instance = current_user.in_world_object_instances.find_by_guid(params[:id])
+    
+    if instance.room
+      # must yank it from the room where its currently used
+      manager = instance.room.room_definition.in_world_object_manager
+      manager.remove_object_instance(instance)
+    end
+    
     num_instances_remaining = instance.in_world_object.in_world_object_instances.count
     if num_instances_remaining == 1
       instance.in_world_object.destroy

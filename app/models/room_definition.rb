@@ -1,3 +1,4 @@
+require 'room_definition/in_world_object_manager'
 class RoomDefinition < RedisModel
   redis_server :room_definitions
   redis_hash_key 'roomDefinition'
@@ -7,8 +8,7 @@ class RoomDefinition < RedisModel
     :guid,
     :world_guid,
     :name,
-    :background,
-    :object_instances
+    :background
   )
   
   define_method 'background', lambda {
@@ -22,7 +22,8 @@ class RoomDefinition < RedisModel
   
   def hash_for_api
     serializable_hash.merge({
-      :hotspots => self.hotspots
+      :hotspots => self.hotspots,
+      :objects => self.in_world_object_manager.object_instances
     })
   end
   
@@ -30,7 +31,6 @@ class RoomDefinition < RedisModel
     super
     room_object = attributes[:room] || attributes['room']
     self.room = room_object unless room_object.nil?
-    self.object_instances = [] if self.object_instances.nil?
   end
   
   def room
@@ -51,6 +51,10 @@ class RoomDefinition < RedisModel
       redis.hset('hotspots', self.guid, Yajl::Encoder.encode(new_array))
     rescue
     end
+  end
+  
+  def in_world_object_manager
+    @in_world_object_manager ||= InWorldObjectManager.new(self)
   end
   
   def room=(room)

@@ -8,6 +8,7 @@ class InWorldObjectInstance < ActiveRecord::Base
   def hash_for_api
     {
       :in_world_object => self.in_world_object.hash_for_api,
+      :room => self.room ? self.room.basic_hash_for_api : nil,
       :guid => self.guid
     }
   end
