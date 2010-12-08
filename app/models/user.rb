@@ -32,6 +32,10 @@ class User < ActiveRecord::Base
     end
     
   end
+
+  acts_as_authentic do |c|
+    #config options here
+  end
   
   def public_hash_for_api
     {
@@ -58,15 +62,7 @@ class User < ActiveRecord::Base
       :birthday => self.birthday
     )
   end
-  
-  acts_as_authentic do |c|
-    #config options here
-  end
-  
-  # def initialize
-  #   super
-  # end
-  
+
   def create_world
     world = self.worlds.create(:name => "#{self.username.capitalize}'s World")
     
@@ -86,6 +82,18 @@ class User < ActiveRecord::Base
     else
       []
     end
+  end
+  
+  def current_server_id
+    redis = Worlize::RedisConnectionPool.get_client(:presence)
+    redis.get "interactServerForUser:#{self.guid}"
+  end
+  
+  def online?
+    redis = Worlize::RedisConnectionPool.get_client(:presence)
+    server_id = redis.get "interactServerForUser:#{self.guid}"
+    return false if server_id.nil?
+    redis.sismember "connectedUsers:#{server_id}", self.guid
   end
   
   def can_edit?(item)
