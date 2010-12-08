@@ -91,8 +91,12 @@ class User < ActiveRecord::Base
   
   def online?
     redis = Worlize::RedisConnectionPool.get_client(:presence)
+    
+    # Find the last server they were connected to...
     server_id = redis.get "interactServerForUser:#{self.guid}"
     return false if server_id.nil?
+    
+    # ...and see if they're still there.
     redis.sismember "connectedUsers:#{server_id}", self.guid
   end
   
