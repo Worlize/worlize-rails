@@ -38,7 +38,7 @@ WorlizeCommunications.prototype = {
     }
     
     this.socket = new io.Socket(null, {
-      transports: ['websocket','htmlfile'], // No Firefox Support for now!! :-(
+      transports: ['websocket','htmlfile','xhr-multipart'],
       rememberTransport: false,
       resource: serverid,
       secure: isSecureConnection,

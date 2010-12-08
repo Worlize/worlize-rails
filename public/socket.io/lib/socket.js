@@ -82,28 +82,12 @@
 		return this;
 	};
 	
-	Socket.prototype.write = function(message, atts){
-		if (!this.transport || !this.transport.connected) return this._queue(message, atts);
-		this.transport.write(message, atts);
+	Socket.prototype.send = function(data){
+		if (!this.transport || !this.transport.connected) return this._queue(data);
+		this.transport.send(data);
 		return this;
 	};
 	
-  Socket.prototype.send = function(message, atts){
-    atts = atts || {};
-    if (typeof message == 'object'){
-      atts['j'] = null;
-      message = JSON.stringify(message);
-    }
-    this.write('1', io.data.encodeMessage(message, atts));
-    return this;
-  };
-
-  Socket.prototype.json = function(obj, atts){
-    atts = atts || {};
-    atts['j'] = null
-    return this.send(JSON.stringify(obj), atts);
-  }
-
 	Socket.prototype.disconnect = function(){
 		this.transport.disconnect();
 		return this;
@@ -115,7 +99,7 @@
 		return this;
 	};
 	
-	Socket.prototype.emit = function(name, args){
+	Socket.prototype.fire = function(name, args){
 		if (name in this._events){
 			for (var i = 0, ii = this._events[name].length; i < ii; i++) 
 				this._events[name][i].apply(this, args === undefined ? [] : args);
@@ -131,15 +115,15 @@
 		return this;
 	};
 	
-	Socket.prototype._queue = function(message, atts){
+	Socket.prototype._queue = function(message){
 		if (!('_queueStack' in this)) this._queueStack = [];
-		this._queueStack.push([message, atts]);
+		this._queueStack.push(message);
 		return this;
 	};
 	
 	Socket.prototype._doQueue = function(){
 		if (!('_queueStack' in this) || !this._queueStack.length) return this;
-		this.transport.write(this._queueStack);
+		this.transport.send(this._queueStack);
 		this._queueStack = [];
 		return this;
 	};
@@ -153,11 +137,11 @@
 		this.connecting = false;
 		this._doQueue();
 		if (this.options.rememberTransport) this.options.document.cookie = 'socketio=' + encodeURIComponent(this.transport.type);
-		this.emit('connect');
+		this.fire('connect');
 	};
 	
 	Socket.prototype._onMessage = function(data){
-		this.emit('message', [data]);
+		this.fire('message', [data]);
 	};
 	
 	Socket.prototype._onDisconnect = function(){
@@ -165,11 +149,9 @@
 		this.connected = false;
 		this.connecting = false;
 		this._queueStack = [];
-		if (wasConnected) this.emit('disconnect');
+		if (wasConnected) this.fire('disconnect');
 	};
 	
 	Socket.prototype.addListener = Socket.prototype.addEvent = Socket.prototype.addEventListener = Socket.prototype.on;
 	
-  Socket.prototype.fire = Socket.prototype.emit;
-
 })();
