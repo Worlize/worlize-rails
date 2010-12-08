@@ -38,7 +38,7 @@ WorlizeCommunications.prototype = {
     }
     
     this.socket = new io.Socket(null, {
-      transports: ['websocket','htmlfile','xhr-multipart','xhr-polling'],
+      transports: ['websocket','htmlfile','xhr-multipart'],
       rememberTransport: false,
       resource: serverid,
       secure: isSecureConnection,
