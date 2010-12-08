@@ -4,6 +4,7 @@
 <table class="datagrid" width="100%">
   <tr>
     <th>Username</th>
+    <th>Online</th>
     <th>Name</th>
     <th>Email</th>
     <th>Time</th>
@@ -12,9 +13,10 @@
   <% for user in @users %>
   <tr class="<%= cycle('even','odd') %>">
     <td><%= link_to user.username, admin_user_path(user) %></td>
+    <td><%= user.online? ? "Yes" : "" %></td>
     <td><%= "#{user.first_name} #{user.last_name}".truncate(20) %></td>
     <td><%= user.email %></td>
-    <td><%= user.created_at.strftime("%B %d, %Y %I:%M %p") %></td>
+    <td><%= user.created_at.strftime("%Y-%m-%d %I:%M%p") %></td>
     <td><%= button_to "Delete", admin_user_path(user), :method => :delete, :confirm => "Are you sure?" %></td>
   </tr>
   <% end %>
