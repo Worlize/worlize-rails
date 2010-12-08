@@ -1,6 +1,7 @@
 <h1><%= @user.username %></h1>
 
 <%= @user.first_name %> <%= @user.last_name %><br/>
+User is <strong><%= @user.online? ? 'online' : 'offline' %></strong>.<br>
 <% if @user.twitter %>
 <%= link_to @user.twitter, "http://www.twitter.com/#{@user.twitter}" %>
 <% end %>
