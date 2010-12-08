@@ -1,0 +1,8 @@
+<h1>Management</h1>
+
+<h2>Broadcast Global Message</h2>
+
+<%= form_tag broadcast_message_admin_management_path, :method => 'post' do %>
+    <%= text_field_tag :message, nil, :size => 40 %>
+    <%= submit_tag "Send Message" %>
+<% end %>

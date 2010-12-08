@@ -48,15 +48,19 @@ Worlize::Application.routes.draw do |map|
         post 'invite_user'
       end
     end
+    
     resources :users
-    resources :backgrounds
     resources :worlds do
-      resources :rooms do
-        member do
-          post :enter
-        end
+      resources :rooms
+    end
+    
+    resource :management, :controller => 'management' do
+      member do
+        post 'broadcast_message'
       end
     end
+    
+    match 'status' => 'status#index', :as => :status
   end
   
   resources :worlds do
