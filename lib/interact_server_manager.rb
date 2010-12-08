@@ -47,7 +47,8 @@ module Worlize
         raise RuntimeError, "There are no interactivity servers running."
       end
       sorted_servers = server_list.sort_by { |server| server['session_count'] }
-      sorted_servers.first['server_id']
+      
+      sorted_servers[rand([sorted_servers.length-1,2].min)]['server_id']
     end
 
   end
