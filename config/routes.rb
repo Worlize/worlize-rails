@@ -60,7 +60,8 @@ Worlize::Application.routes.draw do |map|
       end
     end
     
-    match 'status' => 'status#index', :as => :status
+    resource :status, :controller => 'status' do
+    end
   end
   
   resources :worlds do

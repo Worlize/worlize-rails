@@ -1,0 +1,45 @@
+<h1>System Stats</h1>
+<table cellspacing="0" border="0" cellpadding="0">
+    <tr>
+        <td align="right">Active Users:</td>
+        <td><%= @total_user_count %></td>
+    </tr>
+    <tr>
+        <td align="right">Active Interactivity Sessions:</td>
+        <td><%= @total_session_count %></td>
+    </tr>
+    <tr>
+        <td align="right">Active Rooms:</td>
+        <td><%= @total_room_count %></td>
+    </tr>
+</table>
+
+<br>
+
+<h1>Interactivity Servers</h1>
+
+<% @interactivity_servers.each do |server| %>
+    <h2><%= server['server_id'] %></h2>
+    <table cellspacing="0" border="0" cellpadding="0">
+        <tr>
+            <td align="right">Hostname / Port:</td>
+            <td><%= server['host'] %>:<%= server['port'] %></td>
+        </tr>
+        <tr>
+            <td align="right">Last Checkin:</td>
+            <td><%= distance_of_time_in_words server['last_checkin'], Time.now, true %> ago</td>
+        </tr>
+        <tr>
+            <td align="right">Active Users:</td>
+            <td><%= server['user_count'] %></td>
+        </tr>
+        <tr>
+            <td align="right">Active Interactivity Sessions:</td>
+            <td><%= server['session_count'] %></td>
+        </tr>
+        <tr>
+            <td align="right">Active Rooms:</td>
+            <td><%= server['room_count'] %></td>
+        </tr>
+    </table>
+<% end %>

@@ -7,8 +7,8 @@ class Admin::ManagementController < ApplicationController
   end
   
   def broadcast_message
-    unless params[:message].nil?
-      Worlize::PubSub.publish('global', {
+    unless params[:message].empty?
+      Worlize::PubSub.publish('globalBroadcast', {
         :msg => "global_msg",
         :data => params[:message]
       })
