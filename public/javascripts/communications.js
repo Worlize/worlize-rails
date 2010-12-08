@@ -38,7 +38,7 @@ WorlizeCommunications.prototype = {
     }
     
     this.socket = new io.Socket(null, {
-      transports: ['websocket','htmlfile','xhr-multipart'],
+      transports: ['websocket','htmlfile','xhr-multipart','xhr-polling'],
       rememberTransport: false,
       resource: serverid,
       secure: isSecureConnection,
@@ -138,18 +138,19 @@ function worlizeInitialize() {
   if (worlizeDebug) {
     console.log("initializing worlize communications");
   }
+  var swf = getSWF(flashName);
   comm = WorlizeCommunications.getInstance();
   comm.addEventListener('message', function(data) {
     // console.log("data!", data);
-    getSWF(flashName).handleMessage(data);
+    swf.handleMessage(data);
   });
   comm.addEventListener('connect', function() {
     // console.log("Connected");
-    getSWF(flashName).handleConnect();
+    swf.handleConnect();
   });
   comm.addEventListener('disconnect', function() {
     // console.log("Disconnected");
-    getSWF(flashName).handleDisconnect();
+    swf.handleDisconnect();
   });            
 }
 
