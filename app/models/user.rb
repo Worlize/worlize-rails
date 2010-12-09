@@ -13,6 +13,8 @@ class User < ActiveRecord::Base
   
   has_many :avatars, :foreign_key => 'creator_id', :dependent => :nullify
   
+  attr_protected :admin
+  
   validates :first_name, :presence => true
   validates :last_name, :presence => true
   validates :birthday, :timeliness => {
@@ -102,6 +104,10 @@ class User < ActiveRecord::Base
     @online = redis.sismember "connectedUsers:#{server_id}", self.guid
   end
   
+  def send_message(message)
+    Worlize::PubSub.publish("user:#{self.guid}", message)
+  end
+  
   def can_edit?(item)
     if item.respond_to? 'can_be_edited_by?'
       item.can_be_edited_by?(self)
@@ -149,6 +155,131 @@ class User < ActiveRecord::Base
 
   end
   
+  
+  ###################################################################
+  ##  Friendship Functions                                         ##
+  ###################################################################
+  
+  def request_friendship_of(potential_friend)
+    return false if self.is_friends_with?(potential_friend)
+    if redis_relationships.sadd "#{potential_friend.guid}:friendRequests", self.guid
+      potential_friend.send_message({
+        :msg => 'new_friend_request',
+        :data => {
+          :user => {
+            :guid => self.guid,
+            :username => self.username
+          }
+        }
+      })
+    end
+    true
+  end
+  
+  def retract_friendship_request_for(potential_friend)
+    redis_relationships.srem "#{potential_friend.guid}:friendRequests", self.guid
+  end
+  
+  def reject_friendship_request_from(rejected_friend)
+    redis_relationships.srem "#{self.guid}:friendRequests", rejected_friend.guid
+    # Let's avoid sending an embarrassing "You've been rejected" message...
+  end
+  
+  def accept_friendship_request_from(accepted_friend)
+    result = redis_relationships.srem "#{self.guid}:friendRequests", accepted_friend.guid
+    if result
+      self.befriend(accepted_friend)
+      accepted_friend.send_message({
+        :msg => 'friend_request_accepted',
+        :data => {
+          :user => {
+            :guid => self.guid,
+            :username => self.username
+          }
+        }
+      })
+      return true
+    end
+    return false
+  end
+
+  def pending_friend_guids
+    redis_relationships.smembers "#{self.guid}:friendRequests"
+  end
+  
+  def pending_friends
+    User.find_all_by_guid(self.pending_friend_guids, :order => 'username')
+  end
+  
+  def pending_friend_count
+    redis_relationships.scard "#{self.guid}:friendRequests"
+  end
+  
+  def befriend(new_friend)
+    redis_relationships.multi do
+      redis_relationships.sadd "#{self.guid}:friends", new_friend.guid
+      redis_relationships.sadd "#{new_friend.guid}:friends", self.guid
+    end
+    # send notification to current user
+    self.send_message({
+      :msg => 'friend_added',
+      :data => {
+        :user => {
+          :guid => new_friend.guid,
+          :username => new_friend.username
+        }
+      }
+    })
+    # send notification to new friend
+    new_friend.send_message({
+      :msg => 'friend_added',
+      :data => {
+        :user => {
+          :guid => self.guid,
+          :username => self.username
+        }
+      }
+    })
+    true
+  end
+  
+  def unfriend(sworn_enemy)
+    redis_relationships.multi do
+      redis_relationships.srem "#{self.guid}:friends", sworn_enemy.guid
+      redis_relationships.srem "#{sworn_enemy.guid}:friends", self.guid
+    end
+    true
+  end
+  
+  def mutual_friend_guids_with(user)
+    redis_relationships.sinter "#{self.guid}:friends", "#{user.guid}:friends"
+  end
+
+  def mutual_friends_with(user)
+    User.find_all_by_guid(self.mutual_friend_guids_with(user), :order => 'username')
+  end
+  
+  def is_mutual_friends_with?(user1, user2)
+    user1.mutual_friend_guids_with(user2).include? self.guid
+  end
+  
+  def is_friends_with?(user)
+    redis_relationships.sismember "#{self.guid}:friends", user.guid
+  end
+  
+  def friend_guids
+    redis_relationships.smembers "#{self.guid}:friends"
+  end
+  
+  def friends
+    User.find_all_by_guid(self.friend_guids, :order => 'username')
+  end
+
+  
+  ###################################################################
+  ##  Financial Functions                                          ##
+  ###################################################################
+  
   def credit_account(options)
     return false unless options
     redis = Worlize::RedisConnectionPool.get_client(:currency)
@@ -181,6 +312,11 @@ class User < ActiveRecord::Base
   end
   
   private
+  
+  def redis_relationships
+    @redis_relationships ||= Worlize::RedisConnectionPool.get_client(:relationships)
+  end
+  
   def assign_guid()
     self.guid = Guid.new.to_s
   end
