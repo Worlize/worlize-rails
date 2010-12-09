@@ -43,3 +43,42 @@
         </tr>
     </table>
 <% end %>
+
+<br>
+
+<h1>Redis Servers</h1>
+
+<% @redis_servers.each do |server| %>
+    <h2><%= server['name'] %></h2>
+    <table cellspacing="0" border="0" cellpadding="0">
+        <tr>
+            <td align="right">Uptime (in days):</td>
+            <td><%= server['uptime_in_days'] %></td>
+        </tr>
+        <tr>
+            <td align="right">Connected Clients:</td>
+            <td><%= server['connected_clients'] %></td>
+        </tr>
+        <tr>
+            <td align="right">Used Memory:</td>
+            <td><%= server['used_memory_human'] %></td>
+        </tr>
+        <tr>
+            <td align="right">Changes since last save:</td>
+            <td><%= server['changes_since_last_save'] %></td>
+        </tr>
+        <tr>
+            <td align="right">PubSub Channels:</td>
+            <td><%= server['pubsub_channels'] %></td>
+        </tr>
+        <tr>
+            <td align="right">PubSub Patterns:</td>
+            <td><%= server['pubsub_patterns'] %></td>
+        </tr>
+        <tr>
+            <td align="right">Process ID:</td>
+            <td><%= server['process_id'] %></td>
+        </tr>
+    </table>
+    <br>
+<% end %>

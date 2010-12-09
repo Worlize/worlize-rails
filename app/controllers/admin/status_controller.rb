@@ -17,6 +17,12 @@ class Admin::StatusController < ApplicationController
       @total_room_count += server['room_count']
     end
     
+    # Pull redis server stats
+    @redis_servers = Worlize.config['redis_servers'].map do |server_name,v|
+      Worlize::RedisConnectionPool.get_client(server_name).info.merge('name' => server_name)
+    end
+    @redis_servers.sort! { |a,b| a['name'] <=> b['name'] }
+    
   end
   
 end
