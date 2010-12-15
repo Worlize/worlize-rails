@@ -1,4 +1,5 @@
 class WorldsController < ApplicationController
+  before_filter :require_user
   
   def show
     world = World.find_by_guid(params[:id])

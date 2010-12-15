@@ -1,6 +1,11 @@
 class BetaInvitation < ActiveRecord::Base
   belongs_to :inviter, :class_name => 'User'
   
+  validates :email, { :presence => true,
+                      :email => true
+                    }
+  
+  
   before_create :generate_invite_code
   
   private

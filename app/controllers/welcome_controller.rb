@@ -33,7 +33,8 @@ class WelcomeController < ApplicationController
       "admin" => current_user.admin?,
       "interactivity_session" => current_user.interactivity_session.serializable_hash,
       "authenticity_token" => form_authenticity_token,
-      "cookies" => cookies
+      "cookies" => cookies,
+      "remaining_invites" => current_user.invites
     })
     render :enter, :layout => false
   end

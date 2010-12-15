@@ -31,7 +31,21 @@ Worlize::Application.routes.draw do |map|
     resources :in_world_objects
   end
 
-  resources :users
+  resources :friends do
+    member do
+      post :request_friendship
+      post :accept_friendship
+      post :reject_friendship
+      post :retract_friendship_request
+    end
+  end
+
+  resources :users do
+    collection do
+      get :search
+    end
+    resources :friends
+  end
   
   resource :preferences
   

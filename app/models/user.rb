@@ -13,6 +13,8 @@ class User < ActiveRecord::Base
   
   has_many :avatars, :foreign_key => 'creator_id', :dependent => :nullify
   
+  belongs_to :inviter, :class_name => 'User'
+  
   attr_protected :admin
   
   validates :first_name, :presence => true
@@ -61,7 +63,9 @@ class User < ActiveRecord::Base
       :bucks => self.bucks,
       :twitter => self.twitter,
       :email => self.email,
-      :birthday => self.birthday
+      :birthday => self.birthday,
+      :remaining_invites => self.invites,
+      :world_entrance => self.worlds.first.rooms.first.guid
     )
   end
 
@@ -162,6 +166,7 @@ class User < ActiveRecord::Base
   
   def request_friendship_of(potential_friend)
     return false if self.is_friends_with?(potential_friend)
+    return true if self.accept_friendship_request_from(potential_friend)
     if redis_relationships.sadd "#{potential_friend.guid}:friendRequests", self.guid
       potential_friend.send_message({
         :msg => 'new_friend_request',
@@ -248,6 +253,24 @@ class User < ActiveRecord::Base
       redis_relationships.srem "#{self.guid}:friends", sworn_enemy.guid
       redis_relationships.srem "#{sworn_enemy.guid}:friends", self.guid
     end
+    sworn_enemy.send_message({
+      :msg => 'friend_removed',
+      :data => {
+        :user => {
+          :guid => self.guid,
+          :username => self.username
+        }
+      }
+    })
+    self.send_message({
+      :msg => 'friend_removed',
+      :data => {
+        :user => {
+          :guid => sworn_enemy.guid,
+          :username => sworn_enemy.username
+        }
+      }
+    })
     true
   end
   

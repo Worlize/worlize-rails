@@ -1,4 +1,6 @@
 class AvatarsController < ApplicationController
+  before_filter :require_user
+
   def show
     avatar = Avatar.find_by_guid(params[:id])
     if avatar

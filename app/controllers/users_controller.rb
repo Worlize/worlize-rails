@@ -1,14 +1,19 @@
 class UsersController < ApplicationController
-    
+  before_filter :require_user, :except => [:create]
+  
   def create
     @beta_invitation = BetaInvitation.find_by_invite_code!(params[:invite_code])
     @user = User.new(params[:user])
+    @user.inviter = @beta_invitation.inviter
     if @user.save
       if (@beta_invitation)
         @beta_invitation.destroy
       end
       @user.first_time_login
       @user.create_world
+      if @user.inviter
+        @user.befriend(@user.inviter)
+      end
       redirect_to dashboard_authentications_url
     else
       render "invitations/show"
@@ -32,6 +37,42 @@ class UsersController < ApplicationController
         })
       end
     end
+  end
+  
+  def search
+    if params[:q].nil?
+      render :json => Yajl::Encoder.encode({
+        :success => true,
+        :count => 0,
+        :data => {}
+      }) and return
+    end
+
+    search_term = params[:q].split(/\s/).first
+    if search_term.empty?
+      render :json => Yajl::Encoder.encode({
+        :success => true,
+        :count => 0,
+        :data => {}
+      }) and return
+    end
+    
+    # Don't let users insert their own wildcards
+    search_term.gsub!('%', '')
+    
+    query = User.where('username LIKE ? OR email = ?', "#{search_term}%", search_term)
+    results = query.limit(10).order('username ASC').all
+    render :json => Yajl::Encoder.encode({
+      :success => true,
+      :total => query.count,
+      :count => results.length,
+      :data => results.map do |user|
+        {
+          :guid => user.guid,
+          :username => user.username
+        }
+      end
+    })
   end
 
 end
