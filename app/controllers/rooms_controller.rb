@@ -167,6 +167,13 @@ class RoomsController < ApplicationController
     world = room.world
     description = ''
     if world.user == current_user
+      if world.rooms.count == 1
+        render :json => Yajl::Encoder.encode({
+          :success => false,
+          :description => "You cannot delete your last area.  You must create another area first."
+        }) and return
+      end
+      
       room.destroy
       if room.destroyed?
         Worlize::InteractServerManager.instance.broadcast_to_room(room.guid, {
