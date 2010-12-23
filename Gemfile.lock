@@ -48,34 +48,34 @@ GEM
     acts-as-taggable-on (2.0.6)
     acts_as_list (0.1.2)
     addressable (2.2.2)
-    arel (2.0.4)
+    arel (2.0.6)
     authlogic (2.1.6)
       activesupport
     builder (2.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
-    excon (0.2.4)
+    excon (0.3.6)
     faraday (0.5.3)
       addressable (~> 2.2.2)
       multipart-post (~> 1.0.1)
       rack (>= 1.1.0, < 2)
-    fog (0.2.30)
+    fog (0.3.33)
       builder
-      excon (>= 0.2.0)
-      formatador (>= 0.0.15)
+      excon (>= 0.3.3)
+      formatador (>= 0.0.16)
       json
       mime-types
-      net-ssh
-      nokogiri (>= 1.4.3.1)
+      net-ssh (>= 2.0.23)
+      nokogiri (>= 1.4.4)
       ruby-hmac
     formatador (0.0.16)
     guid (0.1.1)
-    i18n (0.4.2)
+    i18n (0.5.0)
     json (1.4.6)
     kgio (2.0.0)
-    mail (2.2.10)
+    mail (2.2.12)
       activesupport (>= 2.3.6)
-      i18n (~> 0.4.1)
+      i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
@@ -84,7 +84,7 @@ GEM
     mysql (2.8.1)
     net-ldap (0.1.1)
     net-ssh (2.0.23)
-    newrelic_rpm (2.13.3)
+    newrelic_rpm (2.13.4)
     nokogiri (1.4.4)
     oa-basic (0.1.6)
       multi_json (~> 0.0.2)
@@ -153,15 +153,15 @@ GEM
       ruby-openid (>= 2.1.7)
     rubyntlm (0.1.1)
     thor (0.14.6)
-    timeliness (0.1.1)
+    timeliness (0.3.2)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.23)
-    unicorn (3.0.0)
+    unicorn (3.1.0)
       kgio (~> 2.0.0)
       rack
-    validates_timeliness (3.0.1)
-      timeliness (~> 0.1.0)
+    validates_timeliness (3.0.3)
+      timeliness (~> 0.3.2)
     will_paginate (3.0.pre2)
     yajl-ruby (0.7.8)
 
@@ -169,22 +169,22 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  RedCloth
-  SystemTimer
+  RedCloth (= 4.2.3)
+  SystemTimer (= 1.2.1)
   acts-as-taggable-on
-  acts_as_list
+  acts_as_list (= 0.1.2)
   authlogic (= 2.1.6)
   carrierwave!
-  fog
-  guid
-  mysql
+  fog (= 0.3.33)
+  guid (= 0.1.1)
+  mysql (= 2.8.1)
   newrelic_rpm
-  omniauth
+  omniauth (= 0.1.6)
   rails (= 3.0.3)
-  redis
-  rmagick
+  redis (= 2.1.1)
+  rmagick (= 2.13.1)
   state_machine!
-  unicorn
+  unicorn (= 3.1.0)
   validates_timeliness (~> 3.0.0)
   will_paginate (~> 3.0.pre2)
   yajl-ruby
