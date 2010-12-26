@@ -72,8 +72,14 @@ class User < ActiveRecord::Base
   def create_world
     world = self.worlds.create(:name => "#{self.username.capitalize}'s World")
     
+    default_background_guid = Background.initial_world_background_guid
+    default_background = Background.find_by_guid(default_background_guid)
+    if default_background.nil?
+      raise Error.new('Unable to find the default world background')
+    end  
+    
     # Initialize user's first background instance
-    bi = self.background_instances.create(:background => Background.first)
+    bi = self.background_instances.create(:background => default_background)
     
     room = world.rooms.create(:name => "Entrance")
     room.background_instance = bi

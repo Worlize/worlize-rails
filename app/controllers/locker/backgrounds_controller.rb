@@ -48,11 +48,27 @@ class Locker::BackgroundsController < ApplicationController
   def destroy
     instance = current_user.background_instances.find_by_guid(params[:id])
     num_instances_remaining = instance.background.background_instances.count
-    if num_instances_remaining == 1
-      instance.background.destroy
-    else
-      instance.destroy
+
+    if instance.room
+      room = instance.room
+      room.background_instance = nil
+      if room.save
+        Worlize::InteractServerManager.instance.broadcast_to_room(room.guid, {
+          :msg => 'room_definition_updated'
+        })
+      end
     end
+    
+    if instance.background.do_not_delete
+      instance.destroy
+    else
+      if num_instances_remaining == 1
+        instance.background.destroy
+      else
+        instance.destroy
+      end
+    end
+    
     current_user.credit_account :coins => instance.background.return_coins
 
     render :json => Yajl::Encoder.encode({

@@ -6,6 +6,16 @@ class Background < ActiveRecord::Base
 
   mount_uploader :image, BackgroundUploader
 
+  def self.initial_world_background_guid
+    redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
+    redis.get 'initial_world_background_guid'
+  end
+  
+  def self.initial_world_background_guid=(guid)
+    redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
+    redis.set 'initial_world_background_guid', guid
+  end
+
   def hash_for_api
     {
       :name =>          self.name,
