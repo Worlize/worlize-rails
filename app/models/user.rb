@@ -259,15 +259,16 @@ class User < ActiveRecord::Base
       redis_relationships.srem "#{self.guid}:friends", sworn_enemy.guid
       redis_relationships.srem "#{sworn_enemy.guid}:friends", self.guid
     end
-    sworn_enemy.send_message({
-      :msg => 'friend_removed',
-      :data => {
-        :user => {
-          :guid => self.guid,
-          :username => self.username
-        }
-      }
-    })
+    # Lets not send a notification to the unfortunate victim..
+    # sworn_enemy.send_message({
+    #   :msg => 'friend_removed',
+    #   :data => {
+    #     :user => {
+    #       :guid => self.guid,
+    #       :username => self.username
+    #     }
+    #   }
+    # })
     self.send_message({
       :msg => 'friend_removed',
       :data => {
