@@ -5,7 +5,7 @@ class InWorld::ObjectsController < ApplicationController
     if !current_user.can_edit?(room)
       render :json => Yajl::Encoder.encode({
         :success => false,
-        :description => "Permission denied"
+        :description => "You do not have permisson to author this room"
       }) and return
     end
     
@@ -40,7 +40,7 @@ class InWorld::ObjectsController < ApplicationController
     if !current_user.can_edit?(room)
       render :json => Yajl::Encoder.encode({
         :success => false,
-        :description => "Permission denied"
+        :description => "You do not have permisson to author this room"
       }) and return
     end
     
@@ -77,7 +77,7 @@ class InWorld::ObjectsController < ApplicationController
     if !current_user.can_edit?(room)
       render :json => Yajl::Encoder.encode({
         :success => false,
-        :description => "Permission denied"
+        :description => "You do not have permisson to author this room"
       }) and return
     end
     

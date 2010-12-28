@@ -1,6 +1,13 @@
 class InWorld::HotspotsController < ApplicationController
   def create
     room = Room.find_by_guid(params[:room_id])
+    
+    if !current_user.can_edit?(room)
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => 'You do not have permission to author this room'
+      }) and return
+    end
 
     begin
       if room
@@ -183,6 +190,14 @@ class InWorld::HotspotsController < ApplicationController
   
   def destroy
     room = Room.find_by_guid(params[:room_id])
+    
+    if !current_user.can_edit?(room)
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => 'You do not have permission to author this room'
+      }) and return
+    end
+    
     hotspot_guid = params[:id]
     if room
       rd = room.room_definition
