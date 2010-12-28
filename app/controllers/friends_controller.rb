@@ -90,4 +90,83 @@ class FriendsController < ApplicationController
       :success => current_user.retract_friendship_request_for(potential_friend)
     })
   end
+  
+  def invite_to_join
+    friend = User.find_by_guid(params[:id])
+    if friend.nil?
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => "The specified user does not exist."
+      }) and return
+    end
+    
+    room = Room.find_by_guid(current_user.interactivity_session.room_guid)
+    
+    friend.send_message({
+      :msg => "invitation_to_join_friend",
+      :data => {
+        :user => current_user.public_hash_for_api,
+        :room_guid => current_user.interactivity_session.room_guid,
+        :room_name => room.name,
+        :world_name => room.world.name
+      }
+    })
+    
+    render :json => Yajl::Encoder.encode({
+      :success => true
+    })
+  end
+  
+  def request_to_join
+    friend = User.find_by_guid(params[:id])
+    
+    if friend.interactivity_session.room_guid == current_user.interactivity_session.room_guid
+      render :json => Yajl::Encoder.encode({
+        :success => true,
+        :description => "You are already in the same room with the specified user."
+      }) and return
+    end
+    
+    if friend.nil?
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => "The specified user does not exist."
+      }) and return
+    end
+    
+    friend.send_message({
+      :msg => "request_permission_to_join",
+      :data => {
+        :user => current_user.public_hash_for_api,
+        :invitation_token => params[:invitation_token]
+      }
+    })
+    
+    render :json => Yajl::Encoder.encode({
+      :success => true
+    })
+  end
+  
+  def grant_permission_to_join
+    friend = User.find_by_guid(params[:id])
+    if friend.nil?
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => "The specified user does not exist."
+      }) and return
+    end
+    
+    friend.send_message({
+      :msg => "permission_to_join_granted",
+      :data => {
+        :user => current_user.public_hash_for_api,
+        :room_guid => current_user.interactivity_session.room_guid,
+        :invitation_token => params[:invitation_token]
+      }
+    })
+    
+    render :json => Yajl::Encoder.encode({
+      :success => true
+    })
+  end
 end

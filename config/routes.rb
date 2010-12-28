@@ -37,6 +37,9 @@ Worlize::Application.routes.draw do |map|
       post :accept_friendship
       post :reject_friendship
       post :retract_friendship_request
+      post :invite_to_join
+      post :request_to_join
+      post :grant_permission_to_join
     end
   end
 
