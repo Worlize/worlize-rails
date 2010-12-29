@@ -1,10 +1,10 @@
 GIT
   remote: git://github.com/jnicklas/carrierwave.git
-  revision: 7157a0ed628808225744b25798ba10841c929bc1
-  branch: 0.5.0
+  revision: 85ddee1014806dd4ccea7d122fe23d14f0adc43e
+  branch: 0.5.1
   specs:
-    carrierwave (0.5.0)
-      activesupport (~> 3.0.0)
+    carrierwave (0.5.1)
+      activesupport (~> 3.0)
 
 GIT
   remote: git://github.com/pluginaweek/state_machine.git
@@ -73,7 +73,7 @@ GEM
     i18n (0.5.0)
     json (1.4.6)
     kgio (2.0.0)
-    mail (2.2.12)
+    mail (2.2.13)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)

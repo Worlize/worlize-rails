@@ -9,7 +9,7 @@ gem 'redis', '2.1.1'
 gem 'yajl-ruby', :require => 'yajl'
 gem 'acts-as-taggable-on'
 gem 'RedCloth', '4.2.3'
-gem 'carrierwave', :git => 'git://github.com/jnicklas/carrierwave.git', :branch => '0.5.0'
+gem 'carrierwave', :git => 'git://github.com/jnicklas/carrierwave.git', :branch => '0.5.1'
 gem 'rmagick', '2.13.1', :require => 'RMagick'
 gem 'fog', '0.3.33'
 

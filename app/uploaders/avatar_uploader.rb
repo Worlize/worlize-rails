@@ -8,11 +8,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
 
   # Choose what kind of storage to use for this uploader
   # storage :file
-  if ::Rails.env == 'production'
-    storage :s3
-  else
-    storage :file
-  end
+  storage :s3
 
   def s3_cnamed
     ::Rails.env == 'production'
@@ -26,11 +22,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    if ::Rails.env == 'production'
-      "#{model.guid}"
-    else
-      "uploads/#{model.class.to_s.underscore}/#{model.guid}"
-    end
+    "#{model.guid}"
   end
 
   process :resize_to_limit => [400, 400]
