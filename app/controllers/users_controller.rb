@@ -61,6 +61,7 @@ class UsersController < ApplicationController
     search_term.gsub!('%', '')
     
     query = User.where('username LIKE ? OR email = ?', "#{search_term}%", search_term)
+    query = query.where('id != ?', current_user.id)
     results = query.limit(10).order('username ASC').all
     render :json => Yajl::Encoder.encode({
       :success => true,
@@ -69,7 +70,9 @@ class UsersController < ApplicationController
       :data => results.map do |user|
         {
           :guid => user.guid,
-          :username => user.username
+          :username => user.username,
+          :is_friend => current_user.is_friends_with?(user),
+          :has_pending_request => current_user.has_requested_friendship_of?(user)
         }
       end
     })

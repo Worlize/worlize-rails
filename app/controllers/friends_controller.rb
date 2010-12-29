@@ -57,7 +57,12 @@ class FriendsController < ApplicationController
   
   def request_friendship
     potential_friend = User.find_by_guid(params[:id])
-    render :nothing and return if potential_friend == current_user
+    if potential_friend == current_user
+      render :json => Yajl::Encoder.encode({
+        :success => false,
+        :description => "You cannot add yourself as a friend!"
+      }) and return 
+    end
     
     render :json => Yajl::Encoder.encode({
       :success => current_user.request_friendship_of(potential_friend)

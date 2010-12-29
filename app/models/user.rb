@@ -187,6 +187,10 @@ class User < ActiveRecord::Base
     true
   end
   
+  def has_requested_friendship_of?(potential_friend)
+    redis_relationships.sismember "#{potential_friend.guid}:friendRequests", self.guid
+  end
+  
   def retract_friendship_request_for(potential_friend)
     redis_relationships.srem "#{potential_friend.guid}:friendRequests", self.guid
   end
@@ -205,7 +209,11 @@ class User < ActiveRecord::Base
         :data => {
           :user => {
             :guid => self.guid,
-            :username => self.username
+            :username => self.username,
+            :online => self.online?,
+            :world_entrance =>
+              (self.worlds.first && self.worlds.first.rooms.first) ?
+                self.worlds.first.rooms.first.guid : nil
           }
         }
       })
@@ -259,19 +267,20 @@ class User < ActiveRecord::Base
       redis_relationships.srem "#{self.guid}:friends", sworn_enemy.guid
       redis_relationships.srem "#{sworn_enemy.guid}:friends", self.guid
     end
-    # Lets not send a notification to the unfortunate victim..
-    # sworn_enemy.send_message({
-    #   :msg => 'friend_removed',
-    #   :data => {
-    #     :user => {
-    #       :guid => self.guid,
-    #       :username => self.username
-    #     }
-    #   }
-    # })
+    sworn_enemy.send_message({
+      :msg => 'friend_removed',
+      :data => {
+        :show_notification => false,
+        :user => {
+          :guid => self.guid,
+          :username => self.username
+        }
+      }
+    })
     self.send_message({
       :msg => 'friend_removed',
       :data => {
+        :show_notification => true,
         :user => {
           :guid => sworn_enemy.guid,
           :username => sworn_enemy.username
