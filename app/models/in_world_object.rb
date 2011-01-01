@@ -1,7 +1,9 @@
 class InWorldObject < ActiveRecord::Base
   has_many :in_world_object_instances, :dependent => :destroy
   has_many :users, :through => :in_world_object_instances
+  has_many :gifts, :as => :giftable
   belongs_to :creator, :class_name => 'User'
+  before_create :assign_guid
   
   mount_uploader :image, InWorldObjectUploader
   
@@ -15,8 +17,7 @@ class InWorldObject < ActiveRecord::Base
       :return_coins =>  self.return_coins
     }
   end
-  
-  before_create :assign_guid
+
   private
   def assign_guid()
     self.guid = Guid.new.to_s

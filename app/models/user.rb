@@ -11,7 +11,10 @@ class User < ActiveRecord::Base
   has_many :avatar_instances, :dependent => :nullify
   has_many :prop_instances, :dependent => :nullify
   
-  has_many :avatars, :foreign_key => 'creator_id', :dependent => :nullify
+  has_many :created_avatars, :foreign_key => 'creator_id', :dependent => :nullify
+  
+  has_many :received_gifts, :class_name => 'Gift', :foreign_key => 'recipient_id'
+  has_many :sent_gifts,     :class_name => 'Gift', :foreign_key => 'sender_id'
   
   belongs_to :inviter, :class_name => 'User'
   

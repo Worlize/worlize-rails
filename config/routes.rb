@@ -52,7 +52,17 @@ Worlize::Application.routes.draw do |map|
   
   resource :preferences
   
-  resources :avatars
+  resources :gifts do
+    member do
+      post 'accept_gift'
+    end
+  end
+  
+  resources :avatars do
+    member do
+      post 'send_as_gift'
+    end
+  end
   
   resources :invite, :controller => 'Invitations'
   
