@@ -20,6 +20,14 @@ class Avatar < ActiveRecord::Base
     }
   end
   
+  def hash_for_gift_api
+    {
+      :name =>          self.name,
+      :guid =>          self.guid,
+      :thumbnail =>     self.image.tiny.url
+    }
+  end
+  
   private
   def assign_guid()
     self.guid = Guid.new.to_s

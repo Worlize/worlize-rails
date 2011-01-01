@@ -40,6 +40,7 @@ class AvatarsController < ApplicationController
         :msg => 'gift_received',
         :data => {
           :type => gift.giftable_type,
+          :id => gift.id,
           :sender => current_user.public_hash_for_api
         }
       })

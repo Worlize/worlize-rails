@@ -11,7 +11,7 @@ class GiftsController < ApplicationController
   
   # Ignore gift
   def destroy
-    gift = current_user.received_gifts.find_by_guid(params[:id])
+    gift = current_user.received_gifts.find(params[:id])
     if gift.nil?
       render :json => Yajl::Encoder.encode({
         :success => false,
@@ -42,7 +42,7 @@ class GiftsController < ApplicationController
   end
   
   def accept
-    gift = current_user.received_gifts.find_by_guid(params[:id])
+    gift = current_user.received_gifts.find(params[:id])
     if gift.nil?
       render :json => Yajl::Encoder.encode({
         :success => false,
