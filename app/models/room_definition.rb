@@ -1,4 +1,3 @@
-require 'room_definition/in_world_object_manager'
 class RoomDefinition < RedisModel
   redis_server :room_definitions
   redis_hash_key 'roomDefinition'
@@ -16,6 +15,7 @@ class RoomDefinition < RedisModel
   }
   
   after_update :broadcast_update_notification
+  after_destroy :before_dependent_objects
   
   validates :guid, :presence => true
   validates :background, :presence => true
@@ -23,7 +23,8 @@ class RoomDefinition < RedisModel
   def hash_for_api
     serializable_hash.merge({
       :hotspots => self.hotspots,
-      :objects => self.in_world_object_manager.object_instances
+      :objects => self.in_world_object_manager.object_instances,
+      :youtube_players => self.youtube_manager.youtube_players
     })
   end
   
@@ -54,7 +55,11 @@ class RoomDefinition < RedisModel
   end
   
   def in_world_object_manager
-    @in_world_object_manager ||= InWorldObjectManager.new(self)
+    @in_world_object_manager ||= RoomDefinition::InWorldObjectManager.new(self)
+  end
+  
+  def youtube_manager
+    @youtube_manager ||= RoomDefinition::EmbeddedYoutubeManager.new(self)
   end
   
   def room=(room)
@@ -70,6 +75,11 @@ class RoomDefinition < RedisModel
       "room:#{self.guid}",
       '{"msg":"room_definition_updated"}'
     )
+  end
+  
+  def remove_dependent_objects
+    in_world_object_manager.unlink_all
+    in_world_object_manager.destroy
   end
   
 end

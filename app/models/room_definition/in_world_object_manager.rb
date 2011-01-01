@@ -1,4 +1,4 @@
-class InWorldObjectManager
+class RoomDefinition::InWorldObjectManager
   attr_accessor :room_definition
   attr_accessor :raw_data
   
@@ -19,6 +19,10 @@ class InWorldObjectManager
   def save
     redis.hset('in_world_objects', room_definition.guid, Yajl::Encoder.encode(raw_data))
     self
+  end
+  
+  def destroy
+    redis.hdel('in_world_objects', room_definition.guid)
   end
   
   def add_object_instance(in_world_object_instance, x, y)
@@ -115,6 +119,16 @@ class InWorldObjectManager
       end
     end
     raise Exception, "Unable to find specified object instance guid"
+  end
+  
+  def unlink_all
+    object_instances.each do |object_data|
+      in_world_object_instance = InWorldObjectInstance.find_by_guid(object_data['guid'])
+      if !in_world_object_instance.nil?
+        in_world_object_instance.update_attribute(:room, nil)
+      end
+    end
+    
   end
   
   def object_instances

@@ -82,6 +82,8 @@ GEM
     multi_json (0.0.5)
     multipart-post (1.0.1)
     mysql (2.8.1)
+    nestful (0.0.6)
+      activesupport (>= 3.0.0.beta)
     net-ldap (0.1.1)
     net-ssh (2.0.23)
     newrelic_rpm (2.13.4)
@@ -178,6 +180,7 @@ DEPENDENCIES
   fog (= 0.3.33)
   guid (= 0.1.1)
   mysql (= 2.8.1)
+  nestful (= 0.0.6)
   newrelic_rpm
   omniauth (= 0.1.6)
   rails (= 3.0.3)
