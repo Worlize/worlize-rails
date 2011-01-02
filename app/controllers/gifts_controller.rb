@@ -11,7 +11,7 @@ class GiftsController < ApplicationController
   
   # Ignore gift
   def destroy
-    gift = current_user.received_gifts.find(params[:id])
+    gift = current_user.received_gifts.find_by_guid(params[:id])
     if gift.nil?
       render :json => Yajl::Encoder.encode({
         :success => false,
@@ -42,7 +42,7 @@ class GiftsController < ApplicationController
   end
   
   def accept
-    gift = current_user.received_gifts.find(params[:id])
+    gift = current_user.received_gifts.find_by_guid(params[:id])
     if gift.nil?
       render :json => Yajl::Encoder.encode({
         :success => false,
@@ -53,12 +53,25 @@ class GiftsController < ApplicationController
     # FIXME: Re-architect so that this isn't specific to the
     #        type of gift involved
     if gift.giftable_type == 'Avatar'
+      
+      # Check for available slots..
+      if (current_user.avatar_instances.count >= current_user.avatar_slots)
+        render :json => Yajl::Encoder.encode({
+          :success => false,
+          :description => "You don't have enough empty slots in your avatar locker.  You must buy more slots or delete an avatar before you can accept this gift."
+        }) and return
+      end
+      
       avatar = gift.giftable
-      avatar_instance = current_user.avatar_instances.create(:avatar => avatar)
+      avatar_instance = current_user.avatar_instances.create(
+        :avatar => avatar,
+        :gifter => gift.sender
+      )
       if avatar_instance.persisted?
         gift.destroy
         render :json => Yajl::Encoder.encode({
-          :success => true
+          :success => true,
+          :data => avatar_instance.hash_for_api
         })
       else
         render :json => Yajl::Encoder.encode({

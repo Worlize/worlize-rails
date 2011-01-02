@@ -48,9 +48,7 @@ class User < ActiveRecord::Base
     {
       :guid => self.guid,
       :username => self.username,
-      :created_at => self.created_at,
-      :admin => self.admin?,
-      :state => self.state
+      :created_at => self.created_at
     }
   end
   

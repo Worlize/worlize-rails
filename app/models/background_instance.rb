@@ -2,6 +2,7 @@ class BackgroundInstance < ActiveRecord::Base
   belongs_to :background
   belongs_to :user
   belongs_to :room
+  belongs_to :gifter, :class_name => 'User'
   
   before_create :assign_guid
   

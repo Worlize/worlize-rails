@@ -54,7 +54,7 @@ Worlize::Application.routes.draw do |map|
   
   resources :gifts do
     member do
-      post 'accept_gift'
+      post 'accept'
     end
   end
   

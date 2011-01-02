@@ -2,6 +2,7 @@ class InWorldObjectInstance < ActiveRecord::Base
   belongs_to :in_world_object
   belongs_to :user
   belongs_to :room
+  belongs_to :gifter, :class_name => 'User'
   
   before_create :assign_guid
   

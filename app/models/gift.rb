@@ -2,6 +2,8 @@ class Gift < ActiveRecord::Base
   belongs_to :giftable, :polymorphic => true
   belongs_to :sender, :class_name => 'User'
   belongs_to :recipient, :class_name => 'User'
+
+  before_create :assign_guid
   
   validates :sender, :presence => true
   validates :recipient, :presence => true
@@ -17,10 +19,18 @@ class Gift < ActiveRecord::Base
     end
     
     {
+      :guid => guid,
       :type => giftable_type,
       :note => note,
       :sender => sender.public_hash_for_api,
       :item => item_detail
     }
   end
+  
+  
+  private
+  def assign_guid()
+    self.guid = Guid.new.to_s
+  end
+  
 end
