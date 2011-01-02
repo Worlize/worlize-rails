@@ -24,7 +24,7 @@ class Avatar < ActiveRecord::Base
     {
       :name =>          self.name,
       :guid =>          self.guid,
-      :thumbnail =>     self.image.icon.url
+      :thumbnail =>     self.image.thumb.url
     }
   end
   

@@ -4,6 +4,7 @@ class Gift < ActiveRecord::Base
   belongs_to :recipient, :class_name => 'User'
 
   before_create :assign_guid
+  after_create :notify_recipient
   
   validates :sender, :presence => true
   validates :recipient, :presence => true
@@ -29,6 +30,17 @@ class Gift < ActiveRecord::Base
   
   
   private
+  def notify_recipient
+    if !recipient.nil?
+      recipient.send_message({
+        :msg => 'gift_received',
+        :data => {
+          :gift => self.hash_for_api
+        }
+      })
+    end
+  end
+  
   def assign_guid()
     self.guid = Guid.new.to_s
   end

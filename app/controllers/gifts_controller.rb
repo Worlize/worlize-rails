@@ -1,7 +1,7 @@
 class GiftsController < ApplicationController
 
   def index
-    gifts = current_user.received_gifts
+    gifts = current_user.received_gifts.order('created_at DESC')
     
     render :json => Yajl::Encoder.encode({
       :success => true,

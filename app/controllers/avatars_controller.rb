@@ -36,14 +36,6 @@ class AvatarsController < ApplicationController
 
     gift = avatar.gifts.build(:sender => current_user, :recipient => recipient, :note => params[:note])
     if gift.save
-      recipient.send_message({
-        :msg => 'gift_received',
-        :data => {
-          :type => gift.giftable_type,
-          :id => gift.id,
-          :sender => current_user.public_hash_for_api
-        }
-      })
       render :json => Yajl::Encoder.encode({
         :success => true
       })
