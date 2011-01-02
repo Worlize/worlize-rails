@@ -49,15 +49,7 @@ WorlizeCommunications.prototype = {
       if (self.debug) {
         console.log("Incoming Message",data);
       }
-      var decodedMessage;
-      try {
-          decodedMessage = JSON.parse(data)
-      }
-      catch(e) {
-        /* do nothing */
-        return;
-      }
-      self.dispatchEvent('message', decodedMessage);
+      self.dispatchEvent('message', data);
     });
     this.socket.on('connect', function() {
       if (self.debug) {
@@ -92,7 +84,7 @@ WorlizeCommunications.prototype = {
     if (this.debug) {
       console.log("Sending message: ", message);
     }
-    this.socket.send(JSON.stringify(message));
+    this.socket.send(message);
   },
   
   addEventListener: function(event, closure) {
@@ -142,7 +134,7 @@ function worlizeInitialize() {
   comm = WorlizeCommunications.getInstance();
   comm.addEventListener('message', function(data) {
     // console.log("data!", data);
-    swf.handleMessage(data);
+    swf.handleMessage(encodeURIComponent(data));
   });
   comm.addEventListener('connect', function() {
     // console.log("Connected");
@@ -163,5 +155,5 @@ function worlizeDisconnect() {
 }
 
 function worlizeSend(message) {
-  comm.send(message);
+  comm.send(decodeURIComponent(message));
 }
