@@ -38,7 +38,6 @@ class Admin::BetaRegistrationsController < ApplicationController
       :name => @registration.name,
       :first_name => @registration.first_name,
       :last_name => @registration.last_name,
-      :inviter => current_user,
       :email => @registration.email
     )
     
