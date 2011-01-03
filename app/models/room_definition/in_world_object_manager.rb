@@ -126,6 +126,16 @@ class RoomDefinition::InWorldObjectManager
       in_world_object_instance = InWorldObjectInstance.find_by_guid(object_data['guid'])
       if !in_world_object_instance.nil?
         in_world_object_instance.update_attribute(:room, nil)
+        Worlize::InteractServerManager.instance.broadcast_to_room(
+          room_definition.guid,
+          {
+            :msg => 'object_removed',
+            :data => {
+              :room => room_definition.guid,
+              :guid => in_world_object_instance.guid
+            }
+          }
+        )
       end
     end
     

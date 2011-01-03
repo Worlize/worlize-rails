@@ -15,7 +15,7 @@ class RoomDefinition < RedisModel
   }
   
   after_update :broadcast_update_notification
-  after_destroy :before_dependent_objects
+  after_destroy :remove_dependent_objects
   
   validates :guid, :presence => true
   validates :background, :presence => true

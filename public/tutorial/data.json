@@ -1,0 +1,36 @@
+{
+    "slides":[
+        {
+            "image_url":"/tutorial/1_main.png",
+            "text":""
+        },
+        {
+            "image_url":"/tutorial/2_Nav.png",
+            "text":""
+        },
+        {
+            "image_url":"/tutorial/3_main.png",
+            "text":""
+        },
+        {
+            "image_url":"/tutorial/4_BottomToolbar.png",
+            "text":""
+        },
+        {
+            "image_url":"/tutorial/5_AvatarLocker.png",
+            "text":""
+        },
+        {
+            "image_url":"/tutorial/6_AuthorMode.png",
+            "text":""
+        },
+        {
+            "image_url":"/tutorial/8_friends.png",
+            "text":""
+        },
+        {
+            "image_url":"/tutorial/9_End.png",
+            "text":""
+        }
+    ]
+}
