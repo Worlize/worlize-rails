@@ -7,7 +7,9 @@ class UsersController < ApplicationController
     @user.inviter = @beta_invitation.inviter
     @user.beta_code = @beta_invitation.beta_code
     if @user.save
-      @beta_invitation.beta_code.consume
+      if @beta_invitation.beta_code
+        @beta_invitation.beta_code.consume
+      end
       @beta_invitation.destroy
       @user.first_time_login
       @user.create_world
