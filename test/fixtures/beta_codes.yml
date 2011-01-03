@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  code: MyString
+  signups_allotted: 1
+  signups_used: 1
+  campaign_name: 
+
+two:
+  code: MyString
+  signups_allotted: 1
+  signups_used: 1
+  campaign_name: 

@@ -32,18 +32,26 @@ class RegistrationsController < ApplicationController
   # POST /registrations.xml
   def create
     @registration = Registration.new(params[:registration])
-
+    
+    @beta_code = BetaCode.find_by_code(params[:registration][:beta_code])
+    if (@registration.valid? && !@beta_code.nil? && !@beta_code.consumed?)
+      @invitation = BetaInvitation.create(
+        :name => @registration.name,
+        :first_name => @registration.first_name,
+        :last_name => @registration.last_name,
+        :email => @registration.email,
+        :beta_code => @beta_code
+      )
+      redirect_to invite_url(@invitation.invite_code) and return
+    end
+    
     respond_to do |format|
       if @registration.save
         Notifier.beta_full_email(@registration).deliver
         JessicaNotifier.beta_full_email(@registration).deliver
         format.html { render :action => 'new' }
-        format.js
-        format.xml  { render :xml => @registration, :status => :created, :location => @registration }
       else
         format.html { render :action => "new" }
-        format.js
-        format.xml  { render :xml => @registration.errors, :status => :unprocessable_entity }
       end
     end
   end

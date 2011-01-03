@@ -1,5 +1,6 @@
 class BetaInvitation < ActiveRecord::Base
   belongs_to :inviter, :class_name => 'User'
+  belongs_to :beta_code
   
   validates :email, { :presence => true,
                       :email => true

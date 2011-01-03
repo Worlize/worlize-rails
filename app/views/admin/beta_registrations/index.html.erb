@@ -7,7 +7,7 @@
   <tr>
     <th>Name</th>
     <th>Email</th>
-    <th>Twitter</th>
+    <th>Beta Code</th>
     <th>Developer</th>
     <th>Time</th>
     <th>Actions</th>
@@ -22,7 +22,7 @@
       <%- end -%>
     </td>
     <td width="20%"><%= registration.email.truncate(25) %></td>
-    <td width="10%"><%= registration.twitter %></td>
+    <td width="10%"><%= registration.beta_code %></td>
     <td width="10%"><%= registration.developer ? 'yes' : '' %></td>
     <td width="20%"><%= registration.created_at.strftime("%Y-%m-%d %I:%M %p (UTC)") %></td>
     <td width="20%"><%= link_to "Invite User", invite_user_admin_beta_registration_path(registration), :method => :post, :remote => true %> |

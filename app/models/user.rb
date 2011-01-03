@@ -18,6 +18,8 @@ class User < ActiveRecord::Base
   
   belongs_to :inviter, :class_name => 'User'
   
+  belongs_to :beta_code
+  
   attr_protected :admin
   
   validates :first_name, :presence => true

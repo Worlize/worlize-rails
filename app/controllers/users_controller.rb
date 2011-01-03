@@ -5,10 +5,10 @@ class UsersController < ApplicationController
     @beta_invitation = BetaInvitation.find_by_invite_code!(params[:invite_code])
     @user = User.new(params[:user])
     @user.inviter = @beta_invitation.inviter
+    @user.beta_code = @beta_invitation.beta_code
     if @user.save
-      if (@beta_invitation)
-        @beta_invitation.destroy
-      end
+      @beta_invitation.beta_code.consume
+      @beta_invitation.destroy
       @user.first_time_login
       @user.create_world
       if @user.inviter
