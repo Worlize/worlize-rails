@@ -3,6 +3,7 @@ class World < ActiveRecord::Base
 
   belongs_to :user
   has_many :rooms, :dependent => :destroy
+  has_one :public_world
   
   validates :name, :presence => true
 
@@ -57,6 +58,16 @@ class World < ActiveRecord::Base
         :user_guid => user.guid
       }
     end
+  end
+  
+  def population
+    user_guids = Array.new
+    self.rooms.each do |room|
+      room_user_guids = room.connected_user_guids
+      user_guids.concat(room_user_guids)
+    end
+    user_guids.uniq!
+    user_guids.length
   end
 
   private

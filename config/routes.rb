@@ -98,6 +98,8 @@ Worlize::Application.routes.draw do |map|
     end
   end
   
+  resources :public_worlds
+  
   resources :rooms do
     resources :hotspots, :controller => 'in_world/hotspots'
     resources :objects, :controller => 'in_world/objects'
