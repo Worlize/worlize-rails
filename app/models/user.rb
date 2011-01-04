@@ -55,6 +55,7 @@ class User < ActiveRecord::Base
   end
   
   def hash_for_api
+    world = self.worlds.first
     self.public_hash_for_api.merge(
       :first_name => self.first_name,
       :last_name => self.last_name,
@@ -68,7 +69,9 @@ class User < ActiveRecord::Base
       :email => self.email,
       :birthday => self.birthday,
       :remaining_invites => self.invites,
-      :world_entrance => self.worlds.first.rooms.first.guid
+      :world_entrance => world.rooms.first.guid,
+      :world_name => world.name,
+      :world_guid => world.guid
     )
   end
 
