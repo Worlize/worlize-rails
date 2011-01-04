@@ -23,8 +23,8 @@ class Admin::UsersController < ApplicationController
       else
         flash[:error] = "Unable to delete #{@user.username}."
       end
-    rescue
-      flash[:error] = "Cannot find user with id #{params[:id]}"
+    rescue => detail
+      flash[:error] = detail.message
     end
     redirect_to admin_users_url
   end
