@@ -8,3 +8,13 @@
 #   inflect.irregular 'person', 'people'
 #   inflect.uncountable %w( fish sheep )
 # end
+
+module StringExtensions
+  def possessive
+    self + ('s' == self[-1,1] ? "'" : "'s")
+  end
+end
+
+class String
+  include StringExtensions
+end

@@ -38,6 +38,13 @@ class Gift < ActiveRecord::Base
           :gift => self.hash_for_api
         }
       })
+      
+      email = EventNotifier.new_gift_email({
+        :sender => sender,
+        :recipient => recipient,
+        :gift => self
+      })
+      email.deliver
     end
   end
   

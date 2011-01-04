@@ -186,6 +186,12 @@ class User < ActiveRecord::Base
           }
         }
       })
+      
+      email = EventNotifier.new_friend_request_email({
+        :sender => self,
+        :recipient => potential_friend
+      })
+      email.deliver
     end
     true
   end
