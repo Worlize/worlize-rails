@@ -8,6 +8,11 @@ class JessicaNotifier < ActionMailer::Base
   #
   def beta_full_email(registration)
     @registration = registration
-    mail :to => 'jessica@worlize.com, brian@worlize.com', :subject => 'New Worlize Registration'
+    mail :to => 'jessica@worlize.com, brian@worlize.com, greg@worlize.com', :subject => 'New Worlize Registration'
+  end
+  
+  def beta_code_signup(user)
+    @user = user
+    mail :to => 'jessica@worlid.com, brian@worlize.com, greg@worlize.com', :subject => "#{user.beta_code.code} Code Signup"
   end
 end

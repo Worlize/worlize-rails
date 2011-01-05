@@ -9,6 +9,7 @@ class UsersController < ApplicationController
     if @user.save
       if @beta_invitation.beta_code
         @beta_invitation.beta_code.consume
+        JessicaNotifier.beta_code_signup(@user).deliver
       end
       @beta_invitation.destroy
       @user.first_time_login
