@@ -31,7 +31,7 @@ class Gift < ActiveRecord::Base
   
   private
   def notify_recipient
-    if !recipient.nil?
+    if !recipient.nil? && !recipient.online?
       recipient.send_message({
         :msg => 'gift_received',
         :data => {
