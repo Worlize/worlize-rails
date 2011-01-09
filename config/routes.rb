@@ -71,6 +71,9 @@ Worlize::Application.routes.draw do |map|
   namespace "admin" do
     resources :authentications
     resources :beta_registrations do
+      collection do
+        post 'invite_all_users'
+      end
       member do
         post 'invite_user'
       end

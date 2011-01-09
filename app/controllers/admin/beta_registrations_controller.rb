@@ -26,6 +26,33 @@ class Admin::BetaRegistrationsController < ApplicationController
     
   end
   
+  def invite_all_users
+    @successful = 0
+    @failed = 0
+    registrations = Registration.all
+    
+    registrations.each do |registration|
+      beta_invitation = BetaInvitation.create(
+        :name => registration.name,
+        :first_name => registration.first_name,
+        :last_name => registration.last_name,
+        :email => registration.email
+      )
+      if beta_invitation.persisted?
+        @successful = @successful + 1
+        email = InvitationNotifier.beta_accepted_email({
+          :beta_invitation => beta_invitation,
+          :account_creation_url => invite_url(beta_invitation.invite_code)
+        })
+        email.deliver
+
+        registration.destroy
+      else
+        @failed = @failed + 1
+      end
+    end
+  end
+  
   def invite_user
     begin
       @registration = Registration.find(params[:id])
