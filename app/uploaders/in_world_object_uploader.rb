@@ -8,7 +8,11 @@ class InWorldObjectUploader < CarrierWave::Uploader::Base
 
   # Choose what kind of storage to use for this uploader:
   # storage :file
-  storage :s3
+  if ::Rails.env == 'production'
+    storage :s3
+  else
+    storage :file
+  end
   
   def s3_cnamed
     ::Rails.env == 'production'
@@ -21,7 +25,11 @@ class InWorldObjectUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    "#{model.guid}"
+    if ::Rails.env == 'development'
+      "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+    else
+      "#{model.guid}"
+    end
   end
   
   process :resize_to_limit => [950, 570]
