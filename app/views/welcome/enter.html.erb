@@ -19,6 +19,17 @@
 			       background-color: #ffffff; }   
 			#flashContent { display:none; }
         </style>
+        <script type="text/javascript">
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            ga.onload = function() {
+              window._flashtracker = _gat._createTracker('UA-7700604-3', 'flashTracker');
+            };
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+
+        </script>
         <script type="text/javascript" src="/javascripts/swfobject.js"></script>
         <script type="text/javascript">
             <!-- For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. --> 
@@ -54,24 +65,9 @@
         
         <script src="/javascripts/communications.js?cb=<%= cache_bust %>" type="text/javascript" charset="utf-8"></script>
         <script>
-
-          function handleChatButtonClick(event) {
-            var value = document.getElementById('chatbox').value;
-            comm.send({ msg: "say", data: value });
-          }
-
-          function handshake(event) {
-            comm.send({ 
-              msg: "handshake", data: {
-                session_guid: "0aafdccb-9aeb-1df8-f42f-4089a69db8b3"
-              }
-            });
-          }
-          
           function configData() {
             return <%= @configJSON.html_safe %>;
           }
-          
         </script>
         
     </head>
@@ -116,19 +112,5 @@
                 <!--<![endif]-->
             </object>
 	    </noscript>		
-	    <script type="text/javascript">
-
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-7700604-3']);
-        _gaq.push(['_setDomainName', '.worlize.com']);
-        _gaq.push(['_trackPageview']);
-
-        (function() {
-          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-
-      </script>
    </body>
 </html>
