@@ -75,9 +75,9 @@ WorlizeCommunications.prototype = {
     if (this.debug) {
       console.log("Disconnect requested");
     }
-    this.send({
+    this.send(JSON.stringify({
         msg: "disconnect"
-    });
+    }));
     this.socket.disconnect();
   },
   send: function(message) {
