@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   before_create :assign_guid
   before_create :initialize_default_slots
   after_create :initialize_currency
+  before_destroy :unlink_friendships
   
   has_many :authentications
   
@@ -385,6 +386,15 @@ class User < ActiveRecord::Base
     self.background_slots = 20
     self.avatar_slots = 20
     self.in_world_object_slots = 20
+  end
+  
+  def unlink_friendships
+    self.friend_guids.each do |friend_guid|
+      redis_relationships.multi do
+        redis_relationships.srem "#{self.guid}:friends", friend_guid
+        redis_relationships.srem "#{friend_guid}:friends", self.guid
+      end
+    end
   end
   
 end
