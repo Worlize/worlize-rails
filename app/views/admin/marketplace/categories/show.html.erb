@@ -21,7 +21,7 @@
 
 <br>
 
-<%= render :partial => 'form', :locals => { :category => MarketplaceCategory.new(:parent => @category) } %>
+<%= render :partial => 'subcategory_form', :locals => { :category => MarketplaceCategory.new(:parent => @category) } %>
 
 <% if @category.parent %>
   <%= button_to "Delete this category", admin_marketplace_category_path(@category),
