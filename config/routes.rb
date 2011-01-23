@@ -92,6 +92,18 @@ Worlize::Application.routes.draw do |map|
     
     resource :status, :controller => 'status' do
     end
+    
+    namespace "marketplace" do
+      resources :categories do
+        member do
+          post 'update_subcategory_positions'
+        end
+      end
+      resources :items
+      resources :featured_items
+      resources :creators
+      resources :themes
+    end
   end
   
   resources :worlds do

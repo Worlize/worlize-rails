@@ -1,0 +1,42 @@
+<% subcategories = category.children %>
+<div id="subcategory_list">
+  <% if subcategories.empty? %>
+    <p>(This category has no subcategories.)</p>
+  <% else %>
+    <h2>Subcategories:</h2>
+    <ul>
+      <% for subcategory in subcategories %>
+        <li data-category-id="<%= subcategory.id %>"><%= link_to subcategory.name, admin_marketplace_category_path(subcategory) %></li>
+      <% end %>
+    </ul>
+    <div style="clear:left;"></div>
+  <% end %>
+</div>
+<script>
+jQuery(function($) {
+  $('#subcategory_list > ul').sortable({
+    distance: 3,
+    update: function(event, ui) {
+      var order = [];
+      $('#subcategory_list > ul').children().each(function(i, element) {
+        order.push($(element).data('category-id'));
+      });
+      $.ajax({
+        url: "<%= escape_javascript(update_subcategory_positions_admin_marketplace_category_path(category)) %>",
+        type: 'POST',
+        data: { order: order },
+        success: function(data, code, xhr) {
+          console.log("Success");
+        },
+        error: function(xhr, error, exception) {
+          console.log("Error");
+        },
+        complete: function(xhr, code) {
+          console.log("Complete");
+        }
+      })      
+    }
+  });
+  $('#subcategory_list > ul').disableSelection();
+});
+</script>

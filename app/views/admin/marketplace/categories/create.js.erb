@@ -1,0 +1,3 @@
+jQuery('#subcategory_list').replaceWith("<%= escape_javascript(render :partial => 'subcategory_list', :locals => { :category => @category.parent }) %>");
+jQuery('#add_subcategory_form').replaceWith("<%= escape_javascript(render :partial => 'form', :locals => { :category => MarketplaceCategory.new(:parent => @category.parent) }) %>");
+jQuery('#marketplace_category_name').val('').focus();

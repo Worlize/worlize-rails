@@ -1,0 +1,29 @@
+<h1>Marketplace Categories</h1>
+
+<% if @breadcrumbs.length > 1 %>
+  <p>
+    <% for crumb in @breadcrumbs %>
+      <% if crumb == @breadcrumbs.last %>
+        <%= crumb.name %>
+      <% else %>
+        <%= link_to crumb.name, admin_marketplace_category_path(crumb) %> &gt;
+      <% end %>
+    <% end %>
+  </p>
+  <br>
+<% end %>
+
+<h2><%= @category.name %> <span class="smaller">(<a href="#">Rename</a>)</span></h2>
+
+<br>
+
+<%= render :partial => 'subcategory_list', :locals => { :category => @category } %>
+
+<br>
+
+<%= render :partial => 'form', :locals => { :category => MarketplaceCategory.new(:parent => @category) } %>
+
+<% if @category.parent %>
+  <%= button_to "Delete this category", admin_marketplace_category_path(@category),
+      :method => :delete %>
+<% end %>
