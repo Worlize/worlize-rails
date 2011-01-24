@@ -1,5 +1,6 @@
 class Admin::Marketplace::ThemesController < ApplicationController
   layout 'admin'
+  before_filter :require_admin
   before_filter :find_theme, :only => [:show, :edit, :update, :destroy]
 
   # GET /themes

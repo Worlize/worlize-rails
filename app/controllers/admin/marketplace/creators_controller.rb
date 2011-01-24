@@ -1,6 +1,7 @@
 class Admin::Marketplace::CreatorsController < ApplicationController
   layout "admin"
-  
+  before_filter :require_admin
+    
   def search
     if !params[:term].empty?
       query = params[:term];

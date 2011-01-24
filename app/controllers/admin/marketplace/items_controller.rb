@@ -1,5 +1,6 @@
 class Admin::Marketplace::ItemsController < ApplicationController
   layout 'admin'
+  before_filter :require_admin
   before_filter :find_marketplace_item, :only => [:show, :edit, :update, :destroy]
 
   # GET /marketplace_items
