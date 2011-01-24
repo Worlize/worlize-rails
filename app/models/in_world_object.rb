@@ -16,8 +16,7 @@ class InWorldObject < ActiveRecord::Base
       :guid =>          self.guid,
       :thumbnail =>     self.image.thumb.url,
       :medium =>        self.image.medium.url,
-      :fullsize =>      self.image.url,
-      :return_coins =>  self.return_coins
+      :fullsize =>      self.image.url
     }
   end
 

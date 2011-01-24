@@ -19,8 +19,7 @@ class Avatar < ActiveRecord::Base
       :small =>         self.image.small.url,
       :tiny =>          self.image.tiny.url,
       :medium =>        self.image.medium.url,
-      :fullsize =>      self.image.url,
-      :return_coins =>  self.return_coins
+      :fullsize =>      self.image.url
     }
   end
   

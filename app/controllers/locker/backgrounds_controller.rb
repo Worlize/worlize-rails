@@ -17,9 +17,6 @@ class Locker::BackgroundsController < ApplicationController
     name = params[:name] || "Background by #{current_user.username}"
     
     @background = Background.new(:name => name,
-                         :sale_coins => 0,
-                         :sale_bucks => 0,
-                         :return_coins => 0,
                          :creator => current_user,
                          :image => params[:filedata])
     

@@ -18,9 +18,6 @@ class Locker::InWorldObjectsController < ApplicationController
     
     @in_world_object = InWorldObject.new(
       :name => name,
-      :sale_coins => 0,
-      :sale_bucks => 0,
-      :return_coins => 0,
       :creator => current_user,
       :image => params[:filedata]
     )
@@ -62,7 +59,6 @@ class Locker::InWorldObjectsController < ApplicationController
     else
       instance.destroy
     end
-    current_user.credit_account :coins => instance.in_world_object.return_coins
 
     render :json => Yajl::Encoder.encode({
       :success => instance.destroyed?,

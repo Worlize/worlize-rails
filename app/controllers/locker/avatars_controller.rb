@@ -25,9 +25,6 @@ class Locker::AvatarsController < ApplicationController
                          :offset_x => 0,
                          :offset_y => 0,
                          :active => true,
-                         :sale_coins => 0,
-                         :sale_bucks => 0,
-                         :return_coins => 0,
                          :creator => current_user,
                          :image => params[:filedata])
     
