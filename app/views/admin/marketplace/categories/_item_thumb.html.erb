@@ -1,0 +1,11 @@
+<% item = item_thumb %>
+<%= link_to [:admin, item] do %>
+  <div id="item_thumb_<%= item_thumb.id %>" class="<%= item.item_type == 'Background' ? 'thumbnail background' : 'thumbnail' %>">
+      <% if item.item.respond_to? 'image' %>
+        <%= image_tag item.item.image.thumb.url %>
+      <% end %>
+      <% if !item.on_sale? %>
+        <%= image_tag 'icons/error.png', :class => 'not_on_sale' %>
+      <% end %>
+  </div>
+<% end %>

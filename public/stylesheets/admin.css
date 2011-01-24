@@ -359,7 +359,6 @@ table.datagrid tr.odd td {
 }
 
 label {
-	display: block;
 	font-weight: bold;
 }
 
@@ -442,6 +441,7 @@ nav#adminNav li {
 	font-weight: normal;
 	text-shadow: #000 0 1px 1px;
 	margin-left: 4px;
+	margin-bottom: 3px;
 	list-style-type: none;
 	list-style-position: inside;
 }
@@ -535,6 +535,104 @@ footer {
 
 #subcategory_list a {
 	text-decoration: none;
+}
+
+.marketplace_thumbnail_container {
+	padding: 10px 10px 0px 0px;
+	border: 1px solid #caccce;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	background-color: #FEFEFE;
+	-webkit-box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	-moz-box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	-o-box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	margin-bottom: 10px;
+}
+
+.marketplace_thumbnail_container div.thumbnail {
+	position: relative;
+	float: left;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #FAFAFA;
+	-webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.13);
+}
+
+.marketplace_thumbnail_container div.thumbnail img.not_on_sale {
+	width: 16px !important;
+	height: 16px !important;
+	position: absolute !important;
+	right: 2px !important;
+	bottom: 1px !important;
+}
+
+.marketplace_thumbnail_container div.thumbnail:hover {
+	border: 1px solid #d8deed;
+	-webkit-box-shadow: 0px 1px 5px rgba(0,0,0,0.33);
+}
+
+.marketplace_thumbnail_container div.thumbnail img {
+	display: block;
+	width: 80px;
+	height: 80px;
+}
+
+.marketplace_thumbnail_container div.thumbnail.background > img {
+	width: 133px;
+	height: 80px;
+}
+
+.marketplace_thumbnail_container:last-child:after {
+	display: block;
+	clear: left;
+	content: ' ';
+}
+
+/* AutoSuggest Formating... */
+
+#as-selections-MarketplaceCreator {
+	width: 300px;
+}
+
+/* @end */
+
+/* @group Scaffold */
+
+div.field_with_errors {
+	display: inline;
+}
+
+div.field_with_errors input,
+div.field_with_errors textarea {
+	border-color: #C00;
+	background-color: #FEE;
+}
+
+#error_explanation {
+	margin: 0px 0px 15px;
+	padding: 10px 20px;
+	background-color: #f1cfd9;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	-moz-box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	-o-box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	color: #000;
+}
+
+div.field {
+	margin: 0px 0px 10px;
+}
+
+div.actions {
+	margin: 0px 0px 10px;
+}
+
+label.light_label {
+	font-weight: normal;
 }
 
 /* @end */

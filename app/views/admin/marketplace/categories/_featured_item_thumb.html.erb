@@ -1,0 +1,6 @@
+<% item = featured_item_thumb %>
+<div id="item_thumb_<%= item_thumb.id %>" class="item_thumb">
+  <% if item.item.respond_to? 'image' %>
+    <%= image_tag item.item.image.thumb.url %>
+  <% end %>
+</div>

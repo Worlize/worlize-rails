@@ -7,6 +7,9 @@ class InWorldObject < ActiveRecord::Base
   
   mount_uploader :image, InWorldObjectUploader
   
+  validates :image,
+              :presence => true
+  
   def hash_for_api
     {
       :name =>          self.name,

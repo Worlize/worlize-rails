@@ -7,6 +7,9 @@ class Background < ActiveRecord::Base
 
   mount_uploader :image, BackgroundUploader
 
+  validates :image,
+              :presence => true
+
   def self.initial_world_background_guid
     redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
     redis.get 'initial_world_background_guid'

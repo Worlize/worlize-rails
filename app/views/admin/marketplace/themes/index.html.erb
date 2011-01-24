@@ -1,1 +1,23 @@
 <h1>Themes</h1>
+
+<% if @themes.empty? %>
+  <p>There are no themes.</p>
+<% else %>
+  <table class="datagrid">
+    <tr>
+      <th>Theme Name</th>
+      <th>Actions</th>
+    </tr>
+    <% for theme in @themes -%>
+    <tr>
+      <td><%= theme.name %></td>
+      <td>
+        <%= link_to 'Delete', [:admin, theme], :method => 'delete', :confirm => "Are you sure you want to delete this theme?" %> |
+        <%= link_to 'Edit', edit_admin_marketplace_theme_path(theme) %>
+      </td>
+    </tr>
+    <%- end %>
+  </table>
+<% end %>
+
+<%= link_to 'Create New Theme', new_admin_marketplace_theme_path %>

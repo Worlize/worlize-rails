@@ -21,11 +21,24 @@ class Admin::Marketplace::CategoriesController < ApplicationController
     
     respond_to do |format|
       if @category.save
-        format.html { redirect_to admin_marketplace_category_path(@category.parent) }
-        format.js
+        format.html { redirect_to [:admin, @category.parent] }
       else
-        format.html { render :action => :new }
-        format.js { render :action => :new }
+        format.html { redirect_to [:admin, @category.parent] }
+      end
+    end
+  end
+  
+  def update
+    @category = MarketplaceCategory.find(params[:id])
+    @breadcrumbs = build_breadcrumbs(@category)
+
+    respond_to do |format|
+      if @category.update_attributes(params[:marketplace_category])
+        format.html { redirect_to([:admin, @category], :notice => 'Category was successfully updated.') }
+        # format.xml  { head :ok }
+      else
+        format.html { render :action => "show" }
+        # format.xml  { render :xml => @post.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -35,6 +48,11 @@ class Admin::Marketplace::CategoriesController < ApplicationController
     
     if @category.children.count > 0
       flash[:error] = "You cannot delete a category while it still has subcategories."
+      redirect_to admin_marketplace_category_path(@category) and return
+    end
+    
+    if @category.marketplace_items.count > 0
+      flash[:error] = "You cannot delete a category while it still has items in it."
       redirect_to admin_marketplace_category_path(@category) and return
     end
     
@@ -64,6 +82,6 @@ class Admin::Marketplace::CategoriesController < ApplicationController
       category = category.parent
       breadcrumbs.unshift(category)
     end
-    return breadcrumbs
+    return breadcrumbs;
   end
 end

@@ -16,6 +16,7 @@ Worlize::Application.routes.draw do |map|
   end
 
   namespace "marketplace" do
+    resources :themes, :only => [:show]
     resources :backgrounds do
       member do
         post :buy
@@ -98,10 +99,15 @@ Worlize::Application.routes.draw do |map|
         member do
           post 'update_subcategory_positions'
         end
+        resources :items, :except => [:edit]
       end
       resources :items
       resources :featured_items
-      resources :creators
+      resources :creators, :only => [:show, :create, :update, :destroy] do
+        collection do
+          get 'search'
+        end
+      end
       resources :themes
     end
   end

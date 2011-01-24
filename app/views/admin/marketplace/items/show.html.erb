@@ -1,0 +1,17 @@
+<h1>Marketplace Item</h1>
+
+<p>Type: <%= @item.item_type.underscore.titleize %></p>
+
+<%= render 'form' %>
+
+<br>
+
+<%= button_to 'Delete this item', [:admin, @item], :method => :delete, :confirm => "Are you sure?" %>
+
+<br>
+
+<% if @item.marketplace_category %>
+  <%= link_to "Back to #{@item.marketplace_category.name}", [:admin, @item.marketplace_category] %>
+<% else %>
+  <%= link_to "Back to uncategoriezed items", admin_marketplace_items_path %>
+<% end %>

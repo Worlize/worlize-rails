@@ -3,6 +3,7 @@ class MarketplaceCreator < ActiveRecord::Base
   has_many :marketplace_items
   
   validates :display_name,
-              :presence => true
+              :presence => true,
+              :uniqueness => true
   
 end

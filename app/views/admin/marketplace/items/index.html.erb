@@ -1,0 +1,9 @@
+<h1>Marketplace Items</h1>
+
+<% if @items.empty? %>
+  (There are no items to categorize.)
+<% else %>
+  <div class="marketplace_item_list">
+    <%= render :partial => 'item_thumbnail', :collection => @items %>
+  </div>
+<% end %>

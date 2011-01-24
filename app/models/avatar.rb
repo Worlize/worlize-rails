@@ -2,10 +2,14 @@ class Avatar < ActiveRecord::Base
   has_many :avatar_instances, :dependent => :destroy
   has_many :users, :through => :avatar_instances
   has_many :gifts, :as => :giftable, :dependent => :destroy
+  has_one :marketplace_items, :as => :item
   belongs_to :creator, :class_name => 'User'
   before_create :assign_guid
   
   mount_uploader :image, AvatarUploader
+  
+  validates :image,
+              :presence => true
   
   def hash_for_api
     {

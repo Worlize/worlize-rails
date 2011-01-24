@@ -2,9 +2,9 @@
   <h3>Add Subcategory</h3>
 
 <%= form_for [:admin, category],
-             :remote => true do |f| %>
+             :html => { :id => 'subcategory_form' } do |f| %>
   <%= f.hidden_field :parent_id %>
-  Name: <%= f.text_field :name %> <%= f.submit :add %>
+  <%= f.text_field :name, :id => 'subcategory_name_field' %> <%= f.submit :add, :id => 'subcategory_submit' %>
 <% end %>
 <br>
 </section>

@@ -6,14 +6,14 @@
       <% if crumb == @breadcrumbs.last %>
         <%= crumb.name %>
       <% else %>
-        <%= link_to crumb.name, admin_marketplace_category_path(crumb) %> &gt;
+        <%= link_to crumb.name, [:admin, crumb] %> &gt;
       <% end %>
     <% end %>
   </p>
   <br>
 <% end %>
 
-<h2><%= @category.name %> <span class="smaller">(<a href="#">Rename</a>)</span></h2>
+<%= render 'form' %>
 
 <br>
 
@@ -27,3 +27,38 @@
   <%= button_to "Delete this category", admin_marketplace_category_path(@category),
       :method => :delete %>
 <% end %>
+
+<br>
+
+<% if @category.marketplace_featured_items.empty? %>
+
+<% else %>
+  <div id="featured_items_list">
+    <h2>Featured Items</h2>
+    <div class="marketplace_thumbnail_container">
+      <%= render :partial => 'featured_item_thumb', :collection => @category.marketplace_featured_items %>
+    </div>
+  </div>
+<% end %>
+
+<% if @category.marketplace_items.empty? %>
+
+<% else %>
+  <div id="items_list">
+    <h2>Items</h2>
+    <div class="marketplace_thumbnail_container">
+      <%= render :partial => 'item_thumb', :collection => @category.marketplace_items %>
+    </div>
+  </div>
+<% end %>
+
+<% if !@category.parent.nil? %>
+  Add new: 
+  <%= link_to 'Avatar', new_admin_marketplace_category_item_path(@category, :item_type => 'Avatar') %> |
+  <%= link_to 'Background', new_admin_marketplace_category_item_path(@category, :item_type => 'Background') %> |
+  <%= link_to 'Object', new_admin_marketplace_category_item_path(@category, :item_type => 'InWorldObject') %>
+<% end %>  
+  
+  
+  
+  

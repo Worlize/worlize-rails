@@ -1,0 +1,83 @@
+<%= form_for [:admin, @item], :html => { :multipart => true } do |f| %>
+  <% if @item.errors.any? || (!@item.item.nil? && @item.item.errors.any?) %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@item.errors.count + 
+              (@item.item.nil? ? 0 : @item.item.errors.count), "error") %> prohibited this item from being saved:</h2>
+
+      <ul>
+      <% @item.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      <% if @item.item %>
+        <% @item.item.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <%= hidden_field_tag :item_type, @item.item_type %>
+
+  <% if @item.new_record? %>
+    <% if !@item.item.nil? %>
+      <%= fields_for @item.item do |item_fields| %>
+        <%= item_fields.label :image %><br>
+        <%= item_fields.file_field :image %><br>
+      <% end %>
+      <br>
+    <% end %>
+    
+  <% elsif @item.item %>
+    <%= image_tag @item.item.image.medium.url %><br><br>
+  <% end %>
+
+  <%= f.label :name %><br>
+  <%= f.text_field :name %><br>
+  <br>
+  
+  <%= f.label :marketplace_creator, 'Artist' %><br>
+  <%= text_field_tag 'marketplace_item[marketplace_creator]',
+        @item.marketplace_creator ? @item.marketplace_creator.display_name : nil %><br>
+  <br>
+  
+  <script type="text/javascript">
+    jQuery(function($) {
+      $('#marketplace_item_marketplace_creator').autocomplete({
+        source: "<%= escape_javascript(search_admin_marketplace_creators_path) %>"
+      });
+    });  
+  </script>
+  
+  <%= f.label :marketplace_category_id, 'Category' %><br>
+  <%= f.select :marketplace_category_id, options_for_select(@category_options_for_select, @item.marketplace_category_id) %><br>
+  <br>
+  
+  <%= f.label "Currency Type" %><br>
+  <%= f.radio_button :currency_id, '1' %>
+  <%= f.label :currency_id_1, 'Bucks', :class => 'light_label' %><br>
+  <%= f.radio_button :currency_id, '2' %>
+  <%= f.label :currency_id_2, 'Coins', :class => 'light_label' %><br>
+  <br>
+  
+  <%= f.label :price %><br>
+  <%= f.text_field :price %><br>
+  <br>
+  
+  <%= f.label :description %><br>
+  <%= f.text_area :description, :cols => 40, :rows => 6 %><br>
+  <br>
+  
+  <%= f.label :copyright %><br>
+  <%= f.text_field :copyright %><br>
+  <br>
+  
+
+  <%= f.check_box :on_sale %>
+  <%= f.label :on_sale, :class => 'light_label' %><br>
+  <br>
+  
+  <br>
+  
+  <%= f.submit 'Save' %>
+<% end %>
+
