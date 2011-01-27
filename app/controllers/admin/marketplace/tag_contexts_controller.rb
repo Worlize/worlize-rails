@@ -62,6 +62,7 @@ class Admin::Marketplace::TagContextsController < ApplicationController
   end  
 
   def destroy
+    ActsAsTaggableOn::Tagging.update_all({:context => 'tags'}, {:context => @tag_context.name.downcase})
     @tag_context.destroy
 
     respond_to do |wants|
