@@ -18,6 +18,7 @@ class Admin::Marketplace::ItemsController < ApplicationController
   # GET /marketplace_items/1.xml
   def show
     @category_options_for_select = build_category_options
+    @tag_contexts = MarketplaceTagContext.all
     
     respond_to do |wants|
       wants.html # show.html.erb
@@ -29,6 +30,9 @@ class Admin::Marketplace::ItemsController < ApplicationController
   # GET /marketplace_items/new.xml
   def new
     render :nothing => true and return if params[:item_type].empty?
+    
+    @tag_contexts = MarketplaceTagContext.all
+    
     @category_options_for_select = build_category_options
     if params[:category_id]
       @category = MarketplaceCategory.find(params[:category_id])
@@ -53,6 +57,8 @@ class Admin::Marketplace::ItemsController < ApplicationController
   # POST /marketplace_items
   # POST /marketplace_items.xml
   def create
+    tag_contexts = params[:marketplace_item].delete(:tag_contexts)
+    
     # AutoComplete value for marketplace_creator...
     if !params[:marketplace_item][:marketplace_creator].empty?
       creator_criteria = params[:marketplace_item].delete(:marketplace_creator)
@@ -64,7 +70,7 @@ class Admin::Marketplace::ItemsController < ApplicationController
     else
       params[:marketplace_item].delete(:marketplace_creator)
     end
-
+    
     @item = MarketplaceItem.new(params[:marketplace_item])
     @item.item = case params[:item_type]
       when 'Avatar'
@@ -81,11 +87,15 @@ class Admin::Marketplace::ItemsController < ApplicationController
       @item.item.name = @item.name
     end
     
-    puts @item.item
+    # Update tags
+    MarketplaceTagContext.all.each do |tag_context|
+      @item.set_tag_list_on(tag_context.name.downcase, tag_contexts[tag_context.name.downcase.to_sym])
+    end
 
     respond_to do |wants|
       if @item.save
         flash[:notice] = 'Marketplace Item was successfully created.'
+        
         wants.html { 
           if @item.marketplace_category
             redirect_to([:admin, @item.marketplace_category])
@@ -97,6 +107,8 @@ class Admin::Marketplace::ItemsController < ApplicationController
       else
         @item.item.destroy
         @category_options_for_select = build_category_options
+        @tag_contexts = MarketplaceTagContext.all
+        
         wants.html { render :action => 'new' }
         wants.xml  { render :xml => @item.errors, :status => :unprocessable_entity }
       end
@@ -106,6 +118,8 @@ class Admin::Marketplace::ItemsController < ApplicationController
   # PUT /marketplace_items/1
   # PUT /marketplace_items/1.xml
   def update
+    tag_contexts = params[:marketplace_item].delete(:tag_contexts)
+
     # AutoComplete value for marketplace_creator...
     if !params[:marketplace_item][:marketplace_creator].empty?
       creator_criteria = params[:marketplace_item].delete(:marketplace_creator)
@@ -118,7 +132,13 @@ class Admin::Marketplace::ItemsController < ApplicationController
       params[:marketplace_item].delete(:marketplace_creator)
       params[:marketplace_item][:marketplace_creator_id] = nil
     end
-    
+            
+    # Update tags
+    MarketplaceTagContext.all.each do |tag_context|
+      @item.set_tag_list_on(tag_context.name.downcase, tag_contexts[tag_context.name.downcase.to_sym])
+    end
+    @item.save
+
     respond_to do |wants|
       if @item.update_attributes(params[:marketplace_item])
         flash[:notice] = 'Marketplace Item was successfully updated.'
@@ -132,6 +152,7 @@ class Admin::Marketplace::ItemsController < ApplicationController
         wants.xml  { head :ok }
       else
         @category_options_for_select = build_category_options
+        @tag_contexts = MarketplaceTagContext.all
         wants.html { render :action => 'show' }
         wants.xml  { render :xml => @item.errors, :status => :unprocessable_entity }
       end

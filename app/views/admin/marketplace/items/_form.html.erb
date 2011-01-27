@@ -76,6 +76,16 @@
   <%= f.label :on_sale, :class => 'light_label' %><br>
   <br>
   
+  <h3>Tags</h3>
+  <%= f.text_area :tag_list, :cols => 40, :rows => 2 %><br><br>
+  
+  <% for tag_context in @tag_contexts %>
+    <h3>Tags: <%= tag_context.name.humanize %></h3>
+    <%= text_area_tag "marketplace_item[tag_contexts][#{tag_context.name.downcase}]",
+                      @item.tag_list_on(tag_context.name.downcase),
+                      :cols => 40, :rows => 2 %><br><br>
+  <% end %>
+  
   <br>
   
   <%= f.submit 'Save' %>

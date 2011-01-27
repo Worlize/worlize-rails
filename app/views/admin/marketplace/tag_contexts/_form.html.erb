@@ -1,0 +1,21 @@
+<%= form_for [:admin, @tag_context] do |f| %>
+<% if @tag_context.errors.any? %>
+  <div class="error_explanation">
+    <h2><%= pluralize(@tag_context.errors.count, "error") %> prohibited this tag context from being saved:</h2>
+
+    <ul>
+    <% @tag_context.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+  <%= f.label :name %><br>
+  <%= f.text_field :name %><br><br>
+  <%= f.submit 'Save' %>
+  <% unless @tag_context.new_record? %>
+    <br><br>
+    <%= link_to 'Delete this tag context', [:admin, @tag_context], :method => :delete,
+                  :confirm => "Are you sure you want to delete the tag context \"#{@tag_context.name}\"?  All taggings made within this context will be moved to the default general context." %>
+  <% end %>
+<% end %>

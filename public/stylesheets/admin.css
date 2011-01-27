@@ -610,7 +610,8 @@ div.field_with_errors textarea {
 	background-color: #FEE;
 }
 
-#error_explanation {
+#error_explanation,
+.error_explanation {
 	margin: 0px 0px 15px;
 	padding: 10px 20px;
 	background-color: #f1cfd9;
