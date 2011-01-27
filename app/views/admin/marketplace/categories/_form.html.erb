@@ -12,6 +12,8 @@
   <% end %>
 
   <%= f.label :name, 'Category Name' %><br>
-  <%= f.text_field :name %>
+  <%= f.text_field :name %><br>
+  <%= f.label :marketplace_theme_id, 'Theme' %><br>
+  <%= f.select :marketplace_theme_id, options_from_collection_for_select(MarketplaceTheme.all, 'id', 'name', @category.marketplace_theme_id), :include_blank => true %>
   <%= f.submit 'Save' %>
 <% end %>
