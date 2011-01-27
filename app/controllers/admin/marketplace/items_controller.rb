@@ -10,7 +10,7 @@ class Admin::Marketplace::ItemsController < ApplicationController
 
     respond_to do |wants|
       wants.html # index.html.erb
-      wants.xml  { render :xml => @marketplace_items }
+      wants.xml  { render :xml => @items }
     end
   end
 
@@ -21,7 +21,7 @@ class Admin::Marketplace::ItemsController < ApplicationController
     
     respond_to do |wants|
       wants.html # show.html.erb
-      wants.xml  { render :xml => @marketplace_item }
+      wants.xml  { render :xml => @item }
     end
   end
 
@@ -46,7 +46,7 @@ class Admin::Marketplace::ItemsController < ApplicationController
 
     respond_to do |wants|
       wants.html # new.html.erb
-      wants.xml  { render :xml => @marketplace_item }
+      wants.xml  { render :xml => @item }
     end
   end
 
@@ -97,7 +97,7 @@ class Admin::Marketplace::ItemsController < ApplicationController
       else
         @item.item.destroy
         @category_options_for_select = build_category_options
-        wants.html { render :action => "new" }
+        wants.html { render :action => 'new' }
         wants.xml  { render :xml => @item.errors, :status => :unprocessable_entity }
       end
     end
@@ -120,8 +120,6 @@ class Admin::Marketplace::ItemsController < ApplicationController
     end
     
     respond_to do |wants|
-      require 'pp'
-      pp params[:marketplace_item]
       if @item.update_attributes(params[:marketplace_item])
         flash[:notice] = 'Marketplace Item was successfully updated.'
         wants.html {
@@ -134,7 +132,7 @@ class Admin::Marketplace::ItemsController < ApplicationController
         wants.xml  { head :ok }
       else
         @category_options_for_select = build_category_options
-        wants.html { render :action => "show" }
+        wants.html { render :action => 'show' }
         wants.xml  { render :xml => @item.errors, :status => :unprocessable_entity }
       end
     end
