@@ -59,7 +59,7 @@ class Locker::BackgroundsController < ApplicationController
     if instance.background.do_not_delete
       instance.destroy
     else
-      if num_instances_remaining == 1
+      if num_instances_remaining == 1 && instance.background.marketplace_item.nil?
         instance.background.destroy
       else
         instance.destroy

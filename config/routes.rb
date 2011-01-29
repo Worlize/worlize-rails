@@ -102,7 +102,9 @@ Worlize::Application.routes.draw do |map|
         resources :items, :except => [:edit]
       end
       resources :tag_contexts
-      resources :items
+      resources :items do
+        resources :featured_items
+      end
       resources :featured_items
       resources :creators, :only => [:show, :create, :update, :destroy] do
         collection do

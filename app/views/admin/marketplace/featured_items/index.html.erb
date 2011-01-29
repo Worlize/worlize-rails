@@ -1,0 +1,6 @@
+<h1>Featured Items for <%= @item.name %></h1>
+
+<%= render :partial => 'featured_items' %>
+
+<br>
+<%= link_to "Back to Item: #{@item.name}", [:admin, @item] %>

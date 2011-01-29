@@ -1,7 +1,8 @@
 # encoding: utf-8
 
 class MarketplaceCarouselImageUploader < CarrierWave::Uploader::Base
-
+  include CarrierWave::MiniMagick
+  
   # Include RMagick or ImageScience support:
   # include CarrierWave::RMagick
   # include CarrierWave::ImageScience
@@ -34,7 +35,7 @@ class MarketplaceCarouselImageUploader < CarrierWave::Uploader::Base
 
 
   # Process files as they are uploaded:
-  process :convert => 'jpg', :resize_to_limit => [725,200]
+  process :convert => 'jpg', :resize_to_fill => [725,200]
 
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:

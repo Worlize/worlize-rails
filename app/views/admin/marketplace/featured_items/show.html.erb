@@ -1,0 +1,16 @@
+<h1>Edit Featured Item</h1>
+
+<%= render :partial => 'form' %>
+
+<br>
+
+<%= link_to "Delete Featured Item", [:admin, @featured_item], :method => :delete,
+            :confirm => "Are you sure you want to remove this featured item?" %><br>
+
+<br>
+
+<%= link_to "Back to Item: #{@item.name}", [:admin, @item] %><br><br>
+<% unless @featured_item.marketplace_category.nil? %>
+  <%= link_to "Back to Category: #{@featured_item.marketplace_category.name}",
+              [:admin, @featured_item.marketplace_category] %>
+<% end %>

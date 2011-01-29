@@ -54,8 +54,10 @@ class Locker::AvatarsController < ApplicationController
     avatar_instance = current_user.avatar_instances.find_by_guid(params[:id])
     num_instances_remaining = avatar_instance.avatar.avatar_instances.count
     gifts_remaining = avatar_instance.avatar.gifts.count
-    if num_instances_remaining == 1 && gifts_remaining == 0
+    if num_instances_remaining == 1 && gifts_remaining == 0 &&
+        avatar_instance.avatar.marketplace_item.nil?
       # destroy the avatar itself if this is its last instance
+      # but don't destroy the avatar if it exists in the marketplace
       avatar_instance.avatar.destroy
     else
       # otherwise just destroy the instance

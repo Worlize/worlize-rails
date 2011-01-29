@@ -1,0 +1,11 @@
+<h1>New Featured Item</h1>
+
+<%= render :partial => 'form' %>
+
+<br>
+
+<%= link_to "Back to Item: #{@item.name}", [:admin, @item] %><br><br>
+<% unless @featured_item.marketplace_category.nil? %>
+  <%= link_to "Back to Category: #{@featured_item.marketplace_category.name}",
+              [:admin, @featured_item.marketplace_category] %>
+<% end %>

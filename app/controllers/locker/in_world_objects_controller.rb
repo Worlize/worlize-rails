@@ -54,7 +54,7 @@ class Locker::InWorldObjectsController < ApplicationController
     end
     
     num_instances_remaining = instance.in_world_object.in_world_object_instances.count
-    if num_instances_remaining == 1
+    if num_instances_remaining == 1 && instance.in_world_object.marketplace_item.nil?
       instance.in_world_object.destroy
     else
       instance.destroy

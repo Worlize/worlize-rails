@@ -17,9 +17,10 @@ class Admin::Marketplace::ItemsController < ApplicationController
   # GET /marketplace_items/1
   # GET /marketplace_items/1.xml
   def show
+    store_location
     @category_options_for_select = build_category_options
     @tag_contexts = MarketplaceTagContext.all
-    
+    @featured_items = @item.marketplace_featured_items
     respond_to do |wants|
       wants.html # show.html.erb
       wants.xml  { render :xml => @item }
@@ -186,10 +187,20 @@ class Admin::Marketplace::ItemsController < ApplicationController
       options = [];
 
       root.children.each do |category|
-        options.push([('-'.html_safe * level) + ' ' + category.name, category.id])
+        category_label = build_breadcrumbs(category).map { |c| c.name }.join(': ')
+        options.push([category_label, category.id])
         options = options + build_category_options(category, level + 1)
       end
       return options
+    end
+
+    def build_breadcrumbs(category)
+      breadcrumbs = []
+      while category.parent
+        breadcrumbs.unshift(category)
+        category = category.parent
+      end
+      return breadcrumbs
     end
 
 end

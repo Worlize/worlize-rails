@@ -1,0 +1,48 @@
+<%= form_for [:admin, @featured_item], :html => { :multipart => true } do |f| %>
+  <% if @featured_item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@featured_item.errors.count, "error") %> prohibited this featured item from being saved:</h2>
+
+      <ul>
+      <% @featured_item.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.hidden_field :marketplace_item_id %>
+  
+  <h2>Item:</h2>
+  <p><%= link_to @item.name, [:admin, @item] %></p><br>
+  
+  <%= f.label :marketplace_category_id, 'Category' %><br>
+  <%= f.select :marketplace_category_id, options_for_select(@category_options_for_select, @featured_item.marketplace_category_id) %><br>
+  <br>
+  
+  <%= f.label :include_in_carousel %><br>
+  <%= f.check_box :include_in_carousel %><br>
+  <br>
+  
+  <%= f.label :carousel_image %> (725x200)<br>
+  <% if @featured_item.carousel_image? %>
+    <%= image_tag @featured_item.carousel_image.url %><br>
+  <% end %>
+  <%= f.file_field :carousel_image %><br>
+  <%= f.hidden_field :carousel_image_cache %>
+  <br>
+  
+  <%= f.label :carousel_thumbnail_image %> (200x100)<br>
+  <% if @featured_item.carousel_thumbnail_image? %>
+    <%= image_tag @featured_item.carousel_thumbnail_image.url %><br>
+  <% end %>
+  <%= f.file_field :carousel_thumbnail_image %><br>
+  <%= f.hidden_field :carousel_thumbnail_image_cache %>
+  <br>
+  
+  <%= f.label :active %><br>
+  <%= f.check_box :active %><br>
+  <br>
+  
+  <%= f.submit 'Save' %><br>
+<% end %>

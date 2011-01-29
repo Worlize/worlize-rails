@@ -1,6 +1,12 @@
 <h1>Marketplace Item</h1>
 
 <p>Type: <%= @item.item_type.underscore.titleize %></p>
+<br>
+<h2>Featured Items</h2>
+<%= render :partial => 'admin/marketplace/featured_items/featured_items' %>
+
+<br>
+
 
 <%= render 'form' %>
 
@@ -11,7 +17,7 @@
 <br>
 
 <% if @item.marketplace_category %>
-  <%= link_to "Back to #{@item.marketplace_category.name}", [:admin, @item.marketplace_category] %>
+  <%= link_to "Back to Category: #{@item.marketplace_category.name}", [:admin, @item.marketplace_category] %>
 <% else %>
   <%= link_to "Back to uncategoriezed items", admin_marketplace_items_path %>
 <% end %>

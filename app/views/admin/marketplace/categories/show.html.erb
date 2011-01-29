@@ -31,7 +31,7 @@
 <br>
 
 <% if @category.marketplace_featured_items.empty? %>
-
+  <p>(No featured items defined)</p>
 <% else %>
   <div id="featured_items_list">
     <h2>Featured Items</h2>
@@ -42,7 +42,7 @@
 <% end %>
 
 <% if @category.marketplace_items.empty? %>
-
+  <p>(There are no items in this category)</p>
 <% else %>
   <div id="items_list">
     <h2>Items</h2>

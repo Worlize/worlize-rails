@@ -1,6 +1,11 @@
 <% item = featured_item_thumb %>
-<div id="item_thumb_<%= item_thumb.id %>" class="item_thumb">
-  <% if item.item.respond_to? 'image' %>
-    <%= image_tag item.item.image.thumb.url %>
-  <% end %>
-</div>
+<%= link_to [:admin, item], :query => 'category' do %>
+  <div id="featured_item_thumb_<%= item.id %>" class="<%= item.marketplace_item.item_type == 'Background' ? 'thumbnail background' : 'thumbnail' %>">
+    <% if item.marketplace_item.item.respond_to? 'image' %>
+      <%= image_tag item.marketplace_item.item.image.thumb.url %>
+    <% end %>
+    <% if !item.active? %>
+      <%= image_tag 'icons/error.png', :class => 'not_on_sale' %>
+    <% end %>
+  </div>
+<% end %>

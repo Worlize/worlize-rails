@@ -14,6 +14,7 @@ class Admin::Marketplace::CategoriesController < ApplicationController
   def show
     @category = MarketplaceCategory.find(params[:id])
     @breadcrumbs = build_breadcrumbs(@category)
+    store_location
   end
   
   def create
@@ -82,6 +83,6 @@ class Admin::Marketplace::CategoriesController < ApplicationController
       category = category.parent
       breadcrumbs.unshift(category)
     end
-    return breadcrumbs;
+    return breadcrumbs
   end
 end

@@ -350,6 +350,10 @@ table.datagrid tr.odd td {
 	background-color: #e4e7ed;
 }
 
+table.datagrid tr:hover td {
+	background-color: #e8ffe5;
+}
+
 #quickStats {
 	padding: 15px;
 	background: #acb4c8;
@@ -564,8 +568,10 @@ footer {
 	width: 16px !important;
 	height: 16px !important;
 	position: absolute !important;
-	right: 2px !important;
-	bottom: 1px !important;
+	right: 0px !important;
+	bottom: 0px !important;
+	padding: 2px;
+	background: rgba(0,0,0,0.3);
 }
 
 .marketplace_thumbnail_container div.thumbnail:hover {
