@@ -66,8 +66,6 @@ class Locker::BackgroundsController < ApplicationController
       end
     end
     
-    current_user.credit_account :coins => instance.background.return_coins
-
     render :json => Yajl::Encoder.encode({
       :success => instance.destroyed?,
       :balance => {
