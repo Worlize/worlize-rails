@@ -49,7 +49,10 @@
   </script>
   
   <%= f.label :marketplace_category_id, 'Category' %><br>
-  <%= f.select :marketplace_category_id, options_for_select(@category_options_for_select, @item.marketplace_category_id) %><br>
+  <%= f.select :marketplace_category_id,
+          options_for_select(@category_options_for_select, @item.marketplace_category_id),
+          { :include_blank => true } %>
+  <br>
   <br>
   
   <%= f.label "Currency Type" %><br>

@@ -22,9 +22,6 @@ class MarketplaceItem < ActiveRecord::Base
               :presence => true,
               :if => :on_sale?
   
-  validates :marketplace_category,
-              :presence => true
-              
   validates :item_id,
               :presence => true
   
