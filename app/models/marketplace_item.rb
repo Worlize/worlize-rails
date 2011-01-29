@@ -25,6 +25,9 @@ class MarketplaceItem < ActiveRecord::Base
   validates :item_id,
               :presence => true
   
+  validates :marketplace_category,
+              :presence => { :if => :on_sale? }
+  
   validates :currency_id,
               :inclusion => { :in => [1,2] }
 

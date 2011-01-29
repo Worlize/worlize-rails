@@ -101,7 +101,7 @@ class Admin::Marketplace::ItemsController < ApplicationController
           if @item.marketplace_category
             redirect_to([:admin, @item.marketplace_category])
           else
-            redirect_to([:admin, @item])  
+            redirect_to admin_marketplace_items_url
           end
         }
         wants.xml  { render :xml => @item, :status => :created, :location => [:admin, @item] }
@@ -119,7 +119,7 @@ class Admin::Marketplace::ItemsController < ApplicationController
   # PUT /marketplace_items/1
   # PUT /marketplace_items/1.xml
   def update
-    go_back_to_uncatigorized_items = @item.marketplace_category.nil?
+    go_back_to_uncategorized_items = @item.marketplace_category.nil?
     tag_contexts = params[:marketplace_item].delete(:tag_contexts)
 
     # AutoComplete value for marketplace_creator...
@@ -145,7 +145,7 @@ class Admin::Marketplace::ItemsController < ApplicationController
       if @item.update_attributes(params[:marketplace_item])
         flash[:notice] = 'Marketplace Item was successfully updated.'
         wants.html {
-          if go_back_to_uncatigorized_items
+          if go_back_to_uncategorized_items
             redirect_to admin_marketplace_items_url
           elsif @item.marketplace_category
             redirect_to([:admin, @item.marketplace_category])
