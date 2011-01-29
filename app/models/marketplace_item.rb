@@ -8,6 +8,8 @@ class MarketplaceItem < ActiveRecord::Base
   
   acts_as_taggable_on :tags
   
+  before_destroy :delete_actual_item
+  
   validates :name,
               :presence => true,
               :if => :on_sale?
@@ -45,6 +47,13 @@ class MarketplaceItem < ActiveRecord::Base
   def must_not_be_featured_to_take_off_sale
     if !self.on_sale? && self.marketplace_featured_items.where(:active => true).count > 0
       errors.add(:base, "You cannot take an item off-sale until there are no active featured items referencing it.")
+    end
+  end
+  
+  def delete_actual_item
+    # If nobody has this item, delete the actual item too.
+    if self.item.instances.count == 0
+      self.item.destroy
     end
   end
   
