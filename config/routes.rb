@@ -103,6 +103,9 @@ Worlize::Application.routes.draw do |map|
       end
       resources :tag_contexts
       resources :items do
+        collection do
+          post 'multiupload'
+        end
         resources :featured_items
       end
       resources :featured_items

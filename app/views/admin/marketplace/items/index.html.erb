@@ -15,3 +15,40 @@ Add new:
 <%= link_to 'Avatar', new_admin_marketplace_item_path(:item_type => 'Avatar') %> |
 <%= link_to 'Background', new_admin_marketplace_item_path(:item_type => 'Background') %> |
 <%= link_to 'Object', new_admin_marketplace_item_path(:item_type => 'InWorldObject') %>
+
+<br><br>
+
+<!--
+
+<script>
+jQuery(function($) {
+  $('.multiUploadForm').bind('submit', function(event) {
+    $(this).find('.multiUploadSubmit').val('Uploading, please wait!').attr('disabled', true);
+  });
+});
+</script>
+
+<%= form_tag multiupload_admin_marketplace_items_path, :multipart => true, :class => 'multiUploadForm' do%>
+  <input type="hidden" name="type" value="Avatar">
+  <h2>Multiple Upload Avatars</h2>
+  <input name="uploads[]" type="file" multiple>
+  <input type="submit" value="Upload" class="multiUploadSubmit"><br>
+<% end %>
+<br>
+
+<%= form_tag multiupload_admin_marketplace_items_path, :multipart => true, :class => 'multiUploadForm' do%>
+  <input type="hidden" name="type" value="Background">
+  <h2>Multiple Upload Backgrounds</h2>
+  <input name="uploads[]" type="file" multiple>
+  <input type="submit" value="Upload" class="multiUploadSubmit"><br>
+<% end %>
+<br>
+
+<%= form_tag multiupload_admin_marketplace_items_path, :multipart => true, :class => 'multiUploadForm' do%>
+  <input type="hidden" name="type" value="InWorldObject">
+  <h2>Multiple Upload Objects</h2>
+  <input name="uploads[]" type="file" multiple>
+  <input type="submit" value="Upload" class="multiUploadSubmit"><br>
+<% end %>
+
+-->

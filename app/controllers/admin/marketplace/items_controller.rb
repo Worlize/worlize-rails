@@ -180,6 +180,27 @@ class Admin::Marketplace::ItemsController < ApplicationController
     end
   end
 
+  def multiupload
+    if params[:uploads].nil?
+      flash[:error] = "You must select a file to upload!"
+    else
+      params[:uploads].each do |upload|
+        item = case params[:type]
+          when 'Background'
+            Background.new(:image => upload)
+          when 'Avatar'
+            Avatar.new(:image => upload)
+          when 'InWorldObject'
+            InWorldObject.new(:image => upload)
+        end
+        if item.save
+          marketplace_item = MarketplaceItem.create(:item => item, :name => 'Untitled Item')
+        end
+      end
+    end
+    redirect_to admin_marketplace_items_path
+  end
+
   private
     def find_marketplace_item
       @item = MarketplaceItem.find(params[:id])

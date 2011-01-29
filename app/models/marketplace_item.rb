@@ -14,7 +14,6 @@ class MarketplaceItem < ActiveRecord::Base
 
   validates :description,
               :length => {
-                :minimum => 0,
                 :maximum => 2500
               }
               
