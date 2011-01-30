@@ -555,6 +555,24 @@ footer {
 	margin-bottom: 10px;
 }
 
+.marketplace_thumbnail_container a .item_type_avatar {
+	font-size: 11px;
+	background-color: #e9c2dc;
+	color: black;
+}
+
+.marketplace_thumbnail_container a .item_type_background {
+	font-size: 11px;
+	background-color: #c2d3e9;
+	color: black;
+}
+
+.marketplace_thumbnail_container a .item_type_object {
+	font-size: 11px;
+	background-color: #cde9c2;
+	color: black;
+}
+
 .marketplace_thumbnail_container div.thumbnail {
 	position: relative;
 	float: left;
