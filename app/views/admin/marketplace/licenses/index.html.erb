@@ -11,7 +11,7 @@
     </tr>
 
   <% @marketplace_licenses.each do |marketplace_license| %>
-    <tr>
+    <tr class="<%= cycle('even','odd') %>">
       <td width="90%"><%= link_to marketplace_license.name, marketplace_license.details_link, :target => '_BLANK' %></td>
       <td><%= link_to 'Edit', edit_admin_marketplace_license_path(marketplace_license) %></td>
       <td><%= link_to 'Destroy', [:admin, marketplace_license], :confirm => 'Are you sure?', :method => :delete %></td>
