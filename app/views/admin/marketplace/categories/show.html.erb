@@ -46,7 +46,7 @@
 
 <%# Featured items of each type %>
 <% for item_type in %w(avatars backgrounds in_world_objects categories) %>
-  <% featured_items = @category.marketplace_featured_items.not_included_in_carousel.send(item_type) %>
+  <% featured_items = @category.marketplace_featured_items.send(item_type) %>
   <% if !featured_items.empty? %>
     <div>
       <h2>Featured Items: <%= item_type.humanize %> (drag to sort)</h2>
