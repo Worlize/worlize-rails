@@ -73,6 +73,7 @@ class Admin::Marketplace::ItemsController < ApplicationController
     end
     
     @item = MarketplaceItem.new(params[:marketplace_item])
+    @featured_items = @item.marketplace_featured_items
     @item.item = case params[:item_type]
       when 'Avatar'
         Avatar.create(params[:avatar])
@@ -119,7 +120,7 @@ class Admin::Marketplace::ItemsController < ApplicationController
   # PUT /marketplace_items/1
   # PUT /marketplace_items/1.xml
   def update
-    go_back_to_uncategorized_items = @item.marketplace_category.nil?
+    @featured_items = @item.marketplace_featured_items
     tag_contexts = params[:marketplace_item].delete(:tag_contexts)
 
     # AutoComplete value for marketplace_creator...
@@ -145,13 +146,7 @@ class Admin::Marketplace::ItemsController < ApplicationController
       if @item.update_attributes(params[:marketplace_item])
         flash[:notice] = 'Marketplace Item was successfully updated.'
         wants.html {
-          if go_back_to_uncategorized_items
-            redirect_to admin_marketplace_items_url
-          elsif @item.marketplace_category
-            redirect_to([:admin, @item.marketplace_category])
-          else
-            redirect_to([:admin, @item])
-          end
+          redirect_to([:admin, @item])
         }
         wants.xml  { head :ok }
       else
@@ -211,20 +206,10 @@ class Admin::Marketplace::ItemsController < ApplicationController
       options = [];
 
       root.children.each do |category|
-        category_label = build_breadcrumbs(category).map { |c| c.name }.join(': ')
-        options.push([category_label, category.id])
+        options.push([category.name_with_breadcrumbs, category.id])
         options = options + build_category_options(category, level + 1)
       end
       return options
-    end
-
-    def build_breadcrumbs(category)
-      breadcrumbs = []
-      while category.parent
-        breadcrumbs.unshift(category)
-        category = category.parent
-      end
-      return breadcrumbs
     end
 
 end

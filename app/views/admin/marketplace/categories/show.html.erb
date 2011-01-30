@@ -1,4 +1,4 @@
-<h1>Marketplace Categories</h1>
+<h1><%= @category.name_with_breadcrumbs %></h1>
 
 <% if @breadcrumbs.length > 1 %>
   <p>
@@ -30,35 +30,90 @@
 
 <br>
 
-<% if @category.marketplace_featured_items.empty? %>
-  <p>(No featured items defined)</p>
-<% else %>
-  <div id="featured_items_list">
-    <h2>Featured Items</h2>
-    <div class="marketplace_thumbnail_container">
-      <%= render :partial => 'featured_item_thumb', :collection => @category.marketplace_featured_items %>
+<%# Items in the carousel %>
+<% carousel_items = @category.marketplace_carousel_items %>
+<% if !carousel_items.empty? %>
+  <div>
+    <h2>Items in Carousel (drag to sort)</h2>
+    <% if carousel_items.length < 3 %>
+      <h3 style="color: #AA0000;">At least three items are required, or the carousel will not display!</h3>
+    <% end %>
+    <div class="marketplace_thumbnail_container carousel_item_sortable_list">
+      <%= render :partial => 'featured_item_thumb', :collection => carousel_items.map {|i| i.marketplace_featured_item} %>
     </div>
   </div>
 <% end %>
 
-<% if @category.marketplace_items.empty? %>
-  <p>(There are no items in this category)</p>
-<% else %>
+<%# Featured items of each type %>
+<% for item_type in %w(avatars backgrounds in_world_objects categories) %>
+  <% featured_items = @category.marketplace_featured_items.not_included_in_carousel.send(item_type) %>
+  <% if !featured_items.empty? %>
+    <div>
+      <h2>Featured Items: <%= item_type.humanize %> (drag to sort)</h2>
+      <div class="marketplace_thumbnail_container featured_item_sortable_list" data-item-type="<%= item_type.camelize.singularize %>">
+        <%= render :partial => 'featured_item_thumb', :collection => featured_items %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<% if !@category.marketplace_items.empty? %>
   <div id="items_list">
-    <h2>Items</h2>
+    <h2>Items in this category (not sortable)</h2>
     <div class="marketplace_thumbnail_container">
       <%= render :partial => 'item_thumb', :collection => @category.marketplace_items %>
     </div>
   </div>
 <% end %>
 
+<br>
 <% if !@category.parent.nil? %>
   Add new: 
   <%= link_to 'Avatar', new_admin_marketplace_category_item_path(@category, :item_type => 'Avatar') %> |
   <%= link_to 'Background', new_admin_marketplace_category_item_path(@category, :item_type => 'Background') %> |
   <%= link_to 'Object', new_admin_marketplace_category_item_path(@category, :item_type => 'InWorldObject') %>
 <% end %>  
-  
-  
+
+
+<script>
+  jQuery(function($) {
+    /* featured items */
+    $('.marketplace_thumbnail_container.featured_item_sortable_list').sortable({
+      distance: 3,
+      update: function(event, ui) {
+        var order = [];
+        $(this).children().each(function(i, element) {
+          order.push($(element).data('marketplace-featured-item-id'));
+        });
+        $.ajax({
+          url: "<%= escape_javascript(update_featured_item_positions_admin_marketplace_category_path(@category)) %>",
+          type: 'POST',
+          data: {
+            type: $(this).data('item-type'),
+            order: order
+          }
+        })      
+      }
+    });
+    
+    /* carousel items */
+    $('.marketplace_thumbnail_container.carousel_item_sortable_list').sortable({
+      distance: 3,
+      update: function(event, ui) {
+        var order = [];
+        $(this).children().each(function(i, element) {
+          order.push($(element).data('marketplace-carousel-item-id'));
+        });
+        $.ajax({
+          url: "<%= escape_javascript(update_carousel_item_positions_admin_marketplace_category_path(@category)) %>",
+          type: 'POST',
+          data: {
+            order: order
+          }
+        })      
+      }
+    });
+  });
+</script>
   
   

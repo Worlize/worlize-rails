@@ -98,6 +98,8 @@ Worlize::Application.routes.draw do |map|
       resources :categories do
         member do
           post 'update_subcategory_positions'
+          post 'update_featured_item_positions'
+          post 'update_carousel_item_positions'
         end
         resources :items, :except => [:edit]
       end

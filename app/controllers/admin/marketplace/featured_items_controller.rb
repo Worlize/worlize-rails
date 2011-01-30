@@ -58,7 +58,7 @@ class Admin::Marketplace::FeaturedItemsController < ApplicationController
       end
     end
   end
-
+  
   private
   
   def load_featured_item
@@ -74,21 +74,10 @@ class Admin::Marketplace::FeaturedItemsController < ApplicationController
     end
 
     root.children.each do |category|
-      category_label = build_breadcrumbs(category).map { |c| c.name }.join(': ')
-      options.push([category_label, category.id])
+      options.push([ category.name_with_breadcrumbs, category.id ])
       options = options + build_category_options(category, level + 1)
     end
     return options
-  end
-
-  def build_breadcrumbs(category)
-    breadcrumbs = []
-    while category.parent
-      breadcrumbs.unshift(category)
-      category = category.parent
-    end
-    breadcrumbs.unshift(category)
-    return breadcrumbs
   end
 
     

@@ -582,15 +582,20 @@ footer {
 	-webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.13);
 }
 
-.marketplace_thumbnail_container div.thumbnail img.not_on_sale {
+.marketplace_thumbnail_container div.status_badges {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	/*background: rgba(255,255,255,0.5);*/
+}
+
+.marketplace_thumbnail_container div.status_badges img {
 	width: 16px !important;
 	height: 16px !important;
-	position: absolute !important;
-	right: 0px !important;
-	bottom: 0px !important;
 	padding: 2px;
-	background: rgba(0,0,0,0.3);
+	float: right;
 }
+
 
 .marketplace_thumbnail_container div.thumbnail:hover {
 	border: 1px solid #d8deed;
@@ -603,7 +608,7 @@ footer {
 	height: 80px;
 }
 
-.marketplace_thumbnail_container div.thumbnail.background > img {
+.marketplace_thumbnail_container div.thumbnail.background img {
 	width: 133px;
 	height: 80px;
 }

@@ -11,8 +11,10 @@
     <% if item.item.respond_to? 'image' %>
       <%= image_tag item.item.image.thumb.url %>
     <% end %>
-    <% if !item.on_sale? %>
-      <%= image_tag 'icons/error.png', :class => 'not_on_sale' %>
-    <% end %>
+    <div class="status_badges">
+      <% if !item.on_sale? %>
+        <%= image_tag 'icons/error.png', :class => 'not_on_sale' %>
+      <% end %>
+    </div>
   </div>
 <% end %>

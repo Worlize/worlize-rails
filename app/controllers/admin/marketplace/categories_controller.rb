@@ -3,17 +3,14 @@ class Admin::Marketplace::CategoriesController < ApplicationController
   before_filter :require_admin
   
   def index
-    root_category = MarketplaceCategory.where(:parent_id => nil).first
-    if root_category.nil?
-      root_category = MarketplaceCategory.create(:name => 'Marketplace');
-    end
-    
-    redirect_to admin_marketplace_category_path(root_category)
+    params[:id] = MarketplaceCategory.root.id
+    show
+    render :action => 'show'
   end
   
   def show
     @category = MarketplaceCategory.find(params[:id])
-    @breadcrumbs = build_breadcrumbs(@category)
+    @breadcrumbs = @category.breadcrumbs
     store_location
   end
   
@@ -31,7 +28,7 @@ class Admin::Marketplace::CategoriesController < ApplicationController
   
   def update
     @category = MarketplaceCategory.find(params[:id])
-    @breadcrumbs = build_breadcrumbs(@category)
+    @breadcrumbs = @category.breadcrumbs
 
     respond_to do |format|
       if @category.update_attributes(params[:marketplace_category])
@@ -72,17 +69,46 @@ class Admin::Marketplace::CategoriesController < ApplicationController
         )
       end
     end
-    render :nothing => true
+    render :json => Yajl::Encoder.encode({
+      :success => true
+    })
   end
-  
-  private
-  
-  def build_breadcrumbs(category)
-    breadcrumbs = [category]
-    while category.parent
-      category = category.parent
-      breadcrumbs.unshift(category)
+
+  def update_featured_item_positions
+    order = params[:order]
+    if order.instance_of?(Array)
+      order.each_index do |i|
+        MarketplaceFeaturedItem.update_all(
+          { :position => i+1 },
+          {
+            :id => order[i],
+            :marketplace_category_id => params[:id],
+            :item_type => params[:type]
+          }
+        )
+      end
     end
-    return breadcrumbs
+    render :json => Yajl::Encoder.encode({
+      :success => true
+    })
   end
+  
+  def update_carousel_item_positions
+    order = params[:order]
+    if order.instance_of?(Array)
+      order.each_index do |i|
+        MarketplaceCarouselItem.update_all(
+          { :position => i+1 },
+          {
+            :id => order[i],
+            :marketplace_category_id => params[:id]
+          }
+        )
+      end
+    end
+    render :json => Yajl::Encoder.encode({
+      :success => true
+    })
+  end
+  
 end
