@@ -1,0 +1,29 @@
+<%= form_for([:admin, @marketplace_license]) do |f| %>
+  <% if @marketplace_license.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@marketplace_license.errors.count, "error") %> prohibited this marketplace_license from being saved:</h2>
+
+      <ul>
+      <% @marketplace_license.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, :size => 60 %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </div>
+  <div class="field">
+    <%= f.label :details_link %><br />
+    <%= f.text_field :details_link, :size => 60 %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Save" %>
+  </div>
+<% end %>

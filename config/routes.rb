@@ -95,6 +95,7 @@ Worlize::Application.routes.draw do |map|
     end
     
     namespace "marketplace" do
+      resources :licenses
       resources :categories do
         member do
           post 'update_subcategory_positions'

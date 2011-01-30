@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @marketplace_license.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @marketplace_license.description %>
+</p>
+
+<p>
+  <b>Details link:</b>
+  <%= @marketplace_license.details_link %>
+</p>
+
+
+<%= link_to 'Edit', edit_admin_marketplace_license_path(@marketplace_license) %> |
+<%= link_to 'Back', admin_marketplace_licenses_path %>

@@ -70,11 +70,16 @@
   <%= f.text_area :description, :cols => 40, :rows => 6 %><br>
   <br>
   
+  <%= f.label :marketplace_license_id, 'License' %><br>
+  <%= f.select :marketplace_license_id,
+               options_from_collection_for_select(MarketplaceLicense.order(:name), 'id', 'name', @item.marketplace_license_id),
+               { :include_blank => true } %><br>
+  <br>
+  
   <%= f.label :copyright %><br>
   <%= f.text_field :copyright %><br>
   <br>
   
-
   <%= f.check_box :on_sale %>
   <%= f.label :on_sale, :class => 'light_label' %><br>
   <br>

@@ -1,0 +1,24 @@
+<h1>Listing Marketplace Licenses</h1>
+
+<% if @marketplace_licenses.empty? %>
+  (There are no licenses defined.)
+<% else %>
+  <table cellspacing="0" cellpadding="0" border="0" class="datagrid" width="100%">
+    <tr>
+      <th width="90%">Name</th>
+      <th></th>
+      <th></th>
+    </tr>
+
+  <% @marketplace_licenses.each do |marketplace_license| %>
+    <tr>
+      <td width="90%"><%= link_to marketplace_license.name, marketplace_license.details_link, :target => '_BLANK' %></td>
+      <td><%= link_to 'Edit', edit_admin_marketplace_license_path(marketplace_license) %></td>
+      <td><%= link_to 'Destroy', [:admin, marketplace_license], :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+  </table>
+<% end %>
+<br>
+<br>
+<%= link_to 'New Marketplace License', new_admin_marketplace_license_path %>
