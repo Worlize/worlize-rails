@@ -15,15 +15,11 @@ Worlize::Application.routes.draw do |map|
     resources :authentications
   end
 
+  match "/marketplace" => 'marketplace/categories#index'
+  match "/marketplace/search" => 'marketplace/items#search'
   namespace "marketplace" do
     resources :themes, :only => [:show]
-    resources :backgrounds do
-      member do
-        post :buy
-        get :buy
-        put :test
-      end
-    end
+    resources :categories
   end
   
   namespace "locker" do

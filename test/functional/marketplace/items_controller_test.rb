@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Marketplace::ObjectsControllerTest < ActionController::TestCase
+class Marketplace::ItemsControllerTest < ActionController::TestCase
   # Replace this with your real tests.
   test "the truth" do
     assert true

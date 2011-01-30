@@ -1,2 +1,0 @@
-module Marketplace::PropsHelper
-end
