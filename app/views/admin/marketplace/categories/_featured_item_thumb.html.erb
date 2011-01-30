@@ -21,10 +21,10 @@
       <% end %>
       <div class="status_badges">
         <% if !item.active? %>
-          <%= image_tag 'icons/error.png', :class => 'not_on_sale' %>
+          <%= image_tag 'icons/error.png', :class => 'not_on_sale', :alt => 'Not on sale!' %>
         <% end %>
         <% if item.include_in_carousel? %>
-          <%= image_tag 'icons/award_star_gold_1.png', :class => 'included_in_carousel' %>
+          <%= image_tag 'icons/award_star_gold_1.png', :class => 'included_in_carousel', :alt => 'Included in Carousel' %>
         <% end %>
       </div>
 

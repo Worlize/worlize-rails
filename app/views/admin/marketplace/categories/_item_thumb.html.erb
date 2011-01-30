@@ -7,13 +7,15 @@
       <div class="item_type_avatar">Avatar</div>
     <% elsif item.item_type == 'InWorldObject' %>
       <div class="item_type_object">Object</div>
+    <% elsif item.item_type == 'MarketplaceCategory' %>
+      <div class="item_type_category">Category</div>
     <% end %>
     <% if item.item.respond_to? 'image' %>
       <%= image_tag item.item.image.thumb.url %>
     <% end %>
     <div class="status_badges">
       <% if !item.on_sale? %>
-        <%= image_tag 'icons/error.png', :class => 'not_on_sale' %>
+        <%= image_tag 'icons/error.png', :class => 'not_on_sale', :alt => 'Not on sale!' %>
       <% end %>
     </div>
   </div>
