@@ -9,15 +9,24 @@ class Admin::Marketplace::FeaturedItemsController < ApplicationController
   end
   
   def show
-    @item = @featured_item.marketplace_item
+    @item = @featured_item.featured_item
     @category_options_for_select = build_category_options    
   end
   
   def new
-    @item = MarketplaceItem.find(params[:item_id]) unless params[:item_id].empty?
+    if params[:featured_item_type] == 'MarketplaceItem'
+      @item = MarketplaceItem.find(params[:featured_item_id]) if params[:featured_item_id]
+    elsif params[:featured_item_type] == 'MarketplaceCategory'
+      @item = MarketplaceCategory.find(params[:featured_item_id]) if params[:featured_item_id]
+    end
     @category_options_for_select = build_category_options
-    @featured_item = MarketplaceFeaturedItem.new(:marketplace_item_id => params[:item_id])
-    @featured_item.marketplace_category = @item.marketplace_category unless @item.nil?
+    @featured_item = MarketplaceFeaturedItem.new(:featured_item => @item)
+    
+    if !@item.nil? && @item.respond_to?('marketplace_category')
+      @featured_item.marketplace_category = @item.marketplace_category
+    else
+      @featured_item.marketplace_category = nil
+    end
   end
   
   def create
@@ -27,9 +36,9 @@ class Admin::Marketplace::FeaturedItemsController < ApplicationController
     respond_to do |wants|
       if @featured_item.save
         flash[:notice] = "Featured item successfully created"
-        wants.html { redirect_back_or_default [:admin, @featured_item.marketplace_item] }
+        wants.html { redirect_back_or_default [:admin, @featured_item.featured_item] }
       else
-        @item = @featured_item.marketplace_item
+        @item = @featured_item.item
         wants.html { render :action => :new }
       end
     end
@@ -39,10 +48,10 @@ class Admin::Marketplace::FeaturedItemsController < ApplicationController
     respond_to do |wants|
       if @featured_item.update_attributes(params[:marketplace_featured_item])
         flash[:notice] = "Featured item successfully updated"
-        wants.html { redirect_back_or_default [:admin, @featured_item.marketplace_item] }
+        wants.html { redirect_back_or_default [:admin, @featured_item.featured_item] }
       else
         @category_options_for_select = build_category_options
-        @item = @featured_item.marketplace_item
+        @item = @featured_item.featured_item
         wants.html { render :action => :show }
       end
     end
@@ -51,10 +60,10 @@ class Admin::Marketplace::FeaturedItemsController < ApplicationController
   def destroy
     respond_to do |wants|
       if @featured_item.destroy
-        wants.html { redirect_to [:admin, @featured_item.marketplace_item], :anchor => 'featured_items' }
+        wants.html { redirect_to [:admin, @featured_item.featured_item], :anchor => 'featured_items' }
       else
         flash[:error] = "Unable to delete the featured item."
-        wants.html { redirect_to [:admin, @featured_item.marketplace_item] }
+        wants.html { redirect_to [:admin, @featured_item.featured_item] }
       end
     end
   end

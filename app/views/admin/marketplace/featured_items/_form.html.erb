@@ -11,10 +11,11 @@
     </div>
   <% end %>
 
-  <%= f.hidden_field :marketplace_item_id %>
+  <%= f.hidden_field :featured_item_id %>
+  <%= f.hidden_field :featured_item_type %>
   
   <h2>Item:</h2>
-  <p><%= link_to @item.name, [:admin, @item] %></p><br>
+  <p><%= link_to @item.respond_to?('name_with_breadcrumbs') ? @item.name_with_breadcrumbs : @item.name, [:admin, @item] %></p><br>
   
   <%= f.label :marketplace_category_id, 'Category' %><br>
   <%= f.select :marketplace_category_id, options_for_select(@category_options_for_select, @featured_item.marketplace_category_id) %><br>

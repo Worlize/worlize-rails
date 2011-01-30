@@ -1,32 +1,46 @@
 <% item = featured_item_thumb %>
+<%
+  div_classes = ['thumbnail'] 
+  div_classes.push('background') if item.item_type == 'Background'
+  div_classes.push('category') if item.featured_item_type == 'MarketplaceCategory'
+%>
+
 <div id="featured_item_thumb_<%= item.id %>"
     data-marketplace-featured-item-id="<%= item.id %>"
   <% if item.include_in_carousel? && item.marketplace_carousel_item -%>
     data-marketplace-carousel-item-id="<%= item.marketplace_carousel_item.id %>"
   <%- end %>
-    class="<%= item.marketplace_item.item_type == 'Background' ? 'thumbnail background' : 'thumbnail' %>">
+    class="<%= div_classes.join(' ') %>">
 
-  <%= link_to [:admin, item], :query => 'category' do %>
-      <% if item.marketplace_item %>
-        <% if item.marketplace_item.item_type == 'Background' %>
+  <%= link_to [:admin, item] do %>
+      <% if item.featured_item %>
+        <% if item.item_type == 'Background' %>
           <div class="item_type_background">Background</div>
-        <% elsif item.marketplace_item.item_type == 'Avatar' %>
+        <% elsif item.item_type == 'Avatar' %>
           <div class="item_type_avatar">Avatar</div>
-        <% elsif item.marketplace_item.item_type == 'InWorldObject' %>
+        <% elsif item.item_type == 'InWorldObject' %>
           <div class="item_type_object">Object</div>
+        <% elsif item.featured_item_type == 'MarketplaceCategory' %>
+          <div class="item_type_category">Category</div>
         <% end %>
       <% end %>
-      <% if item.marketplace_item.item.respond_to? 'image' %>
-        <%= image_tag item.marketplace_item.item.image.thumb.url %>
+      <% if item.featured_item_type == 'MarketplaceItem' %>
+        <% if item.featured_item.item.respond_to? 'image' %>
+          <%= image_tag item.featured_item.item.image.thumb.url %>
+        <% end %>
+      <% end %>
+      <% if item.featured_item_type == 'MarketplaceCategory' %>
+        <div class="featured_category_name">
+          <%= item.featured_item.name_with_breadcrumbs %>
+        </div>
       <% end %>
       <div class="status_badges">
         <% if !item.active? %>
-          <%= image_tag 'icons/error.png', :class => 'not_on_sale', :alt => 'Not on sale!' %>
+          <%= image_tag 'icons/error.png', :alt => 'Not active' %>
         <% end %>
         <% if item.include_in_carousel? %>
-          <%= image_tag 'icons/award_star_gold_1.png', :class => 'included_in_carousel', :alt => 'Included in Carousel' %>
+          <%= image_tag 'icons/award_star_gold_1.png', :alt => 'Included in Carousel' %>
         <% end %>
       </div>
-
   <% end %>
 </div>

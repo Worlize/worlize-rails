@@ -5,27 +5,31 @@ class MarketplaceFeaturedItem < ActiveRecord::Base
   mount_uploader :carousel_thumbnail_image, MarketplaceCarouselThumbnailUploader
   
   belongs_to :creator, :class_name => 'User'
-  belongs_to :marketplace_item
   belongs_to :marketplace_category
+  belongs_to :featured_item, :polymorphic => true
   has_one :marketplace_carousel_item, :dependent => :destroy
   
   before_save :sync_item_type
   after_save :sync_marketplace_carousel_item
   
   scope :avatars, lambda {
-    where(:item_type => 'Avatar')
+    where(:featured_item_type => 'MarketplaceItem', :item_type => 'Avatar')
   }
   
   scope :backgrounds, lambda {
-    where(:item_type => 'Background')
+    joins("JOIN #{connection.quote_table_name("marketplace_items")} ON #{connection.quote_table_name("marketplace_items")}.#{connection.quote_column_name("id")} = #{connection.quote_table_name("marketplace_featured_items")}.#{connection.quote_column_name("featured_item_id")}").
+    where(:featured_item_type => 'MarketplaceItem').
+    where("#{connection.quote_table_name("marketplace_items")}.#{connection.quote_column_name("item_type")} = #{connection.quote("Background")}")
   }
   
   scope :in_world_objects, lambda {
-    where(:item_type => 'InWorldObject')
+    joins("JOIN #{connection.quote_table_name("marketplace_items")} ON #{connection.quote_table_name("marketplace_items")}.#{connection.quote_column_name("id")} = #{connection.quote_table_name("marketplace_featured_items")}.#{connection.quote_column_name("featured_item_id")}").
+    where(:featured_item_type => 'MarketplaceItem').
+    where("#{connection.quote_table_name("marketplace_items")}.#{connection.quote_column_name("item_type")} = #{connection.quote("InWorldObject")}")
   }
   
   scope :categories, lambda {
-    where(:item_type => 'MarketplaceCategory')
+    where(:featured_item_type => 'MarketplaceCategory')
   }
   
   scope :included_in_carousel, lambda {
@@ -43,14 +47,14 @@ class MarketplaceFeaturedItem < ActiveRecord::Base
     where(:marketplace_category_id => category_id)
   }
   
-  validates :marketplace_item,
+  validates :featured_item,
               :presence => true
               
   validates :marketplace_category,
               :presence => { :if => :active? }
   
   validates :marketplace_category_id,
-              :uniqueness => { :scope => :marketplace_item_id, 
+              :uniqueness => { :scope => :featured_item_id, 
                                :message => 'already has this item featured.  Choose a different category.' }
 
   validates :carousel_image,
@@ -65,7 +69,7 @@ class MarketplaceFeaturedItem < ActiveRecord::Base
   private
   
   def item_must_be_on_sale
-    if self.active? && !self.marketplace_item.on_sale?
+    if self.active? && (self.featured_item.respond_to?('on_sale?') && !self.featured_item.on_sale?)
       errors.add(:base, "The referenced marketplace item must be marked 'on sale' before you can feature it.")
     end
   end
@@ -76,8 +80,10 @@ class MarketplaceFeaturedItem < ActiveRecord::Base
   end
   
   def sync_item_type
-    if self.marketplace_item
-      self.item_type = self.marketplace_item.item_type
+    if self.featured_item_type == 'MarketplaceItem' && self.featured_item
+      self.item_type = self.featured_item.item_type
+    else
+      self.item_type = nil
     end
   end
   

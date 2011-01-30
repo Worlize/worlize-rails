@@ -3,7 +3,7 @@ class MarketplaceItem < ActiveRecord::Base
   belongs_to :marketplace_category
   belongs_to :marketplace_theme
   belongs_to :item, :polymorphic => true
-  has_many :marketplace_featured_items, :dependent => :destroy
+  has_many :marketplace_featured_items, :as => :featured_item, :dependent => :destroy
   has_many :marketplace_purchase_records, :dependent => :restrict
   
   acts_as_taggable_on :tags

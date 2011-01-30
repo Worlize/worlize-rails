@@ -35,8 +35,8 @@
 <% if !carousel_items.empty? %>
   <div>
     <h2>Items in Carousel (drag to sort)</h2>
-    <% if carousel_items.length < 3 %>
-      <h3 style="color: #AA0000;">At least three items are required, or the carousel will not display!</h3>
+    <% if carousel_items.active.count < 3 %>
+      <h3 style="color: #AA0000;">At least three active items are required, or the carousel will not display!</h3>
     <% end %>
     <div class="marketplace_thumbnail_container carousel_item_sortable_list">
       <%= render :partial => 'featured_item_thumb', :collection => carousel_items.map {|i| i.marketplace_featured_item} %>
@@ -72,7 +72,11 @@
   <%= link_to 'Avatar', new_admin_marketplace_category_item_path(@category, :item_type => 'Avatar') %> |
   <%= link_to 'Background', new_admin_marketplace_category_item_path(@category, :item_type => 'Background') %> |
   <%= link_to 'Object', new_admin_marketplace_category_item_path(@category, :item_type => 'InWorldObject') %>
-<% end %>  
+
+  <br><br>
+  <%= link_to 'Feature This Category', new_admin_marketplace_featured_item_path(:featured_item_id => @category.id, :featured_item_type => @category.class.to_s) %><br>
+  
+<% end %>
 
 
 <script>
