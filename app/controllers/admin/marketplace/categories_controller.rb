@@ -78,14 +78,17 @@ class Admin::Marketplace::CategoriesController < ApplicationController
     order = params[:order]
     if order.instance_of?(Array)
       order.each_index do |i|
-        MarketplaceFeaturedItem.update_all(
-          { :position => i+1 },
-          {
-            :id => order[i],
-            :marketplace_category_id => params[:id],
-            :item_type => params[:type]
-          }
-        )
+        search_criteria = {
+          :id => order[i],
+          :marketplace_category_id => params[:id]
+        }
+        if params[:type] == 'Category'
+          search_criteria[:featured_item_type] = 'MarketplaceCategory'
+        else
+          search_criteria[:featured_item_type] = 'MarketplaceItem'
+          search_criteria[:item_type] = params[:type]
+        end
+        MarketplaceFeaturedItem.update_all( { :position => i+1 }, search_criteria )
       end
     end
     render :json => Yajl::Encoder.encode({

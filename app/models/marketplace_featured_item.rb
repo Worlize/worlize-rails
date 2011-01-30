@@ -83,7 +83,7 @@ class MarketplaceFeaturedItem < ActiveRecord::Base
     if self.featured_item_type == 'MarketplaceItem' && self.featured_item
       self.item_type = self.featured_item.item_type
     else
-      self.item_type = nil
+      self.item_type = self.featured_item_type
     end
   end
   
