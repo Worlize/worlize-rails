@@ -9,7 +9,7 @@
       <th>Actions</th>
     </tr>
     <% for theme in @themes -%>
-    <tr>
+    <tr class="<%= cycle('even','odd') %>">
       <td><%= theme.name %></td>
       <td>
         <%= link_to 'Delete', [:admin, theme], :method => 'delete', :confirm => "Are you sure you want to delete this theme?" %> |

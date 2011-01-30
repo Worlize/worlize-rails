@@ -9,7 +9,7 @@
       <th>Actions</th>
     </tr>
   <% for tag_context in @tag_contexts %>
-    <tr>
+    <tr class="<%= cycle('even','odd') %>">
       <td><%= link_to tag_context.name, [:admin, tag_context] %></td>
       <td><%= link_to 'Delete', [:admin, tag_context], :method => :delete,
                     :confirm => "Are you sure you want to delete the tag context \"#{tag_context.name}\"?  All taggings made within this context will be moved to the default general context." %></td>
