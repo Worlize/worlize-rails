@@ -40,6 +40,10 @@ class MarketplaceFeaturedItem < ActiveRecord::Base
     where(:include_in_carousel => false)
   }
   
+  scope :active, lambda {
+    where(:active => true)
+  }
+  
   scope :in_category, lambda { |category_id|
     if category_id.instance_of? MarketplaceCategory
       category_id = category_id.id
@@ -65,6 +69,21 @@ class MarketplaceFeaturedItem < ActiveRecord::Base
               
   validate :item_must_be_on_sale
   
+  def name
+    if !self.featured_item.nil? && self.featured_item.respond_to?('name')
+      self.featured_item.name
+    else
+      ''
+    end
+  end
+  
+  def slug
+    if self.name.nil?
+      self.id.to_s
+    else
+      "#{self.id}-#{self.name}"
+    end
+  end
   
   private
   

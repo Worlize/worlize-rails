@@ -9,7 +9,7 @@ jQuery(function($) {
     var currentItem = 0;
     var totalItems = null;
     
-    var cycleDelay = 5000;
+    var cycleDelay = 7000;
     
     function nextItem() {
         currentItem = (currentItem + 1) % totalItems;
@@ -18,7 +18,7 @@ jQuery(function($) {
         currentBanner = banners[currentItem].bannerElement;
         prevBanner.css('z-index', 0)
         currentBanner.css('z-index', 10);
-        currentBanner.fadeIn(500, function() {
+        currentBanner.fadeIn(700, function() {
             prevBanner.hide();
         });
         
@@ -31,7 +31,7 @@ jQuery(function($) {
                     thumbsContainer.append(childToMove);
                     setTimeout(nextItem, cycleDelay);
                 }
-            }, 1000);
+            }, 1300);
     }
     
     function initCarousel() {

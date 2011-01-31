@@ -1,0 +1,25 @@
+<% item = featured_item_thumb %>
+<%
+  div_classes = [] 
+  div_classes.push(item.item_type.downcase.dasherize) unless item.item_type.nil?
+  div_classes.push('category') if item.featured_item_type == 'MarketplaceCategory'
+%>
+
+<li id="featured_item_thumb_<%= item.id %>"
+    data-marketplace-featured-item-id="<%= item.id %>"
+  <% if item.include_in_carousel? && item.marketplace_carousel_item -%>
+    data-marketplace-carousel-item-id="<%= item.marketplace_carousel_item.id %>"
+  <%- end %>
+    class="<%= div_classes.join(' ') %>">
+
+  <%= link_to item.featured_item do %>
+      <% if item.featured_item_type == 'MarketplaceItem' %>
+        <% if item.featured_item.item.respond_to? 'image' %>
+          <%= image_tag item.featured_item.item.image.thumb.url %>
+        <% end %>
+        <h3><%= item.featured_item.name %></h3>
+        <h4><%= item.featured_item.marketplace_creator.display_name %></h4>
+      <% end %>
+      <div class="status_badges"></div>
+  <% end %>
+</li>

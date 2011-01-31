@@ -42,7 +42,7 @@
 
 <body>
 
-  <header>
+  <header class="unselectable">
     <nav id="top-level-nav">
       <div class="back-button" onclick="window.history.back()"></div>
       <div class="forward-button" onclick="window.history.forward()"></div>
@@ -59,7 +59,7 @@
     </nav>
   </header>
 
-  <div id="container">
+  <div id="container" class="unselectable">
     
     <% if flash[:notice] %>
     <div id="flash_notice">
@@ -78,7 +78,7 @@
     </div>
     
     <footer>
-      <div class="copyright">© <%= Date.today.year %> Worlize Inc.</div>
+      <div class="copyright">Copyright © <%= Date.today.year %> Worlize Inc.</div>
     </footer>
   </div> <!--! end of #container -->
 

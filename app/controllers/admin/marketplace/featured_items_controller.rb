@@ -38,7 +38,7 @@ class Admin::Marketplace::FeaturedItemsController < ApplicationController
         flash[:notice] = "Featured item successfully created"
         wants.html { redirect_back_or_default [:admin, @featured_item.featured_item] }
       else
-        @item = @featured_item.item
+        @item = @featured_item.featured_item
         wants.html { render :action => :new }
       end
     end

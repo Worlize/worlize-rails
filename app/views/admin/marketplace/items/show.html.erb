@@ -1,4 +1,10 @@
 <h1>Marketplace Item</h1>
+<% if @item.marketplace_category %>
+  <%= link_to "Back to Category: #{@item.marketplace_category.name}", [:admin, @item.marketplace_category] %>
+<% else %>
+  <%= link_to "Back to uncategorized items", admin_marketplace_items_path %>
+<% end %>
+<br><br>
 
 <p>Type: <%= @item.item_type.underscore.titleize %></p>
 <br>
