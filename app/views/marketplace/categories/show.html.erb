@@ -1,3 +1,42 @@
 <%= title "#{@category.name} - Marketplace" %>
 
-<h1>Category: <%= @category.name %></h1>
+<% if @carousel_items.size >= 3 %>
+<section id="carousel" style="visibility:hidden;">
+  <% for featured_item in @carousel_items %>
+    <div class="carousel-banner">
+      <%= link_to featured_item.featured_item do %>
+        <img data-banner-src="<%= featured_item.carousel_image.url %>"
+          <% if featured_item.featured_item.respond_to?('name') %>
+             alt="<%= featured_item.featured_item.name %>"
+          <% end %>
+             data-thumb-src="<%= featured_item.carousel_thumbnail_image.url %>">
+        <%= image_tag featured_item.carousel_image.url %>
+      <% end %>
+    </div>
+  <% end %>
+  <section id="carousel-thumbs">
+  </section>
+  <div class="bottom-left"></div>
+  <div class="bottom-edge"></div>
+  <div class="bottom-right"></div>
+  <div class="left-edge"></div>
+  <div class="right-edge"></div>
+</section>
+<% end %>
+
+
+<div id="right-column">
+  <%# if !@category.parent.nil? %>
+    <h1><%= @category.name %></h1>
+  <%# end %>
+</div>
+
+<div id="left-column">
+
+</div>
+
+
+
+<div style="clear:both;">&nbsp;</div>
+
+

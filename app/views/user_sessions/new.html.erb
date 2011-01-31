@@ -74,3 +74,11 @@
     
   </section>
 </div>
+
+<% content_for :page_script do %>
+<script>
+  jQuery(function($) {
+    $('#user_session_username').focus();
+  });
+</script>
+<% end %>

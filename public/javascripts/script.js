@@ -4,9 +4,9 @@
 
 
 
-jQuery('document').ready(function() {
+jQuery(function($) {
   if (!Modernizr.input.placeholder) {
-    jQuery('input[type=text], input[type=password], textarea').placehold('placeholder');
+    $('input[type=text], input[type=password], input[type=search], textarea').placehold('placeholder');
   }
 });
 

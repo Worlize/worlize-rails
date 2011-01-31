@@ -9,7 +9,7 @@ class Marketplace::CategoriesController < ApplicationController
   
   def show
     @category = MarketplaceCategory.find(params[:id])
-    
+    @carousel_items = @category.marketplace_carousel_items.active.map { |i| i.marketplace_featured_item }
   end
 
 end
