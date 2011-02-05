@@ -52,6 +52,10 @@ class ApplicationController < ActionController::Base
       end
     end
     
+    def store_location_if_not_logged_in
+      store_location unless current_user
+    end
+    
     def store_location
       session[:return_to] = request.fullpath
     end

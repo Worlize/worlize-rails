@@ -29,9 +29,40 @@
 
 
 <div id="right-column">
+  <% if @category.breadcrumbs.length > 1 %>
+    <p class="breadcrumbs">
+<% 
+  crumbs = @category.breadcrumbs
+  crumbs.pop
+%>
+      <% for crumb in crumbs %>
+        <%= link_to(html_escape(crumb.name).gsub(/\s/, '&nbsp;'), crumb) %>&nbsp;&gt;
+      <% end %>
+    </p>
+  <% end %>
+  
   <%# if !@category.parent.nil? %>
     <h1><%= @category.name %></h1>
   <%# end %>
+  <p id="welcome-user">
+    <% if current_user %>
+      Welcome, <%= current_user.username %>!
+    <% else %>
+      <%= link_to "Log in", login_path %>
+    <% end %>
+  </p>  
+  
+  
+  <% if !@category.children.empty? %>
+    <nav id="subcategory-list">
+      <h1>Subcategories</h1>
+      <ul>
+        <% for subcategory in @category.children %>
+          <li><%= link_to subcategory.name, subcategory %></li>
+        <% end %>
+      </ul>
+    </nav>
+  <% end %>
 </div>
 
 <div id="left-column">

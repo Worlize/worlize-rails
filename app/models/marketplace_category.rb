@@ -11,14 +11,15 @@ class MarketplaceCategory < ActiveRecord::Base
               :presence => true
               
   def breadcrumbs
+    return @breadcrumbs if @breadcrumbs
     category = self
-    breadcrumbs = []
+    @breadcrumbs = []
     while category.parent
-      breadcrumbs.unshift(category)
+      @breadcrumbs.unshift(category)
       category = category.parent
     end
-    breadcrumbs.unshift(category)
-    return breadcrumbs
+    @breadcrumbs.unshift(category)
+    return @breadcrumbs
   end
   
   def name_with_breadcrumbs
