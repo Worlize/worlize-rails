@@ -497,6 +497,120 @@ footer {
 
 /* @end */
 
+/* @group UI Elements */
+
+/* Buy Buttons */
+.buy-button {
+	display: inline-block;
+	position: relative;
+	cursor: pointer;
+	padding: 0px 8px 0px 24px;
+	margin: 5px 0px;
+	border: 1px solid #D8D8D8;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-o-border-radius: 10px;
+	font-family: PTSansNarrowBold;
+	text-transform: uppercase;
+	
+	background: #EEE; /* old browsers */
+	background: -moz-linear-gradient(top, #F9F9F9 0%, #E5E5E5 100%); /* firefox */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#F9F9F9), color-stop(100%,#E5E5E5)); /* webkit */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F9F9F9', endColorstr='#E5E5E5',GradientType=0 ); /* ie */
+}
+
+.buy-button.free {
+	padding: 0px 8px 0px 9px;
+}
+
+.buy-button:hover {
+	border-color: #E8E8E8;
+	
+	background: #FCFCFC; /* old browsers */
+	background: -moz-linear-gradient(top, #FCFCFC 0%, #EFEFEF 100%); /* firefox */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FCFCFC), color-stop(100%,#EFEFEF)); /* webkit */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FCFCFC', endColorstr='#EFEFEF',GradientType=0 ); /* ie */	
+}
+
+.buy-button .bucks-icon {
+	position: absolute;
+	left: 7px;
+	top: 4px;
+	width: 13px;
+	height: 9px;
+	background-image: url(/images/marketplace/bucks-icon.png);
+	background-repeat: no-repeat;
+}
+
+.buy-button .coins-icon {
+	position: absolute;
+	left: 5px;
+	top: 2px;
+	width: 12px;
+	height: 12px;
+	background-image: url(/images/marketplace/coins-icon.png);
+	background-repeat: no-repeat;
+}
+
+.overlay-dialog {
+	width: 400px;
+}
+
+.overlay-dialog h1 {
+	font-family: PTSansNarrowBold;
+	font-size: 15pt;
+	font-weight: normal;
+	margin: 0px 0px 10px;
+}
+
+.overlay-dialog img {
+	float: left;
+	margin: 5px 20px 20px 5px;
+	border: 4px solid white;
+	-webkit-box-shadow: 0px 2px 5px rgba(127,127,127,0.4);
+	-moz-box-shadow: 0px 2px 5px rgba(127,127,127,0.4);
+	-o-box-shadow: 0px 2px 5px rgba(127,127,127,0.4);
+	box-shadow: 0px 2px 5px rgba(127,127,127,0.4);
+}
+
+.overlay-dialog .option-buttons {
+	text-align: right;
+	margin-top: 35px;
+}
+
+.overlay-dialog .option-buttons div {
+	cursor: pointer;
+	display: inline-block;
+	padding: 5px 10px;
+	margin: 0px 0px 0px 5px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-o-border-radius: 10px;
+	font-family: PTSansNarrowBold;
+	font-size: 13pt;
+	background: #555;
+	color: #FFF;
+}
+
+.overlay-dialog .option-buttons div:hover {
+	background: #999;
+}
+
+.overlay-dialog .option-buttons .cancel-button {
+	background: #777;
+}
+
+#must-be-logged-in-tooltip {
+	padding: 4px 15px;
+	background: #444;
+	color: #EEE;
+	border-radius: 5px;
+	-webkit-box-shadow: 0px 2px 12px rgba(0,0,0,0.5);
+}
+
+/* @end */
 
 /* @group Featured Item Lists */
 
@@ -563,17 +677,17 @@ section.featured-item-list ul {
 
 section.featured-item-list ul li {
 	position: relative;
-	margin: 0px 5px 15px 0px;
+	margin: 0px 5px 5px 0px;
 	list-style-type: none;
 	float: left;
 }
 
-section.featured-item-list ul li.avatar,
-section.featured-item-list ul li.in-world-object {	
+section.featured-item-list ul li.Avatar,
+section.featured-item-list ul li.InWorldObject {	
 	width: 105px;
 }
 
-section.featured-item-list ul li.background {	
+section.featured-item-list ul li.Background {	
 	width: 145px;
 }
 
@@ -592,8 +706,13 @@ section.featured-item-list ul li.in-world-object img {
 	height: 80px;
 }
 
+section.featured-item-list ul li a {
+	display: block;
+	position: relative;
+}
+
 /* Prevent dragging the thumbnail images */
-section.featured-item-list ul li a:after {
+section.featured-item-list ul li div.status_badges:after {
 	content: '';
 	position: absolute;
 	top: 0px;
@@ -601,13 +720,12 @@ section.featured-item-list ul li a:after {
 	height: 100%;
 }
 
-
 section.featured-item-list ul li.background img {
 	width: 133px;
 	height: 80px;
 }
 
-section.featured-item-list ul li:hover img {
+section.featured-item-list ul li a:hover img {
 	border: 4px solid #fff;
 	-webkit-box-shadow: 0px 2px 5px rgba(127,127,127,0.9);
 	margin: -3px 0px 2px -3px;
@@ -641,12 +759,22 @@ section.featured-item-list ul li:hover img {
 }
 
 #welcome-user {
-	font-size: 13px;
+	font-size: 15px;
 	text-align: right;
-	margin: 0px 0px 10px;
+}
+
+#right-column .balance {
+	font-size: 15px;
+	font-weight: bold;
+	text-align: right;
+}
+
+.balance img {
+	margin-left: 10px;
 }
 
 #subcategory-list {
+	margin-top: 10px;
 	border-radius: 8px 8px 8px 8px;
 	-webkit-box-shadow: 0px 2px 5px rgba(127,127,127,0.5);
 }

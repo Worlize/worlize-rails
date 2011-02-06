@@ -4,6 +4,7 @@ class AvatarInstance < ActiveRecord::Base
   belongs_to :gifter, :class_name => 'User'
   
   before_create :assign_guid
+  after_create :notify_user
   
   def hash_for_api
     {
@@ -16,6 +17,15 @@ class AvatarInstance < ActiveRecord::Base
   
   
   private
+  def notify_user
+    if self.user
+      self.user.send_message({
+        :msg => 'new_avatar_instance',
+        :data => self.hash_for_api
+      })
+    end
+  end
+  
   def assign_guid()
     self.guid = Guid.new.to_s
   end

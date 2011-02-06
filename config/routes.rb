@@ -20,7 +20,11 @@ Worlize::Application.routes.draw do |map|
   namespace "marketplace" do
     resources :themes, :only => [:show]
     resources :categories
-    resources :items
+    resources :items do
+      member do
+        post :buy
+      end
+    end
   end
   
   namespace "locker" do

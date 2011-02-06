@@ -10,6 +10,10 @@ class MarketplaceItem < ActiveRecord::Base
   
   before_destroy :delete_actual_item
   
+  scope :active, lambda {
+    where(:on_sale => true)
+  }
+  
   validates :name,
               :presence => true,
               :if => :on_sale?

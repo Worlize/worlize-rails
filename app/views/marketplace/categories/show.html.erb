@@ -47,6 +47,12 @@
   <p id="welcome-user">
     <% if current_user %>
       Welcome, <%= current_user.username %>!
+      <div class="balance">
+        <img src="/images/marketplace/coins-icon.png" alt="Coins">
+          <span id="coins-balance"><%= number_with_delimiter(current_user.coins) %></span>
+        <img src="/images/marketplace/bucks-icon.png" alt="Bucks">
+          <span id="bucks-balance"><%= number_with_delimiter(current_user.bucks) %></span>
+      </div>
     <% else %>
       <%= link_to "Log in", login_path %>
     <% end %>
@@ -90,6 +96,12 @@
 
 <div style="clear:both;">&nbsp;</div>
 
+<% unless current_user %>
+  <div id="must-be-logged-in-tooltip" style="display:none;">
+    You must be logged in to buy.
+  </div>
+<% end %>
+
 <% content_for :page_script do %>
 <script>
   jQuery(function($) {
@@ -104,3 +116,6 @@
 </script>
 <% end %>
 
+<% content_for :fancybox do %>
+// Fancybox
+<% end %>

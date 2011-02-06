@@ -135,45 +135,6 @@ class User < ActiveRecord::Base
     end
   end
   
-  def coins
-    redis = Worlize::RedisConnectionPool.get_client(:currency)
-    redis.get("coins:#{self.guid}").to_i
-  end
-  
-  def bucks
-    redis = Worlize::RedisConnectionPool.get_client(:currency)
-    redis.get("bucks:#{self.guid}").to_i
-  end
-  
-  def debit_account(options)
-    return false unless options
-    redis = Worlize::RedisConnectionPool.get_client(:currency)
-    
-    if options[:coins]
-      currency_type = 'coins'
-      amount = options[:coins]
-    elsif options[:bucks]
-      currency_type = 'bucks'
-      amount = options[:bucks]
-    else
-      raise "You must specify either coins or bucks."
-    end
-    
-    unless amount.kind_of? Integer
-      raise "Amount must be an integer"
-    end
-    
-    redis_key = "#{currency_type}:#{self.guid}"
-    before = redis.get(redis_key).to_i
-    
-    if before - amount > 0
-      after = redis.decrby(redis_key, amount).to_i
-    else
-      raise "Insufficient Funds"
-    end
-
-  end
-  
   
   ###################################################################
   ##  Friendship Functions                                         ##
@@ -336,6 +297,32 @@ class User < ActiveRecord::Base
   ##  Financial Functions                                          ##
   ###################################################################
   
+  def coins
+    redis = Worlize::RedisConnectionPool.get_client(:currency)
+    redis.get("coins:#{self.guid}").to_i
+  end
+  
+  def bucks
+    redis = Worlize::RedisConnectionPool.get_client(:currency)
+    redis.get("bucks:#{self.guid}").to_i
+  end
+  
+  def credit_coins(amount)
+    self.credit_account({ :coins => amount })
+  end
+  
+  def credit_bucks(amount)
+    self.credit_account({ :bucks => amount })    
+  end
+  
+  def debit_coins(amount)
+    self.debit_account({ :coins => amount })
+  end
+  
+  def debit_bucks(amount)
+    self.debit_account({ :bucks => amount })    
+  end
+  
   def credit_account(options)
     return false unless options
     redis = Worlize::RedisConnectionPool.get_client(:currency)
@@ -356,6 +343,35 @@ class User < ActiveRecord::Base
     
     redis_key = "#{currency_type}:#{self.guid}"
     redis.incrby(redis_key, amount).to_i
+  end
+  
+  def debit_account(options)
+    return false unless options
+    redis = Worlize::RedisConnectionPool.get_client(:currency)
+    
+    if options[:coins]
+      currency_type = 'coins'
+      amount = options[:coins]
+    elsif options[:bucks]
+      currency_type = 'bucks'
+      amount = options[:bucks]
+    else
+      raise "You must specify either coins or bucks."
+    end
+    
+    unless amount.kind_of? Integer
+      raise "Amount must be an integer"
+    end
+    
+    redis_key = "#{currency_type}:#{self.guid}"
+    before = redis.get(redis_key).to_i
+    
+    if before - amount > 0
+      after = redis.decrby(redis_key, amount).to_i
+    else
+      raise "Insufficient Funds"
+    end
+
   end
 
   def interactivity_session
