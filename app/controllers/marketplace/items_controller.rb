@@ -1,11 +1,39 @@
 class Marketplace::ItemsController < ApplicationController
   include ActionView::Helpers::NumberHelper
-  
-  before_filter :require_user
   layout 'marketplace'
+    
+  before_filter :require_user, :only => [ :buy ]
+  before_filter :store_location_if_not_logged_in
+
+  def index
+    @category = MarketplaceCategory.find_by_id(params[:category_id])
+    @items = @category.marketplace_items
+    case params[:item_type]
+      when 'Avatar'
+        @display_item_type = 'Avatars'
+        @item_type = 'avatars'
+        @items = @items.avatars
+      when 'Background'
+        @display_item_type = 'Backgrounds'
+        @item_type = 'backgrounds'
+        @items = @items.backgrounds
+      when 'InWorldObject'
+        @display_item_type = 'Objects'
+        @item_type = 'in_world_objects'
+        @items = @items.in_world_objects
+      when 'Prop'
+        @display_item_type = 'Props'
+        @item_type = 'props'
+        @items = @items.props
+      else
+        raise "Unknown item type"
+    end
+    
+  end
 
   def show
-    
+    @item = MarketplaceItem.find(params[:id])
+    @category = @item.marketplace_category
   end
   
   def buy

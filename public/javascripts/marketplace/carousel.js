@@ -65,6 +65,7 @@ jQuery(function($) {
                 bannerImageElement: image,
                 bannerURL: image.data('banner-src'),
                 thumbnailURL: image.data('thumb-src'),
+                type: link.data('type'),
                 link: link.attr('href')
             });
         });
@@ -76,6 +77,7 @@ jQuery(function($) {
             def.thumbElement = $('<div>');
             def.thumbElement.addClass('carousel-thumb');
             var linkElement = $('<a>');
+            linkElement.attr('data-type', def.type);
             linkElement.attr('href', def.link);
             var thumbImageElement = $('<img>');
             thumbImageElement.bind('load', imageLoad);

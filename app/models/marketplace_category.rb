@@ -10,6 +10,16 @@ class MarketplaceCategory < ActiveRecord::Base
   validates :name,
               :presence => true
               
+  def descends_from?(ancestor)
+    ancestor = ancestor.id if ancestor.instance_of? MarketplaceCategory
+    category = self
+    while category
+      return true if category.parent_id == ancestor
+      category = category.parent
+    end
+    return false
+  end
+  
   def breadcrumbs
     return @breadcrumbs if @breadcrumbs
     category = self

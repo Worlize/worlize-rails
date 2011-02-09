@@ -1,10 +1,16 @@
-<%= title "#{@category.name} - Marketplace" %>
+<%= title "#{@category.name} - Worlize Marketplace" %>
+<% content_for :extra_head_items do %>
+  <% if @category.marketplace_theme %>
+    <link rel="stylesheet" href="<%= marketplace_theme_path(@category.marketplace_theme) %>">
+  <% end %>
+<% end %>
+
 
 <% if @carousel_items.size >= 3 %>
   <section id="carousel" class="unselectable">
     <% for featured_item in @carousel_items %>
       <div class="carousel-banner">
-        <%= link_to featured_item.featured_item do %>
+        <%= link_to featured_item.featured_item, 'data-type' => featured_item.featured_item_type do %>
           <img data-banner-src="<%= featured_item.carousel_image.url %>"
             <% if featured_item.featured_item.respond_to?('name') %>
                alt="<%= featured_item.featured_item.name %>"
@@ -28,63 +34,58 @@
 <% end %>
 
 
-<div id="right-column">
-  <% if @category.breadcrumbs.length > 1 %>
-    <p class="breadcrumbs">
-<% 
-  crumbs = @category.breadcrumbs
-  crumbs.pop
-%>
-      <% for crumb in crumbs %>
-        <%= link_to(html_escape(crumb.name).gsub(/\s/, '&nbsp;'), crumb) %>&nbsp;&gt;
-      <% end %>
-    </p>
-  <% end %>
-  
-  <%# if !@category.parent.nil? %>
-    <h1><%= @category.name %></h1>
-  <%# end %>
-  <p id="welcome-user">
-    <% if current_user %>
-      Welcome, <%= current_user.username %>!
-      <div class="balance">
-        <img src="/images/marketplace/coins-icon.png" alt="Coins">
-          <span id="coins-balance"><%= number_with_delimiter(current_user.coins) %></span>
-        <img src="/images/marketplace/bucks-icon.png" alt="Bucks">
-          <span id="bucks-balance"><%= number_with_delimiter(current_user.bucks) %></span>
-      </div>
-    <% else %>
-      <%= link_to "Log in", login_path %>
-    <% end %>
-  </p>  
-  
-  
-  <% if !@category.children.empty? %>
-    <nav id="subcategory-list">
-      <h1>Subcategories</h1>
-      <ul>
-        <% for subcategory in @category.children %>
-          <li><%= link_to subcategory.name, subcategory %></li>
-        <% end %>
-      </ul>
-    </nav>
-  <% end %>
-</div>
+<%= render :partial => 'marketplace/right_column' %>
+
 
 <div id="left-column">
   <%# Featured items of each type %>
   <% for item_type in %w(avatars backgrounds in_world_objects) %>
     <% featured_items = @category.marketplace_featured_items.send(item_type).active %>
     <% if !featured_items.empty? %>
-      <section class="featured-item-list">
+      <section class="featured item-list">
         <% if item_type == 'in_world_objects'
+          link_item_type = 'objects'
           display_item_type = 'Objects'
-         else 
+         else
+          link_item_type = item_type
           display_item_type = item_type.humanize.capitalize
          end %>
-        <h1>Featured <small><%= display_item_type %></small></h1>
-        <ul class="featured-thumbnail-container" data-item-type="<%= item_type.camelize.singularize %>">
+        <h1>Featured <small><%= display_item_type %></small>
+          <% item_count = MarketplaceItem.send(item_type).active.where(:marketplace_category_id => @category.id).count %>
+          <% if item_count > 0 %>
+            <%= link_to "See all...", send("marketplace_category_#{link_item_type}_path", @category.id) %>
+          <% end %>
+        </h1>
+        <ul class="item-thumbnail-container" data-item-type="<%= item_type.camelize.singularize %>">
           <%= render :partial => 'featured_item_thumb', :collection => featured_items %>
+        </ul>
+        <div style="clear:left; width:0px; height:0px;">&nbsp;</div>
+      </section>
+    <% end %>
+  <% end %>
+  
+  <%# List All Items %>
+  <% for item_type in %w(avatars backgrounds in_world_objects) %>
+    <% items = @category.marketplace_items.active.send(item_type) %>
+    <% items_count = items.count %>
+    <% items = items.limit(30) %>
+    <% if !items.empty? %>
+      <section class="item-list">
+        <% if item_type == 'in_world_objects'
+             link_item_type = 'objects'
+             display_item_type = 'Objects'
+           else
+             link_item_type = item_type
+             display_item_type = item_type.humanize.capitalize
+           end %>
+        <h1>
+          <%= display_item_type %>
+          <% if items.size > 30 %>
+            <%= link_to "See all #{items_count} #{display_item_type}...", send("marketplace_category_#{link_item_type}_path", @category.id) %>
+          <% end %>
+        </h1>
+        <ul class="item-thumbnail-container" data-item-type="<%= item_type.camelize.singularize %>">
+          <%= render :partial => 'marketplace/items/item_thumb', :collection => items %>
         </ul>
         <div style="clear:left; width:0px; height:0px;">&nbsp;</div>
       </section>
@@ -96,17 +97,13 @@
 
 <div style="clear:both;">&nbsp;</div>
 
-<% unless current_user %>
-  <div id="must-be-logged-in-tooltip" style="display:none;">
-    You must be logged in to buy.
-  </div>
-<% end %>
-
 <% content_for :page_script do %>
 <script>
   jQuery(function($) {
+    
+    // Apply ellipsis plugin (for firefox) to the item names
     var tags = ['h2', 'h3', 'h4', 'h5'];
-    var selectorBase = ".featured-thumbnail-container ";
+    var selectorBase = ".item-thumbnail-container ";
     for (var i=0; i < tags.length; i++) {
       tags[i] = selectorBase + tags[i];
     }

@@ -1,0 +1,43 @@
+<%= title "All #{@display_item_type} - #{@category.name} - Worlize Marketplace" %>
+<% content_for :extra_head_items do %>
+  <% if @category.marketplace_theme %>
+    <link rel="stylesheet" href="<%= marketplace_theme_path(@category.marketplace_theme) %>">
+  <% end %>
+<% end %>
+
+<%= render :partial => 'marketplace/right_column' %>
+
+<div id="left-column">
+  <%# List All Items %>
+    <% if !@items.empty? %>
+      <section class="item-list">
+        <h1>All <%= @display_item_type %></h1>
+        <ul class="item-thumbnail-container" data-item-type="<%= @item_type.camelize.singularize %>">
+          <%= render :partial => 'item_thumb', :collection => @items %>
+        </ul>
+        <div style="clear:left; width:0px; height:0px;">&nbsp;</div>
+      </section>
+    <% end %>
+</div>
+
+<div style="clear:both;">&nbsp;</div>
+
+<% content_for :page_script do %>
+<script>
+  jQuery(function($) {
+    
+    // Apply ellipsis plugin (for firefox) to the item names
+    var tags = ['h2', 'h3', 'h4', 'h5'];
+    var selectorBase = ".item-thumbnail-container ";
+    for (var i=0; i < tags.length; i++) {
+      tags[i] = selectorBase + tags[i];
+    }
+    var selector = tags.join(', ');
+    $(selector).ellipsis();
+  });
+</script>
+<% end %>
+
+<% content_for :fancybox do %>
+// Fancybox
+<% end %>

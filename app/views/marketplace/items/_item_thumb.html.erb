@@ -1,0 +1,30 @@
+<% item = item_thumb %>
+
+<li id="featured_item_thumb_<%= item.id %>"
+    data-currency-id="<%= item.currency_id %>"
+    data-price="<%= item.price %>"
+    data-marketplace-item-id="<%= item.id %>"
+    <% if item.item.respond_to? 'image' %>
+      data-thumbnail-image-url="<%= item.item.image.thumb.url %>"
+    <% end %>
+    class="<%= item.item_type %>">
+
+  <%= link_to item do %>
+      <% if item.item.respond_to? 'image' %>
+        <%= image_tag item.item.image.thumb.url %>
+      <% end %>
+      <h3><%= item.name %></h3>
+      <h4><%= item.marketplace_creator.display_name %></h4>
+      <div class="status_badges"></div>
+  <% end %>
+  <% if item.price == 0 %>
+    <div class="buy-button free">
+      Free
+    </div>
+  <% else %>
+    <div class="buy-button">
+      <div class="<%= item.currency_id == 1 ? 'bucks-icon' : 'coins-icon' %>"></div>
+      <%= number_with_delimiter item.price %> Buy
+    </div>
+  <% end %>
+</li>

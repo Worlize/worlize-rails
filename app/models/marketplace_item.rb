@@ -14,6 +14,22 @@ class MarketplaceItem < ActiveRecord::Base
     where(:on_sale => true)
   }
   
+  scope :avatars, lambda {
+    where(:item_type => 'Avatar')
+  }
+  
+  scope :backgrounds, lambda {
+    where(:item_type => 'Background')
+  }
+  
+  scope :in_world_objects, lambda {
+    where(:item_type => 'InWorldObject')
+  }
+  
+  scope :props, lambda {
+    where(:item_type => 'Prop')
+  }
+  
   validates :name,
               :presence => true,
               :if => :on_sale?

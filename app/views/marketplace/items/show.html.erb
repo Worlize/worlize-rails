@@ -1,0 +1,16 @@
+<%= title "#{@item.name} - Worlize Marketplace" %>
+<% content_for :extra_head_items do %>
+  <% if @category.marketplace_theme %>
+    <link rel="stylesheet" href="<%= marketplace_theme_path(@category.marketplace_theme) %>">
+  <% end %>
+<% end %>
+
+<% content_for :fancybox do %>
+// Fancybox
+<% end %>
+
+<%= render :partial => 'marketplace/right_column' %>
+
+<div class="item-detail-full">
+  <%= render :partial => 'item_detail' %>
+</div>

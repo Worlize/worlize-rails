@@ -18,8 +18,26 @@ Worlize::Application.routes.draw do |map|
   match "/marketplace" => 'marketplace/categories#index'
   match "/marketplace/search" => 'marketplace/items#search'
   namespace "marketplace" do
-    resources :themes, :only => [:show]
-    resources :categories
+    resources :themes, :only => :show
+    resources :categories do
+      resources :items, :only => :index
+      
+      resources :avatars, :only => :index,
+                          :controller => 'items',
+                          :defaults => { :item_type => 'Avatar' }
+
+      resources :backgrounds, :only => :index,
+                              :controller => 'items',
+                              :defaults => { :item_type => 'Background' }
+                          
+      resources :objects, :only => :index,
+                          :controller => 'items',
+                          :defaults => { :item_type => 'InWorldObject' }
+                          
+      resources :props, :only => :index,
+                        :controller => 'items',
+                        :defaults => { :item_type => 'Prop' }
+    end
     resources :items do
       member do
         post :buy

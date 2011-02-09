@@ -1,0 +1,66 @@
+<div class="item-detail"
+  data-currency-id="<%= @item.currency_id %>"
+  data-price="<%= @item.price %>"
+  data-marketplace-item-id="<%= @item.id %>"
+  data-thumbnail-image-url="<%= @item.item.image.thumb.url %>">
+  <table cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tr>
+      <td class="item-detail-left-column">
+        <% if @item.item.respond_to?('image') &&
+              @item.item.image.respond_to?('medium') %>
+          <div class="preview-image">
+            <%= image_tag @item.item.image.medium.url, :class => 'preview' %>
+          </div>
+        <% end %>
+    
+        <% for tag_context in MarketplaceTagContext.all %>
+          <% tags = @item.tags_on(tag_context.name) %>
+          <% if tags.length > 0 %>
+            <h4 class="tag-heading">Tags: <%= tag_context.name %></h4>
+            <ul class="tag-list">
+              <% for tag in tags %>
+                <li><%= tag.name %></li>
+              <% end %>
+            </ul>
+          <% end %>
+        <% end %>
+    
+      </td>
+      <td class="item-detail-right-column" width="100%">
+        <h1><%= @item.name %></h1>
+        <h2 class="artist"><%= @item.marketplace_creator.display_name %></h2>
+        <h3 class="category">
+          Category: <%= link_to @item.marketplace_category.name, @item.marketplace_category %>
+        </h3>
+    
+        <% if @item.price == 0 %>
+          <div class="buy-button free">
+            Free
+          </div>
+        <% else %>
+          <div class="buy-button">
+            <div class="<%= @item.currency_id == 1 ? 'bucks-icon' : 'coins-icon' %>"></div>
+            <%= number_with_delimiter @item.price %> Buy
+          </div>
+        <% end %>
+    
+        <% unless @item.description.empty? || @item.description.nil? %>
+          <p class="description">
+            <%= @item.description %>
+          </p>
+        <% end %>
+        
+        <p class="copyright">
+          <% unless @item.copyright.empty? || @item.copyright.nil? %>
+            <% unless @item.copyright.downcase.include?('copyright') || @item.copyright.include?('©') -%>
+              ©
+            <%- end %>
+            <%= @item.copyright %>
+          <% else %>
+            © <%= @item.item.created_at.year %> Worlize Inc.
+          <% end %>
+        </p>
+      </td>
+    </tr>
+  </table>
+</div>

@@ -33,6 +33,8 @@
   <%= yield :extra_styles %>
   </style>
  
+  <%= yield :extra_head_items %>
+ 
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
   <script src="/javascripts/libs/modernizr-1.6.min.js"></script>
   
@@ -56,9 +58,14 @@
       <div class="forward-button" onclick="window.history.forward()"></div>
     
       <ul class="top-level-category-list">
-        <li class="home-top-level-category-button active"><%= link_to 'Home', marketplace_path %></li>
+        <li class="home-top-level-category-button<%= @category.parent_id.nil? ? ' active' : '' %>">
+          <%= link_to 'Home', marketplace_path %>
+        </li>
         <% for category in MarketplaceCategory.root.children %>
-          <li class="top-level-category-button"><%= link_to category.name, category %></li>
+          <% category_active = (@category == category || @category.descends_from?(category)) %>
+          <li class="top-level-category-button<%= category_active ? ' active' : '' %>">
+            <%= link_to category.name, category %>
+          </li>
         <% end %>
       </ul>
       <%= form_tag marketplace_search_path, :method => 'get', :class => 'search-field' do %>

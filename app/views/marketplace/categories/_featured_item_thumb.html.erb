@@ -10,6 +10,9 @@
   <% if item.include_in_carousel? && item.marketplace_carousel_item -%>
     data-marketplace-carousel-item-id="<%= item.marketplace_carousel_item.id %>"
   <%- end %>
+  <% if item.featured_item.item.respond_to? 'image' %>
+    data-thumbnail-image-url="<%= item.featured_item.item.image.thumb.url %>"
+  <% end %>
   <% if item.featured_item_type == 'MarketplaceItem' %>
     data-currency-id="<%= item.featured_item.currency_id %>"
     data-price="<%= item.featured_item.price %>"

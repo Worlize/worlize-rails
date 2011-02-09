@@ -1,6 +1,26 @@
 jQuery(function($) {
     
     var marketplaceItemId;
+    var mustBeLoggedInTooltip;
+    
+    // Wire up ajax item detail popups...
+    $('ul.item-thumbnail-container > li > a, a[data-type=MarketplaceItem]').live('click', function(event) {
+        var link = $(event.target).closest('a');
+        event.preventDefault();
+        $.ajax({
+            dataType: 'script',
+            url: link.attr('href'),
+            cache: true,
+            error: function(xhr, textStatus, errorThrown) {
+                $('<a>').fancybox({
+                    content: "<h1>Uhoh!</h1>" +
+                             "<p>There was an error loading item details.  " +
+                             "Please try again in a few minutes.</p>",
+                    overlayOpacity: 0.2
+                }).click();
+            }
+        });
+    });
     
     $('.overlay-dialog .cancel-button').live('click', function(event) {
         $.fancybox.close();
@@ -100,7 +120,7 @@ jQuery(function($) {
     
     if (loggedIn) {
         $('.buy-button').live('click', function(event) {
-            var container = $(event.target).closest('li');
+            var container = $(event.target).closest('li, div.item-detail');
             marketplaceItemId = container.data('marketplace-item-id');
             var currency = (container.data('currency-id') == '1') ? "bucks" : "coins";
             var price = parseInt(container.data('price'), 10);
@@ -110,12 +130,17 @@ jQuery(function($) {
             else {
                 price = price + " " + currency;
             }
-            var thumbnailImage = $(event.target).closest('li').find('img').attr('src');
+            var thumbnailImage = container.data('thumbnail-image-url');
             showConfirmation(marketplaceItemId, thumbnailImage, price);
         });
     }
     else {
         $('.buy-button').live('mouseover', function(event) {
+            if (!mustBeLoggedInTooltip) {
+                mustBeLoggedInTooltip = $('<div id="must-be-logged-in-tooltip">');
+                mustBeLoggedInTooltip.text('You must be logged in to buy.');
+                $(document.body).append(mustBeLoggedInTooltip);
+            }
             var tooltip = $('#must-be-logged-in-tooltip');
             tooltip.css({
                 position: 'absolute'
