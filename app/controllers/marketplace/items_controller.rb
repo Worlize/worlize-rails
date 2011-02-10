@@ -3,7 +3,7 @@ class Marketplace::ItemsController < ApplicationController
   layout 'marketplace'
     
   before_filter :require_user, :only => [ :buy ]
-  before_filter :store_location_if_not_logged_in
+  before_filter :store_location_if_not_logged_in, :except => [ :show ]
 
   def index
     @category = MarketplaceCategory.find_by_id(params[:category_id])
@@ -34,6 +34,11 @@ class Marketplace::ItemsController < ApplicationController
   def show
     @item = MarketplaceItem.find(params[:id])
     @category = @item.marketplace_category
+    
+    respond_to do |wants|
+      wants.html { store_location_if_not_logged_in }
+      wants.js
+    end
   end
   
   def buy
