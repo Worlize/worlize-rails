@@ -11,7 +11,7 @@
       <th>&nbsp;</th>
     </tr>
     <% for featured_item in @featured_items %>
-      <tr>
+      <tr class="<%= cycle('even','odd') %>">
         <td>
           <% if featured_item.marketplace_category %>
             <%= featured_item.marketplace_category.name %>

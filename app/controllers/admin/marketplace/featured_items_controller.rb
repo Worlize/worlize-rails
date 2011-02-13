@@ -20,7 +20,7 @@ class Admin::Marketplace::FeaturedItemsController < ApplicationController
       @item = MarketplaceCategory.find(params[:featured_item_id]) if params[:featured_item_id]
     end
     @category_options_for_select = build_category_options
-    @featured_item = MarketplaceFeaturedItem.new(:featured_item => @item)
+    @featured_item = MarketplaceFeaturedItem.new(:featured_item => @item, :active => true)
     
     if !@item.nil? && @item.respond_to?('marketplace_category')
       @featured_item.marketplace_category = @item.marketplace_category
