@@ -91,7 +91,7 @@ jQuery(function($) {
 
                 var confirmTemplate = $(
                     '<div class="overlay-dialog error">' +
-                        '<h1>There was an error while purchasing your item.</h1>' +
+                        '<h1>Oops!</h1>' +
                         ((errors.length > 0) ? errorString : '') +
                         '<div class="option-buttons">' +
                           '<div class="cancel-button">Close</div>' +
