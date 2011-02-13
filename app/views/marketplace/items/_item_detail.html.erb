@@ -13,13 +13,27 @@
           </div>
         <% end %>
     
+        <% tags = @item.tags %>
+        <% if tags.length > 0 %>
+          <h4 class="tag-heading">Tags: General</h4>
+          <ul class="tag-list">
+            <% for tag in tags %>
+              <%= link_to marketplace_search_path(:q => tag.name) do %>
+                <li><%= tag.name %></li>
+              <% end %>
+            <% end %>
+          </ul>
+        <% end %>
+    
         <% for tag_context in MarketplaceTagContext.all %>
           <% tags = @item.tags_on(tag_context.name) %>
           <% if tags.length > 0 %>
             <h4 class="tag-heading">Tags: <%= tag_context.name %></h4>
             <ul class="tag-list">
               <% for tag in tags %>
-                <li><%= tag.name %></li>
+                <%= link_to marketplace_search_path(:q => tag.name) do %>
+                  <li><%= tag.name %></li>
+                <% end %>
               <% end %>
             </ul>
           <% end %>

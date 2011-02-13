@@ -16,23 +16,27 @@ jQuery(function($) {
             beforeSend: function() {
                 // show loading spinner
                 image = $(event.target).closest('li').find('img');
-                var width = image.outerWidth();
-                var height = image.outerHeight();
-                var offset = image.offset();
-                
-                spinner = $('<div class="loading-spinner">');
-                $(event.target).closest('li').append(spinner);
-                spinner.offset({
-                    top: offset.top + (height/2 - 4),
-                    left: offset.left + (width/2 - 8)
-                });
-                
-                image.animate({'opacity': 0.3}, 200);
+                if (image[0]) {
+                    var width = image.outerWidth();
+                    var height = image.outerHeight();
+                    var offset = image.offset();
+
+                    spinner = $('<div class="loading-spinner">');
+                    $(event.target).closest('li').append(spinner);
+                    spinner.offset({
+                        top: offset.top + (height/2 - 4),
+                        left: offset.left + (width/2 - 8)
+                    });
+
+                    image.animate({'opacity': 0.3}, 200);
+                }
             },
             complete: function () {
                 // hide loading spinner
-                spinner.remove();
-                image.animate({'opacity': 1}, 200);
+                if (spinner) {
+                    spinner.remove();
+                    image.animate({'opacity': 1}, 200);
+                }
             },
             error: function(xhr, textStatus, errorThrown) {
                 $('<a>').fancybox({

@@ -40,7 +40,61 @@ class Marketplace::ItemsController < ApplicationController
       wants.js
     end
   end
-  
+
+  def search
+    @query = params[:q] || ''
+    @item_type = params[:type] || ''
+    @order = params[:order] || 'date'
+    @page = params[:page]
+    logger.debug "Order: #{@order}"
+    logger.debug "Item Type: #{@item_type}"
+    @errors = []
+    
+    @preview_item_count = 15
+    
+    case @order
+    when 'date'
+      @order_fragment = 'created_at DESC'
+    when 'date_reverse'
+      @order_fragment = 'created_at ASC'
+    else
+      @errors.push("Unsupported order type: #{@order}")
+    end
+    
+    if @query.empty?
+      @errors.push('You must specify a search term.')
+    else
+      if @item_type.empty?
+        @items = MarketplaceItem.active.tagged_with(@query)
+      else
+        if @errors.empty?
+          case @item_type
+          when 'avatars'
+            @items = MarketplaceItem.avatars.active.tagged_with(@query)
+          when 'in_world_objects'
+            @items = MarketplaceItem.in_world_objects.active.tagged_with(@query)
+          when 'backgrounds'
+            @items = MarketplaceItem.backgrounds.active.tagged_with(@query)
+          when 'props'
+            @items = MarketplaceItem.props.active.tagged_with(@query)
+          else
+            @errors.push('Unknown item type!')
+          end
+        end
+      end
+      if @items
+        @items = @items.order(@order_fragment)
+        if !@page.nil? && !@page.empty?
+          @items = @items.paginate(:page => @page, :per_page => 25)
+        end
+      end
+      
+      
+      @result_count = @items.count
+    end
+    
+  end
+
   def buy
     errors = []
     item = MarketplaceItem.active.find_by_id(params[:id])

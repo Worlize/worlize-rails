@@ -1,0 +1,30 @@
+<% for item_type in %w(avatars backgrounds in_world_objects) %>
+  <% items = @items.send(item_type) %>
+  <% item_count = items.count %>
+  <% if item_count > 0 %>
+    <section class="item-list">
+      <% if item_type == 'in_world_objects'
+           link_item_type = 'objects'
+           display_item_type = 'Objects'
+         else
+           link_item_type = item_type
+           display_item_type = item_type.humanize.capitalize
+         end %>
+      <h1>
+        <%= display_item_type %> tagged &quot;<%= @query %>&quot;
+        <% if item_count > @preview_item_count %>
+          <%= link_to "See all (#{item_count - @preview_item_count} more)...", send("marketplace_search_path", {
+            :q => @query,
+            :order => @order,
+            :type => item_type,
+            :page => 1
+          }) %>
+        <% end %>
+      </h1>
+      <ul class="item-thumbnail-container" data-item-type="<%= item_type.camelize.singularize %>">
+        <%= render :partial => 'marketplace/items/item_thumb', :collection => items.limit(@preview_item_count) %>
+      </ul>
+      <div style="clear:left; width:0px; height:0px;">&nbsp;</div>
+    </section>
+  <% end %>
+<% end %>

@@ -1,0 +1,65 @@
+<%= title "Tagged: #{@query} - Worlize Marketplace" %>
+
+<%= render :partial => 'marketplace/right_column' %>
+
+<div id="left-column">
+  <%# List All Items %>
+  <h1>Search Results</h1>
+  
+  <%= form_tag marketplace_search_path, :method => 'get', :class => 'big-search-field' do %>
+    <label for="big-search-field">Search Tags:</label>
+    <input id="big-search-field" type="text" name="q" placeholder="Search..." autocomplete="on" value="<%= @query %>">
+    <input type="submit" value="Search">
+  <% end %>
+  
+    <% if !@errors.empty? %>
+      <% for error in @errors %>
+        <h2><%= error %></h2>
+      <% end %>
+    <% else %>
+      <% if @result_count == 0 %>
+        <h2>There are no items tagged &quot;<%= @query %>.&quot;
+      <% end %>
+      <% if @item_type.nil? || @item_type.empty? %>
+        <%= render :partial => 'multiple_type_search_results' %>
+      <% else %>
+        <section class="item-list">
+          <% if @item_type == 'in_world_objects'
+               link_item_type = 'objects'
+               display_item_type = 'Objects'
+             else
+               link_item_type = @item_type
+               display_item_type = @item_type.humanize.capitalize
+             end %>
+          <h1><%= display_item_type %> tagged &quot;<%= @query %>&quot;</h1>        
+          <ul class="item-thumbnail-container" data-item-type="<%= @item_type.camelize.singularize %>">
+            <%= render :partial => 'marketplace/items/item_thumb', :collection => @items %>
+          </ul>
+          <div style="clear:left; width:0px; height:0px;">&nbsp;</div>
+          <%= will_paginate @users %>
+        </section>
+      <% end %>
+    <% end %>
+</div>
+
+<div style="clear:both;">&nbsp;</div>
+
+<% content_for :page_script do %>
+<script>
+  jQuery(function($) {
+    
+    // Apply ellipsis plugin (for firefox) to the item names
+    var tags = ['h2', 'h3', 'h4', 'h5'];
+    var selectorBase = ".item-thumbnail-container ";
+    for (var i=0; i < tags.length; i++) {
+      tags[i] = selectorBase + tags[i];
+    }
+    var selector = tags.join(', ');
+    $(selector).ellipsis();
+  });
+</script>
+<% end %>
+
+<% content_for :fancybox do %>
+// Fancybox
+<% end %>

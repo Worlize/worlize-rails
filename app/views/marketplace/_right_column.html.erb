@@ -1,19 +1,19 @@
 <div id="right-column">
-  <% if @category.breadcrumbs.length > 1 %>
-    <p class="breadcrumbs">
-<% 
-  crumbs = @category.breadcrumbs
-  crumbs.pop
-%>
-      <% for crumb in crumbs %>
-        <%= link_to(html_escape(crumb.name).gsub(/\s/, '&nbsp;'), crumb) %>&nbsp;&gt;
-      <% end %>
-    </p>
-  <% end %>
+  <% if @category %>
+    <% if @category.breadcrumbs.length > 1 %>
+      <p class="breadcrumbs">
+  <% 
+    crumbs = @category.breadcrumbs
+    crumbs.pop
+  %>
+        <% for crumb in crumbs %>
+          <%= link_to(html_escape(crumb.name).gsub(/\s/, '&nbsp;'), crumb) %>&nbsp;&gt;
+        <% end %>
+      </p>
+    <% end %>
   
-  <%# if !@category.parent.nil? %>
     <h1><%= @category.name %></h1>
-  <%# end %>
+  <% end %>
   <p id="welcome-user">
     <% if current_user %>
       Welcome, <%= current_user.username %>!
@@ -28,10 +28,13 @@
         <nav class="marketplace-admin-list">
           <h1>Admin Options</h1>
           <ul>
+            <li><%= link_to 'Marketplace Admin', admin_marketplace_categories_path %></li>
             <% if @item %>
               <li><%= link_to 'Edit item', [:admin, @item] %></li>
             <% end %>
-            <li><%= link_to "Edit category '#{@category.name}'", [:admin, @category] %></li>
+            <% if @category %>
+              <li><%= link_to "Edit category '#{@category.name}'", [:admin, @category] %></li>
+            <% end %>
           </ul>
         </nav>
       <% end %>
@@ -41,7 +44,7 @@
     <% end %>
   </p>  
   
-  <% if !@category.children.empty? %>
+  <% if @category && !@category.children.empty? %>
     <nav id="subcategory-list">
       <h1>Subcategories</h1>
       <ul>
