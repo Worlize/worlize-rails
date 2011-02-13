@@ -84,6 +84,12 @@
   <%= f.label :on_sale, :class => 'light_label' %><br>
   <br>
   
+  <% if @item.archived? %>
+    <%= f.check_box :archived %>
+    <%= f.label :archived, :class => 'light_label' %><br>
+    <br>
+  <% end %>
+  
   <h3>Tags</h3>
   <%= f.text_area :tag_list, :cols => 40, :rows => 2 %><br><br>
   

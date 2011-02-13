@@ -3,7 +3,7 @@
 <% if @items.empty? %>
   (There are no items to categorize.)
 <% else %>
-  <div id="items_list">
+  <div class="items_list">
     <div class="marketplace_thumbnail_container">
       <%= render :partial => 'admin/marketplace/categories/item_thumb', :collection => @items %>
     </div>

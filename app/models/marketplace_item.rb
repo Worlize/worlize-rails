@@ -11,7 +11,15 @@ class MarketplaceItem < ActiveRecord::Base
   before_destroy :delete_actual_item
   
   scope :active, lambda {
-    where(:on_sale => true)
+    where(:on_sale => true, :archived => false)
+  }
+  
+  scope :not_archived, lambda {
+    where(:archived => false)
+  }
+  
+  scope :archived, lambda {
+    where(:archived => true)
   }
   
   scope :avatars, lambda {
@@ -59,6 +67,11 @@ class MarketplaceItem < ActiveRecord::Base
                 :greater_than_or_equal_to => 0
               },
               :if => :on_sale?
+  
+  validates :on_sale,
+              :exclusion => { :in => [true],
+                              :message => "can not be selected if item is archived."},
+              :if => :archived?
   
   validate :must_not_be_featured_to_take_off_sale
 

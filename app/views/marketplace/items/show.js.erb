@@ -11,6 +11,6 @@ jQuery('<a>').fancybox({
         jQuery('.item-detail-overlay').css('visibility','').hide().fadeIn();
     },
     onCleanup: function() {
-        jQuery('.item-detail-overlay').fadeOut(250);
+        jQuery('.item-detail-overlay').html('');
     }
 }).click();

@@ -57,11 +57,20 @@
   <% end %>
 <% end %>
 
-<% if !@category.marketplace_items.empty? %>
-  <div id="items_list">
+<% if !@category.marketplace_items.not_archived.empty? %>
+  <div class="items-list">
     <h2>Items in this category (not sortable)</h2>
     <div class="marketplace_thumbnail_container">
-      <%= render :partial => 'item_thumb', :collection => @category.marketplace_items %>
+      <%= render :partial => 'item_thumb', :collection => @category.marketplace_items.not_archived %>
+    </div>
+  </div>
+<% end %>
+
+<% if !@category.marketplace_items.archived.empty? %>
+  <div class="items-list">
+    <h2>Archived items (not sortable)</h2>
+    <div class="marketplace_thumbnail_container">
+      <%= render :partial => 'item_thumb', :collection => @category.marketplace_items.archived %>
     </div>
   </div>
 <% end %>

@@ -161,7 +161,13 @@ class Admin::Marketplace::ItemsController < ApplicationController
   # DELETE /marketplace_items/1
   # DELETE /marketplace_items/1.xml
   def destroy
-    @item.destroy
+    @item.marketplace_featured_items.each do |featured_item|
+      featured_item.destroy
+    end
+    @item.update_attributes({
+      :archived => true,
+      :on_sale => false
+    });
 
     respond_to do |wants|
       wants.html {
