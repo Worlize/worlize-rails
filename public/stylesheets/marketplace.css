@@ -39,6 +39,10 @@ time, mark, audio, video {
   background:transparent;
 }                  
 
+body {
+  overflow: hidden;
+}
+
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section { 
     display:block;
@@ -691,6 +695,13 @@ section.item-list ul li {
 	float: left;
 }
 
+section.item-list ul li .loading-spinner {
+	position: absolute;
+	width: 16px;
+	height: 11px;
+	background-image: url(/images/ajax-loader.gif);
+}
+
 section.item-list ul li.Avatar,
 section.item-list ul li.InWorldObject {	
 	width: 105px;
@@ -772,7 +783,8 @@ section.item-list ul li a:hover img {
 }
 
 .item-detail .preview-image {
-	display: inline-block;
+	position: relative;
+	display: block;
 	text-align: center;
 	border: 6px solid white;
 	background: #EEE;
@@ -786,6 +798,14 @@ section.item-list ul li a:hover img {
 .item-detail .preview-image img {
 	display: block;
 	margin: 0px auto;
+}
+
+.item-detail .preview-image:after {
+	content: '';
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	height: 100%;
 }
 
 .item-detail-right-column h1 {

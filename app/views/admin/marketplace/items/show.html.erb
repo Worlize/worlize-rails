@@ -1,4 +1,7 @@
 <h1>Marketplace Item</h1>
+
+<%= link_to 'View in Marketplace', @item %><br><br>
+
 <% if @item.marketplace_category %>
   <%= link_to "Back to Category: #{@item.marketplace_category.name}", [:admin, @item.marketplace_category] %>
 <% else %>

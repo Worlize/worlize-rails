@@ -5,12 +5,35 @@ jQuery(function($) {
     
     // Wire up ajax item detail popups...
     $('ul.item-thumbnail-container > li > a, a[data-type=MarketplaceItem]').live('click', function(event) {
+        var spinner;
+        var image;
         var link = $(event.target).closest('a');
         event.preventDefault();
         $.ajax({
             dataType: 'script',
             url: link.attr('href'),
             cache: true,
+            beforeSend: function() {
+                // show loading spinner
+                image = $(event.target).closest('li').find('img');
+                var width = image.outerWidth();
+                var height = image.outerHeight();
+                var offset = image.offset();
+                
+                spinner = $('<div class="loading-spinner">');
+                $(event.target).closest('li').append(spinner);
+                spinner.offset({
+                    top: offset.top + (height/2 - 4),
+                    left: offset.left + (width/2 - 8)
+                });
+                
+                image.animate({'opacity': 0.3}, 200);
+            },
+            complete: function () {
+                // hide loading spinner
+                spinner.remove();
+                image.animate({'opacity': 1}, 200);
+            },
             error: function(xhr, textStatus, errorThrown) {
                 $('<a>').fancybox({
                     content: "<h1>Uhoh!</h1>" +
