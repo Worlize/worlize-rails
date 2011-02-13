@@ -15,7 +15,9 @@
     <% end %>
     <div class="status_badges">
       <% if !item.on_sale? %>
-        <%= image_tag 'icons/error.png', :class => 'not_on_sale', :alt => 'Not on sale!' %>
+        <%= image_tag 'icons/exclamation.png', :class => 'not_on_sale', :alt => 'Not on sale!' %>
+      <% else %>
+        <%= image_tag 'icons/accept.png', :alt => 'Active' %>
       <% end %>
     </div>
   </div>

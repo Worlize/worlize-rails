@@ -36,7 +36,9 @@
       <% end %>
       <div class="status_badges">
         <% if !item.active? %>
-          <%= image_tag 'icons/error.png', :alt => 'Not active' %>
+          <%= image_tag 'icons/exclamation.png', :alt => 'Not active' %>
+        <% else %>
+          <%= image_tag 'icons/accept.png', :alt => 'Active' %>
         <% end %>
         <% if item.include_in_carousel? %>
           <%= image_tag 'icons/award_star_gold_1.png', :alt => 'Included in Carousel' %>
