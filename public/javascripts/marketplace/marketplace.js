@@ -138,24 +138,31 @@ jQuery(function($) {
         $('.buy-button').live('mouseover', function(event) {
             if (!mustBeLoggedInTooltip) {
                 mustBeLoggedInTooltip = $('<div id="must-be-logged-in-tooltip">');
-                mustBeLoggedInTooltip.text('You must be logged in to buy.');
+                mustBeLoggedInTooltip.html('You&nbsp;must&nbsp;be&nbsp;logged&nbsp;in&nbsp;to&nbsp;buy.');
+                mustBeLoggedInTooltip.hide();
+                mustBeLoggedInTooltip.css({ position: 'absolute', 'z-index': 99999 })
                 $(document.body).append(mustBeLoggedInTooltip);
+                console.log("Created tooltip");
             }
-            var tooltip = $('#must-be-logged-in-tooltip');
-            tooltip.css({
-                position: 'absolute'
-            });
-            tooltip.show();
-        });
-        $('.buy-button').live('mousemove', function(event) {
-            $('#must-be-logged-in-tooltip').offset({
+            mustBeLoggedInTooltip
+            .offset({
                 top: event.pageY+10,
                 left: event.pageX+20
-            });
+            })
+            .show();
+        });
+        $('.buy-button').live('mousemove', function(event) {
+            if (mustBeLoggedInTooltip) {
+                mustBeLoggedInTooltip.offset({
+                    top: event.pageY+10,
+                    left: event.pageX+20
+                });
+            }
         });
         $('.buy-button').live('mouseout', function(event) {
-            var tooltip = $('#must-be-logged-in-tooltip');
-            tooltip.hide();
+            if (mustBeLoggedInTooltip) {
+                mustBeLoggedInTooltip.hide();
+            }
         });
     }
     
