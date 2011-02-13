@@ -1,4 +1,16 @@
-$('<a>').fancybox({
+jQuery('<a>').fancybox({
     content: "<%= escape_javascript(render(:partial => 'item_detail_overlay')) %>",
-    overlayOpacity: 0.2
+    overlayOpacity: 0.2,
+    transitionIn: 'elastic',
+    transitionOut: 'elastic',
+    orig: "#item_thumb_<%= @item.id %> img",
+    speedIn: 200,
+    speedOut: 200,
+    overlayShow: false,
+    onComplete: function() {
+        jQuery('.item-detail-overlay').css('visibility','').hide().fadeIn();
+    },
+    onCleanup: function() {
+        jQuery('.item-detail-overlay').fadeOut(250);
+    }
 }).click();

@@ -5,7 +5,7 @@
   div_classes.push('category') if item.featured_item_type == 'MarketplaceCategory'
 %>
 
-<li id="featured_item_thumb_<%= item.id %>"
+<li id="item_thumb_<%= item.featured_item.id %>"
     data-marketplace-featured-item-id="<%= item.id %>"
   <% if item.include_in_carousel? && item.marketplace_carousel_item -%>
     data-marketplace-carousel-item-id="<%= item.marketplace_carousel_item.id %>"
