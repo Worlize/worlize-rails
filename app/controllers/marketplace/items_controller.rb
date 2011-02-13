@@ -102,41 +102,63 @@ class Marketplace::ItemsController < ApplicationController
       case item.item_type
         when 'Avatar'
           if current_user.avatar_slots <= current_user.avatar_instances.count
-            raise "You do not have enough open slots in your avatar locker.  Add more locker space and try again."
+            raise 'You do not have enough open slots in your avatar locker.  Add more locker space and try again.'
+          end
+          
+          # For avatars, make sure the user doesn't already have the avatar.
+          if item.item.instances.where(:user_id => current_user.id).count > 0
+            raise 'You already have this avatar, and do not need to purchase it again!'
           end
         when 'InWorldObject'
           if current_user.in_world_object_slots <= current_user.in_world_object_instances.count
-            raise "You do not have enough open slots in your object locker.  Add more locker space and try again."
+            raise 'You do not have enough open slots in your object locker.  Add more locker space and try again.'
           end
         when 'Prop'
           if current_user.prop_slots <= current_user.prop_instances.count
-            raise "You do not have enough open slots in your props locker.  Add more locker space and try again."
+            raise 'You do not have enough open slots in your props locker.  Add more locker space and try again.'
           end
         when 'Background'
           if current_user.background_slots <= current_user.background_instances.count
-            raise "You do not have enough open slots in your backgrounds locker.  Add more locker space and try again."
+            raise 'You do not have enough open slots in your backgrounds locker.  Add more locker space and try again.'
           end
         else
       end
       
-      # Create the purchase record...
-      MarketplacePurchaseRecord.create!(
-        :user => current_user,
-        :marketplace_item => item,
-        :currency_id => item.currency_id,
-        :purchase_price => item.price
-      )
-
-      # Put the product into the user's locker...
-      instance = item.item.instances.create!(:user => current_user)
       
-      # Finally, charge the customer if all has gone well.
-      if item.price > 0
-        if item.currency_id == 1
-          current_user.debit_bucks(item.price)
-        elsif item.currency_id == 2
-          current_user.debit_coins(item.price)
+      # Start by charging the customer...
+      begin
+        if item.price > 0
+          if item.currency_id == 1
+            current_user.debit_bucks(item.price)
+          elsif item.currency_id == 2
+            current_user.debit_coins(item.price)
+          end
         end
+      rescue
+        raise 'You do not have enough funds available to make this purchase.'
+      end
+      
+      begin
+        # Create the purchase record...
+        MarketplacePurchaseRecord.create!(
+          :user => current_user,
+          :marketplace_item => item,
+          :currency_id => item.currency_id,
+          :purchase_price => item.price
+        )
+
+        # Put the product into the user's locker...
+        instance = item.item.instances.create!(:user => current_user)
+      rescue
+        # If something went wrong, refund the user's funds
+        if item.price > 0
+          if item.currency_id == 1
+            current_user.credi_bucks(item.price)
+          elsif item.currency_id == 2
+            current_user.credit_coins(item.price)
+          end
+        end
+        raise 'An unknown error occurred while processing the transaction.  You have not been charged.'
       end
 
       coins = current_user.coins
