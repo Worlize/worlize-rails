@@ -19,7 +19,7 @@ class InWorldObjectInstance < ActiveRecord::Base
   def notify_user
     if self.user
       self.user.send_message({
-        :msg => 'new_in_world_object_instance',
+        :msg => 'in_world_object_instance_added',
         :data => self.hash_for_api
       })
     end

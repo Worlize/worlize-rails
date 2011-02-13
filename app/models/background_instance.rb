@@ -23,7 +23,7 @@ class BackgroundInstance < ActiveRecord::Base
   def notify_user
     if self.user
       self.user.send_message({
-        :msg => 'new_background_instance',
+        :msg => 'background_instance_added',
         :data => self.hash_for_api
       })
     end

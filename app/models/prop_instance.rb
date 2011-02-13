@@ -18,7 +18,7 @@ class PropInstance < ActiveRecord::Base
   def notify_user
     if self.user
       self.user.send_message({
-        :msg => 'new_prop_instance',
+        :msg => 'prop_instance_added',
         :data => self.hash_for_api
       })
     end
