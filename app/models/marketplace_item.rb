@@ -9,6 +9,7 @@ class MarketplaceItem < ActiveRecord::Base
   acts_as_taggable_on :tags
   
   before_destroy :delete_actual_item
+  before_save :sync_name_to_item
   
   scope :active, lambda {
     where(:on_sale => true, :archived => false)
@@ -87,6 +88,12 @@ class MarketplaceItem < ActiveRecord::Base
     # If nobody has this item, delete the actual item too.
     if self.item.instances.count == 0
       self.item.destroy
+    end
+  end
+  
+  def sync_name_to_item
+    if self.item
+      self.item.update_attribute(:name, self.name)
     end
   end
   
