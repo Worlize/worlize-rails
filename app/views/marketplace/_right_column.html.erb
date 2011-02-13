@@ -23,11 +23,23 @@
         <img src="/images/marketplace/bucks-icon.png" alt="Bucks">
           <span id="bucks-balance"><%= number_with_delimiter(current_user.bucks) %></span>
       </div>
+      
+      <% if current_user.admin? %>
+        <nav class="marketplace-admin-list">
+          <h1>Admin Options</h1>
+          <ul>
+            <% if @item %>
+              <li><%= link_to 'Edit item', [:admin, @item] %></li>
+            <% end %>
+            <li><%= link_to "Edit category '#{@category.name}'", [:admin, @category] %></li>
+          </ul>
+        </nav>
+      <% end %>
+      
     <% else %>
       <%= link_to "Log in", login_path %>
     <% end %>
   </p>  
-  
   
   <% if !@category.children.empty? %>
     <nav id="subcategory-list">
@@ -39,4 +51,5 @@
       </ul>
     </nav>
   <% end %>
+  
 </div>

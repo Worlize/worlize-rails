@@ -747,15 +747,20 @@ section.item-list ul li a:hover img {
 }
 
 .item-detail-full {
-	margin: 30px 250px 40px 20px;
+	margin: 30px 20px 40px 20px;
 	background: #FFF;
 	padding: 20px;
-	margin-right: 200px;
 	border-radius: 30px;
 	-webkit-box-shadow: 0px 7px 15px rgba(127,127,127,0.5);
 	-moz-box-shadow: 0px 7px 15px rgba(127,127,127,0.5);
 	-o-box-shadow: 0px 7px 15px rgba(127,127,127,0.5);
 	box-shadow: 0px 7px 15px rgba(127,127,127,0.5);
+}
+
+.item-detail p.admin-options,
+.item-detail .admin-options a {
+	font-weight: bold;
+	color: #A00;
 }
 
 .item-detail-left-column {
@@ -889,8 +894,8 @@ section.item-list ul li a:hover img {
 	margin-left: 10px;
 }
 
-#subcategory-list {
-	margin-top: 10px;
+#right-column nav {
+	margin: 10px 0px 20px;
 	border-radius: 8px 8px 8px 8px;
 	-webkit-box-shadow: 0px 2px 5px rgba(127,127,127,0.5);
 	-moz-box-shadow: 0px 2px 5px rgba(127,127,127,0.5);
@@ -898,7 +903,7 @@ section.item-list ul li a:hover img {
 	box-shadow: 0px 2px 5px rgba(127,127,127,0.5);
 }
 
-#subcategory-list h1 {
+#right-column nav h1 {
 	font-weight: bold;
 	padding: 5px 10px 4px;
 	color: #333;
@@ -906,13 +911,13 @@ section.item-list ul li a:hover img {
 	border-radius: 8px 8px 0px 0px;
 }
 
-#subcategory-list ul {
+#right-column nav ul {
 	background: #FFF;
 	padding: 15px;
 	border-radius: 0px 0px 8px 8px;
 }
 
-#subcategory-list li {
+#right-column nav li {
 	font-size: 10pt;
 	font-weight: bold;
 	margin: 2px 0px;

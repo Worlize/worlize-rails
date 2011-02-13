@@ -32,6 +32,10 @@
         <h3 class="category">
           Category: <%= link_to @item.marketplace_category.name, @item.marketplace_category %>
         </h3>
+        
+        <% if current_user && current_user.admin? %>
+          <p class="admin-options">Admin: <%= link_to 'Edit item', [:admin, @item] %></p>
+        <% end %>
     
         <% if @item.price == 0 %>
           <div class="buy-button free">
