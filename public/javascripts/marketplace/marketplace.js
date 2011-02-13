@@ -130,7 +130,7 @@ jQuery(function($) {
         var confirmationDialog = $(
             '<div class="overlay-dialog confirm-purchase-dialog">' +
                 '<img>' +
-                '<h1>Are you sure you want to purchase this item for ' + price + '?</h1>' +
+                '<h1>Would you like to purchase this item for ' + price + '?</h1>' +
                 '<div class="option-buttons">' +
                   '<div class="cancel-button">Cancel</div>' +
                   '<div class="confirm-button">Confirm</div>' +

@@ -59,7 +59,7 @@
       <div class="forward-button" onclick="window.history.forward()"></div>
     
       <ul class="top-level-category-list">
-        <li class="home-top-level-category-button<%= (!@category || @category.parent_id.nil?) ? ' active' : '' %>">
+        <li class="home-top-level-category-button<%= (@category && @category.parent_id.nil?) ? ' active' : '' %>">
           <%= link_to 'Home', marketplace_path %>
         </li>
         <% for category in MarketplaceCategory.root.children %>
