@@ -343,6 +343,8 @@ class User < ActiveRecord::Base
     
     redis_key = "#{currency_type}:#{self.guid}"
     redis.incrby(redis_key, amount).to_i
+    
+    notify_user_of_balance_change
   end
   
   def debit_account(options)
@@ -371,7 +373,8 @@ class User < ActiveRecord::Base
     else
       raise "Insufficient Funds"
     end
-
+    
+    notify_user_of_balance_change
   end
 
   def interactivity_session
@@ -415,4 +418,14 @@ class User < ActiveRecord::Base
     end
   end
   
+  def notify_user_of_balance_change
+    # send notification to current user
+    self.send_message({
+      :msg => 'balance_updated',
+      :data => {
+        :coins => self.coins,
+        :bucks => self.bucks
+      }
+    })
+  end
 end
