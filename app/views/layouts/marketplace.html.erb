@@ -58,23 +58,25 @@
       <div class="back-button" onclick="window.history.back()"></div>
       <div class="forward-button" onclick="window.history.forward()"></div>
     
-      <ul class="top-level-category-list">
-        <li class="home-top-level-category-button<%= (@category && @category.parent_id.nil?) ? ' active' : '' %>">
-          <%= link_to 'Home', marketplace_path %>
-        </li>
-        <% for category in MarketplaceCategory.root.children %>
-          <% if @category %>
-            <% category_active = (@category == category || @category.descends_from?(category)) %>
-          <% else %>
-            <% category_active = false %>
-          <% end %>
-          <li class="top-level-category-button<%= category_active ? ' active' : '' %>">
-            <%= link_to category.name, category %>
+      <div class="category-list-container">
+        <ul class="top-level-category-list">
+          <li class="home-top-level-category-button<%= (@category && @category.parent_id.nil?) ? ' active' : '' %>">
+            <%= link_to 'Home', marketplace_path %>
           </li>
-        <% end %>
-      </ul>
+          <% for category in MarketplaceCategory.root.children %>
+            <% if @category %>
+              <% category_active = (@category == category || @category.descends_from?(category)) %>
+            <% else %>
+              <% category_active = false %>
+            <% end %>
+            <li class="top-level-category-button<%= category_active ? ' active' : '' %>">
+              <%= link_to category.name, category %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
       <%= form_tag marketplace_search_path, :method => 'get', :class => 'search-field' do %>
-        <input type="search" name="q" placeholder="Search..." autocomplete="on">
+        <input type="text" name="q" placeholder="Search..." autocomplete="on">
       <% end %>
     </nav>
   </header>

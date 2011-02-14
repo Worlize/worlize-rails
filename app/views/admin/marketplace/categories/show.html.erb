@@ -37,8 +37,8 @@
 <% if !carousel_items.empty? %>
   <div>
     <h2>Items in Carousel (drag to sort)</h2>
-    <% if carousel_items.active.count < 3 %>
-      <h3 style="color: #AA0000;">At least three active items are required, or the carousel will not display!</h3>
+    <% if carousel_items.active.count < 4 %>
+      <h3 style="color: #AA0000;">At least four active items are required, or the carousel will not display!</h3>
     <% end %>
     <div class="marketplace_thumbnail_container carousel_item_sortable_list">
       <%= render :partial => 'featured_item_thumb', :collection => carousel_items.map {|i| i.marketplace_featured_item} %>
