@@ -74,6 +74,9 @@
           <li><a href="/">Home</a></li>
           <li><%= link_to 'About', about_path %></li>
           <li><%= link_to 'Press', press_path %></li>
+          <% if Worlize.config['marketplace_enabled'] %>
+            <li><%= link_to 'Marketplace', marketplace_path %></li>
+          <% end %>
           <li><a href="http://blog.worlize.com/">Our Blog</a></li>
         </ul>
       </nav>

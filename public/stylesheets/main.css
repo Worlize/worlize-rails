@@ -1,4 +1,7 @@
-/* @override http://www.worlize.com/stylesheets/main.css?v=3 */
+/* @override 
+	http://www.worlize.com/stylesheets/main.css?v=3
+	http://localhost/stylesheets/main.css?v=3
+*/
 
 /* @group Boilerplate */
 
@@ -719,6 +722,8 @@ footer .footer-background {
 }
 
 footer nav {
+	overflow: hidden;
+	float: left;
 	position: absolute;
 	bottom: 10px;
 	width: 100%;
@@ -726,19 +731,22 @@ footer nav {
 }
 
 footer nav ul {
-	width: 400px;
 	position: relative;
-	margin: 0px auto;
+	float: left;
+	left: 50%;
 }
 
 footer nav li {
+	position: relative;
+	right: 50%;
 	float: left;
-	width: 100px;
+	margin: 0px 30px;
 	text-align: center;
 	text-transform: uppercase;
 }
 
 footer div.copyright {
+	color: #AAA;
 	display: block;
 	position: absolute;
 	right: 15px;
