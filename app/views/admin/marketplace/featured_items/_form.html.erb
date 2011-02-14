@@ -25,9 +25,9 @@
   <%= f.check_box :include_in_carousel %><br>
   <br>
   
-  <%= f.label :carousel_image %> (725x200)<br>
+  <%= f.label :carousel_image %> (950x300)<br>
   <% if @featured_item.carousel_image? %>
-    <%= image_tag @featured_item.carousel_image.url %><br>
+    <%= image_tag @featured_item.carousel_image.url, :width => 725, :height => 229 %><br>
   <% end %>
   <%= f.file_field :carousel_image %><br>
   <%= f.hidden_field :carousel_image_cache %>

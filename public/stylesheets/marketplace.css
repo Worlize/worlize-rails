@@ -519,8 +519,8 @@ form.big-search-field input[type=submit]:hover {
 	position: relative;
 	margin: 0px auto 15px;
 	padding: 0px 6px 8px;
-	max-width: 925px;
-	height: 200px;
+	max-width: 1150px;
+	height: 300px;
 	overflow: hidden;
 }
 
