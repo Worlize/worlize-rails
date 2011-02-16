@@ -31,20 +31,22 @@ class Gift < ActiveRecord::Base
   
   private
   def notify_recipient
-    if !recipient.nil? && !recipient.online?
-      recipient.send_message({
-        :msg => 'gift_received',
-        :data => {
-          :gift => self.hash_for_api
-        }
-      })
-      
-      email = EventNotifier.new_gift_email({
-        :sender => sender,
-        :recipient => recipient,
-        :gift => self
-      })
-      email.deliver
+    if !recipient.nil?
+      if recipient.online?
+        recipient.send_message({
+          :msg => 'gift_received',
+          :data => {
+            :gift => self.hash_for_api
+          }
+        })
+      else
+        email = EventNotifier.new_gift_email({
+          :sender => sender,
+          :recipient => recipient,
+          :gift => self
+        })
+        email.deliver
+      end
     end
   end
   
