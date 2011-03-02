@@ -1,3 +1,10 @@
+<% content_for :extra_head_items do %>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Worlize">
+  <meta property="og:image" content="<%= request.protocol + request.host_with_port + image_path('characters/blusey.jpg') %>">
+  <meta property="og:url" content="<%= request.protocol + request.host_with_port + request.fullpath %>">
+<% end %>
+
 <% @hide_login_bar = true %>
 
 <div id="homepage-character">

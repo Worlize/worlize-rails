@@ -1,5 +1,21 @@
 <%= title "#{@item.name} - Worlize Marketplace" %>
 <% content_for :extra_head_items do %>
+  <%# Facebook Open Graph Protocol Tags %>
+  <meta property="og:title" content="<%= @item.name %>">
+  <meta property="og:type" content="product">
+  <% if @item.item.respond_to? 'image' %>
+    <meta property="og:image" content="<%= @item.item.image.thumb.url %>">
+  <% end %>
+  <meta property="og:url" content="<%= marketplace_item_url(@item) %>">
+  
+  <% if !@item.description.nil? && !@item.description.empty? %>
+    <meta property="og:description" content="<%= truncate(@item.description, :length => 200) %>">
+  <% else %>
+    <% og_type = @item.item_type
+       og_type = 'Object' if og_type == 'InWorldObject' %>
+    <meta property="og:description" content="<%= og_type %> for sale in the Worlize Marketplace.">
+  <% end %>
+  
   <% if @category.marketplace_theme %>
     <link rel="stylesheet" href="<%= marketplace_theme_path(@category.marketplace_theme) %>">
   <% end %>

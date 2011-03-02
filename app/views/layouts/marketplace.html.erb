@@ -14,8 +14,6 @@
   <% else %>
     <title>Worlize - Your World Realized</title>
   <% end %>
-  <meta name="description" content="">
-  <meta name="author" content="">
 
   <!--  Mobile viewport optimized: j.mp/bplateviewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,6 +30,8 @@
   <style type="text/css">
   <%= yield :extra_styles %>
   </style>
+ 
+  <%= render :partial => 'layouts/open_graph_global' %>
  
   <%= yield :extra_head_items %>
  
