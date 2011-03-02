@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   after_create :initialize_currency
   before_destroy :unlink_friendships
   
-  has_many :authentications
+  has_many :authentications, :dependent => :destroy
   
   has_many :worlds, :dependent => :destroy
   has_many :background_instances, :dependent => :nullify
