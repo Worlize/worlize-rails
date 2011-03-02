@@ -873,7 +873,7 @@ section.item-list ul li a:hover img {
 }
 
 .item-detail-overlay {
-	width: 550px;
+	width: 600px;
 	height: 400px;
 	overflow-y: auto;
 }

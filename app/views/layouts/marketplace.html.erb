@@ -37,7 +37,7 @@
  
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
   <script src="/javascripts/libs/modernizr-1.6.min.js"></script>
-  
+    
   <script>
   <% if current_user %>
     loggedIn = true;
@@ -120,6 +120,11 @@
     <script src="/fancybox/jquery.fancybox-1.3.4.pack.js" type="text/javascript" charset="utf-8"></script>
     <link rel="stylesheet" href="/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
   <% end %>
+
+  <script src="http://connect.facebook.net/en_US/all.js"></script>
+  <script type="text/javascript">
+    FB.XFBML.parse();
+  </script>  
   
   <%= yield :page_script %>
   
