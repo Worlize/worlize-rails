@@ -39,7 +39,7 @@ class MarketplaceCarouselImageUploader < CarrierWave::Uploader::Base
 
 
   # Process files as they are uploaded:
-  process :convert_to_jpg => 70, :resize_to_fill => [950,300]
+  process :convert_to_jpg => 80, :resize_to_fill => [950,300]
   
   def convert_to_jpg(quality)
     manipulate! do |img|
