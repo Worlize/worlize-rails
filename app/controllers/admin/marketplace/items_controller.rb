@@ -39,7 +39,12 @@ class Admin::Marketplace::ItemsController < ApplicationController
       @category = MarketplaceCategory.find(params[:category_id])
     end
     
-    @item = MarketplaceItem.new(:item_type => params[:item_type], :marketplace_category => @category)
+    @item = MarketplaceItem.new(
+      :item_type => params[:item_type],
+      :marketplace_category => @category,
+      :on_sale => true,
+      :currency_id => 2
+    )
     @item.item = case params[:item_type]
       when 'Avatar'
         Avatar.new
