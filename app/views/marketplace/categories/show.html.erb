@@ -2,7 +2,7 @@
 <% content_for :extra_head_items do %>
   <meta property="og:type" content="article">
   <meta property="og:title" content="<%= @category.name %> - Worlize Marketplace">
-  <meta property="og:image" content="<%= request.protocol + request.host_with_port + image_path('characters/blusey.jpg') %>">
+  <meta property="og:image" content="<%= image_path('characters/blusey.jpg') %>">
   <meta property="og:url" content="<%= marketplace_category_url(@category) %>">
 
   <% if @category.marketplace_theme %>
