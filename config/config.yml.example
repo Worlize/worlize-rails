@@ -1,5 +1,6 @@
 global:
     default_room_background_url: http://background-images.worlize.com/default-room-background.png
+    marketplace_enabled: true
     initial_currency:
         coins: 15000
         bucks: 50
@@ -22,7 +23,7 @@ global:
         rails_session:
             host: localhost
             db: 5
-        assets:
+        relationships:
             host: localhost
             db: 6
         currency:
@@ -31,15 +32,11 @@ global:
         preferences:
             host: localhost
             db: 8
-production:
-    amazon:{}
 development:
     amazon:
         backgrounds_bucket: worlize_dev_backgrounds
         avatars_bucket: worlize_dev_avatars
         in_world_objects_bucket: worlize_dev_objects
-        access_key_id: AKIAJKPRGV6PIKIHNRZA
-        secret_access_key: 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
-test:
-    amazon:{}
-
+        media_cdn_bucket: worlize_dev_media
+        access_key_id: put_access_key_id_here
+        secret_access_key: put_secret_access_key_here
