@@ -1,6 +1,7 @@
 class UploadInitialBackground < ActiveRecord::Migration
   def self.up
     filedata = File.new("#{Rails.root}/config/assets/default_background.jpg", 'r')
+    Background.reset_column_information
     new_background = Background.create(:name => 'Default Background',
                       :image => filedata,
                       :return_coins => 0,
