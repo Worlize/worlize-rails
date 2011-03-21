@@ -3,7 +3,6 @@ class UsersController < ApplicationController
 
   def new
     if current_user
-      flash[:alert] = "You are already logged in as #{current_user.username}.  Please sign out before attempting to register a new account."
       redirect_to dashboard_url and return
     end
 
@@ -27,6 +26,10 @@ class UsersController < ApplicationController
       end
     end
     
+  end
+  
+  def index
+    redirect_to root_url
   end
 
   def validate_field

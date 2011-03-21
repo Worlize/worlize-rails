@@ -11,7 +11,7 @@ Worlize::Application.routes.draw do |map|
   
   match '/about' => 'welcome#about', :as => :about
 
-  resources :registrations
+  match '/registrations/new' => redirect('/users/new')
   
   resource :dashboard, :controller => :dashboard do
     resources :authentications
