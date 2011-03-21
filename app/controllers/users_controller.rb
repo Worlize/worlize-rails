@@ -1,6 +1,28 @@
 class UsersController < ApplicationController
   before_filter :require_user, :except => [:create]
 
+  def new
+    
+  end
+
+  def validate_field
+    attribute = params[:field_name]
+    value = params[:value]
+    mock = User.new(attribute => value)
+
+    response = {}
+    response[:valid] = !mock.valid? && mock.errors[attribute.to_sym].empty?
+    if (!response[:valid])
+      message = mock.errors[attribute.to_sym].first
+      response[:field_name] = attribute
+      response[:value] = params[:value]
+      response[:message] = message
+      response[:full_message] = "#{attribute.capitalize} #{message}"
+    end
+    
+    render :json => Yajl::Encoder.encode(response)
+  end
+
   def create
     @beta_invitation = BetaInvitation.find_by_invite_code!(params[:invite_code])
     @user = User.new(params[:user])

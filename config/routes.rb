@@ -68,6 +68,7 @@ Worlize::Application.routes.draw do |map|
   resources :users do
     collection do
       get :search
+      get :validate_field
     end
     resources :friends
   end
