@@ -15,7 +15,7 @@ gem 'fog', '0.3.33'
 gem 'nestful', '0.0.6'
 
 # Plugins
-gem 'omniauth', '0.1.6'
+gem 'omniauth', '0.2.0'
 gem 'will_paginate', '~> 3.0.pre2'
 gem 'acts-as-taggable-on', '2.0.6'
 gem 'acts_as_list', '0.1.2'
