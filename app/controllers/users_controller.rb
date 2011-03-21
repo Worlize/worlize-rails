@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_filter :require_user, :except => [:create]
-  
+
   def create
     @beta_invitation = BetaInvitation.find_by_invite_code!(params[:invite_code])
     @user = User.new(params[:user])
@@ -24,16 +24,26 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find_by_guid(params[:id])
+    begin
+      @user = User.find_by_guid(Guid.from_s(params[:id]).to_s)
+    rescue ArgumentError
+      @user = User.find_by_username!(params[:id])
+    end
+    
     respond_to do |format|
-      
-      if @user != current_user
-        @object = @user.public_hash_for_api
-      else
-        @object = @user.hash_for_api
+      format.html do
+        @world = @user.worlds.first
+        @entrance = @world.rooms.first
+        @background_thumb = @entrance.background_instance.background.image.medium.url
       end
-      
       format.json do
+        if !@user.nil?
+          if @user != current_user
+            @object = @user.public_hash_for_api
+          else
+            @object = @user.hash_for_api
+          end
+        end
         render :json => Yajl::Encoder.encode({
           :success => true,
           :data => @object
