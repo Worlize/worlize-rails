@@ -1,26 +1,36 @@
 class UsersController < ApplicationController
-  before_filter :require_user, :except => [:create]
+  before_filter :require_user, :except => [:new, :create, :validate_field]
 
   def new
-    
+    @user = User.new
   end
 
   def validate_field
     attribute = params[:field_name]
     value = params[:value]
-    mock = User.new(attribute => value)
+    
+    if !attribute.nil? && !value.nil?
+      mock = User.new(attribute => value)
+      mock.valid?
+      
+      response = {}
+      response[:valid] = mock.errors[attribute.to_sym].empty?
+      if (!response[:valid])
+        message = mock.errors[attribute.to_sym].first
+        response[:field_name] = attribute
+        response[:value] = params[:value]
+        response[:message] = message
+        response[:full_message] = "#{attribute.capitalize} #{message}"
+      end
 
-    response = {}
-    response[:valid] = !mock.valid? && mock.errors[attribute.to_sym].empty?
-    if (!response[:valid])
-      message = mock.errors[attribute.to_sym].first
-      response[:field_name] = attribute
-      response[:value] = params[:value]
-      response[:message] = message
-      response[:full_message] = "#{attribute.capitalize} #{message}"
+      render :json => Yajl::Encoder.encode(response)
+    else
+      render :json => Yajl::Encoder.encode({
+        :valid => false,
+        :message => "You must specify an attribute name and a value"
+      })
     end
     
-    render :json => Yajl::Encoder.encode(response)
   end
 
   def create
