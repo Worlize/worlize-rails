@@ -31,7 +31,12 @@ class User < ActiveRecord::Base
       :before => :thirteen_years_ago,
       :type => :date
   }
-  validates :email, { :presence => true }
+  validates :email, { :presence => true,
+                      :email => true,
+                      :uniqueness => {
+                        :message => "has already been used"
+                      }
+                    }
   
   state_machine :initial => :new_user do
     
