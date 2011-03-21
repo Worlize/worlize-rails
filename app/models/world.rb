@@ -3,7 +3,7 @@ class World < ActiveRecord::Base
 
   belongs_to :user
   has_many :rooms, :dependent => :destroy
-  has_one :public_world
+  has_one :public_world, :dependent => :destroy
   
   validates :name, :presence => true
 
