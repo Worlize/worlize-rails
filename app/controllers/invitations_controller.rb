@@ -29,7 +29,6 @@ class InvitationsController < ApplicationController
       
       render :json => Yajl::Encoder.encode({
         :success => true,
-        :remaining_invites => current_user.invites,
         :description => "#{invitation.email} has been invited."
       }) and return
     end

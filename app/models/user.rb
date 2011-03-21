@@ -83,7 +83,6 @@ class User < ActiveRecord::Base
       :twitter => self.twitter,
       :email => self.email,
       :birthday => self.birthday,
-      :remaining_invites => self.invites,
       :world_entrance => world.rooms.first.guid,
       :world_name => world.name,
       :world_guid => world.guid
