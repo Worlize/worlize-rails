@@ -15,38 +15,28 @@ class InvitationsController < ApplicationController
   end
   
   def create
-    if current_user.invites > 0
-      invitation = BetaInvitation.create(
-        :email => params[:email],
-        :inviter => current_user
-      )
-      if invitation.persisted?
-        
-        current_user.update_attribute(:invites, current_user.invites-1)
-        
-        email = InvitationNotifier.beta_invitation_email({
-          :beta_invitation => invitation,
-          :inviter => current_user,
-          :account_creation_url => invite_url(invitation.invite_code)
-        })
-        email.deliver
-        
-        render :json => Yajl::Encoder.encode({
-          :success => true,
-          :remaining_invites => current_user.invites,
-          :description => "#{invitation.email} has been invited."
-        }) and return
-      end
+    invitation = BetaInvitation.create(
+      :email => params[:email],
+      :inviter => current_user
+    )
+    if invitation.persisted?
+      email = InvitationNotifier.beta_invitation_email({
+        :beta_invitation => invitation,
+        :inviter => current_user,
+        :account_creation_url => invite_url(invitation.invite_code)
+      })
+      email.deliver
       
       render :json => Yajl::Encoder.encode({
-        :success => false,
-        :description => invitation.errors.map { |k,v| "- #{k.to_s.humanize} #{v}" }.join(".\n")
-      })
-    else
-      render :json => Yajl::Encoder.encode({
-        :success => false,
-        :description => "You are out of beta invitations!"
+        :success => true,
+        :remaining_invites => current_user.invites,
+        :description => "#{invitation.email} has been invited."
       }) and return
     end
+    
+    render :json => Yajl::Encoder.encode({
+      :success => false,
+      :description => invitation.errors.map { |k,v| "- #{k.to_s.humanize} #{v}" }.join(".\n")
+    })
   end
 end
