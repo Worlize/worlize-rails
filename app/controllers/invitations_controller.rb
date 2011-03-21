@@ -2,6 +2,10 @@ class InvitationsController < ApplicationController
   before_filter :require_user, :only => [ :create ]
   
   def show
+    if current_user
+      flash[:alert] = "You are already logged in as #{current_user.username}.  Please sign out before attempting to register a new account."
+      redirect_to dashboard_url and return
+    end
     @beta_invitation = BetaInvitation.find_by_invite_code!(params[:id])
     @user = User.new(
       :first_name => @beta_invitation.first_name,

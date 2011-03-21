@@ -1,0 +1,81 @@
+<% title 'Create an Account' %>
+
+<% content_for :page_script do %>
+<script>
+
+</script>
+<% end %>
+
+<% content_for :extra_styles do %>
+  #beta-invite-accepted-header {
+    width: 940px;
+    height: 229px;
+    display: relative;
+    margin: 0px auto 30px;
+  }
+  
+  #beta-invite-accepted-header h1 {
+    font-family: PTSansNarrowBold, Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    color: #525252;
+    font-size: 55pt;
+    line-height: 55pt;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+  #beta-invite-accepted-header h1 strong {
+    color: #969696;
+    font-size: 75pt;
+    line-height: 75pt;
+  }
+  #beta-invite-accepted-header h1 small {
+    color: #969696;
+    font-size: 20pt;
+    line-height: 20pt;
+  }
+  #beta-invite-accepted-header h2 {
+    font-family: PTSansNarrowBold, Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    font-size: 45pt;
+    line-height: 45pt;
+    color: #525252;
+    position: absolute;
+    top: 100px;
+    right: 60px;
+  }
+  #beta-invite-accepted-header h2 strong {
+    color: #969696;
+  }
+  
+  #beta-invite-form > h2 {
+    font-family: PTSansNarrowRegular, Helvetica, Arial, sans-serif;
+    font-size: 16pt;
+    line-height: 16pt;
+    color: #AAA;
+  }
+  #beta-invite-form > h2 strong {
+    color: #838383;
+    font-size: 18pt;
+    line-height: 24pt;
+  }
+<% end %>
+
+<div id="beta-invite-accepted-page">
+  <div id="beta-invite-accepted-header">
+    <%= image_tag "characters/orange.jpg", :width => 289, :height => 229 %>
+    <h1><strong>Who is</strong> the best <small>beta user ever?</small></h1>
+    <h2>...<strong>you</strong> are of course!</h2>
+  </div>
+  
+  <section id="beta-invite-form">
+    <h1><small class="accent-color-2">another</small><br>
+        Form</h1>
+        
+    <h2>Please fill out the form below to complete your registration:</h2>
+    
+    <div class="form_container">
+      <%= render 'users/form' %>
+    </div>    
+  </section>
+</div>

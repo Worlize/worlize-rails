@@ -42,9 +42,14 @@ class AuthenticationsController < ApplicationController
   # POST /authentications.xml
   def create
     omniauth = request.env["omniauth.auth"]
-    logger.debug "Authentication Details:\n#{omniauth.to_yaml}\n"
+    if Rails.env == 'development'
+      logger.debug "Authentication Details:\n#{omniauth.to_yaml}\n"
+    end
     
     authentication = Authentication.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'])
+
+    # If we already have a user logged in, then we assume we're
+    # simply associating their external account
     if current_user
       if authentication
         flash[:alert] = "That #{omniauth['provider'].capitalize} account has already been associated with a Worlize account."
@@ -54,16 +59,20 @@ class AuthenticationsController < ApplicationController
           flash[:alert] = "Unable to associate your #{omniauth['provider'].capitalize} account."
         end
       end
-      redirect_to dashboard_authentications_url and return
+      redirect_to dashboard_authentications_url
 
+    # If we don't have a currently logged in user, we log in as the user we
+    # found when we looked up the external provider credentials.
     elsif authentication
       UserSession.create(authentication.user)
+      redirect_to request.env['omniauth.origin'] || root_url
 
+    # If we couldn't find an existing linked account and there isn't a
+    # currently logged in user, we will start the signup process
     else
       session[:omniauth] = omniauth.except('extra')
-      redirect_to new_registration_url and return
+      redirect_to new_user_url
     end
-    redirect_to root_url
   end
 
   # DELETE /authentications/1
