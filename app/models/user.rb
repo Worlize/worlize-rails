@@ -23,7 +23,14 @@ class User < ActiveRecord::Base
   
   belongs_to :beta_code
   
-  attr_protected :admin
+  attr_accessible :username,
+                  :password,
+                  :password_confirmation,
+                  :email,
+                  :birthday,
+                  :twitter,
+                  :first_name,
+                  :last_name
   
   validates :first_name, :presence => true
   validates :last_name, :presence => true
