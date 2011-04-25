@@ -56,21 +56,11 @@
 			      swfobject.createCSS("#flashContent", "display:block;text-align:left;");
         </script>
         
-
-        <script src="/socket.io/socket.io.js?cb=<%= cache_bust %>" type="text/javascript" charset="utf-8"></script>
-<%#
-        <script type="text/javascript" charset="utf-8">
-          WEB_SOCKET_SWF_LOCATION = "/socket.io/lib/vendor/web-socket-js/WebSocketMain.swf";
-        </script>
-%>
-        
-        <script src="/javascripts/communications.js?cb=<%= cache_bust %>" type="text/javascript" charset="utf-8"></script>
         <script>
           function configData() {
             return <%= @configJSON.html_safe %>;
           }
         </script>
-        
     </head>
     <body>
       <div id="flashContent">
@@ -85,6 +75,25 @@
       <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery-1.4.3.js"%3E%3C/script%3E'))</script>
 
       <script src="/javascripts/enter.js?cb=<%= cache_bust %>" type="text/javascript" charset="utf-8"></script>
+      
+      <!-- Facebook API -->
+      <div id="fb-root"></div>
+      <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            appId: "<%= Worlize.config['facebook']['app_id'] %>",
+            status: false,
+            cookie: true,
+            xfbml: false
+          });
+        };
+        (function() {
+          var e = document.createElement('script'); e.async = true;
+          e.src = document.location.protocol +
+            '//connect.facebook.net/en_US/all.js';
+          document.getElementById('fb-root').appendChild(e);
+        }());
+      </script>
       
    </body>
 </html>

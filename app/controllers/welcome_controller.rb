@@ -34,7 +34,10 @@ class WelcomeController < ApplicationController
       'admin' => current_user.admin?,
       'interactivity_session' => current_user.interactivity_session.serializable_hash,
       'authenticity_token' => form_authenticity_token,
-      'cookies' => cookies
+      'cookies' => cookies,
+      'interactivity_hostname' => Worlize.config['interactivity_hostname'],
+      'interactivity_port' => Worlize.config['interactivity_port'],
+      'interactivity_tls' => Worlize.config['interactivity_tls']
     })
     render :enter, :layout => false
   end
