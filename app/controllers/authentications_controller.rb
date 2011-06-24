@@ -66,6 +66,7 @@ class AuthenticationsController < ApplicationController
     elsif authentication
       UserSession.create(authentication.user)
       redirect_to session[:return_to] || root_url
+      session[:return_to] = nil
 
     # If we couldn't find an existing linked account and there isn't a
     # currently logged in user, we will start the signup process
