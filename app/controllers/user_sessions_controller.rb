@@ -1,4 +1,7 @@
 class UserSessionsController < ApplicationController
+
+  before_filter :require_user, :only => [:vanilla_sso]
+
   # GET /user_sessions
   # GET /user_sessions.xml
   
@@ -46,5 +49,13 @@ class UserSessionsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(root_url) }
     end
+  end
+  
+  def vanilla_sso
+    render :text =>
+      "UniqueID=#{current_user.id}\n" +
+      "Name=#{current_user.username}\n" +
+      "Email=#{current_user.email}\n" +
+      "DateOfBirth=#{current_user.birthday.strftime('%Y-%m-%d')}"
   end
 end

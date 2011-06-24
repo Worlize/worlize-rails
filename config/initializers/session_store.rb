@@ -5,7 +5,7 @@
 #   :secure => Rails.env.production?
 # }
 
-Rails.application.config.session_store :active_record_store
+Rails.application.config.session_store :active_record_store, :domain => :all
 
 # Use redis as our session store.
 # Rails.application.config.session_store :redis_session_store

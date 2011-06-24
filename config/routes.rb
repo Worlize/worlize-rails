@@ -163,7 +163,11 @@ Worlize::Application.routes.draw do |map|
     end
   end
 
-  resource :user_session
+  resource :user_session do
+    member do
+      get :vanilla_sso
+    end
+  end
   match 'login' => 'user_sessions#new', :as => :login
   match 'logout' => 'user_sessions#destroy', :as => :logout
   match 'signup' => 'users#new', :as => :signup
