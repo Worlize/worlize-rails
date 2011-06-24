@@ -1,7 +1,4 @@
 class UserSessionsController < ApplicationController
-
-  before_filter :require_user, :only => [:vanilla_sso]
-
   # GET /user_sessions
   # GET /user_sessions.xml
   
@@ -23,6 +20,10 @@ class UserSessionsController < ApplicationController
     respond_to do |format|
       if @user_session.save
         @user_session.user.reset_appearance!
+        
+        # Make sure any stale forum logins are cleared
+        cookies["Vanilla"] = {:value => "", :domain => ".worlize.com"}
+        cookies["Vanilla-Volatile"] = {:value => "", :domain => ".worlize.com"}
 
         if @user_session.user.linking_external_accounts?
           default_url = dashboard_authentications_url
@@ -43,6 +44,10 @@ class UserSessionsController < ApplicationController
     @user_session = UserSession.find()
     begin
       @user_session.destroy
+      
+      # Log the user out of the forums also
+      cookies["Vanilla"] = {:value => "", :domain => ".worlize.com"}
+      cookies["Vanilla-Volatile"] = {:value => "", :domain => ".worlize.com"}
     rescue
     end
 
@@ -52,10 +57,15 @@ class UserSessionsController < ApplicationController
   end
   
   def vanilla_sso
-    render :text =>
-      "UniqueID=#{current_user.id}\n" +
-      "Name=#{current_user.username}\n" +
-      "Email=#{current_user.email}\n" +
-      "DateOfBirth=#{current_user.birthday.strftime('%Y-%m-%d')}"
+    if current_user
+      render :text =>
+          "UniqueID=#{current_user.id}\n" +
+          "Name=#{current_user.username}\n" +
+          "Email=#{current_user.email}\n" +
+          "DateOfBirth=#{current_user.birthday.strftime('%Y-%m-%d')}",
+        :content_type => 'text/plain'
+    else
+      render :text => '', :content_type => 'text/plain'
+    end
   end
 end
