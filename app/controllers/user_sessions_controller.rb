@@ -5,6 +5,10 @@ class UserSessionsController < ApplicationController
   # GET /user_sessions/new
   # GET /user_sessions/new.xml
   def new
+    if params[:redirect_to]
+      session[:return_to] = params[:redirect_to]
+    end
+    
     @user_session = UserSession.new
 
     respond_to do |format|
