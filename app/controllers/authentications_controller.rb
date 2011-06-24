@@ -65,7 +65,7 @@ class AuthenticationsController < ApplicationController
     # found when we looked up the external provider credentials.
     elsif authentication
       UserSession.create(authentication.user)
-      redirect_to request.env['omniauth.origin'] || root_url
+      redirect_to session[:return_to] || root_url
 
     # If we couldn't find an existing linked account and there isn't a
     # currently logged in user, we will start the signup process
