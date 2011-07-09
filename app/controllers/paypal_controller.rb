@@ -1,0 +1,2 @@
+class PaypalController < ApplicationController
+end
