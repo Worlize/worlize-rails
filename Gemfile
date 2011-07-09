@@ -14,6 +14,8 @@ gem 'mini_magick', '3.1'
 gem 'fog', '0.3.33'
 gem 'nestful', '0.0.6'
 
+gem 'money', '3.7.1'
+
 # Plugins
 gem 'omniauth', '0.2.0'
 gem 'will_paginate', '~> 3.0.pre2'
@@ -34,4 +36,3 @@ gem 'authlogic', '2.1.6'
 
 # Use unicorn as the web server
 gem 'unicorn', '3.1.0'
-
