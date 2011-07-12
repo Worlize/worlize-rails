@@ -141,6 +141,12 @@ Worlize::Application.routes.draw do |map|
       end
       resources :themes
     end
+    
+    resources :virtual_currency_products do
+      member do
+        post 'archive'
+      end
+    end
   end
   
   resources :worlds do

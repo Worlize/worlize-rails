@@ -1,0 +1,13 @@
+<div class="virtual-currency-product">
+  <h1><%= virtual_currency_product.name %></h1>
+  <% if virtual_currency_product.description && !virtual_currency_product.description.empty? %>
+    <h2><%= virtual_currency_product.description %></h2>
+  <% end %>
+  <p>
+    Coins: <%= virtual_currency_product.coins_to_add %><br>
+    Bucks: <%= virtual_currency_product.bucks_to_add %>
+  </p>
+  <p>
+    Price: $<%= sprintf('%.2f', virtual_currency_product.price) %>
+  </p>
+</div>

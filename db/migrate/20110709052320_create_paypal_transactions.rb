@@ -77,10 +77,10 @@ class CreatePaypalTransactions < ActiveRecord::Migration
       t.string :case_id, :limit => 16
       t.string :case_type, :limit => 16
       
-      
-      
       t.timestamps
     end
+    
+    add_index :paypal_transactions, :txn_id
   end
 
   def self.down

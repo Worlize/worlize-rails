@@ -1,0 +1,38 @@
+<%= form_for([:admin, @product]) do |f| %>
+  <% if @product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@product.errors.count, "error") %> prohibited this virtual currency product from being saved:</h2>
+
+      <ul>
+      <% @product.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name, :size => 40 %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_area :description, :cols => 40, :rows => 4 %>
+  </div>
+  <div class="field">
+    <%= f.label :coins_to_add, 'Coins' %><br>
+    <%= f.text_field :coins_to_add, :size => 10 %>
+  </div>
+  <div class="field">
+    <%= f.label :bucks_to_add, 'Bucks' %><br>
+    <%= f.text_field :bucks_to_add, :size => 10 %>
+  </div>
+  <div class="field">
+    <%= f.label :price, 'Price (USD)' %><br>
+    <%= f.text_field :price, :size => 10 %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Save" %>
+  </div>
+<% end %>

@@ -12,7 +12,8 @@ class User < ActiveRecord::Base
   has_many :avatar_instances, :dependent => :nullify
   has_many :prop_instances, :dependent => :nullify
   
-  has_many :marketplace_purchase_records
+  has_many :virtual_financial_transactions, :dependent => :restrict
+  has_many :payments, :dependent => :restrict
   
   has_many :created_avatars, :foreign_key => 'creator_id', :dependent => :nullify, :class_name => 'Avatar'
   

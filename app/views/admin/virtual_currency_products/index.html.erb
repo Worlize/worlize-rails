@@ -1,0 +1,10 @@
+<h1>Currency Packages</h1>
+
+<% if @products.count > 0 %>
+  <%= render @products %>
+<% else %>  
+  <h2>There are no virtual currency packages active!</h2>
+<% end %>
+
+<br>
+<%= link_to 'New Virtual Currency Package', new_admin_virtual_currency_product_path %>
