@@ -1,7 +1,7 @@
 class VirtualCurrencyProduct < ActiveRecord::Base
   before_create :assign_guid
   
-  acts_as_list
+  acts_as_list :scope => 'archived = 0'
   
   validates :coins_to_add, :numericality => {
     :greater_than_or_equal_to => 0

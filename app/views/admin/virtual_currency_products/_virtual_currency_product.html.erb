@@ -12,5 +12,13 @@
   <p class="price">
     Price: $<%= sprintf('%.2f', virtual_currency_product.price) %>
   </p>
+  <p class="actions">
+    <% if !virtual_currency_product.first? %>
+      <%= link_to 'Move Up', move_higher_admin_virtual_currency_product_path(virtual_currency_product), :method => :post %>
+    <% end %>
+    <% if !virtual_currency_product.last?  %>
+      <%= link_to 'Move Down', move_lower_admin_virtual_currency_product_path(virtual_currency_product), :method => :post %>
+    <% end %>
+  </p>
 </div>
 <br>

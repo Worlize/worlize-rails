@@ -148,6 +148,8 @@ Worlize::Application.routes.draw do |map|
     resources :virtual_currency_products do
       member do
         post 'archive'
+        post 'move_higher'
+        post 'move_lower'
       end
     end
   end

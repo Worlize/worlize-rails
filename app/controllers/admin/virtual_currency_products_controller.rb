@@ -3,7 +3,7 @@ class Admin::VirtualCurrencyProductsController < ApplicationController
   before_filter :require_admin
   
   def index
-    @products = VirtualCurrencyProduct.where(:archived => false)
+    @products = VirtualCurrencyProduct.where(:archived => false).order(:position)
     respond_to do |format|
       format.html # index.html.erb
     end
@@ -14,6 +14,26 @@ class Admin::VirtualCurrencyProductsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
+    end
+  end
+  
+  def move_higher
+    @product = VirtualCurrencyProduct.find(params[:id])
+    @product.move_higher
+    @product.save
+    
+    respond_to do |format|
+      format.html { redirect_to(admin_virtual_currency_products_url) }
+    end
+  end
+  
+  def move_lower
+    @product = VirtualCurrencyProduct.find(params[:id])
+    @product.move_lower
+    @product.save
+    
+    respond_to do |format|
+      format.html { redirect_to(admin_virtual_currency_products_url) }
     end
   end
   
