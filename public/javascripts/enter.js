@@ -1,5 +1,11 @@
+var marketplaceShowing = false;
+var virtualCurrencyProductsShowing = false;
+
 function openMarketplace() {
+    if (marketplaceShowing) { return; }
+    if (virtualCurrencyProductsShowing) { closeVirtualCurrencyProducts(); }
     showShim();
+    marketplaceShowing = true;
     var marketplaceTemplate =
         '<div id="marketplace">' +
             '<div id="marketplace-close-button">Return to Worlize</div>' +
@@ -17,8 +23,42 @@ function openMarketplace() {
 }
 
 function closeMarketplace() {
+    marketplaceShowing = false;
     hideShim();
     $('#marketplace').remove();
+}
+
+function openVirtualCurrencyProducts() {
+    if (virtualCurrencyProductsShowing) { return; }
+    if (marketplaceShowing) { closeMarketplace(); }
+    showShim();
+    virtualCurrencyProductsShowing = true;
+    var virtualCurrencyProductsTemplate =
+        '<div id="virtual-currency-products">' +
+            '<div id="virtual-currency-products-close-button">Close</div>' +
+            '<iframe frameborder="0" sandbox="allow-forms allow-scripts allow-same-origin" src="/virtual_currency_products" id="virtual-currency-products-iframe">' +
+        '</div>';
+    
+    var virtualCurrencyProductsElement = $(virtualCurrencyProductsTemplate);
+    virtualCurrencyProductsElement.find('#virtual-currency-products-close-button').click(function() {
+        closeVirtualCurrencyProducts();
+    });
+    
+    setTimeout(function() {
+        $(document.body).append(virtualCurrencyProductsElement);
+
+        var windowWidth = $(window).width();
+        var width = virtualCurrencyProductsElement.width();
+        virtualCurrencyProductsElement.css({
+            left: windowWidth/2 - width/2
+        });
+    }, 200);
+}
+
+function closeVirtualCurrencyProducts() {
+    hideShim();
+    virtualCurrencyProductsShowing = false;
+    $('#virtual-currency-products').remove();
 }
 
 function showShim() {

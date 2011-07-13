@@ -1,0 +1,11 @@
+<section id="virtual-currency-products">
+
+<h1>Buy Coins and Bucks</h1>
+
+<% if @products.count > 0 %>
+  <%= render @products %>
+<% else %>  
+  <h2>There are no virtual currency packages active!</h2>
+<% end %>
+
+</section>

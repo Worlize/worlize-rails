@@ -13,6 +13,7 @@ gem 'carrierwave', :git => 'git://github.com/jnicklas/carrierwave.git', :tag => 
 gem 'mini_magick', '3.1'
 gem 'fog', '0.3.33'
 gem 'nestful', '0.0.6'
+gem 'activemerchant', '1.15.0'
 
 gem 'money', '3.7.1'
 

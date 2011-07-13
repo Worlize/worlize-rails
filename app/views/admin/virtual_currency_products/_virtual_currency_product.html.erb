@@ -1,13 +1,16 @@
-<div class="virtual-currency-product">
+<div class="virtual-currency-product" style="border:1px solid black;">
   <h1><%= virtual_currency_product.name %></h1>
   <% if virtual_currency_product.description && !virtual_currency_product.description.empty? %>
     <h2><%= virtual_currency_product.description %></h2>
   <% end %>
-  <p>
-    Coins: <%= virtual_currency_product.coins_to_add %><br>
-    Bucks: <%= virtual_currency_product.bucks_to_add %>
-  </p>
-  <p>
+  <% if virtual_currency_product.coins_to_add > 0 %>
+    <p class="coins">Coins: <%= virtual_currency_product.coins_to_add %></p>
+  <% end %>
+  <% if virtual_currency_product.bucks_to_add > 0 %>
+    <p class="bucks">Bucks: <%= virtual_currency_product.bucks_to_add %></p>
+  <% end %>
+  <p class="price">
     Price: $<%= sprintf('%.2f', virtual_currency_product.price) %>
   </p>
 </div>
+<br>

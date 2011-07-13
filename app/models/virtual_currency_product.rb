@@ -3,6 +3,19 @@ class VirtualCurrencyProduct < ActiveRecord::Base
   
   acts_as_list
   
+  validates :coins_to_add, :numericality => {
+    :greater_than_or_equal_to => 0
+  }
+  validates :bucks_to_add, :numericality => {
+    :greater_than_or_equal_to => 0
+  }
+  validates :price, :numericality => {
+    :greater_than => 0
+  }
+  validates :name, :presence => true
+  validates :description, :length => {
+    :maximum => 500
+  }
   
   private
   
