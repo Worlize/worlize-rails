@@ -141,8 +141,7 @@ class PaypalController < ApplicationController
         transaction.save!
 
         # Recalculate and cache coins & bucks balance in redis
-        user.coins = user.virtual_financial_transactions.sum('coins_amount')
-        user.bucks = user.virtual_financial_transactions.sum('bucks_amount')
+        user.recalculate_balances
         user.notify_client_of_balance_change
         user.send_message({
           :msg => 'payment_completed'

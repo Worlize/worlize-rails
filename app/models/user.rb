@@ -360,6 +360,11 @@ class User < ActiveRecord::Base
     })
   end
   
+  def recalculate_balances
+    self.coins = self.virtual_financial_transactions.sum('coins_amount')
+    self.bucks = self.virtual_financial_transactions.sum('bucks_amount')
+  end
+  
   ###################################################################
   ##  END: Financial Functions                                     ##
   ###################################################################

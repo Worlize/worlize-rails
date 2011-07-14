@@ -123,44 +123,38 @@ class Marketplace::ItemsController < ApplicationController
           end
         else
       end
-      
+
+      if item.price > 0
+        if item.currency_id == 1 && current_user.bucks < item.price
+          raise 'You do not have enough funds available to make this purchase.'
+        elsif item.currency_id == 2 && current_user.coins < item.price
+          raise 'You do not have enough funds available to make this purchase.'
+        end
+      end
       
       # Start by charging the customer...
-      begin
-        if item.price > 0
-          if item.currency_id == 1
-            current_user.debit_bucks(item.price)
-          elsif item.currency_id == 2
-            current_user.debit_coins(item.price)
-          end
-        end
-      rescue
-        raise 'You do not have enough funds available to make this purchase.'
-      end
-      
-      begin
-        # Create the purchase record...
-        MarketplacePurchaseRecord.create!(
+      VirtualFinancialTransaction.transaction do
+        transaction = VirtualFinancialTransaction.new(
           :user => current_user,
+          :kind => VirtualFinancialTransaction::KIND_DEBIT_ITEM_PURCHASE,
           :marketplace_item => item,
-          :currency_id => item.currency_id,
-          :purchase_price => item.price
+          :comment => "#{item.item_type}: #{item.name}"
         )
-
+        if item.currency_id == 1
+          transaction.bucks_amount = 0 - item.price
+        end
+        if item.currency_id == 2
+          transaction.coins_amount = 0 - item.price
+        end
+        transaction.save!
+        
         # Put the product into the user's locker...
         instance = item.item.instances.create!(:user => current_user)
-      rescue
-        # If something went wrong, refund the user's funds
-        if item.price > 0
-          if item.currency_id == 1
-            current_user.credi_bucks(item.price)
-          elsif item.currency_id == 2
-            current_user.credit_coins(item.price)
-          end
-        end
-        raise 'An unknown error occurred while processing the transaction.  You have not been charged.'
+        
+        current_user.recalculate_balances
+        current_user.notify_client_of_balance_change
       end
-
+      
       coins = current_user.coins
       bucks = current_user.bucks
       
