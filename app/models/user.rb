@@ -12,8 +12,8 @@ class User < ActiveRecord::Base
   has_many :avatar_instances, :dependent => :nullify
   has_many :prop_instances, :dependent => :nullify
   
-  has_many :virtual_financial_transactions, :dependent => :restrict
-  has_many :payments, :dependent => :restrict
+  has_many :virtual_financial_transactions, :dependent => :restrict, :order => 'created_at'
+  has_many :payments, :dependent => :restrict, :order => 'created_at'
   
   has_many :created_avatars, :foreign_key => 'creator_id', :dependent => :nullify, :class_name => 'Avatar'
   
@@ -319,75 +319,51 @@ class User < ActiveRecord::Base
     redis.get("bucks:#{self.guid}").to_i
   end
   
-  def credit_coins(amount)
-    self.credit_account({ :coins => amount })
-  end
-  
-  def credit_bucks(amount)
-    self.credit_account({ :bucks => amount })    
-  end
-  
-  def debit_coins(amount)
-    self.debit_account({ :coins => amount })
-  end
-  
-  def debit_bucks(amount)
-    self.debit_account({ :bucks => amount })    
-  end
-  
-  def credit_account(options)
-    return false unless options
+  def coins=(new_value)
     redis = Worlize::RedisConnectionPool.get_client(:currency)
-    
-    if options[:coins]
-      currency_type = 'coins'
-      amount = options[:coins]
-    elsif options[:bucks]
-      currency_type = 'bucks'
-      amount = options[:bucks]
-    else
-      raise "You must specify either coins or bucks."
-    end
-    
-    unless amount.kind_of? Integer
-      raise "Amount must be an integer"
-    end
-    
-    redis_key = "#{currency_type}:#{self.guid}"
-    redis.incrby(redis_key, amount).to_i
-    
-    notify_user_of_balance_change
+    redis.set("coins:#{self.guid}", new_value)
   end
   
-  def debit_account(options)
-    return false unless options
+  def bucks=(new_value)
     redis = Worlize::RedisConnectionPool.get_client(:currency)
-    
-    if options[:coins]
-      currency_type = 'coins'
-      amount = options[:coins]
-    elsif options[:bucks]
-      currency_type = 'bucks'
-      amount = options[:bucks]
-    else
-      raise "You must specify either coins or bucks."
-    end
-    
-    unless amount.kind_of? Integer
-      raise "Amount must be an integer"
-    end
-    
-    redis_key = "#{currency_type}:#{self.guid}"
-    before = redis.get(redis_key).to_i
-    
-    if before - amount > 0
-      after = redis.decrby(redis_key, amount).to_i
-    else
-      raise "Insufficient Funds"
-    end
-    
-    notify_user_of_balance_change
+    redis.set("bucks:#{self.guid}", new_value)
   end
+  
+  def add_coins(amount)
+    redis = Worlize::RedisConnectionPool.get_client(:currency)
+    redis.incrby("coins:#{self.guid}", amount)
+  end
+  
+  def subtract_coins(amount)
+    redis = Worlize::RedisConnectionPool.get_client(:currency)
+    redis.decrby("coins:#{self.guid}", amount)
+  end
+
+  def add_bucks(amount)
+    redis = Worlize::RedisConnectionPool.get_client(:currency)
+    redis.incrby("bucks:#{self.guid}", amount)
+  end
+  
+  def subtract_bucks(amount)
+    redis = Worlize::RedisConnectionPool.get_client(:currency)
+    redis.decrby("bucks:#{self.guid}", amount)
+  end
+  
+  def notify_client_of_balance_change
+    # send notification to current user
+    self.send_message({
+      :msg => 'balance_updated',
+      :data => {
+        :coins => self.coins,
+        :bucks => self.bucks
+      }
+    })
+  end
+  
+  ###################################################################
+  ##  END: Financial Functions                                     ##
+  ###################################################################
+  
 
   def interactivity_session
     InteractivitySession.find_by_user_guid(self.guid)
@@ -409,9 +385,24 @@ class User < ActiveRecord::Base
   end
   
   def initialize_currency
-    redis = Worlize::RedisConnectionPool.get_client(:currency)
-    redis.set "coins:#{self.guid}", Worlize.config['initial_currency']['coins'] || 0
-    redis.set "bucks:#{self.guid}", Worlize.config['initial_currency']['bucks'] || 0
+    self.coins = Worlize.config['initial_currency']['coins'] || 0
+    self.bucks = Worlize.config['initial_currency']['bucks'] || 0
+    
+    if self.coins > 0
+      self.virtual_financial_transactions.create(
+        :kind => VirtualFinancialTransaction::KIND_CREDIT_ADJUSTMENT,
+        :coins_amount => self.coins,
+        :comment => "Initial Balance"
+      )
+    end
+    
+    if self.bucks > 0
+      self.virtual_financial_transactions.create(
+        :kind => VirtualFinancialTransaction::KIND_CREDIT_ADJUSTMENT,
+        :bucks_amount => self.bucks,
+        :comment => "Initial Balance"
+      )
+    end
   end
   
   def initialize_default_slots
@@ -428,16 +419,5 @@ class User < ActiveRecord::Base
         redis_relationships.srem "#{friend_guid}:friends", self.guid
       end
     end
-  end
-  
-  def notify_user_of_balance_change
-    # send notification to current user
-    self.send_message({
-      :msg => 'balance_updated',
-      :data => {
-        :coins => self.coins,
-        :bucks => self.bucks
-      }
-    })
   end
 end

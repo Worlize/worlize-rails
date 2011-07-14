@@ -14,7 +14,7 @@ Worlize::Application.routes.draw do |map|
   match '/registrations/new' => redirect('/users/new')
   
   match '/paypal/ipn' => 'paypal#ipn', :via => :post
-  match '/paypal/return' => 'paypal#return', :via => :get
+  match '/paypal/return' => 'paypal#return', :via => :get, :as => :paypal_return
   
   resource :dashboard, :controller => :dashboard do
     resources :authentications
@@ -175,9 +175,6 @@ Worlize::Application.routes.draw do |map|
   end
 
   resources :virtual_currency_products do
-    collection do
-      get :return
-    end
   end
 
   resource :user_session do

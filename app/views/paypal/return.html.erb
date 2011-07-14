@@ -1,0 +1,66 @@
+<% content_for :extra_styles do %>
+#paypal-return {
+	width: 700px;
+	margin: 25px auto;
+}
+
+#paypal-return img {
+	float: right;
+	margin: 20px 20px 20px 60px;
+	display: block;
+}
+
+#paypal-return h1 {
+	font-size: 48pt;
+	text-align: center
+}
+
+#paypal-return h2 {
+	font-size: 22pt;
+	color: #666;
+	text-align: center;
+}
+
+#paypal-return p {
+	margin: 30px;
+}
+
+#paypal-return button {
+	margin: 40px auto;
+	display: block;
+	font-family: PTSansNarrowBold;
+	font-size: 28pt;
+	-webkit-border-radius: 40px;
+	-moz-border-radius: 40px;
+	-o-border-radius: 40px;
+	border-radius: 40px;
+	background-color: #368cae;
+	padding: 10px 40px;
+  	border: 5px solid #368daf;
+}
+
+#paypal-return button:hover {
+	background-color: #46a6cc;
+  	border: 5px solid #368daf;
+}
+
+#paypal-return button:active {
+	background-color: #46a6cc;
+  	border: 5px solid #368daf;
+}
+<% end %>
+
+<script>
+  function closeWindow() {
+    window.close();
+  }
+</script>
+
+<div id="paypal-return">
+  <%# image_tag "characters/blusey.jpg", :width => 213, :height => 169, :alt => "Welcome!" %>
+  <h1>Oh Boy!</h1>
+  <h2>Your payment was successful!</h2>
+  <p>Thank you for your payment. Your transaction has been completed, and a receipt for your purchase has been emailed to you. You may log into your account at <a href="https://www.paypal.com/">www.paypal.com</a> to view details of this transaction.</p>
+  
+  <button onclick="closeWindow();">Return to Worlize</button>
+</div>

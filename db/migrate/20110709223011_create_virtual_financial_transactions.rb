@@ -3,6 +3,7 @@ class CreateVirtualFinancialTransactions < ActiveRecord::Migration
     create_table :virtual_financial_transactions do |t|
       t.references :user
       t.references :marketplace_item
+      t.references :payment
       t.integer    :kind
       t.integer    :coins_amount
       t.integer    :bucks_amount
@@ -15,31 +16,31 @@ class CreateVirtualFinancialTransactions < ActiveRecord::Migration
     
     User.all.each do |user|
       redis = Worlize::RedisConnectionPool.get_client(:currency)
-      coins = redis.get("coins:#{user.guid}").to_i
-      bucks = redis.get("bucks:#{user.guid}").to_i
+      coins = user.coins
+      bucks = user.bucks
       
-      if coins > 0
-        VirtualFinancialTransaction.create! (
+      if coins > 0 || bucks > 0
+        transaction = VirtualFinancialTransaction.new (
           :user => user,
           :kind => VirtualFinancialTransaction::KIND_CREDIT_ADJUSTMENT,
-          :coins_amount => coins,
           :comment => "Initial Balance"
         )
-      end
-      
-      if bucks > 0
-        VirtualFinancialTransaction.create! (
-          :user => user,
-          :kind => VirtualFinancialTransaction::KIND_CREDIT_ADJUSTMENT,
-          :bucks_amount => bucks,
-          :comment => "Initial Balance"
-        )
+        if coins > 0
+          transaction.coins_amount = coins
+        end
+        if bucks > 0
+          transaction.bucks_amount = bucks
+        end
+        success = transaction.save
+        if !success
+          say "Unable to save initial balance transaction for user #{user.id} '#{user.username}'"
+        end
       end
     end
   end
 
   def self.down
-    remove_index :table_name, :column_name
+    remove_index :virtual_financial_transactions, :column_name
     drop_table :virtual_financial_transactions
   end
 end

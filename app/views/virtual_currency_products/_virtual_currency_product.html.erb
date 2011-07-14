@@ -20,33 +20,10 @@
   
   <% if current_user %>  
     <div class="buy-button">
-      <form action="<%= Worlize.config['paypal']['website_payments_standard']['submit_url'] %>" method="post" target="worlize_paypal">
+      <form action="<%= Worlize.config['paypal']['website_payments_standard']['submit_url'] %>" method="post" target="_blank">
         <input type="hidden" name="cmd" value="_s-xclick"> <!-- Buy Now -->
-        <% encrypted_value = PayPalWPSToolkit::EWPServices.encrypt_button(
-               Worlize::PaypalConfig.paypal_public_cert,
-               Worlize::PaypalConfig.app_public_cert,
-               Worlize::PaypalConfig.app_private_key,
-               '',
-               {
-                 :cmd => '_xclick',
-                 :charset => 'UTF-8',
-                 :currency_code => 'USD',
-                 :custom => Yajl::Encoder.encode({
-                   :user => current_user.guid
-                 }),
-                 :cert_id => Worlize.config['paypal']['cert_id'],
-                 :business => Worlize.config['paypal']['business_email'],
-                 :item_number => virtual_currency_product.id,
-                 :item_name => virtual_currency_product.name,
-                 :amount => sprintf('%.2f', virtual_currency_product.price),
-                 :return => return_virtual_currency_products_url,
-               }
-           )
-        %>
-
-        <%= hidden_field_tag 'encrypted', encrypted_value, :id => nil %>
-
-        <input type="image" name="submit" border="0"
+        <%= hidden_field_tag 'encrypted', @encrypted[virtual_currency_product.id], :id => nil %>
+        <input type="image" name="submit" border="0" width="107" height="26"
           src="https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif"
           alt="PayPal - The safer, easier way to pay online">
       </form>

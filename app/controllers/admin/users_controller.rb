@@ -9,6 +9,19 @@ class Admin::UsersController < ApplicationController
   
   def show
     @user = User.find(params[:id])
+    @payments = @user.payments
+    @total_payments = 0
+    @payments.each do |p|
+      @total_payments += p.amount
+    end
+    
+    @virtual_financial_transactions = @user.virtual_financial_transactions
+    @coins_balance = 0
+    @bucks_balance = 0
+    @virtual_financial_transactions.each do |t|
+      @coins_balance += t.coins_amount unless t.coins_amount.nil?
+      @bucks_balance += t.bucks_amount unless t.bucks_amount.nil?
+    end
   end
   
   def update

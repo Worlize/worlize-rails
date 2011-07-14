@@ -29,7 +29,7 @@ class CreatePaypalTransactions < ActiveRecord::Migration
       t.decimal :auth_amount, :precision => 10, :scale => 2
       t.datetime :auth_exp # format HH:MM:SS DD Mmm YY, YYYY PST
       t.string :auth_id, :limit => 19
-      t.string :auth_status
+      t.string :auth_status, :limit => 32
       t.decimal :exchange_rate, :precision => 12, :scale => 6
       
       t.string :invoice, :limit => 127
