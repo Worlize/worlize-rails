@@ -14,4 +14,5 @@ class VirtualFinancialTransaction < ActiveRecord::Base
   belongs_to :user
   belongs_to :marketplace_item
   belongs_to :payment
+  belongs_to :virtual_currency_product
 end

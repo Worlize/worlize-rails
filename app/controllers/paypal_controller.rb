@@ -120,6 +120,7 @@ class PaypalController < ApplicationController
       payment = Payment.create!(
         :user => user,
         :paypal_transaction => paypal_txn,
+        :virtual_currency_product => product,
         :amount => notification.gross,
         :currency => notification.currency,
         :comment => product.name
@@ -129,6 +130,7 @@ class PaypalController < ApplicationController
         transaction = VirtualFinancialTransaction.new(
           :user => user,
           :payment => payment,
+          :virtual_currency_product => product,
           :kind => VirtualFinancialTransaction::KIND_CREDIT_PURCHASE,
           :comment => product.name
         )

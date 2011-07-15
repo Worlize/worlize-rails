@@ -1,6 +1,9 @@
 class VirtualCurrencyProduct < ActiveRecord::Base
   before_create :assign_guid
   
+  has_many :virtual_financial_transactions
+  has_many :payments
+  
   acts_as_list :scope => 'archived = 0'
   
   validates :coins_to_add, :numericality => {

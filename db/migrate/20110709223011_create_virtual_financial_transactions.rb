@@ -4,6 +4,7 @@ class CreateVirtualFinancialTransactions < ActiveRecord::Migration
       t.references :user
       t.references :marketplace_item
       t.references :payment
+      t.references :virtual_currency_product
       t.integer    :kind
       t.integer    :coins_amount
       t.integer    :bucks_amount
@@ -40,7 +41,6 @@ class CreateVirtualFinancialTransactions < ActiveRecord::Migration
   end
 
   def self.down
-    remove_index :virtual_financial_transactions, :column_name
     drop_table :virtual_financial_transactions
   end
 end
