@@ -7,6 +7,10 @@ class MarketplaceCategory < ActiveRecord::Base
   has_many :marketplace_carousel_items, :order => 'position', :dependent => :destroy
   belongs_to :marketplace_theme
   
+  after_update :update_old_parent_subcategory_lists!
+  after_save :update_parent_subcategory_lists!
+  after_destroy :update_parent_subcategory_lists!
+  
   validates :name,
               :presence => true
               
@@ -18,6 +22,40 @@ class MarketplaceCategory < ActiveRecord::Base
       category = category.parent
     end
     return false
+  end
+  
+  def build_subcategory_list
+    return @list if @list
+    @list = []
+    children.each do |child|
+      @list.push(child.id)
+      @list.concat(child.build_subcategory_list)
+    end
+    return @list
+  end
+  
+  def populate_subcategory_list
+    subcategory_list = build_subcategory_list
+  end
+  
+  def update_subcategory_list!
+    update_attribute('subcategory_list', build_subcategory_list.join(','))
+  end
+  
+  def update_parent_subcategory_lists!
+    current_category = self
+    while current_category.parent_id
+      current_category = MarketplaceCategory.find(current_category.parent_id)
+      current_category.update_subcategory_list!
+    end
+  end
+  
+  def update_old_parent_subcategory_lists!
+    if parent_id_changed?
+      previous_category = MarketplaceCategory.find(parent_id_was)
+      previous_category.update_subcategory_list!
+      previous_category.update_parent_subcategory_lists!
+    end
   end
   
   def breadcrumbs

@@ -71,10 +71,10 @@
   
   <%# List All Items %>
   <% for item_type in %w(avatars backgrounds in_world_objects) %>
-    <% items = @category.marketplace_items.active.send(item_type) %>
+    <% items = MarketplaceItem.active.send(item_type).where(:marketplace_category_id => @category_ids) %>
     <% items_count = items.count %>
     <% items = items.limit(30) %>
-    <% if !items.empty? %>
+    <% if items_count > 0 %>
       <section class="item-list">
         <% if item_type == 'in_world_objects'
              link_item_type = 'objects'

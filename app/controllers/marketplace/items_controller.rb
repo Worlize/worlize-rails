@@ -7,6 +7,7 @@ class Marketplace::ItemsController < ApplicationController
 
   def index
     @category = MarketplaceCategory.find_by_id(params[:category_id])
+    @category_ids = [@category.id].concat @category.subcategory_list.split(',')
     @items = @category.marketplace_items
     case params[:item_type]
       when 'Avatar'
