@@ -17,7 +17,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     RedCloth (4.2.3)
-    SystemTimer (1.2.1)
+    SystemTimer (1.2.3)
     abstract (1.0.0)
     actionmailer (3.0.3)
       actionpack (= 3.0.3)
@@ -164,7 +164,7 @@ GEM
       rake (>= 0.8.7)
       thor (~> 0.14.4)
     rake (0.8.7)
-    redis (2.1.1)
+    redis (2.2.1)
     rest-client (1.6.1)
       mime-types (>= 1.16)
     ruby-hmac (0.4.0)
@@ -191,7 +191,7 @@ PLATFORMS
 
 DEPENDENCIES
   RedCloth (= 4.2.3)
-  SystemTimer (= 1.2.1)
+  SystemTimer (= 1.2.3)
   activemerchant (= 1.15.0)
   acts-as-taggable-on (= 2.0.6)
   acts_as_list (= 0.1.2)
@@ -208,7 +208,7 @@ DEPENDENCIES
   newrelic_rpm
   omniauth (= 0.2.0)
   rails (= 3.0.3)
-  redis (= 2.1.1)
+  redis (= 2.2.1)
   state_machine!
   unicorn (= 3.1.0)
   validates_timeliness (~> 3.0.0)

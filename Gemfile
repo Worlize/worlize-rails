@@ -2,10 +2,10 @@ source :rubygems
 
 gem 'newrelic_rpm'
 gem 'rails', '3.0.3'
-gem 'SystemTimer', '1.2.1'
+gem 'SystemTimer', '1.2.3'
 gem 'mysql', '2.8.1'
 gem 'guid', '0.1.1'
-gem 'redis', '2.1.1'
+gem 'redis', '2.2.1'
 gem 'yajl-ruby', '0.7.9', :require => 'yajl'
 gem 'RedCloth', '4.2.3'
 gem 'carrierwave', :git => 'git://github.com/jnicklas/carrierwave.git', :tag => '0.5.1'
