@@ -8,5 +8,6 @@ class DashboardController < ApplicationController
     if @world
       @room = @world.rooms.first
     end
+    redirect_to enter_room_url(@room.guid)
   end
 end

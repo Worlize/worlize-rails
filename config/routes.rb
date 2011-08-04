@@ -190,6 +190,8 @@ Worlize::Application.routes.draw do |map|
   match 'enter', :to => "welcome#enter", :as => :enter_world
   
 
+  match '/:link_code', :to => "sharing_link#show"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

@@ -3,6 +3,8 @@ class Room < ActiveRecord::Base
   has_one :background_instance
   has_many :in_world_object_instances
   
+  has_many :sharing_links, :dependent => :destroy
+  
   before_create :assign_guid
   after_save :update_room_definition
   after_destroy :delete_room_definition

@@ -20,6 +20,8 @@ class User < ActiveRecord::Base
   has_many :received_gifts, :class_name => 'Gift', :foreign_key => 'recipient_id'
   has_many :sent_gifts,     :class_name => 'Gift', :foreign_key => 'sender_id'
   
+  has_many :sharing_links, :dependent => :destroy
+  
   belongs_to :inviter, :class_name => 'User'
   
   belongs_to :beta_code

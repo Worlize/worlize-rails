@@ -32,7 +32,7 @@ class UserSessionsController < ApplicationController
         if @user_session.user.linking_external_accounts?
           default_url = dashboard_authentications_url
         else
-          default_url = dashboard_url
+          default_url = enter_room_url(@user_session.user.worlds.first.rooms.first.guid)
         end
 
         format.html { redirect_back_or_default(default_url) }
