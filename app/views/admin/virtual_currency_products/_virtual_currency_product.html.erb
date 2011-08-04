@@ -19,6 +19,7 @@
     <% if !virtual_currency_product.last?  %>
       <%= link_to 'Move Down', move_lower_admin_virtual_currency_product_path(virtual_currency_product), :method => :post %>
     <% end %>
+	<%= link_to 'Archive', archive_admin_virtual_currency_product_path(virtual_currency_product), :method => :post, :confirm => "Are you sure you want to archive this product?" %>
   </p>
 </div>
 <br>
