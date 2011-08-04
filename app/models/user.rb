@@ -96,7 +96,7 @@ class User < ActiveRecord::Base
     default_background_guid = Background.initial_world_background_guid
     default_background = Background.find_by_guid(default_background_guid)
     if default_background.nil?
-      raise Error.new('Unable to find the default world background')
+      raise 'Unable to find the default world background'
     end  
     
     # Initialize user's first background instance
@@ -377,6 +377,23 @@ class User < ActiveRecord::Base
   def reset_appearance!
     redis = Worlize::RedisConnectionPool.get_client(:presence)
     redis.del("userState:#{self.guid}")
+  end
+  
+  def disable_webcam!
+    redis = Worlize::RedisConnectionPool.get_client(:presence)
+    userStateJSON = redis.get("userState:#{self.guid}")
+    if userStateJSON
+      begin
+        userState = Yajl::Parser.parse(userStateJSON)
+        if userState['avatar']['type'] == 'video'
+          userState['avatar'] = nil
+          redis.set("userState:#{self.guid}", Yajl::Encoder.encode(userState))
+          redis.expire("userState:#{self.guid}", 60*60*24); # 24 hours
+        end
+      rescue
+        redis.del("userState:#{self.guid}")
+      end
+    end
   end
   
   private
