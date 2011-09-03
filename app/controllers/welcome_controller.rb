@@ -37,8 +37,8 @@ class WelcomeController < ApplicationController
       'authenticity_token' => form_authenticity_token,
       'cookies' => cookies,
       'interactivity_hostname' => Worlize.config['interactivity_hostname'],
-      'interactivity_port' => Worlize.config['interactivity_port'],
-      'interactivity_tls' => Worlize.config['interactivity_tls']
+      'interactivity_port' => request.ssl? ? 443 : 80,
+      'interactivity_tls' => request.ssl?
     })
     render :enter, :layout => false
   end
