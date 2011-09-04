@@ -1,8 +1,0 @@
-# Uncomment this, rename to omniauth.rb, and add the relevant key/secret information
-
-#Rails.application.config.middleware.use OmniAuth::Builder do
-#  provider :twitter, 'KEY', 'SECRET'
-#  provider :facebook, 'KEY', 'SECRET', {
-#    :scope => 'email'
-#  }
-#end
