@@ -1,7 +1,7 @@
 source :rubygems
 
 gem 'newrelic_rpm'
-gem 'rails', '3.0.3'
+gem 'rails', '3.0.10'
 gem 'SystemTimer', '1.2.3'
 gem 'mysql', '2.8.1'
 gem 'guid', '0.1.1'
@@ -33,7 +33,8 @@ gem 'state_machine', :git => 'git://github.com/pluginaweek/state_machine.git', :
 # I applied a couple manual fixes to be able to use the official release of
 # authlogic rather than an unknown and less-maintained fork.
 # gem "authlogic", :git => "git://github.com/odorcicd/authlogic.git", :branch => "rails3"
-gem 'authlogic', '2.1.6'
+# gem 'authlogic', '2.1.6'
+gem 'authlogic', '3.0.3'
 
 # Use unicorn as the web server
 gem 'unicorn', '3.1.0'
