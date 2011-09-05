@@ -768,6 +768,15 @@ footer nav a {
 
 /* @group Homepage */
 
+@keyframes pulsate {
+  0% {
+    opacity: 0;
+  }
+  100% { 
+    opacity: 1;
+  }
+}
+
 @-webkit-keyframes pulsate {
   0% {
     opacity: 0;
@@ -798,6 +807,7 @@ footer nav a {
 	background: url(../images/homepage-login-button.png) no-repeat 0 -80px;
 }
 #homepage-login a.enter-button {
+	animation: pulsate 1.5s infinite alternate;
 	-webkit-animation: pulsate 1.5s infinite alternate;
 	-moz-animation: pulsate 1.5s infinite alternate;
     display:block;
@@ -808,6 +818,7 @@ footer nav a {
 	background: url(../images/homepage-login-button.png) no-repeat 0 0px;
 }
 #homepage-login a.enter-button:hover {
+	animation: none;
 	-webkit-animation: none;
 	-moz-animation: none;
 	background-position: 0 -80px;
