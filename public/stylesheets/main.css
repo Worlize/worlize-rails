@@ -770,19 +770,19 @@ footer nav a {
 
 @-webkit-keyframes pulsate {
   0% {
-    opacity: 1;
+    opacity: 0;
   }
   100% { 
-    opacity: 0;
+    opacity: 1;
   }
 }
 
 @-moz-keyframes pulsate {
   0% {
-    opacity: 1;
+    opacity: 0;
   }
   100% { 
-    opacity: 0;
+    opacity: 1;
   }
 }
 
@@ -794,8 +794,8 @@ footer nav a {
     display:block;
     width: 396px;
     height: 80px;
-    background-image: url(../images/homepage-login-button.png);
     margin: 25px auto 10px;
+	background: url(../images/homepage-login-button.png) no-repeat 0 -80px;
 }
 #homepage-login a.enter-button {
 	-webkit-animation: pulsate 1.5s infinite alternate;
@@ -805,8 +805,7 @@ footer nav a {
     height: 80px;
     position: relative;
     text-indent: -10000px;
-    background-image: url(../images/homepage-login-button.png);
-	background-position: 0 -80px;
+	background: url(../images/homepage-login-button.png) no-repeat 0 0px;
 }
 #homepage-login a.enter-button:hover {
 	-webkit-animation: none;
