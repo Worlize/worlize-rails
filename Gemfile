@@ -25,7 +25,7 @@ gem 'acts_as_list', '0.1.2'
 gem 'acts_as_tree', '0.1.1'
 
 # Yqy, jQuery!
-gem 'jquery-rails', '>= 0.2.6'
+gem 'jquery-rails', '>= 1.0.12'
 
 gem 'validates_timeliness', '~> 3.0.0'
 gem 'state_machine', :git => 'git://github.com/pluginaweek/state_machine.git', :tag => 'v0.9.4'

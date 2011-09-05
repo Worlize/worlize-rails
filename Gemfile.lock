@@ -204,7 +204,7 @@ DEPENDENCIES
   carrierwave!
   fog (= 0.3.33)
   guid (= 0.1.1)
-  jquery-rails (>= 0.2.6)
+  jquery-rails (>= 1.0.12)
   mini_magick (= 3.1)
   money (= 3.7.1)
   mysql (= 2.8.1)
