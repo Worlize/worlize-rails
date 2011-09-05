@@ -1,6 +1,7 @@
 /* @override 
 	http://www.worlize.com/stylesheets/main.css?v=3
 	http://localhost/stylesheets/main.css?v=3
+	http://worlize.local/stylesheets/main.css?v=3
 */
 
 /* @group Boilerplate */
@@ -767,30 +768,76 @@ footer nav a {
 
 /* @group Homepage */
 
+@-webkit-keyframes pulsate {
+  0% {
+    opacity: 1;
+  }
+  100% { 
+    opacity: 0;
+  }
+}
+
+@-moz-keyframes pulsate {
+  0% {
+    opacity: 1;
+  }
+  100% { 
+    opacity: 0;
+  }
+}
+
 #homepage-login {
 	text-align: center;
-	color: #555;
-	font: 29px/27px 'PTSansNarrowBold', Arial, sans-serif;
+	font: 18px/15px 'PTSansNarrowRegular', Arial, sans-serif;
 }
+#homepage-login .enter-button-background {
+    display:block;
+    width: 396px;
+    height: 80px;
+    background-image: url(../images/homepage-login-button.png);
+    margin: 25px auto 10px;
+}
+#homepage-login a.enter-button {
+	-webkit-animation: pulsate 1.5s infinite alternate;
+	-moz-animation: pulsate 1.5s infinite alternate;
+    display:block;
+    width: 396px;
+    height: 80px;
+    position: relative;
+    text-indent: -10000px;
+    background-image: url(../images/homepage-login-button.png);
+	background-position: 0 -80px;
+}
+#homepage-login a.enter-button:hover {
+	-webkit-animation: none;
+	-moz-animation: none;
+	background-position: 0 -80px;
+}
+
 #homepage-login a {
+	color: #888;
 	text-decoration: none;
 }
 #homepage-login a:hover {
 	text-decoration: underline;
+	color: #555;
 }
 
+
+
+/*
 #homepage-login small {
-	font-size: 70%;
-	padding: 0px 10px;
+    font-size: 70%;
+    padding: 0px 10px;
 }
 #homepage-login img {
-	padding-bottom: 10px;
-	vertical-align: middle;
+    padding-bottom: 10px;
+    vertical-align: middle;
 }
 #homepage-login img:hover {
-	opacity: 0.7;
+    opacity: 0.7;
 }
-
+*/
 #homepage-character {
 	width: 850px;
 	height: 370px;
