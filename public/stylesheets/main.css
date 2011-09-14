@@ -2,6 +2,7 @@
 	http://www.worlize.com/stylesheets/main.css?v=3
 	http://localhost/stylesheets/main.css?v=3
 	http://worlize.local/stylesheets/main.css?v=3
+	http://turtle.office.worlize.com/stylesheets/main.css?v=3
 */
 
 /* @group Boilerplate */
@@ -801,18 +802,18 @@ footer nav a {
 }
 #homepage-login .enter-button-background {
     display:block;
-    width: 396px;
-    height: 80px;
+    width: 312px;
+    height: 81px;
     margin: 25px auto 10px;
-	background: url(../images/homepage-login-button.png) no-repeat 0 -80px;
+	background: url(../images/homepage-login-button.png) no-repeat 0 -81px;
 }
 #homepage-login a.enter-button {
 	animation: pulsate 1.5s infinite alternate;
 	-webkit-animation: pulsate 1.5s infinite alternate;
 	-moz-animation: pulsate 1.5s infinite alternate;
     display:block;
-    width: 396px;
-    height: 80px;
+    width: 312px;
+    height: 81px;
     position: relative;
     text-indent: -10000px;
 	background: url(../images/homepage-login-button.png) no-repeat 0 0px;
@@ -821,7 +822,7 @@ footer nav a {
 	animation: none;
 	-webkit-animation: none;
 	-moz-animation: none;
-	background-position: 0 -80px;
+	background-position: 0 -81px;
 }
 
 #homepage-login a {
