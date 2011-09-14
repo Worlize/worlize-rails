@@ -13,12 +13,18 @@ gem 'carrierwave', :git => 'git://github.com/jnicklas/carrierwave.git', :tag => 
 gem 'mini_magick', '3.1'
 gem 'fog', '0.3.33'
 gem 'nestful', '0.0.6'
+
+# TODO: Are we using this?
 gem 'activemerchant', '1.15.0'
 
+# TODO: Are we using this?
 gem 'money', '3.7.1'
 
+# Facebook Graph API support
+gem "koala", "~> 1.2.0beta"
+
 # Plugins
-gem 'omniauth', '0.2.0'
+gem 'omniauth', '>= 0.3.0.rc', '<0.4'
 gem 'will_paginate', '~> 3.0.pre2'
 gem 'acts-as-taggable-on', '2.0.6'
 gem 'acts_as_list', '0.1.2'
