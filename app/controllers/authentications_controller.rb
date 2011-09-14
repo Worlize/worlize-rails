@@ -51,6 +51,7 @@ class AuthenticationsController < ApplicationController
     # If we already have a user logged in, then we assume we're
     # simply associating their external account
     if current_user
+      Rails.logger.debug "User already logged in, linking additional authentication."
       if authentication
         flash[:alert] = "That #{omniauth['provider'].capitalize} account has already been associated with a Worlize account."
       else
@@ -59,18 +60,19 @@ class AuthenticationsController < ApplicationController
           flash[:alert] = "Unable to associate your #{omniauth['provider'].capitalize} account."
         end
       end
-      redirect_to dashboard_authentications_url
+      redirect_to dashboard_url
 
     # If we don't have a currently logged in user, we log in as the user we
     # found when we looked up the external provider credentials.
     elsif authentication
+      Rails.logger.debug "Found a matching authentication record, logging user in"
       UserSession.create(authentication.user)
-      redirect_to session[:return_to] || root_url
-      session[:return_to] = nil
+      redirect_back_or_default dashboard_url
 
     # If we couldn't find an existing linked account and there isn't a
     # currently logged in user, we will start the signup process
     else
+      Rails.logger.debug "Unable to find matching omniauth authentication"
       session[:omniauth] = omniauth.except('extra')
       redirect_to new_user_url
     end

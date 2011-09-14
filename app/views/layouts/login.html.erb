@@ -25,35 +25,35 @@
   <link rel="stylesheet" href="/stylesheets/main-fonts.css?v=2">
 
   <!-- CSS : implied media="all" -->
-  <link rel="stylesheet" href="/stylesheets/main.css?v=3">
+  <link rel="stylesheet" href="/stylesheets/plain.css?v=3">
+  <link rel="stylesheet" href="/stylesheets/login.css" type="text/css" charset="utf-8">
  
   <style type="text/css">
   <%= yield :extra_styles %>
   </style>
-
-  <%= render :partial => 'layouts/open_graph_global' %>
-
+ 
   <%= yield :extra_head_items %>
-
  
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
   <script src="/javascripts/libs/modernizr-1.6.min.js"></script>
+    
+  <script>
+  <% if current_user %>
+    loggedIn = true;
+  <% else %>
+    loggedIn = false;
+  <% end %>
+  </script>
   
   <%= csrf_meta_tag %>
 
 </head>
 
 <body>
+  <img src="/images/ajax-loader.gif" style="position: absolute; top: -10000px">
 
-  <div id="container">
-    <header>
-        <% if current_user %>
-          <%= render :partial => 'layouts/logged_in_header' %>
-        <% elsif !@hide_login_bar %>
-          <%# render :partial => 'layouts/log_in_form_header' %>
-        <% end %>
-    </header>
-
+  <div id="container" class="unselectable">
+    
     <% if flash[:notice] %>
     <div id="flash_notice">
       <%= flash[:notice] %>
@@ -67,25 +67,12 @@
     <% end %>
     
     <div id="main">
+      <div id="fake-app-background"> </div>
+      <div id="login-overlay-shroud"> </div>
+
       <%= yield %>
     </div>
-    
-    <footer>
-      <div class="footer-background"></div>
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><%= link_to 'About', about_path %></li>
-          <li><%= link_to 'Press', press_path %></li>
-          <% if Worlize.config['marketplace_enabled'] %>
-            <li><%= link_to 'Marketplace', marketplace_path %></li>
-          <% end %>
-          <li><a href="http://blog.worlize.com/">Our Blog</a></li>
-          <li><a href="https://forums.worlize.com/">Forums</a></li>
-        </ul>
-      </nav>
-      <div class="copyright">© 2010-<%= Date.today.year %> Worlize Inc.</div>
-    </footer>
+
   </div> <!--! end of #container -->
 
 
@@ -97,27 +84,40 @@
   <script src="/javascripts/plugins.js"></script>
   <script src="/javascripts/script.js"></script>
   
+  <script src="/javascripts/marketplace/carousel.js"></script>
+  <script src="/javascripts/marketplace/marketplace.js"></script>
+  
   <% if content_for?(:fancybox) %>
     <script src="/fancybox/jquery.fancybox-1.3.4.pack.js" type="text/javascript" charset="utf-8"></script>
     <link rel="stylesheet" href="/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
   <% end %>
+
+  <script src="https://connect.facebook.net/en_US/all.js"></script>
+  <script type="text/javascript">
+    FB.XFBML.parse();
+  </script>  
   
   <%= yield :page_script %>
+  
+  <!--[if lt IE 7 ]>
+    <script src="javascripts/libs/dd_belatedpng.js"></script>
+    <script> DD_belatedPNG.fix('img, .png_bg'); //fix any <img> or .png_bg background-images </script>
+  <![endif]-->
 
-       <script type="text/javascript">
+  <script type="text/javascript">
 
-         var _gaq = _gaq || [];
-         _gaq.push(['_setAccount', 'UA-7700604-3']);
-         _gaq.push(['_setDomainName', '.worlize.com']);
-         _gaq.push(['_trackPageview']);
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-7700604-3']);
+    _gaq.push(['_setDomainName', '.worlize.com']);
+    _gaq.push(['_trackPageview']);
 
-         (function() {
-           var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-           ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-           var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-         })();
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
 
-       </script>
+  </script>
   
 </body>
 </html>

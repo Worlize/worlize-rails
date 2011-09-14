@@ -13,19 +13,11 @@
 
 <div id="homepage-login">
   <div class="enter-button-background">
-    <a class="enter-button" href="/login">Enter Worlize</a>
+    <% if current_user %>
+      <%= link_to 'Enter Worlize', dashboard_path, :class => 'enter-button' %>
+    <% else %>
+      <a class="enter-button" href="/login">Enter Worlize</a>
+    <% end %>
   </div>
   <a class="what-is-this-thing-link" href="/about">What is this thing anyway?</a>
 </div>
-
-<% content_for :page_script do %>
-<script>
-jQuery('document').ready(function() {
-  $('#homepage_login_link').click(function(event) {
-    event.preventDefault();
-    $('#homepage_login_layer').fadeIn();
-    $('#user_session_username').focus();
-  });
-});
-</script>
-<% end %>

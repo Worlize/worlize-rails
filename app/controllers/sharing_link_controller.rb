@@ -11,29 +11,13 @@ class SharingLinkController < ApplicationController
     Rails.logger.info("Room id: #{room.id}")
     
     if current_user
-      # user already logged in
-      interact_server_id = room.interact_server_id
-      s = current_user.interactivity_session || InteractivitySession.new
-      if s.update_attributes(
-          :username => current_user.username,
-          :user_guid => current_user.guid,
-          :room_guid => room.guid,
-          :world_guid => room.world.guid,
-          :server_id => interact_server_id
-        )
-        
-        flash[:notice] = "Room #{room.name} entered."
-        redirect_to enter_world_url
-      else
-        Rails.logger.error('Unable to update interactivity session')
-        render_404 and return
-      end
+      redirect_to enter_room_url(room.guid) and return
     else
       # Render the login page
       store_location
       @sharing_link = link
       @user_session = UserSession.new
-      render :layout => 'plain'
+      render :layout => 'login'
     end
   end
   

@@ -1,12 +1,14 @@
 class UserSessionsController < ApplicationController
-  # GET /user_sessions
-  # GET /user_sessions.xml
+  layout 'login'
   
-  # GET /user_sessions/new
-  # GET /user_sessions/new.xml
   def new
     if params[:redirect_to]
       session[:return_to] = params[:redirect_to]
+    end
+    
+    if Rails.env == 'development'
+      Rails.logger.debug "Cookies:\n" + cookies.to_yaml
+      Rails.logger.debug "Session:\n" + session.to_yaml
     end
     
     @user_session = UserSession.new
@@ -19,6 +21,11 @@ class UserSessionsController < ApplicationController
   # POST /user_sessions
   # POST /user_sessions.xml
   def create
+    if Rails.env == 'development'
+      Rails.logger.debug "Cookies:\n" + cookies.to_yaml
+      Rails.logger.debug "Session:\n" + session.to_yaml
+    end
+    
     @user_session = UserSession.new(params[:user_session])
 
     respond_to do |format|
@@ -29,15 +36,22 @@ class UserSessionsController < ApplicationController
         cookies["Vanilla"] = {:value => "", :domain => ".worlize.com"}
         cookies["Vanilla-Volatile"] = {:value => "", :domain => ".worlize.com"}
 
-        if @user_session.user.linking_external_accounts?
-          default_url = dashboard_authentications_url
-        else
-          default_url = enter_room_url(@user_session.user.worlds.first.rooms.first.guid)
-        end
+        default_url = enter_room_url(@user_session.user.worlds.first.rooms.first.guid)
 
         format.html { redirect_back_or_default(default_url) }
+        format.json do
+          render :json => Yajl::Encoder.encode({
+            :success => true,
+            :redirect_to => get_redirect_back_or_default_url(default_url)
+          })
+        end
       else
         format.html { render :action => "new" }
+        format.json do
+          render :json => Yajl::Encoder.encode({
+            :success => false
+          })
+        end
       end
     end
   end
@@ -65,8 +79,7 @@ class UserSessionsController < ApplicationController
       render :text =>
           "UniqueID=#{current_user.id}\n" +
           "Name=#{current_user.username}\n" +
-          "Email=#{current_user.email}\n" +
-          "DateOfBirth=#{current_user.birthday.strftime('%Y-%m-%d')}",
+          "Email=#{current_user.email}",
         :content_type => 'text/plain'
     else
       render :text => '', :content_type => 'text/plain'

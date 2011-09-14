@@ -1,84 +1,123 @@
-<% @hide_login_bar = true %>
+<% title 'Sign in' %>
 
-<% content_for :extra_styles do %>
-#login_header {
-  position: relative;
-  width: 735px;
-  height: 240px;
-  margin: 0px auto 40px;
-}
-#login_header img.character {
-  position: absolute;
-  left: 330px;
-  top: 0px;
-}
-#login_header h1 {
-  position: absolute;
-  left: 0px;
-  top: 55px;
-  font-size: 80pt;
-}
-#login_header h2 {
-  position: absolute;
-  text-align: right;
-  right: 0px;
-  bottom: 0px;
-  font-size: 40pt;
-}
-.login_alternative {
-  color: #747474;
-  font: 16pt/16pt PTSansNarrowBold, Helvetica, Arial, sans-serif;
-}
-.login_alternative div {
-    text-align: center;
-    margin: 0px 10px 0px 0px;
-}
-.login_alternative small {
-  color: #969696;
-}
-.login_alternative img:hover {
-  opacity: 0.8;
-}
-#login_form td.actions input[type=submit] {
-	vertical-align: baseline;
-	margin: 0px 0px 0px 10px;
-}
-#login_form {
-  margin: 0px 0px 0px 370px;
-}
-<% end %>
-
-<div id="login_header">
-  <%= image_tag 'characters/sign-in.jpg', :class => 'character' %>
-  <h1 style="color:#969696;">Sign-in</h1>
-  <h2 style="color:#525252;">...we have <span style="color:#969696;">missed you!</span></h2>
-</div>
-
-<div id="page_content">
-  <section id="login_form">
-    <h1 class="light"><small><span class="accent-color-2">welcome</span></small><br>
-      back</h1>
-      
-    <div class="form_container">
-      <%= render 'form' %>
-    </div>
+<div id="login-overlay">
+	<div id="main-login-1">
+	  <div class="character">
+  	  <h1>Oh Boy!</h1>
+  	  <h2>You're almost there!</h2>
+	  </div>
+	  <h3>Pick your favorite social network to get started</h3>
+	  <div class="facebook-login">
+	    <a href="/auth/facebook">
+	      <img src="/images/login-overlay/facebook-icon.png">
+	      Sign in with Facebook
+	    </a>
+	  </div>
+	  <div class="social-network-or">
+	    or
+	  </div>
+	  <div class="twitter-login">
+	    <a href="/auth/twitter">
+	      <img src="/images/login-overlay/twitter-icon.png">
+	      Sign in with Twitter
+	    </a>
+	  </div>
+	  <p class="username-login">
+	    <a href="#username-login">
+	      ...or sign in with username and password
+	    </a>
+	  </p>
+	</div>
+	<div id="username-login-page" style="display:none;">
+	  <div class="character">
+	    <h1>Old fashioned, huh?</h1>
+	  </div>
+	  <h3>
+	    We'll be requiring Facebook or Twitter to sign in as of Jan. 1, 2012,<br>
+	    so make sure to link a Facebook or Twitter account soon!
+	  </h3>
+	  
+	  <div class="login-error" style="display:none;">
+	    Invalid username or password.
+	  </div>
+	  
+    <%= form_for @user_session, :url => user_session_path, :html => {:id => 'username-login-form', :class => 'standard_form'} do |f| %>
+  	  <table>
+  	    <tr>
+          <th>
+            <label id="username-label" for="login-form-username-field">Username:</label>
+          </th>
+          <th>
+            <label id="password-label" for="login-form-password-field">Password:</label>
+          </th>
+          <th></th>
+  	    </tr>
+  	    <tr>
+          <td>
+            <input type="text" name="user_session[username]" id="login-form-username-field">
+          </td>
+          <td>
+            <input type="password" name="user_session[password]" id="login-form-password-field">
+          </td>
+          <td>
+            <input type="submit" name="submit" id="login-form-submit-button" value="Let's Go!">
+          </td>
+  	    </tr>
+  	  </table>
+    <% end %>
     
-    <div class="login_alternative">
-      <div style="float:left;">
-        <small>or</small><br>
-        Log-in with:
-      </div>
-      <a href="/auth/facebook"><%= image_tag 'homepage-facebook-icon.png', :alt => 'Login with Facebook' %></a>
-      <a href="/auth/twitter"><%= image_tag 'homepage-twitter-icon.png', :alt => 'Login with Twitter' %></a>
-    </div>
-    
-  </section>
+    <p class="social-login">
+      <a href="#social-login">
+        ...or sign in with facebook or twitter
+      </a>
+    </p>
+	</div>
 </div>
 
 <% content_for :page_script do %>
 <script>
   jQuery(function($) {
-    $('#user_session_username').focus();
+    $('.username-login a').click(function(event) {
+      event.preventDefault();
+      $('#main-login-1').fadeOut('fast', function() {
+        $('#username-login-page .login-error').hide();
+        $('#login-form-username-field,#login-form-password-field').val('');
+        $('#username-login-page').fadeIn('fast', function() {
+          $('#login-form-username-field').focus();
+        });
+      });
+    });
+    
+    $('.social-login a').click(function(event) {
+      event.preventDefault();
+      $('#username-login-page').fadeOut('fast', function() {
+        $('#main-login-1').fadeIn('fast');
+      });
+    })
+    
+    
+    $('#username-login-form').bind('submit', function(event) {
+      event.preventDefault();
+
+      $.post('<%= user_session_path(:format => :json) %>',
+        $('#username-login-form').serialize(),
+        function(data, textStatus, jqXHR) {
+          if (data.success) {
+            top.location.href = data.redirect_to;
+          }
+          else {
+            $('#username-login-page .login-error').show();
+            $('#username-login-page .login-error').addClass('highlight');
+            setTimeout(function() {
+              $('#username-login-page .login-error').removeClass('highlight');
+            }, 250);
+          }
+        }
+      );
+    });
+    
+    
+    
   });
 </script>
 <% end %>

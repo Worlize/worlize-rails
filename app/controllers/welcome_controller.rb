@@ -3,11 +3,6 @@ class WelcomeController < ApplicationController
   before_filter :require_user, :only => [:enter]
   
   def index
-    if current_user
-      redirect_to dashboard_url and return
-    end
-    
-    @user_session = UserSession.new
     characters = {
       'halbert' => 'I am HAL(bert).  Identify yourself!',
       'gus' => 'They call me Guss... What do they call you?',

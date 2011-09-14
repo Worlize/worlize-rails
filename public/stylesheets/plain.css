@@ -2,6 +2,7 @@
 	http://www.worlize.com/stylesheets/main.css?v=3
 	http://localhost/stylesheets/main.css?v=3
 	http://worlize.local/stylesheets/plain.css?v=3
+	http://turtle.office.worlize.com/stylesheets/plain.css?v=3
 */
 
 /* @group Boilerplate */
@@ -230,11 +231,11 @@ button {  width: auto; overflow: visible; }
 input[type=text],
 input[type=password],
 select {
-	background-color: #F0F0F0;
+	background-color: #fff;
 	border: 1px solid #888;
 	padding: 2px 5px;
 	outline: none;
-	color: #787571;
+	color: #444444;
 	font: 11pt Helvetica, Arial, sans-serif;
 }
 
@@ -271,6 +272,7 @@ button:active {
 
 input[type=submit], button {
 	background: #555555;
+	outline: none;
 	color: #FFF;
 	border: none;
 	border-radius:8px;

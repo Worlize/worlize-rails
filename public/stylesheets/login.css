@@ -1,5 +1,51 @@
+/* @override http://turtle.office.worlize.com/stylesheets/login.css */
+
 html,body {
 	background-color: #e6e2dc !important;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	color: #000000;
+}
+
+label {
+	font-family: PTSansNarrowBold;
+	font-size: 16pt;
+	color: #333;
+}
+
+input[type='text'],
+input[type='password'] {
+	width: 254px;
+	font-family: PTSansNarrowRegular;
+	font-size: 14pt;
+	padding: 3px 5px;
+	color: #333;
+	border: 1px solid #bfb3b3;
+	border-radius: 5px;
+}
+
+input[type='submit'] {
+	background-color: #FFF !important;
+	border: 1px solid #AAA;
+	color: #333;
+	padding: 3px 12px;
+	font-size: 14pt;
+	font-family: PTSansNarrowRegular;
+	margin: 0px 0px 0px;
+	border-radius: 5px;
+	border: 1px solid #bfb3b3;
+}
+
+input {
+}
+
+input:focus {
+	box-shadow: 0px 0px 15px 2px rgba(255,255,255,1);
 }
 
 #fake-app-background {
@@ -24,9 +70,11 @@ html,body {
 
 #login-overlay {
 	position: relative;
-	margin: 120px auto 20px;
-	width: 621px;
-	height: 396px;
+	font-family: PTSansNarrowRegular;
+	font-size: 14pt;
+	margin: 150px auto 20px;
+	width: 535px;
+	height: 340px;
 	background-color: rgba(229,226,220,1.0);
 	background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 300, from(rgba(248,248,248,1.0)), to(rgba(212,206,196,1.0)));
 	background: -moz-radial-gradient(50% 50%, farthest-side, rgba(248,248,248,1.0), rgba(212,206,196,1.0));
@@ -34,86 +82,297 @@ html,body {
 	box-shadow: 0px 0px 2px rgba(0,0,0,0.3), 0px 10px 40px rgba(0,0,0,0.75);
 }
 
-#left-column, #right-column {
-	position: absolute;
-	top: 0px;
-	padding: 15px;
-	width: 289px;
-}
-
-#left-column {
-	left: 0px;
-}
-
-#right-column {
-	right: 0px;
-}
-
-#worlize-logo {
-	position: relative;
-	margin: 0px 0px 25px;
-	width: 170px;
-	height: 33px;
-	background-image: url(/images/login-overlay/worlize-logo.png);
-}
-
 h1 {
-	font-size: 22pt;
+	font-size: 38pt;
 	margin: 0px 0px 10px;
-	color: #333333;
+	color: #87b411;
 }
 
 h2 {
 	font-size: 18pt;
 	font-family: PTSansNarrowRegular;
-	color: #333333;
+	color: #444444;
 }
+
+h3 {
+	text-align: center;
+	margin: 0px 0px 12px;
+	font-size: 14pt;
+	font-family: PTSansNarrowRegular;
+	color: #444444;
+}
+
+#login-overlay table {
+	margin: 10px auto;
+}
+
+#login-overlay th {
+	text-align: left;
+	padding: 0px 4px;
+}
+
+#login-overlay td {
+	padding: 0px 4px;
+}
+
+#login-overlay input[type="text"],
+#login-overlay input[type="password"] {
+	width: 160px;
+}
+
+/* @group main-login-1 */
+
+#main-login-1 .character {
+	position: relative;
+	display: block;
+	width: 330px;
+	height: 100px;
+	top: 30px;
+	margin: 35px auto;
+	background: url(/images/login-overlay/green-jelly.png) no-repeat;
+}
+
+#main-login-1 .character h1 {
+	position: absolute;
+	left: 130px;
+}
+
+#main-login-1 .character h2 {
+	position: absolute;
+	left: 160px;
+	top: 52px;
+}
+
+#main-login-1 .facebook-login img,
+#main-login-1 .twitter-login img {
+	display: block;
+	margin: 0px auto;
+	opacity: 0.8;
+}
+
+#main-login-1 .facebook-login {
+	text-align: center;
+	display: block;
+	position: absolute;
+	font-family: PTSansNarrowBold;
+	left: 80px;
+}
+
+#main-login-1 .facebook-login a:hover img,
+#main-login-1 .twitter-login a:hover img {
+	opacity: 1;
+}
+
+#main-login-1 .twitter-login {
+	text-align: center;
+	display: block;
+	position: absolute;
+	font-family: PTSansNarrowBold;
+	left: 314px;
+}
+
+#main-login-1 .social-network-or {
+	position: absolute;
+	text-align: center;
+	font-size: 20pt;
+	font-family: PTSansNarrowBold;
+	top: 213px;
+	left: 240px;
+	right: 240px;
+}
+
+#main-login-1 p.username-login {
+	font-size: 12pt;
+	position: absolute;
+	bottom: 5px;
+	right: 10px;
+	color: #777777;
+}
+
+#main-login-1 p.username-login a {
+	color: #777777;
+}
+
+#main-login-1 p.username-login a:hover {
+	color: #000000;
+}
+
+
+/* @end */
+
+/* @group Username-login-page */
+
+#username-login-page .character h1 {
+	position: absolute;
+	left: 140px;
+	top: 20px;
+	font-size: 27pt;
+	font-family: PTSansNarrowRegular;
+	font-weight: normal;
+	color: #444444;
+}
+
+#username-login-page .character {
+	position: relative;
+	display: block;
+	width: 390px;
+	height: 100px;
+	top: 30px;
+	margin: 35px auto;
+	background: url(/images/login-overlay/red-jelly.png) no-repeat;
+}
+
+#username-login-page h3 {
+	margin-top: 40px;
+	margin-bottom: 20px;
+}
+
+#username-login-page .login-error {
+	width: 450px;
+	margin: -10px auto 10px;
+	border: 1px solid #beb8b1;
+	color: #8e0500;
+	font-size: 16pt;
+	font-family: PTSansNarrowBold;
+	font-weight: normal;
+	text-align: center;
+	padding: 4px;
+	background-color: rgba(255,255,255,0.2);
+	-webkit-transition: background-color 1s;
+	-moz-transition: background-color 1s;
+	-ms-transition: background-color 1s;
+	-o-transition: background-color 1s;
+	transition: background-color 1s;
+}
+
+#username-login-page .login-error.highlight {
+	background-color: rgba(255,129,0,0.35);
+	-webkit-transition: background-color 0.2s;
+	-moz-transition: background-color 0.2s;
+	-ms-transition: background-color 0.2s;
+	-o-transition: background-color 0.2s;
+	transition: background-color 0.2s;
+}
+
+#username-login-page label {
+	font-family: PTSansNarrowBold;
+	font-weight: normal;
+}
+
+#username-login-page p.social-login {
+	font-size: 12pt;
+	position: absolute;
+	bottom: 5px;
+	right: 10px;
+	color: #777777;
+}
+
+#username-login-page p.social-login a {
+	color: #777777;
+}
+
+#username-login-page p.social-login a:hover {
+	color: #000000;
+}
+
+
+/* @end */
+
+/* @group signup-page */
+
+#signup-page .character h1 {
+	position: absolute;
+	left: 135px;
+	top: 0px;
+	font-size: 34pt;
+	font-family: PTSansNarrowBold;
+	font-weight: normal;
+	color: #87b411;
+}
+
+#signup-page .character h2 {
+	position: absolute;
+	left: 138px;
+	top: 48px;
+}
+
+#signup-page h3 {
+	margin-top: 40px;
+	margin-bottom: 20px;
+	font-size: 18pt;
+}
+
+#signup-page .character {
+	position: relative;
+	display: block;
+	width: 400px;
+	height: 100px;
+	top: 30px;
+	margin: 35px auto;
+	background: url(/images/login-overlay/green-jelly.png) no-repeat;
+}
+
+.tos-checkbox {
+	margin: 12px 0px 0px;
+}
+
+.tos-checkbox label {
+	font-family: PTSansNarrowRegular;
+	font-weight: normal;
+	font-size: 12pt;
+	vertical-align: middle;
+}
+
+.tos-checkbox input[type=checkbox] {
+	vertical-align: middle;
+}
+
+#signup-page div.submit-button {
+	float: right;
+	margin: 8px 0px;
+}
+
+#validation-tooltip {
+	position: absolute;
+}
+
+#validation-tooltip .message {
+	position: relative;
+	z-index: 0;
+	top: 9px;
+	left: -40px;
+	background: #a71f1f;
+	padding: 5px 13px;
+	font-family: PTSansNarrowBold;
+	color: #ffd9d9;
+	border: 1px solid #720000;
+	border-radius: 4px
+}
+
+#validation-tooltip .tip {
+	position: absolute;
+	z-index: 1;
+	top: 0px;
+	left: -5px;
+	border-style: solid;
+	border-width: 0px 10px 10px 10px;
+	border-color: transparent transparent #a71f1f transparent;
+	width: 0px;
+	height: 0px;
+	border-bottom-color: #720000;
+	border-bottom-width: 10px;
+}
+
+input.valid {
+	background-color: #e6ffdf !important;
+}
+
+/* @end */
+
+
 
 #signin-form-container {
 	padding: 10px;
 	background-color: #dfe8eb;
 	border: 1px solid #666;
-}
-
-label {
-	font-family: PTSansNarrowBold;
-	font-size: 16pt;
-	color: #333;
-}
-
-input[type='text'],
-input[type='password'] {
-	width: 254px;
-	font-family: PTSansNarrowBold;
-	font-size: 14pt;
-	padding: 5px 5px;
-	color: #333;
-}
-
-input[type='submit'] {
-	background-color: #FFF !important;
-	border: 1px solid #AAA;
-	color: #333;
-	font-family: PTSansNarrowBold;
-	margin: 10px 0px 0px;
-}
-
-input {
-	-webkit-transition: box-shadow 0.1s linear;
-}
-
-input:focus {
-	box-shadow: 0px 0px 15px 2px rgba(255,255,255,1);
-}
-
-.login-alternative {
-	margin: 20px 10px 10px;
-	text-align: center;
-	font-size: 13pt;
-	font-family: PTSansNarrowBold;
-}
-
-.login-alternative p {
-	margin: 6px;
-	color: #333;
 }

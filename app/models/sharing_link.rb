@@ -5,7 +5,7 @@ class SharingLink < ActiveRecord::Base
   before_create :generate_code
   
   scope :active, lambda {
-    where("expires_at >= ?", Time.now)
+    where("expires_at < ?", Time.now)
   }
   
   private

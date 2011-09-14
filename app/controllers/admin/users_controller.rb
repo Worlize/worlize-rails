@@ -4,7 +4,7 @@ class Admin::UsersController < ApplicationController
   before_filter :require_admin
   
   def index
-    @users = User.paginate(:page => params[:page], :order => 'created_at DESC')
+    @users = User.active.paginate(:page => params[:page], :order => 'created_at DESC')
   end
   
   def show
@@ -31,10 +31,10 @@ class Admin::UsersController < ApplicationController
   def destroy
     begin
       @user = User.find(params[:id])
-      if @user.destroy
-        flash[:notice] = "#{@user.username} deleted successfully."
+      if @user.update_attribute(:suspended, true)
+        flash[:notice] = "#{@user.username} suspended successfully."
       else
-        flash[:error] = "Unable to delete #{@user.username}."
+        flash[:error] = "Unable to suspend #{@user.username}."
       end
     rescue => detail
       flash[:error] = detail.message

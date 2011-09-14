@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   before_filter :require_user, :except => [:new, :create, :validate_field]
 
+  layout 'login'
+
   def new
     if current_user
       redirect_to dashboard_url and return
@@ -18,11 +20,6 @@ class UsersController < ApplicationController
         @user.email = oa['user_info']['email']
       elsif oa['provider'] == 'twitter'
         @user.username = oa['user_info']['nickname']
-        name_parts = oa['user_info']['name'].split(' ')
-        @user.first_name = name_parts[0]
-        if name_parts.length > 1
-          @user.last_name = name_parts[name_parts.length-1]
-        end
       end
     end
     
@@ -57,7 +54,6 @@ class UsersController < ApplicationController
         :message => "You must specify an attribute name and a value"
       })
     end
-    
   end
 
   def create
@@ -80,6 +76,7 @@ class UsersController < ApplicationController
       
       # If we created the account via an OmniAuth login, make sure to link the
       # external account!
+      Rails.logger.debug("Omniauth:\n#{session[:omniauth].to_yaml}")
       if session[:omniauth]
         success = @user.authentications.create(
           :provider => session[:omniauth]['provider'],
@@ -88,9 +85,10 @@ class UsersController < ApplicationController
         if !success
           flash[:alert] = "Unable to associate your #{omniauth['provider'].capitalize} account."
         end
+        session.delete(:omniauth)
       end
       
-      redirect_to dashboard_authentications_url
+      redirect_to dashboard_url
     else
       render "users/new"
     end

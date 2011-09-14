@@ -4,6 +4,10 @@ class User < ActiveRecord::Base
   after_create :initialize_currency
   before_destroy :unlink_friendships
   
+  scope :active, lambda {
+    where(:suspended => false)
+  }
+  
   has_many :authentications, :dependent => :destroy
   
   has_many :worlds, :dependent => :destroy
@@ -35,33 +39,29 @@ class User < ActiveRecord::Base
                   :first_name,
                   :last_name
   
-  validates :first_name, :presence => true
-  validates :last_name, :presence => true
-  validates :birthday, :timeliness => {
-      :before => :thirteen_years_ago,
-      :type => :date
-  }
+  # validates :birthday, :timeliness => {
+  #       :before => :thirteen_years_ago,
+  #       :type => :date
+  #   }
+
   validates :email, { :presence => true,
-                      :email => true,
-                      :uniqueness => {
-                        :message => "has already been used"
-                      }
+                      :email => true
                     }
   
   state_machine :initial => :new_user do
     
     event :first_time_login do
-      transition :new_user => :linking_external_accounts
-    end
-    
-    event :finish_linking_external_accounts do
-      transition :linking_external_accounts => :user_ready
+      transition :new_user => :user_ready
     end
     
   end
 
   acts_as_authentic do |c|
-    #config options here
+    c.validate_password_field = false
+  end
+  
+  def active?
+    !self.suspended?
   end
   
   def public_hash_for_api
@@ -75,8 +75,6 @@ class User < ActiveRecord::Base
   def hash_for_api
     world = self.worlds.first
     self.public_hash_for_api.merge(
-      :first_name => self.first_name,
-      :last_name => self.last_name,
       :background_slots => self.background_slots,
       :avatar_slots => self.avatar_slots,
       :prop_slots => self.prop_slots,
