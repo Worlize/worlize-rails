@@ -70,5 +70,17 @@ class ApplicationController < ActionController::Base
       session[:return_to] = nil
       return url
     end
+    
+    def get_facebook_user_info
+      oauth = Koala::Facebook::OAuth.new(
+        Worlize.config['facebook']['app_id'],
+        Worlize.config['facebook']['app_secret']
+      )
+      oauth.get_user_info_from_cookies(cookies)
+    end
+    
+    def get_facebook_access_token
+      get_facebook_user_info ? get_facebook_user_info['access_token'] : nil
+    end
   
 end

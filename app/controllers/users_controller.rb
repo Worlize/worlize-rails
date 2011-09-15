@@ -57,6 +57,10 @@ class UsersController < ApplicationController
   end
 
   def create
+    if !session[:omniauth]
+      redirect_to new_user_url and return
+    end
+
     @beta_invitation = BetaInvitation.find_by_invite_code(params[:invite_code])
 
     @user = User.new(params[:user])
@@ -74,19 +78,16 @@ class UsersController < ApplicationController
         @user.befriend(@user.inviter)
       end
       
-      # If we created the account via an OmniAuth login, make sure to link the
-      # external account!
+      # Make sure to link the external account!
       Rails.logger.debug("Omniauth:\n#{session[:omniauth].to_yaml}")
-      if session[:omniauth]
-        success = @user.authentications.create(
-          :provider => session[:omniauth]['provider'],
-          :uid => session[:omniauth]['uid']
-        )
-        if !success
-          flash[:alert] = "Unable to associate your #{omniauth['provider'].capitalize} account."
-        end
-        session.delete(:omniauth)
+      success = @user.authentications.create(
+        :provider => session[:omniauth]['provider'],
+        :uid => session[:omniauth]['uid']
+      )
+      if !success
+        flash[:alert] = "Unable to associate your #{omniauth['provider'].capitalize} account."
       end
+      session.delete(:omniauth)
       
       redirect_to dashboard_url
     else

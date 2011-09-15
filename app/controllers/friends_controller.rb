@@ -54,6 +54,61 @@ class FriendsController < ApplicationController
     })
   end
   
+  # Find all facebook friends who are on worlize
+  def facebook
+
+    # Koala API methods will raise errors for things like expired tokens
+    begin
+      fb_graph = Koala::Facebook::API.new(get_facebook_access_token)
+      # Get user's list of facebook friends
+      fb_friends = fb_graph.get_connections('me', 'friends', {'fields' => 'id,name,picture'})
+    rescue Koala::Facebook::APIError => e
+      render :json => {
+        'success' => false,
+        'error' => e.to_s
+      } and return
+    end
+    
+    fb_friends.sort! { |a,b| a['name'].downcase <=> b['name'].downcase }
+      
+    # Keep a reference to each by their Facbook ID so we can find and return
+    # the facebook data once we find all the worlize users with matching
+    # facebook IDs.
+    fb_friends_by_id = Hash.new
+    fb_friends.each do |fb_friend|
+      fb_friends_by_id[fb_friend['id']] = fb_friend
+    end
+    
+    # Find all Worlize users that have linked a facebook account with an ID
+    # contained in the current user's Facebook friend list.
+    matches = User.joins(:authentications).
+                   where(:authentications => {
+                      :provider => 'facebook',
+                      :uid => fb_friends.map { |f| f['id'] }
+                   });
+    
+    matches.find_each do |user|
+      fb_authentication = user.authentications.where(:provider => 'facebook').first
+      fb_friend = fb_friends_by_id[fb_authentication.uid]
+      fb_friend['worlize'] = user.public_hash_for_api.merge({
+        'is_friend' => user.is_friends_with?(current_user)
+      })
+    end
+    
+    on_worlize       = fb_friends.select { |f| f['worlize'] }
+    not_on_worlize   = fb_friends.reject { |f| f['worlize'] }
+    already_friended = on_worlize.select { |f| f['worlize']['is_friend'] }
+    not_yet_friended = on_worlize.reject { |f| f['worlize']['is_friend'] }
+    
+    render :json => {
+      'success' => true,
+      'data' => {
+        'not_yet_friended' => not_yet_friended,
+        'already_friended' => already_friended,
+        'not_on_worlize' => not_on_worlize
+      }
+    }
+  end  
   
   def request_friendship
     potential_friend = User.find_by_guid(params[:id])

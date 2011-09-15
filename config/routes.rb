@@ -66,6 +66,9 @@ Worlize::Application.routes.draw do |map|
       post :request_to_join
       post :grant_permission_to_join
     end
+    collection do
+      get  :facebook
+    end
   end
 
   resources :users do
