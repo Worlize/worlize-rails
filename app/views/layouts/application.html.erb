@@ -34,7 +34,6 @@
   <%= render :partial => 'layouts/open_graph_global' %>
 
   <%= yield :extra_head_items %>
-
  
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
   <script src="/javascripts/libs/modernizr-1.6.min.js"></script>
@@ -44,6 +43,26 @@
 </head>
 
 <body>
+  <div id="fb-root"></div>
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId  : '<%= Worlize.config['facebook']['app_id'] %>',
+        status : true, // check login status
+        cookie : true, // enable cookies to allow the server to access the session
+        xfbml  : true,  // parse XFBML
+        channelUrl  : '<%= "#{request.scheme}://#{request.host_with_port}/channel.html" %>', // Custom Channel URL
+        oauth : true //enables OAuth 2.0
+      });
+    };
+
+    (function() {
+      var e = document.createElement('script');
+      e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+      e.async = true;
+      document.getElementById('fb-root').appendChild(e);
+    }());
+  </script>
 
   <div id="container">
     <header>

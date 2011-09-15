@@ -1,6 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<!-- saved from url=(0014)about:internet -->
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">	
+<!doctype html>  
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en" xml:lang="en"> 
     <%
         if ::Rails.env == 'production' 
           path = '/client' 
@@ -11,30 +10,25 @@
         cache_bust = '30'
     -%>
     <head>
-        <title>Worlize</title>         
+        <meta name="google" value="notranslate" />         
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <style type="text/css" media="screen"> 
-			    html, body	{ height:100%; }
-			    body { margin:0; padding:0; overflow:auto; text-align:center; background-color: #ffffff; }   
-			    #flashContent { display:none; }
-        </style>
-        <link rel="stylesheet" href="/stylesheets/enter.css?cb=<%= cache_bust %>">
-        <script type="text/javascript">
-          (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            ga.onload = function() {
-              window._flashtracker = _gat._createTracker('UA-7700604-3', 'flashTracker');
-            };
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-          })();
+        <title>Worlize</title>         
 
-        </script>
+        <style type="text/css" media="screen"> 
+            html, body  { height:100%; }
+            body { margin:0; padding:0; overflow:auto; text-align:center; 
+                   background-color: #ffffff; }   
+            object:focus { outline:none; }
+            #flashContent { display:none; }
+        </style>
+
+        <link rel="stylesheet" href="/stylesheets/enter.css?cb=<%= cache_bust %>">
         <script type="text/javascript" src="/javascripts/swfobject.js"></script>
+
         <script type="text/javascript">
-            <!-- For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. --> 
-            var swfVersionStr = "10.0.0";
-            <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
+            // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
+            var swfVersionStr = "10.2.0";
+            // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
             var xiSwfUrlStr = "<%= path %>/playerProductInstall.swf";
             var flashvars = {};
             var params = {};
@@ -52,8 +46,8 @@
                 "100%", "100%", 
                 swfVersionStr, xiSwfUrlStr, 
                 flashvars, params, attributes);
-            <!-- JavaScript enabled so display the flashContent div in case it is not replaced with a swf object. -->
-			      swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+            // JavaScript enabled so display the flashContent div in case it is not replaced with a swf object.
+            swfobject.createCSS("#flashContent", "display:block;text-align:left;");
         </script>
         
         <script>
@@ -63,10 +57,40 @@
         </script>
     </head>
     <body>
+      <div id="fb-root"></div>
+      <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            appId  : '<%= Worlize.config['facebook']['app_id'] %>',
+            status : true, // check login status
+            cookie : true, // enable cookies to allow the server to access the session
+            xfbml  : true,  // parse XFBML
+            channelUrl  : '<%= "#{request.scheme}://#{request.host_with_port}/channel.html" %>', // Custom Channel URL
+            oauth : true //enables OAuth 2.0
+          });
+        };
+
+        (function() {
+          var e = document.createElement('script');
+          e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+          e.async = true;
+          document.getElementById('fb-root').appendChild(e);
+        }());
+
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          ga.onload = function() {
+            window._flashtracker = _gat._createTracker('UA-7700604-3', 'flashTracker');
+          };
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      
       <div id="flashContent">
       	<p>
         	To view this page ensure that Adobe Flash Player version 
-			    10.0.0 or greater is installed. 
+			    10.2.0 or greater is installed. 
 		    </p>
       </div>
 	   	
@@ -75,25 +99,5 @@
       <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery-1.4.3.js"%3E%3C/script%3E'))</script>
 
       <script src="/javascripts/enter.js?cb=<%= cache_bust %>" type="text/javascript" charset="utf-8"></script>
-      
-      <!-- Facebook API -->
-      <div id="fb-root"></div>
-      <script>
-        window.fbAsyncInit = function() {
-          FB.init({
-            appId: "<%= Worlize.config['facebook']['app_id'] %>",
-            status: false,
-            cookie: true,
-            xfbml: false
-          });
-        };
-        (function() {
-          var e = document.createElement('script'); e.async = true;
-          e.src = document.location.protocol +
-            '//connect.facebook.net/en_US/all.js';
-          document.getElementById('fb-root').appendChild(e);
-        }());
-      </script>
-      
    </body>
 </html>
