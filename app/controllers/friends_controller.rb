@@ -59,7 +59,7 @@ class FriendsController < ApplicationController
 
     # Koala API methods will raise errors for things like expired tokens
     begin
-      fb_graph = Koala::Facebook::API.new(get_facebook_access_token)
+      fb_graph = Koala::Facebook::API.new(params[:access_token])
       # Get user's list of facebook friends
       fb_friends = fb_graph.get_connections('me', 'friends', {'fields' => 'id,name,picture'})
     rescue Koala::Facebook::APIError => e
