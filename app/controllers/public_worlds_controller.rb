@@ -21,10 +21,10 @@ class PublicWorldsController < ApplicationController
       :entrance => my_world.rooms.first.guid
     })
     
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => true,
       :count => worlds.length,
       :data => worlds
-    })    
+    }
   end
 end

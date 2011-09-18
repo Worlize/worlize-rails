@@ -38,7 +38,7 @@ module Worlize
     end
     
     def broadcast_to_room(room_guid, message)
-      Worlize::PubSub.publish("room:#{room_guid}", Yajl::Encoder.encode(message))
+      Worlize::PubSub.publish("room:#{room_guid}", message)
     end
 
     def find_least_loaded_server_id

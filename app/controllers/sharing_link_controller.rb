@@ -24,10 +24,10 @@ class SharingLinkController < ApplicationController
   def create
     room = Room.find_by_guid[:room_guid]
     if room.nil?
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :message => 'Specified room guid does not exist'
-      })
+      }
     end
     
     link = SharingLink.active.where(
@@ -44,15 +44,15 @@ class SharingLinkController < ApplicationController
     end
     
     if link.persisted?
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => true,
         :url => sharing_link_url(link)
-      })
+      }
     else
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :message => 'Unable to create requested link'
-      })
+      }
     end
     
   end

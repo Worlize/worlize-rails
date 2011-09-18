@@ -3,10 +3,10 @@ class InWorld::ObjectsController < ApplicationController
   def create
     room = Room.find_by_guid(params[:room_id])
     if !current_user.can_edit?(room)
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "You do not have permisson to author this room"
-      }) and return
+      } and return
     end
     
     in_world_object_instance = current_user.in_world_object_instances.find_by_guid(params[:in_world_object_instance_guid])
@@ -14,23 +14,23 @@ class InWorld::ObjectsController < ApplicationController
     if in_world_object_instance
 
       if in_world_object_instance.room
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => false,
           :description => "This object is already in use in room \"#{in_world_object_instance.room.name}\""
-        }) and return
+        } and return
       end
       
       begin
         manager = room.room_definition.in_world_object_manager
         manager.add_object_instance(in_world_object_instance, params[:x], params[:y])
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => true
-        }) and return
+        } and return
       rescue => detail
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => false,
           :description => detail.message
-        }) and return
+        } and return
       end
     end
   end
@@ -38,10 +38,10 @@ class InWorld::ObjectsController < ApplicationController
   def update
     room = Room.find_by_guid(params[:room_id])
     if !current_user.can_edit?(room)
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "You do not have permisson to author this room"
-      }) and return
+      } and return
     end
     
     in_world_object_instance = current_user.in_world_object_instances.find_by_guid(params[:id])
@@ -55,30 +55,30 @@ class InWorld::ObjectsController < ApplicationController
           dest = (params[:dest] != 'null') ? params[:dest] : nil
           manager.update_object_destination(in_world_object_instance, dest)
         end
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => true
-        }) and return
+        } and return
       rescue => detail
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => false,
           :description => detail.message
-        }) and return
+        } and return
       end
     else
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "Unable to find the specified object instance"
-      }) and return
+      } and return
     end
   end
   
   def destroy
     room = Room.find_by_guid(params[:room_id])
     if !current_user.can_edit?(room)
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "You do not have permisson to author this room"
-      }) and return
+      } and return
     end
     
     in_world_object_instance = current_user.in_world_object_instances.find_by_guid(params[:id])
@@ -87,20 +87,20 @@ class InWorld::ObjectsController < ApplicationController
       begin
         manager = room.room_definition.in_world_object_manager
         manager.remove_object_instance(in_world_object_instance)
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => true
-        }) and return
+        } and return
       rescue => detail
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => false,
           :description => detail.message
-        }) and return
+        } and return
       end
     else
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "You must provide an object instance guid"
-      }) and return
+      } and return
     end
   end
 

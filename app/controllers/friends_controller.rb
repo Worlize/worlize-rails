@@ -50,15 +50,15 @@ class FriendsController < ApplicationController
       end
     end
     
-    render :json => Yajl::Encoder.encode(output)
+    render :json => output
   end
   
   # Unfriend
   def destroy
     sworn_enemy = User.find_by_guid(params[:id])
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => current_user.unfriend(sworn_enemy)
-    })
+    }
   end
   
   # Find all facebook friends who are on worlize
@@ -120,51 +120,51 @@ class FriendsController < ApplicationController
   def request_friendship
     potential_friend = User.find_by_guid(params[:id])
     if potential_friend == current_user
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "You cannot add yourself as a friend!"
-      }) and return 
+      } and return 
     end
     
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => current_user.request_friendship_of(potential_friend)
-    })
+    }
   end
   
   def reject_friendship
     rejected_friend = User.find_by_guid(params[:id])
     render :nothing and return if rejected_friend == current_user
     
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => current_user.reject_friendship_request_from(rejected_friend)
-    })
+    }
   end
   
   def accept_friendship
     new_friend = User.find_by_guid(params[:id])
     render :nothing and return if new_friend == current_user
     
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => current_user.accept_friendship_request_from(new_friend)
-    })
+    }
   end
   
   def retract_friendship_request
     potential_friend = User.find_by_guid(params[:id])
     render :nothing and return if potential_friend == current_user
     
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => current_user.retract_friendship_request_for(potential_friend)
-    })
+    }
   end
   
   def invite_to_join
     friend = User.find_by_guid(params[:id])
     if friend.nil?
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "The specified user does not exist."
-      }) and return
+      } and return
     end
     
     room = Room.find_by_guid(current_user.interactivity_session.room_guid)
@@ -179,26 +179,26 @@ class FriendsController < ApplicationController
       }
     })
     
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => true
-    })
+    }
   end
   
   def request_to_join
     friend = User.find_by_guid(params[:id])
     
     if friend.interactivity_session.room_guid == current_user.interactivity_session.room_guid
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => true,
         :description => "You are already in the same room with the specified user."
-      }) and return
+      } and return
     end
     
     if friend.nil?
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "The specified user does not exist."
-      }) and return
+      } and return
     end
     
     friend.send_message({
@@ -209,18 +209,18 @@ class FriendsController < ApplicationController
       }
     })
     
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => true
-    })
+    }
   end
   
   def grant_permission_to_join
     friend = User.find_by_guid(params[:id])
     if friend.nil?
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "The specified user does not exist."
-      }) and return
+      } and return
     end
     
     friend.send_message({
@@ -232,8 +232,8 @@ class FriendsController < ApplicationController
       }
     })
     
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => true
-    })
+    }
   end
 end

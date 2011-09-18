@@ -2,36 +2,36 @@ class InWorld::YoutubePlayersController < ApplicationController
   def create
     room = Room.find_by_guid(params[:room_id])
     if !current_user.can_edit?(room)
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "You do not have permisson to author this room"
-      }) and return
+      } and return
     end
     
     begin
       manager = room.room_definition.youtube_manager
       player = manager.create_new_player()
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => true,
         :data => {
           :player => player
         }
-      }) and return
+      } and return
     rescue => detail
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => detail.message
-      }) and return
+      } and return
     end
   end
   
   def update
     room = Room.find_by_guid(params[:room_id])
     if !current_user.can_edit?(room)
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "You do not have permisson to author this room"
-      }) and return
+      } and return
     end
     
     begin
@@ -50,14 +50,14 @@ class InWorld::YoutubePlayersController < ApplicationController
         end
         manager.update_player_data(params[:id], data)
       end
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => true
-      }) and return
+      } and return
     rescue => detail
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => detail.message
-      }) and return
+      } and return
     end
     
   end
@@ -65,23 +65,23 @@ class InWorld::YoutubePlayersController < ApplicationController
   def destroy
     room = Room.find_by_guid(params[:room_id])
     if !current_user.can_edit?(room)
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "You do not have permisson to author this room"
-      }) and return
+      } and return
     end
     
     begin
       manager = room.room_definition.youtube_manager
       manager.remove_player(params[:id])
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => true
-      }) and return
+      } and return
     rescue => detail
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => detail.message
-      }) and return
+      } and return
     end
     
   end

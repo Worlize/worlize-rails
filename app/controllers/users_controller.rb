@@ -47,12 +47,12 @@ class UsersController < ApplicationController
         response[:full_message] = "#{attribute.capitalize} #{message}"
       end
 
-      render :json => Yajl::Encoder.encode(response)
+      render :json => response
     else
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :valid => false,
         :message => "You must specify an attribute name and a value"
-      })
+      }
     end
   end
 
@@ -116,30 +116,30 @@ class UsersController < ApplicationController
             @object = @user.hash_for_api
           end
         end
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => true,
           :data => @object
-        })
+        }
       end
     end
   end
   
   def search
     if params[:q].nil?
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => true,
         :count => 0,
         :data => {}
-      }) and return
+      } and return
     end
 
     search_term = params[:q].split(/\s/).first
     if search_term.empty?
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => true,
         :count => 0,
         :data => {}
-      }) and return
+      } and return
     end
     
     # Don't let users insert their own wildcards
@@ -148,7 +148,7 @@ class UsersController < ApplicationController
     query = User.where('username LIKE ? OR email = ?', "#{search_term}%", search_term)
     query = query.where('id != ?', current_user.id)
     results = query.limit(10).order('username ASC').all
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => true,
       :total => query.count,
       :count => results.length,
@@ -160,7 +160,7 @@ class UsersController < ApplicationController
           :has_pending_request => current_user.has_requested_friendship_of?(user)
         }
       end
-    })
+    }
   end
 
 end

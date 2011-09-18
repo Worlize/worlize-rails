@@ -5,12 +5,12 @@ class Locker::BackgroundsController < ApplicationController
       i.hash_for_api
     end
     
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => true,
       :capacity => current_user.background_slots,
       :count => result.length,
       :data => result
-    })
+    }
   end
 
   def create
@@ -23,22 +23,22 @@ class Locker::BackgroundsController < ApplicationController
     if @background.save
       bi = current_user.background_instances.create(:background => @background)
       if (bi.persisted?)
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => true,
           :data => bi.hash_for_api
-        })
+        }
       else
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => false,
           :description => "Unable to create background instance."
-        })
+        }
       end
     else
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "Background is invalid.",
         :errors => @background.errors
-      })
+      }
     end
   end
 
@@ -66,12 +66,12 @@ class Locker::BackgroundsController < ApplicationController
       end
     end
     
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => instance.destroyed?,
       :balance => {
         :coins => current_user.coins,
         :bucks => current_user.bucks
       }
-    })
+    }
   end
 end

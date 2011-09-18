@@ -3,10 +3,10 @@ class InWorld::HotspotsController < ApplicationController
     room = Room.find_by_guid(params[:room_id])
     
     if !current_user.can_edit?(room)
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => 'You do not have permission to author this room'
-      }) and return
+      } and return
     end
 
     begin
@@ -68,11 +68,11 @@ class InWorld::HotspotsController < ApplicationController
         
         Worlize::PubSub.publish(
           "room:#{room.guid}",
-          Yajl::Encoder.encode({
+          {
             :msg => 'new_hotspot',
             :room => room.guid,
             :data => hotspot
-          })
+          }
         )
         success = true
         
@@ -86,16 +86,16 @@ class InWorld::HotspotsController < ApplicationController
     end
     
     if success
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => true,
         :room_guid => room.guid,
         :data => hotspot
-      })
+      }
     else
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => description
-      })
+      }
     end
   end
   
@@ -177,14 +177,14 @@ class InWorld::HotspotsController < ApplicationController
     end
     
     if success  
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => true
-      })
+      }
     else
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => description
-      })
+      }
     end
   end
   
@@ -192,10 +192,10 @@ class InWorld::HotspotsController < ApplicationController
     room = Room.find_by_guid(params[:room_id])
     
     if !current_user.can_edit?(room)
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => 'You do not have permission to author this room'
-      }) and return
+      } and return
     end
     
     hotspot_guid = params[:id]
@@ -227,15 +227,15 @@ class InWorld::HotspotsController < ApplicationController
           }
         )
         
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => true
-        }) and return
+        } and return
       end
     end
     
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => false
-    })
+    }
   end
   
   private

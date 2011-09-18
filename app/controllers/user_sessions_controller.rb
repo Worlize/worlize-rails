@@ -40,17 +40,17 @@ class UserSessionsController < ApplicationController
 
         format.html { redirect_back_or_default(default_url) }
         format.json do
-          render :json => Yajl::Encoder.encode({
+          render :json => {
             :success => true,
             :redirect_to => get_redirect_back_or_default_url(default_url)
-          })
+          }
         end
       else
         format.html { render :action => "new" }
         format.json do
-          render :json => Yajl::Encoder.encode({
+          render :json => {
             :success => false
-          })
+          }
         end
       end
     end

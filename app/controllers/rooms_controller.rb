@@ -13,15 +13,15 @@ class RoomsController < ApplicationController
         }
       end
 
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => true,
         :data => rooms
-      })
+      }
     else
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "There is no such world."
-      })
+      }
     end
   end
   
@@ -29,12 +29,12 @@ class RoomsController < ApplicationController
     room = Room.find_by_guid(params[:id])
     
     if room
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => true,
         :data => room.hash_for_api(current_user)
-      })
+      }
     else
-      render :json => Yajl::Encoder.encode({ :success => false, :description => "Unable to load room" })
+      render :json => { :success => false, :description => "Unable to load room" }
     end
     
   end
@@ -75,42 +75,42 @@ class RoomsController < ApplicationController
       room_name = params[:room_name] || 'Untitled Area'
       room = world.rooms.new(:name => room_name)
       if room.save
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => true,
           :data => {
             :room_guid => room.guid
           }
-        }) and return
+        } and return
       else
         error_message = room.errors.map { |k,v| "#{k} #{v}" }.join(", ")
       end
     else
       error_message = "Permission Denied"
     end
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => false,
       :description => error_message
-    })
+    }
   end
   
   def update
     room = Room.find_by_guid(params[:id])
     if room.world.user == current_user
       if room.update_attributes(:name => params[:room][:name])
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => true
-        }) and return
+        } and return
       else
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => false,
           :description => room.errors.map { |k,v| "#{k} #{v}" }.join(', ')
-        }) and return
+        } and return
       end
     else
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "Permission Denied"
-      }) and return
+      } and return
     end
   end
 
@@ -143,22 +143,22 @@ class RoomsController < ApplicationController
         end
       end
 
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => success,
         :data => {
           :updated_background_instances => updated_background_instances
         }
-      })
+      }
       return
       
     else
       error = "Permission denied"
     end
     
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => success,
       :description => error
-    })
+    }
   end
   
   
@@ -168,10 +168,10 @@ class RoomsController < ApplicationController
     description = ''
     if world.user == current_user
       if world.rooms.count == 1
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => false,
           :description => "You cannot delete your last area.  You must create another area first."
-        }) and return
+        } and return
       end
       
       room.destroy
@@ -184,9 +184,9 @@ class RoomsController < ApplicationController
     else
       description = 'Permission denied'
     end
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => room.destroyed?
-    })
+    }
   end
   
 end

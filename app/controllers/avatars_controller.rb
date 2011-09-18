@@ -4,15 +4,15 @@ class AvatarsController < ApplicationController
   def show
     avatar = Avatar.find_by_guid(params[:id])
     if avatar
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => true,
         :data => avatar.hash_for_api
-      })
+      }
     else
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "Unable to find the specified avatar"
-      }), :status => 404
+      }, :status => 404
     end
   end
   
@@ -21,29 +21,29 @@ class AvatarsController < ApplicationController
     recipient = User.find_by_guid(params[:recipient_guid])
     
     if recipient.nil? || !current_user.is_friends_with?(recipient)
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "You are not friends with the specified recipient"
-      }) and return
+      } and return
     end
 
     if avatar.nil?
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "Unable to find the specified avatar"
-      }) and return
+      } and return
     end
 
     gift = avatar.gifts.build(:sender => current_user, :recipient => recipient, :note => params[:note])
     if gift.save
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => true
-      })
+      }
     else
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => errors.map { |k,v| "- #{k.to_s.humanize} #{v}" }.join(".\n")
-      })
+      }
     end
         
   end

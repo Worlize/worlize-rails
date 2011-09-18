@@ -3,20 +3,20 @@ class GiftsController < ApplicationController
   def index
     gifts = current_user.received_gifts.order('created_at DESC')
     
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => true,
       :data => gifts.map { |gift| gift.hash_for_api }
-    })
+    }
   end
   
   # Ignore gift
   def destroy
     gift = current_user.received_gifts.find_by_guid(params[:id])
     if gift.nil?
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => 'Unable to find the specified gift id'
-      }) and return
+      } and return
     end
     
     # If this is the last gift remaining for an avatar that has no
@@ -36,18 +36,18 @@ class GiftsController < ApplicationController
       gift.destroy
     end
     
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => true
-    })
+    }
   end
   
   def accept
     gift = current_user.received_gifts.find_by_guid(params[:id])
     if gift.nil?
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => 'Unable to find the specified gift id'
-      }) and return
+      } and return
     end
     
     # FIXME: Re-architect so that this isn't specific to the
@@ -56,10 +56,10 @@ class GiftsController < ApplicationController
       
       # Check for available slots..
       if (current_user.avatar_instances.count >= current_user.avatar_slots)
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => false,
           :description => "You don't have enough empty slots in your avatar locker.  You must buy more slots or delete an avatar before you can accept this gift."
-        }) and return
+        } and return
       end
       
       avatar = gift.giftable
@@ -69,21 +69,21 @@ class GiftsController < ApplicationController
       )
       if avatar_instance.persisted?
         gift.destroy
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => true,
           :data => avatar_instance.hash_for_api
-        })
+        }
       else
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => false,
           :description => "An unknown error occurred while accepting your gift."
-        })
+        }
       end
     else
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "Gifts of type #{gift.giftable_type} are not yet supported."
-      })
+      }
     end
     
   end

@@ -5,12 +5,12 @@ class Locker::InWorldObjectsController < ApplicationController
       o.hash_for_api
     end
     
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => true,
       :capacity => current_user.in_world_object_slots,
       :count => result.length,
       :data => result
-    })
+    }
   end
   
   def create
@@ -25,22 +25,22 @@ class Locker::InWorldObjectsController < ApplicationController
     if @in_world_object.save
       oi = current_user.in_world_object_instances.create(:in_world_object => @in_world_object)
       if (oi.persisted?)
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => true,
           :data => oi.hash_for_api
-        })
+        }
       else
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => false,
           :description => "Unable to create in-world object instance."
-        })
+        }
       end
     else
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "In-world object is invalid.",
         :errors => @in_world_object.errors
-      })
+      }
     end
   end
   
@@ -60,13 +60,13 @@ class Locker::InWorldObjectsController < ApplicationController
       instance.destroy
     end
 
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => instance.destroyed?,
       :balance => {
         :coins => current_user.coins,
         :bucks => current_user.bucks
       }
-    })
+    }
   end
   
 end

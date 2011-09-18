@@ -40,7 +40,7 @@ class Admin::WorldsController < ApplicationController
       format.html
       format.json do
         output = @worlds.map { |w| { :name => w.name, :guid => w.guid } }
-        render :json => Yajl::Encoder.encode(output)
+        render :json => output
       end
     end
   end

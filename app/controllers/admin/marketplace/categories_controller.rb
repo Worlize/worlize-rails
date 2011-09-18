@@ -69,9 +69,9 @@ class Admin::Marketplace::CategoriesController < ApplicationController
         )
       end
     end
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => true
-    })
+    }
   end
 
   def update_featured_item_positions
@@ -91,9 +91,9 @@ class Admin::Marketplace::CategoriesController < ApplicationController
         MarketplaceFeaturedItem.update_all( { :position => i+1 }, search_criteria )
       end
     end
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => true
-    })
+    }
   end
   
   def update_carousel_item_positions
@@ -109,9 +109,9 @@ class Admin::Marketplace::CategoriesController < ApplicationController
         )
       end
     end
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => true
-    })
+    }
   end
   
 end

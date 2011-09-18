@@ -3,20 +3,20 @@ class Locker::AvatarsController < ApplicationController
   def index
     avatar_instances = current_user.avatar_instances.all(:include => [:avatar, :user])
       
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => true,
       :count => avatar_instances.length,
       :capacity => current_user.avatar_slots,
       :data => avatar_instances.map { |ai| ai.hash_for_api }
-    })
+    }
   end
   
   def create
     if current_user.avatar_slots <= current_user.avatar_instances.count
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "You cannot upload any more avatars."
-      }) and return
+      } and return
     end
     
     @avatar = Avatar.new(:name => "Created by #{current_user.username}",
@@ -31,22 +31,22 @@ class Locker::AvatarsController < ApplicationController
     if @avatar.save
       ai = current_user.avatar_instances.create(:avatar => @avatar)
       if (ai.persisted?)
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => true,
           :data => ai.hash_for_api
-        })
+        }
       else
-        render :json => Yajl::Encoder.encode({
+        render :json => {
           :success => false,
           :description => "Unable to create avatar instance."
-        })
+        }
       end
     else
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :description => "Avatar is invalid.",
         :errors => @avatar.errors
-      })
+      }
     end
   end
   
@@ -63,9 +63,9 @@ class Locker::AvatarsController < ApplicationController
       # otherwise just destroy the instance
       avatar_instance.destroy
     end
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => true
-    })
+    }
   end
   
 end

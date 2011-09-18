@@ -159,25 +159,25 @@ class Marketplace::ItemsController < ApplicationController
       coins = current_user.coins
       bucks = current_user.bucks
       
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => true,
         :formatted_coins => number_with_delimiter(coins),
         :formatted_bucks => number_with_delimiter(bucks),
         :coins => coins,
         :bucks => bucks
-      })
+      }
     rescue Exception => e
       errors.push(e.to_s)
       coins = current_user.coins
       bucks = current_user.bucks
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => false,
         :formatted_coins => number_with_delimiter(coins),
         :formatted_bucks => number_with_delimiter(bucks),
         :coins => coins,
         :bucks => bucks,
         :errors => errors
-      }), :status => 500
+      }, :status => 500
     end
   end
 

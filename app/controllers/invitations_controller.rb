@@ -27,15 +27,15 @@ class InvitationsController < ApplicationController
       })
       email.deliver
       
-      render :json => Yajl::Encoder.encode({
+      render :json => {
         :success => true,
         :description => "#{invitation.email} has been invited."
-      }) and return
+      } and return
     end
     
-    render :json => Yajl::Encoder.encode({
+    render :json => {
       :success => false,
       :description => invitation.errors.map { |k,v| "- #{k.to_s.humanize} #{v}" }.join(".\n")
-    })
+    }
   end
 end

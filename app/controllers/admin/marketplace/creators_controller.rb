@@ -8,11 +8,10 @@ class Admin::Marketplace::CreatorsController < ApplicationController
       query.gsub!('%', '')
       results = MarketplaceCreator.where('display_name LIKE ?', "#{query}%")
       
-      render :json => Yajl::Encoder.encode(
+      render :json => 
         results.map do |creator|
           creator.display_name
         end
-      )
     end
   end
 end
