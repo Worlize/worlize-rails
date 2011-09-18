@@ -15,25 +15,58 @@ class FriendsController < ApplicationController
         :error => "Unable to find the specified user"
       } and return
     end
+
+    output = {
+      :success => true,
+      :data => {}
+    }
     
-    friends = user.friends.map do |friend|
+    friends_by_guid = {}
+    friends = []
+    
+    # Load Facebook Friends
+    if params[:access_token]
+      fb_friends = load_facebook_friends(params[:access_token])
+
+      on_worlize = fb_friends.select { |f| f['worlize_user'] }
+      on_worlize.each do |data|
+        friend = data['worlize_user']
+        is_worlize_friend = friend.is_friends_with?(current_user)
+        friend_data = {
+          :friend_type => 'facebook',
+          :name => data['name'], # Name from Facebook
+          :picture => data['picture'],
+          :username => friend.username,
+          :guid => friend.guid,
+          :online => friend.online?,
+          :is_worlize_friend => is_worlize_friend
+        }
+        if friend.worlds.first && friend.worlds.first.rooms.first
+          friend_data[:world_entrance] = friend.worlds.first.rooms.first.guid
+        end
+        friends_by_guid[friend.guid] = friend_data
+        friends.push(friend_data)
+      end
+    end
+    
+    # Load Worlize Friends
+    user.friends.each do |friend|
+      next if friends_by_guid[friend.guid]
       friend_data = {
+        :friend_type => 'worlize',
         :username => friend.username,
         :guid => friend.guid,
-        :online => friend.online?
+        :online => friend.online?,
+        :picture => "#{request.scheme}://#{request.host_with_port}/images/unknown_user.png"
       }
       if friend.worlds.first && friend.worlds.first.rooms.first
         friend_data[:world_entrance] = friend.worlds.first.rooms.first.guid
       end
-      friend_data
+      friends_by_guid[friend.guid] = friend_data
+      friends.push(friend_data)
     end
     
-    output = {
-      :success => true,
-      :data => {
-        :friends => friends
-      }
-    }
+    output[:data][:friends] = friends
     
     if user == current_user
       output[:data][:pending_friends] = user.pending_friends.map do |friend|
@@ -63,47 +96,19 @@ class FriendsController < ApplicationController
   
   # Find all facebook friends who are on worlize
   def facebook
+    fb_friends = load_facebook_friends(params[:access_token])
+    
+    not_on_worlize   = fb_friends.reject { |f| f['worlize_user'] }
+    on_worlize       = fb_friends.select { |f| f['worlize_user'] }
 
-    # Koala API methods will raise errors for things like expired tokens
-    begin
-      fb_graph = Koala::Facebook::API.new(params[:access_token])
-      # Get user's list of facebook friends
-      fb_friends = fb_graph.get_connections('me', 'friends', {'fields' => 'id,name,picture'})
-    rescue Koala::Facebook::APIError => e
-      render :json => {
-        'success' => false,
-        'error' => e.to_s
-      } and return
-    end
-    
-    fb_friends.sort! { |a,b| a['name'].downcase <=> b['name'].downcase }
-      
-    # Keep a reference to each by their Facbook ID so we can find and return
-    # the facebook data once we find all the worlize users with matching
-    # facebook IDs.
-    fb_friends_by_id = Hash.new
-    fb_friends.each do |fb_friend|
-      fb_friends_by_id[fb_friend['id']] = fb_friend
-    end
-    
-    # Find all Worlize users that have linked a facebook account with an ID
-    # contained in the current user's Facebook friend list.
-    matches = User.joins(:authentications).
-                   where(:authentications => {
-                      :provider => 'facebook',
-                      :uid => fb_friends.map { |f| f['id'] }
-                   });
-    
-    matches.find_each do |user|
-      fb_authentication = user.authentications.where(:provider => 'facebook').first
-      fb_friend = fb_friends_by_id[fb_authentication.uid]
-      fb_friend['worlize'] = user.public_hash_for_api.merge({
+    on_worlize.each do |data|
+      user = data['worlize_user']
+      data.delete('worlize_user')
+      data['worlize'] = user.public_hash_for_api.merge({
         'is_friend' => user.is_friends_with?(current_user)
       })
     end
     
-    on_worlize       = fb_friends.select { |f| f['worlize'] }
-    not_on_worlize   = fb_friends.reject { |f| f['worlize'] }
     already_friended = on_worlize.select { |f| f['worlize']['is_friend'] }
     not_yet_friended = on_worlize.reject { |f| f['worlize']['is_friend'] }
     
@@ -235,5 +240,45 @@ class FriendsController < ApplicationController
     render :json => {
       :success => true
     }
+  end
+  
+  private
+  
+  def load_facebook_friends(access_token)
+    # Koala API methods will raise errors for things like expired tokens
+    begin
+      fb_graph = Koala::Facebook::API.new(access_token)
+      # Get user's list of facebook friends
+      fb_friends = fb_graph.get_connections('me', 'friends', {'fields' => 'id,name,picture'})
+    rescue Koala::Facebook::APIError => e
+      return nil
+    end
+    
+    fb_friends.sort! { |a,b| a['name'].downcase <=> b['name'].downcase }
+      
+    # Keep a reference to each by their Facebook ID so we can find and return
+    # the facebook data once we find all the worlize users with matching
+    # facebook IDs.
+    fb_friends_by_id = Hash.new
+    fb_friends.each do |fb_friend|
+      fb_friends_by_id[fb_friend['id']] = fb_friend
+    end
+    
+    # Find all Worlize users that have linked a facebook account with an ID
+    # contained in the current user's Facebook friend list.
+    matches = User.joins(:authentications).
+                   includes(:authentications).
+                   where(:authentications => {
+                      :provider => 'facebook',
+                      :uid => fb_friends.map { |f| f['id'] }
+                   });
+    
+    matches.find_each do |user|
+      fb_authentication = user.authentications.select { |a| a.provider == 'facebook' }.first
+      fb_friend = fb_friends_by_id[fb_authentication.uid]
+      fb_friend['worlize_user'] = user
+    end
+    
+    fb_friends
   end
 end
