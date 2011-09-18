@@ -9,16 +9,12 @@ gem 'redis', '2.2.1'
 gem 'yajl-ruby', :require => 'yajl'
 gem 'RedCloth', '4.2.3'
 gem 'carrierwave', :git => 'git://github.com/jnicklas/carrierwave.git', :tag => '0.5.1'
-#gem 'rmagick', '2.13.1', :require => 'RMagick'
 gem 'mini_magick', '3.1'
 gem 'fog', '0.3.33'
 gem 'nestful', '0.0.6'
 
 # TODO: Are we using this?
 gem 'activemerchant', '1.15.0'
-
-# TODO: Are we using this?
-gem 'money', '3.7.1'
 
 # Facebook Graph API support
 gem "koala", "~> 1.2.0beta"
@@ -30,7 +26,7 @@ gem 'acts-as-taggable-on', '2.0.6'
 gem 'acts_as_list', '0.1.2'
 gem 'acts_as_tree', '0.1.1'
 
-# Yqy, jQuery!
+# Yay, jQuery!
 gem 'jquery-rails', '>= 1.0.12'
 
 gem 'validates_timeliness', '~> 3.0.0'
