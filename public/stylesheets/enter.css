@@ -1,4 +1,7 @@
-/* @override http://localhost/stylesheets/enter.css?cb=19 */
+/* @override 
+	http://localhost/stylesheets/enter.css?cb=19
+	http://turtle.office.worlize.com/stylesheets/enter.css?cb=30
+*/
 
 @font-face {
 	font-family: 'PTSansNarrowBold';
@@ -7,6 +10,106 @@
 	font-weight: normal;
 	font-style: normal;
 }
+
+body {
+	font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+p {
+	padding: 0px;
+	margin: 0px;
+}
+
+button {
+	border: none;
+	background: #969696;
+	border-radius: 4px;
+	font-weight: bold;
+	color: #FFF;
+	font-size: 10pt;
+	padding: 4px 10px;
+	cursor: pointer;
+}
+
+button:hover {
+	background: #6b6b6b;	
+}
+
+.popup-window-container {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+.click-catcher {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background: #444;
+    opacity: 0.5;
+    filter:alpha(opacity=50);
+}
+
+.popup {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    background: #FFFFFF;
+    box-shadow: 0px 3px 20px rgba(0,0,0,0.7);
+    border-radius: 3px;
+}
+
+.popup .content-container {
+	max-height: 340px;
+	margin: 10px;
+	overflow-y: scroll;
+	border: 1px solid #DDDDDD;
+}
+
+.friend-finder-window {
+    margin-top: 85px;
+    width: 550px;
+    padding-bottom: 34px;
+}
+
+.friend-finder-window > h1 {
+    font-family: PTSansNarrowBold;
+    font-size: 28pt;
+    font-weight: normal;
+    color: #0b5373;
+    padding: 5px 10px 0px;
+}
+
+.facebook-login-prompt {
+	background-color: #daeef7;
+	font-size: 12pt;
+	margin: 0px auto 20px;
+	text-align: center;
+	padding: 15px;
+	width: 400px;
+}
+
+.facebook-login-prompt p {
+	margin: 0px 0px 10px;
+}
+
+.popup .control-bar {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    height: 28px;
+	padding: 3px;
+    background-color: #eaeaea;
+    text-align: right;
+    border-radius: 0px 0px 3px 3px;
+}
+
+.popup .control-bar 
 
 #virtual-currency-products {
     background: #FFF;

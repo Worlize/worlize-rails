@@ -1,6 +1,44 @@
 var marketplaceShowing = false;
 var virtualCurrencyProductsShowing = false;
 
+if (window['FB']) {
+    initializeFacebook();
+}
+else {
+    var oldAsyncInitFn = window.fbAsyncInit;
+    window.fbAsyncInit = function() {
+        oldAsyncInitFn();
+        initializeFacebook();
+    };
+}
+
+function initializeFacebook() {
+    FB.Event.subscribe('auth.login', handleFacebookLogin);
+}
+
+function handleFacebookLogin(response) {
+    // Once a user authorizes the app with facebook, make sure to connect
+    // their facebook ID to their account in the database.
+    if (response.status === 'connected') {
+        $.post('/authentications/connect_facebook_via_js', {
+            access_token: response.authResponse.accessToken
+        });
+    }
+}
+
+function namespace(namespace) {
+    var parts = namespace.split('.');
+    var current = window;
+    for (var i=0,len=parts.length; i < len; i ++) {
+        var part = parts[i];
+        var next = current[part];
+        if (typeof(next) !== 'object') {
+            next = current[part] = {};
+        }
+        current = next;
+    }
+}
+
 function openMarketplace() {
     if (marketplaceShowing) { return; }
     if (virtualCurrencyProductsShowing) { closeVirtualCurrencyProducts(); }
@@ -20,6 +58,30 @@ function openMarketplace() {
     setTimeout(function() {
         $(document.body).append(marketplaceElement);
     }, 200);
+}
+
+function openFacebookFriendFinder() {
+    var friendFinder = new worlize.view.FacebookFriendFinder();
+    friendFinder.show();
+    // 
+    // FB.getLoginStatus(function(response) {
+    //     if (response.authResponse) {
+    //         // Logged into facebook and connected
+    //     }
+    //     else {
+    //         // not connected through facebook
+    //         // Prompt user to log in
+    //         FB.login(function(response) {
+    //           if (response.authResponse) {
+    //               var friendFinder = new worlize.view.FacebookFriendFinder();
+    //               friendFinder.show();
+    //               handleFacebookLogin();
+    //           } else {
+    //             // console.log('User cancelled login or did not fully authorize.');
+    //           }
+    //         }, {scope: requestedFacebookPermissions});
+    //     }
+    // });
 }
 
 function closeMarketplace() {
