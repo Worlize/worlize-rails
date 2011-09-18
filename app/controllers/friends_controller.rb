@@ -9,6 +9,13 @@ class FriendsController < ApplicationController
       user = current_user
     end
     
+    if user.nil?
+      render :json => {
+        :success => false,
+        :error => "Unable to find the specified user"
+      } and return
+    end
+    
     friends = user.friends.map do |friend|
       friend_data = {
         :username => friend.username,
