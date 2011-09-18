@@ -16,9 +16,13 @@ Worlize::Application.routes.draw do |map|
   match '/paypal/ipn' => 'paypal#ipn', :via => :post
   match '/paypal/return' => 'paypal#return', :via => :get, :as => :paypal_return
   
-  resource :dashboard, :controller => :dashboard do
-    resources :authentications
+  resources :authentications do
+    collection do
+      post :connect_facebook_via_js
+    end
   end
+  
+  resource :dashboard, :controller => :dashboard
 
   match "/marketplace" => 'marketplace/categories#index'
   match "/marketplace/search" => 'marketplace/items#search'
