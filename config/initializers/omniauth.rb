@@ -6,7 +6,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   end
   if Worlize.config['facebook']
     provider :facebook, Worlize.config['facebook']['app_id'], Worlize.config['facebook']['app_secret'], {
-      :scope => 'email'
+      :scope => Worlize.config['facebook']['requested_permissions']
     }
   end
 end
