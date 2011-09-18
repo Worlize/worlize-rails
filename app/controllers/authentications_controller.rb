@@ -34,7 +34,7 @@ class AuthenticationsController < ApplicationController
   def failure
     flash[:error] = "Your authentication was unsuccessful."
     respond_to do |format|
-      format.html { redirect_to current_user ? dashboard_authentications_url : root_url }
+      format.html { redirect_to current_user ? dashboard_url : root_url }
     end
   end
 
@@ -75,6 +75,43 @@ class AuthenticationsController < ApplicationController
       Rails.logger.debug "Unable to find matching omniauth authentication"
       session[:omniauth] = omniauth.except('extra')
       redirect_to new_user_url
+    end
+  end
+  
+  def connect_facebook_via_js
+    fb_authentication = current_user.authentications.where(:provider => 'facebook').first
+    if fb_authentication
+      render :json => {
+        'success' => true,
+        'detail' => 'Account already connected'
+      } and return
+    end
+    
+    # Koala API methods will raise errors for things like expired tokens
+    begin
+      fb_graph = Koala::Facebook::API.new(params[:access_token])
+      # Get user's list of facebook friends
+      fb_profile = fb_graph.get_object('me')
+    rescue Koala::Facebook::APIError => e
+      render :json => {
+        'success' => false,
+        'error' => e.to_s
+      } and return
+    end
+    
+    if fb_profile['id']
+      fb_authentication = current_user.authentications.create(
+        :provider => 'facebook',
+        :uid => fb_profile['id']
+      )
+      render :json => {
+        'success' => fb_authentication.persisted?
+      }
+    else
+      render :json => {
+        'success' => false,
+        'detail' => 'Unable to get facebook user id'
+      }
     end
   end
 
