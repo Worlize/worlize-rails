@@ -20,10 +20,10 @@ class AvatarsController < ApplicationController
     avatar = Avatar.find_by_guid(params[:id])
     recipient = User.find_by_guid(params[:recipient_guid])
     
-    if recipient.nil? || !current_user.is_friends_with?(recipient)
+    if recipient.nil?
       render :json => {
         :success => false,
-        :description => "You are not friends with the specified recipient"
+        :description => "Unable to find the specified recipient"
       } and return
     end
 

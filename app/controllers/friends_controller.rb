@@ -25,27 +25,39 @@ class FriendsController < ApplicationController
     friends = []
     
     # Load Facebook Friends
-    if params[:access_token]
-      fb_friends = load_facebook_friends(params[:access_token])
+    if user == current_user
+      fb_auth = current_user.facebook_authentication
+      if !fb_auth.nil? && fb_auth.token
+        fb_friends = load_facebook_friends(fb_auth.token)
 
-      on_worlize = fb_friends.select { |f| f['worlize_user'] }
-      on_worlize.each do |data|
-        friend = data['worlize_user']
-        is_worlize_friend = friend.is_friends_with?(current_user)
-        friend_data = {
-          :friend_type => 'facebook',
-          :name => data['name'], # Name from Facebook
-          :picture => data['picture'],
-          :username => friend.username,
-          :guid => friend.guid,
-          :online => friend.online?,
-          :is_worlize_friend => is_worlize_friend
-        }
-        if friend.worlds.first && friend.worlds.first.rooms.first
-          friend_data[:world_entrance] = friend.worlds.first.rooms.first.guid
+        on_worlize = fb_friends.select { |f| f['worlize_user'] }
+        on_worlize.each do |data|
+          friend = data['worlize_user']
+          is_worlize_friend = friend.is_friends_with?(current_user)
+          friend_data = {
+            :friend_type => 'facebook',
+            :name => data['name'], # Name from Facebook
+            :picture => data['picture'],
+            :username => friend.username,
+            :guid => friend.guid,
+            :online => friend.online?,
+            :is_worlize_friend => is_worlize_friend
+          }
+          if friend.facebook_authentication
+            friend_data[:facebook_profile] = friend.facebook_authentication.profile_url || "http://www.facebook.com/#{friend.facebook_authentication.uid}"
+          end
+          if friend.twitter_authentication && friend.twitter_authentication.profile_url
+            friend_data[:twitter_profile] = friend.twitter_authentication.profile_url
+          end
+          if friend.worlds.first && friend.worlds.first.rooms.first
+            friend_data[:world_entrance] = friend.worlds.first.rooms.first.guid
+          end
+          if friend.online?
+            friend_data[:current_room_guid] = friend.current_room_guid
+          end
+          friends_by_guid[friend.guid] = friend_data
+          friends.push(friend_data)
         end
-        friends_by_guid[friend.guid] = friend_data
-        friends.push(friend_data)
       end
     end
     
@@ -59,8 +71,17 @@ class FriendsController < ApplicationController
         :online => friend.online?,
         :picture => "#{request.scheme}://#{request.host_with_port}/images/unknown_user.png"
       }
+      if friend.facebook_authentication
+        friend_data[:facebook_profile] = friend.facebook_authentication.profile_url || "http://www.facebook.com/#{friend.facebook_authentication.uid}"
+      end
+      if friend.twitter_authentication && friend.twitter_authentication.profile_url
+        friend_data[:twitter_profile] = friend.twitter_authentication.profile_url
+      end
       if friend.worlds.first && friend.worlds.first.rooms.first
         friend_data[:world_entrance] = friend.worlds.first.rooms.first.guid
+      end
+      if friend.online?
+        friend_data[:current_room_guid] = friend.current_room_guid
       end
       friends_by_guid[friend.guid] = friend_data
       friends.push(friend_data)
@@ -150,7 +171,7 @@ class FriendsController < ApplicationController
     render :nothing and return if new_friend == current_user
     
     render :json => {
-      :success => current_user.accept_friendship_request_from(new_friend)
+      :success => current_user.accept_friendship_request_from(new_friend, "#{request.scheme}://#{request.host_with_port}")
     }
   end
   
@@ -232,7 +253,7 @@ class FriendsController < ApplicationController
       :msg => "permission_to_join_granted",
       :data => {
         :user => current_user.public_hash_for_api,
-        :room_guid => current_user.interactivity_session.room_guid,
+        :room_guid => current_user.current_room_guid,
         :invitation_token => params[:invitation_token]
       }
     })

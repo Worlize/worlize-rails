@@ -135,6 +135,10 @@ class User < ActiveRecord::Base
     @online = redis.sismember "connectedUsers:#{server_id}", self.guid
   end
   
+  def current_room_guid
+    self.interactivity_session.room_guid
+  end
+  
   def send_message(message)
     Worlize::PubSub.publish("user:#{self.guid}", message)
   end
@@ -147,6 +151,25 @@ class User < ActiveRecord::Base
     end
   end
   
+  def facebook_authentication
+    return @facebook_authentication if @facebook_authentication
+    self.authentications.each do |auth|
+      if auth.provider == 'facebook'
+        return @facebook_authentication = auth
+      end
+    end
+    return nil
+  end
+  
+  def twitter_authentication
+    return @twitter_authentication if @twitter_authentication
+    self.authentications.each do |auth|
+      if auth.provider == 'twitter'
+        return @twitter_authentication = auth
+      end
+    end
+    return nil
+  end
   
   ###################################################################
   ##  Friendship Functions                                         ##
@@ -190,21 +213,35 @@ class User < ActiveRecord::Base
     # Let's avoid sending an embarrassing "You've been rejected" message...
   end
   
-  def accept_friendship_request_from(accepted_friend)
+  def accept_friendship_request_from(accepted_friend, picture_base_url=nil)
     result = redis_relationships.srem "#{self.guid}:friendRequests", accepted_friend.guid
     if result
       self.befriend(accepted_friend)
+      
+      friend_data = {
+        :friend_type => 'worlize',
+        :picture => "#{picture_base_url}/images/unknown_user.png",
+        :guid => self.guid,
+        :username => self.username,
+        :online => self.online?
+      }
+      if self.facebook_authentication
+        friend_data[:facebook_profile] = self.facebook_authentication.profile_url || "http://www.facebook.com/#{friend.facebook_authentication.uid}"
+      end
+      if self.twitter_authentication && self.twitter_authentication.profile_url
+        friend_data[:twitter_profile] = self.twitter_authentication.profile_url
+      end
+      if self.worlds.first && self.worlds.first.rooms.first
+        friend_data[:world_entrance] = self.worlds.first.rooms.first.guid
+      end
+      if self.online?
+        friend_data[:current_room_guid] = self.current_room_guid
+      end
+      
       accepted_friend.send_message({
         :msg => 'friend_request_accepted',
         :data => {
-          :user => {
-            :guid => self.guid,
-            :username => self.username,
-            :online => self.online?,
-            :world_entrance =>
-              (self.worlds.first && self.worlds.first.rooms.first) ?
-                self.worlds.first.rooms.first.guid : nil
-          }
+          :user => friend_data
         }
       })
       return true

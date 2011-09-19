@@ -55,7 +55,19 @@ class AuthenticationsController < ApplicationController
       if authentication
         flash[:alert] = "That #{omniauth['provider'].capitalize} account has already been associated with a Worlize account."
       else
-        success = current_user.authentications.create(:provider => omniauth['provider'], :uid => omniauth['uid'])
+        create_options = {
+          :provider => omniauth['provider'],
+          :uid => omniauth['uid'],
+          :token => omniauth['credentials']['token']
+        }
+        
+        if omniauth['provider'] == 'facebook'
+          create_options[:profile_url] = omniauth['user_info']['urls']['Facebook']
+        elsif omniauth['provider'] == 'twitter'
+          create_options[:profile_url] = omniauth['user_info']['urls']['Twitter']
+        end
+        
+        success = current_user.authentications.create(create_options)
         if !success
           flash[:alert] = "Unable to associate your #{omniauth['provider'].capitalize} account."
         end
@@ -66,6 +78,17 @@ class AuthenticationsController < ApplicationController
     # found when we looked up the external provider credentials.
     elsif authentication
       Rails.logger.debug "Found a matching authentication record, logging user in"
+      
+      if omniauth['credentials'] && omniauth['credentials']['token']
+        authentication.token = omniauth['credentials']['token']
+      end
+      if omniauth['provider'] == 'facebook'
+        authentication.profile_url = omniauth['user_info']['urls']['Facebook']
+      elsif omniauth['provider'] == 'twitter'
+        authentication.profile_url = omniauth['user_info']['urls']['Twitter']
+      end
+      authentication.save
+      
       UserSession.create(authentication.user)
       redirect_back_or_default dashboard_url
 
@@ -102,7 +125,8 @@ class AuthenticationsController < ApplicationController
     if fb_profile['id']
       fb_authentication = current_user.authentications.create(
         :provider => 'facebook',
-        :uid => fb_profile['id']
+        :uid => fb_profile['id'],
+        :token => params[:access_token]
       )
       render :json => {
         'success' => fb_authentication.persisted?
