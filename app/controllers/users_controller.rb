@@ -18,8 +18,10 @@ class UsersController < ApplicationController
         @user.last_name = oa['user_info']['last_name']
         @user.username = oa['user_info']['nickname']
         @user.email = oa['user_info']['email']
+        @email_autofilled = true
       elsif oa['provider'] == 'twitter'
         @user.username = oa['user_info']['nickname']
+        @email_autofilled = false
       end
     end
     
@@ -106,6 +108,7 @@ class UsersController < ApplicationController
       
       redirect_to dashboard_url
     else
+      @email_autofilled = (session[:omniauth]['provider'] == 'facebook')
       render "users/new"
     end
   end

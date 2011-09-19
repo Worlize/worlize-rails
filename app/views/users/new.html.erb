@@ -21,20 +21,33 @@
 
   	  <table>
   	    <tr>
-          <th>
-            <%= f.label :username, 'Screen Name' %>
-          </th>
-          <th>
-            <%= f.label :email, 'Email' %>
-          </th>
+          <% if @email_autofilled && @user.errors['email'].empty? %>
+            <th colspan="2" width="300" style="text-align: center; text-indent: -65px;">
+              <%= f.label :username, 'Screen Name' %>
+            </th>
+          <% else %>
+            <th>
+              <%= f.label :username, 'Screen Name' %>
+            </th>
+            <th>
+              <%= f.label :email, 'Email' %>
+            </th>
+          <% end %>
   	    </tr>
   	    <tr>
-          <td>
-            <%= f.text_field :username, :tabindex => 1 %>
-          </td>
-          <td>
-            <%= f.text_field :email, :tabindex => 2 %>
-          </td>
+          <% if @email_autofilled && @user.errors['email'].empty? %>
+            <td colspan="2" width="300" style="text-align: center;">
+              <%= f.text_field :username, :tabindex => 1 %>
+              <%= f.hidden_field :email %>
+            </td>
+          <% else %>
+            <td>
+              <%= f.text_field :username, :tabindex => 1 %>
+            </td>
+            <td>
+              <%= f.text_field :email, :tabindex => 2 %>
+            </td>
+          <% end %>
   	    </tr>
   	    <tr>
   	      <td colspan="2">

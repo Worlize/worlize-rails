@@ -39,10 +39,6 @@ class User < ActiveRecord::Base
   #       :type => :date
   #   }
 
-  validates :email, { :presence => true,
-                      :email => true
-                    }
-  
   state_machine :initial => :new_user do
     
     event :first_time_login do
@@ -52,7 +48,15 @@ class User < ActiveRecord::Base
   end
 
   acts_as_authentic do |c|
+    c.login_field = 'username'
+    c.validates_format_of_login_field_options = {
+      :with => /^[a-zA-Z\d_\-\ ]+$/,
+      :message => 'can only contain letters, numbers, spaces, and the dash or underscore characters'
+    }
     c.validate_password_field = false
+    c.validates_uniqueness_of_email_field_options = {
+      :if => Proc.new { |user| false }
+    }
   end
   
   def active?
