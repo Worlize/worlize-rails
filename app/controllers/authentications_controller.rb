@@ -96,6 +96,9 @@ class AuthenticationsController < ApplicationController
     # currently logged in user, we will start the signup process
     else
       Rails.logger.debug "Unable to find matching omniauth authentication"
+      if omniauth['provider'] == 'facebook'
+        omniauth['user_info']['birthday'] = omniauth['extra']['user_hash']['birthday']
+      end
       session[:omniauth] = omniauth.except('extra')
       redirect_to new_user_url
     end
@@ -126,8 +129,10 @@ class AuthenticationsController < ApplicationController
       fb_authentication = current_user.authentications.create(
         :provider => 'facebook',
         :uid => fb_profile['id'],
-        :token => params[:access_token]
+        :token => params[:access_token],
+        :profile_url => fb_profile['link']
       )
+      current_user.update_attribute(:birthday, fb_profile)
       render :json => {
         'success' => fb_authentication.persisted?
       }

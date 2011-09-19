@@ -31,13 +31,8 @@ class User < ActiveRecord::Base
   belongs_to :beta_code
   
   attr_accessible :username,
-                  :password,
-                  :password_confirmation,
                   :email,
-                  :birthday,
-                  :twitter,
-                  :first_name,
-                  :last_name
+                  :accepted_tos
   
   # validates :birthday, :timeliness => {
   #       :before => :thirteen_years_ago,

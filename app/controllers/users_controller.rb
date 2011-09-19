@@ -64,6 +64,9 @@ class UsersController < ApplicationController
     @beta_invitation = BetaInvitation.find_by_invite_code(params[:invite_code])
 
     @user = User.new(params[:user])
+    if session[:omniauth]['provider'] == 'facebook'
+      @user.birthday = session[:omniauth]['user_info']['birthday']
+    end
     if @beta_invitation
       @user.inviter = @beta_invitation.inviter
     end
@@ -79,11 +82,23 @@ class UsersController < ApplicationController
       end
       
       # Make sure to link the external account!
-      Rails.logger.debug("Omniauth:\n#{session[:omniauth].to_yaml}")
-      success = @user.authentications.create(
-        :provider => session[:omniauth]['provider'],
-        :uid => session[:omniauth]['uid']
-      )
+      Rails.logger.debug("Omniauth:\n#{session[:omniauth].to_yaml}") if Rails.env == 'development'
+      omniauth = session[:omniauth]
+      
+      create_options = {
+        :provider => omniauth['provider'],
+        :uid => omniauth['uid'],
+        :token => omniauth['credentials']['token']
+      }
+      
+      if omniauth['provider'] == 'facebook'
+        create_options[:profile_url] = omniauth['user_info']['urls']['Facebook']
+      elsif omniauth['provider'] == 'twitter'
+        create_options[:profile_url] = omniauth['user_info']['urls']['Twitter']
+      end
+      
+      success = @user.authentications.create(create_options)
+
       if !success
         flash[:alert] = "Unable to associate your #{omniauth['provider'].capitalize} account."
       end
