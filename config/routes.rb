@@ -16,6 +16,9 @@ Worlize::Application.routes.draw do |map|
   match '/paypal/ipn' => 'paypal#ipn', :via => :post
   match '/paypal/return' => 'paypal#return', :via => :get, :as => :paypal_return
   
+  match '/fb-canvas' => 'facebook_canvas#index', :via => :post
+  match '/fb-canvas/:action(/:id(.:format))', { :controller => :facebook_canvas }
+  
   resources :authentications do
     collection do
       post :connect_facebook_via_js
@@ -76,6 +79,9 @@ Worlize::Application.routes.draw do |map|
   end
 
   resources :users do
+    member do
+      get :join
+    end
     collection do
       get :search
       get :validate_field

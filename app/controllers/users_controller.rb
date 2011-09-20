@@ -58,6 +58,20 @@ class UsersController < ApplicationController
     end
   end
 
+  def join
+    begin
+      @user = User.find_by_guid(Guid.from_s(params[:id]).to_s)
+    rescue ArgumentError
+      @user = User.find_by_username!(params[:id])
+    end
+    
+    if @user.online?
+      redirect_to enter_room_url(@user.current_room_guid)
+    else
+      redirect_to enter_room_url(@user.world.rooms.first.guid)
+    end
+  end
+
   def create
     if !session[:omniauth]
       redirect_to new_user_url and return

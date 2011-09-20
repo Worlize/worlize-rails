@@ -21,7 +21,7 @@
         FB.getLoginStatus(function(response) {
             if (response.authResponse) {
                 // Logged into facebook and connected
-                s.loadData(response.authResponse.accessToken);
+                // s.loadData(response.authResponse.accessToken);
             }
             else {
                 // not connected through facebook - prompt user to log in
@@ -106,7 +106,7 @@
             s.removeFacebookLoginListener();
             if (response.status === 'connected') {
                 s.removeFacebookLoginPrompt();
-                s.loadData(response.authResponse.accessToken);
+                // s.loadData(response.authResponse.accessToken);
             }
         };
 

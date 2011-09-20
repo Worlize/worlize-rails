@@ -60,28 +60,23 @@ function openMarketplace() {
     }, 200);
 }
 
-function openFacebookFriendFinder() {
-    var friendFinder = new worlize.view.FacebookFriendFinder();
-    friendFinder.show();
-    // 
-    // FB.getLoginStatus(function(response) {
-    //     if (response.authResponse) {
-    //         // Logged into facebook and connected
-    //     }
-    //     else {
-    //         // not connected through facebook
-    //         // Prompt user to log in
-    //         FB.login(function(response) {
-    //           if (response.authResponse) {
-    //               var friendFinder = new worlize.view.FacebookFriendFinder();
-    //               friendFinder.show();
-    //               handleFacebookLogin();
-    //           } else {
-    //             // console.log('User cancelled login or did not fully authorize.');
-    //           }
-    //         }, {scope: requestedFacebookPermissions});
-    //     }
-    // });
+function showFacebookDialog(options) {
+    console.log("ShowFacebookDialog", options);
+    function doShowDialog() {
+        FB.ui(options);
+    }
+    FB.getLoginStatus(function(response) {
+        if (response.authResponse) {
+            doShowDialog();
+        }
+        else {
+            FB.login(function(response) {
+                if (response.authResponse) {
+                    doShowDialog();
+                }
+            }, { scope: requestedFacebookPermissions })
+        }
+    });
 }
 
 function closeMarketplace() {

@@ -44,6 +44,7 @@ class AuthenticationsController < ApplicationController
     omniauth = request.env["omniauth.auth"]
     if Rails.env == 'development'
       logger.debug "Authentication Details:\n#{omniauth.to_yaml}\n"
+      logger.debug "Session: \n#{session.to_yaml}\n"
     end
     
     authentication = Authentication.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'])

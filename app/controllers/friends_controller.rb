@@ -41,7 +41,8 @@ class FriendsController < ApplicationController
             :username => friend.username,
             :guid => friend.guid,
             :online => friend.online?,
-            :is_worlize_friend => is_worlize_friend
+            :is_worlize_friend => is_worlize_friend,
+            :facebook_id => data['id']
           }
           if friend.facebook_authentication
             friend_data[:facebook_profile] = friend.facebook_authentication.profile_url || "http://www.facebook.com/#{friend.facebook_authentication.uid}"

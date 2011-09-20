@@ -1,0 +1,12 @@
+<% if !@app_requests.empty? %>
+  <div class="app-request-list">
+  <% @app_requests.each do |request| %>
+    <div class="app-request" data-action="<%= request['data']['action'] %>" data-inviter="<%= request['data']['inviter_guid'] %>">
+      <p><%= request['from']['name'] %> has invited you to chat with them in Worlize!</p>
+      <button class="accept">Accept</button>
+      <button class="ignore">Ignore</button>
+    </div>
+  <% end %>
+  </div>
+<% end %>
+
