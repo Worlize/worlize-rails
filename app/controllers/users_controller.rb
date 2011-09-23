@@ -120,7 +120,7 @@ class UsersController < ApplicationController
       end
       session.delete(:omniauth)
       
-      redirect_to dashboard_url
+      redirect_back_or_default dashboard_url
     else
       @email_autofilled = (session[:omniauth]['provider'] == 'facebook')
       render "users/new"

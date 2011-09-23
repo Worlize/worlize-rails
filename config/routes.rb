@@ -17,7 +17,8 @@ Worlize::Application.routes.draw do |map|
   match '/paypal/return' => 'paypal#return', :via => :get, :as => :paypal_return
   
   match '/fb-canvas' => 'facebook_canvas#index', :via => :post
-  match '/fb-canvas/:action(/:id(.:format))', { :controller => :facebook_canvas }
+  match '/fb-canvas/ignore_request/:id' => 'facebook_canvas#ignore_request', :via => :post
+  match '/fb-canvas/handle_request/:id' => 'facebook_canvas#handle_request', :via => :post
   
   resources :authentications do
     collection do

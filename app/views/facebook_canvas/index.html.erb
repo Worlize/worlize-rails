@@ -24,7 +24,11 @@
     $('button.accept').live('click', function(event) {
       var request = $(this).closest('.app-request');
       var requestId = request.data('requestid');
-      top.location.href = '<%= request.scheme %>://<%= request.host_with_port %>/fb-canvas/handle_request/' + requestId;
+      var form = $('<form>');
+      form.attr('method', 'post');
+      form.attr('action', '<%= request.scheme %>://<%= request.host_with_port %>/fb-canvas/handle_request/' + requestId);
+      $(document.body).append(form)
+      form.submit();
     });
     $('button.ignore').live('click', function(event) {
       var request = $(this).closest('.app-request');
