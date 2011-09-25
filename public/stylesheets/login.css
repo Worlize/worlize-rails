@@ -316,7 +316,8 @@ h3 {
 	margin: 12px 0px 0px;
 }
 
-.tos-checkbox label {
+.tos-checkbox label,
+a.tos_link {
 	font-family: PTSansNarrowRegular;
 	font-weight: normal;
 	font-size: 12pt;
