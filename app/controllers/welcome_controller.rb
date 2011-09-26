@@ -35,6 +35,10 @@ class WelcomeController < ApplicationController
       'interactivity_port' => request.ssl? ? 443 : 80,
       'interactivity_tls' => request.ssl?
     })
+    current_user.send_message({
+      :msg => 'logged_out', 
+      :data => 'You have signed on from another location.'
+    })
     render :enter, :layout => false
   end
 

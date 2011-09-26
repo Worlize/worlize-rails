@@ -15,7 +15,8 @@ class UserSession < Authlogic::Session::Base
   
   def force_client_logout
     self.user.send_message({
-      :msg => 'logged_out'
+      :msg => 'logged_out', 
+      :data => 'You have logged out.'
     })
   end
   

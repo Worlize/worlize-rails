@@ -12,6 +12,10 @@ else {
     };
 }
 
+function handleLoggedOut() {
+    top.location.href = "/";
+}
+
 function initializeFacebook() {
     FB.Event.subscribe('auth.login', handleFacebookLogin);
 }
