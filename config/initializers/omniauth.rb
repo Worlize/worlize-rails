@@ -2,11 +2,19 @@
 
 Rails.application.config.middleware.use OmniAuth::Builder do
   if Worlize.config['twitter']
-    provider :twitter, Worlize.config['twitter']['app_id'], Worlize.config['twitter']['app_secret']
+    options = {}
+    if Rails.env == 'production'
+      options[:client_options] = {:ssl => {:ca_path => '/etc/ssl/certs'}}
+    end
+    provider :twitter, Worlize.config['twitter']['app_id'], Worlize.config['twitter']['app_secret'], options
   end
   if Worlize.config['facebook']
-    provider :facebook, Worlize.config['facebook']['app_id'], Worlize.config['facebook']['app_secret'], {
+    options = {
       :scope => Worlize.config['facebook']['requested_permissions']
     }
+    if Rails.env == 'production'
+      options[:client_options] = {:ssl => {:ca_path => '/etc/ssl/certs'}}
+    end
+    provider :facebook, Worlize.config['facebook']['app_id'], Worlize.config['facebook']['app_secret'], options
   end
 end
