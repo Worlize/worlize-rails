@@ -16,8 +16,6 @@
   <% end %>
 
   <link rel="stylesheet" href="/stylesheets/main-fonts.css?v=2">
-
-  <!-- CSS : implied media="all" -->
   <link rel="stylesheet" href="/stylesheets/facebook_canvas.css?v=3">
  
   <style type="text/css">
@@ -41,7 +39,7 @@
 
 </head>
 
-<body>
+<body onload="recordLoadTime()">
   <div id="fb-root"></div>
   <script>
     window.fbAsyncInit = function() {
@@ -61,6 +59,19 @@
       e.async = true;
       document.getElementById('fb-root').appendChild(e);
     }());
+    
+    function recordLoadTime() {
+      if (window['FB']) {
+          FB.Canvas.setDoneLoading();
+      }
+      else {
+          var oldAsyncInitFn = window.fbAsyncInit;
+          window.fbAsyncInit = function() {
+              oldAsyncInitFn();
+              FB.Canvas.setDoneLoading();
+          };
+      } 
+    }
   </script>
   
   <img src="/images/ajax-loader.gif" style="position: absolute; top: -10000px">

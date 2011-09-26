@@ -287,6 +287,112 @@ h1, h2, h3, h4, h5, h6 {
 	font-family: PTSansNarrowBold;
 }
 
+header {
+    border-bottom: 1px solid #DDD;
+    height: 39px;
+    padding: 7px 0px 8px;
+    margin-bottom: 45px;
+}
+
+.welcome-header .character {
+    position: relative;
+    margin: 30px auto;
+    background: url(/images/characters/blusey.jpg) no-repeat;
+    width: 500px;
+    height: 169px;
+}
+
+.welcome-header .character > h1 {
+    position: absolute;
+    color: #1283d1;
+    font-size: 55px;
+    top: 10px;
+    left: 210px;
+}
+
+.welcome-header .character > h2 {
+    position: absolute;
+    color: #666;
+    font-family: PTSansNarrowRegular;
+    font-weight: normal;
+    font-size: 30px;
+    top: 65px;
+    left: 230px;
+}
+
+
+@keyframes pulsate {
+  0% {
+    opacity: 0;
+  }
+  100% { 
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes pulsate {
+  0% {
+    opacity: 0;
+  }
+  100% { 
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes pulsate {
+  0% {
+    opacity: 0;
+  }
+  100% { 
+    opacity: 1;
+  }
+}
+
+#homepage-login {
+	text-align: center;
+	font: 18px/15px 'PTSansNarrowRegular', Arial, sans-serif;
+}
+#homepage-login .enter-button-background {
+    display:block;
+    width: 312px;
+    height: 81px;
+    margin: 25px auto 10px;
+	background: url(../images/homepage-login-button.png) no-repeat 0 -81px;
+}
+#homepage-login a.enter-button {
+	animation: pulsate 1.5s infinite alternate;
+	-webkit-animation: pulsate 1.5s infinite alternate;
+	-moz-animation: pulsate 1.5s infinite alternate;
+    display:block;
+    width: 312px;
+    height: 81px;
+    position: relative;
+    text-indent: -10000px;
+	background: url(../images/homepage-login-button.png) no-repeat 0 0px;
+}
+#homepage-login a.enter-button:hover {
+	animation: none;
+	-webkit-animation: none;
+	-moz-animation: none;
+	background-position: 0 -81px;
+}
+
+#homepage-login a {
+	color: #888;
+	text-decoration: none;
+}
+#homepage-login a:hover {
+	text-decoration: underline;
+	color: #555;
+}
+
+#video-embed {
+    position: relative;
+    width: 500px;
+    margin: 10px auto;
+}
+
+
 /* @group Flashes */
 
 header {

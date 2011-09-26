@@ -1,41 +1,52 @@
-<% if !@app_requests.empty? %>
-  <div class="invitations-header">
-    <div class="character">
-      <h1>An Invitation!!</h1>
-    </div>
-  </div>
+<%= fancybox 'true' %>
 
-  <div class="app-request-list">
-  <% @app_requests.each do |request| %>
-    <div class="app-request" data-requestid="<%= request['id'] %>" data-action="<%= request['data']['action'] %>" data-inviter="<%= request['data']['inviter_guid'] %>">
-      <p><%= request['from']['name'] %> has invited you to chat with them in Worlize!</p>
-      <button class="accept">Accept</button>
-      <button class="ignore">Ignore</button>
-    </div>
-  <% end %>
-  </div>
-<% end %>
+<header>
+  <%= link_to image_tag('logo-fb-canvas.png'), root_url %>
+</header>
 
-<textarea rows="20" cols="80"><%= @app_requests.to_json.html_safe %></textarea>
+<div class="welcome-header">
+  <div class="character">
+    <h1>I can't wait!</h1>
+    <h2>You're almost here!</h2>
+  </div>
+</div>
+
+<div id="homepage-login">
+  <div class="enter-button-background">
+    <%= link_to 'Enter Worlize', "#{request.scheme}://#{request.host_with_port}/auth/facebook", :class => 'enter-button' %>
+  </div>
+  <%= link_to 'What is this thing anyway?', about_url, :class => 'what-is-this-thing-link' %>
+</div>
 
 <% content_for :page_script do %>
-<script>
+<script type="text/javascript" charset="utf-8">
   jQuery(function($) {
-    $('button.accept').live('click', function(event) {
-      var request = $(this).closest('.app-request');
-      var requestId = request.data('requestid');
-      var form = $('<form>');
-      form.attr('method', 'post');
-      form.attr('action', '<%= request.scheme %>://<%= request.host_with_port %>/fb-canvas/handle_request/' + requestId);
-      $(document.body).append(form)
-      form.submit();
+    $('.what-is-this-thing-link').click(function(event) {
+      event.preventDefault();
     });
-    $('button.ignore').live('click', function(event) {
-      var request = $(this).closest('.app-request');
-      var requestId = request.data('requestid');
-      $.post('ignore_request/' + requestId);
-      request.remove();
+    $('.what-is-this-thing-link').fancybox({
+      type: 'iframe',
+      href: 'http://player.vimeo.com/video/17431869?title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1',
+      width: 500,
+      height: 298,
+      overlayShow: false
     });
+
+    $('a.enter-button').click(function(event) {
+      event.preventDefault();
+      top.location.href = $(this).attr('href');
+    });
+    
+    if (window['FB']) {
+      FB.Canvas.setSize();
+    }
+    else {
+      var oldAsyncInitFn = window.fbAsyncInit;
+      window.fbAsyncInit = function() {
+          oldAsyncInitFn();
+          FB.Canvas.setSize();
+      };
+    }
   });
 </script>
 <% end %>
