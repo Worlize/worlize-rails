@@ -26,9 +26,8 @@ class FriendsController < ApplicationController
     
     # Load Facebook Friends
     if user == current_user
-      fb_auth = current_user.facebook_authentication
-      if !fb_auth.nil? && fb_auth.token
-        fb_friends = load_facebook_friends(fb_auth.token)
+      if params[:access_token]
+        fb_friends = load_facebook_friends(params[:access_token])
 
         on_worlize = fb_friends.select { |f| f['worlize_user'] }
         on_worlize.each do |data|
@@ -273,7 +272,7 @@ class FriendsController < ApplicationController
       # Get user's list of facebook friends
       fb_friends = fb_graph.get_connections('me', 'friends', {'fields' => 'id,name,picture'})
     rescue Koala::Facebook::APIError => e
-      return nil
+      return []
     end
     
     fb_friends.sort! { |a,b| a['name'].downcase <=> b['name'].downcase }

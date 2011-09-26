@@ -65,18 +65,17 @@ function showFacebookDialog(options) {
     function doShowDialog() {
         FB.ui(options);
     }
-    FB.getLoginStatus(function(response) {
-        if (response.authResponse) {
-            doShowDialog();
-        }
-        else {
-            FB.login(function(response) {
-                if (response.authResponse) {
-                    doShowDialog();
-                }
-            }, { scope: requestedFacebookPermissions })
-        }
-    });
+    if (FB.getAuthResponse()) {
+        doShowDialog();
+    }
+    else {
+        FB.login(function(response) {
+            if (response.authResponse) {
+                console.log("Login complete, showing requestsed dialog.");
+                doShowDialog();
+            }
+        }, { scope: requestedFacebookPermissions })
+    }
 }
 
 function closeMarketplace() {

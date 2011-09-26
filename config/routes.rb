@@ -20,6 +20,8 @@ Worlize::Application.routes.draw do |map|
   match '/fb-canvas/ignore_request/:id' => 'facebook_canvas#ignore_request', :via => :post
   match '/fb-canvas/handle_request/:id' => 'facebook_canvas#handle_request', :via => :post
   match '/fb-canvas/auth_callback' => 'facebook_canvas#auth_callback', :via => :get
+  match '/fb-canvas/enter_worlize' => 'facebook_canvas#enter_worlize', :via => :get
+  match '/fb-canvas/link_account' => 'facebook_canvas#link_account', :via => :post
   
   resources :authentications do
     collection do

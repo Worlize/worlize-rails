@@ -172,8 +172,8 @@ input:invalid, textarea:invalid {
 /* These selection declarations have to be separate.
    No text-shadow: twitter.com/miketaylr/status/12228805301 
    Also: hot pink. */
-::-moz-selection{ background: #cabbac; color:#fff; text-shadow: none; }
-::selection { background: #cabbac; color:#fff; text-shadow: none; } 
+::-moz-selection{ background: #b5d5ff; color: #000; text-shadow: none; }
+::selection { background: #b5d5ff; color: #000; text-shadow: none; } 
 
 /*  j.mp/webkit-tap-highlight-color */
 a:link { -webkit-tap-highlight-color: #FF5E99; } 
@@ -253,29 +253,17 @@ label {
 	vertical-align: middle;
 }
 
-input[type=submit]:hover,
-input[type=submit]:focus,
-button:hover,
-button:focus {
-	background: #b5aa99;
-}
-
-input[type=submit]:active,
-button:active {
-	background: #e3d5c0;
-}
-
-
-input[type=submit], button {
-	background: #555555;
-	outline: none;
-	color: #FFF;
-	border: none;
-	border-radius:8px;
-	-webkit-border-radius:8px;
-	-moz-border-radius:8px;
-	padding: 3px 10px;
-	font: 11pt Helvetica, Arial, sans-serif;
+input[type=submit],
+button {
+	background-color: #FFF !important;
+	border: 1px solid #AAA;
+	color: #333;
+	padding: 3px 12px;
+	font-size: 14pt;
+	font-family: PTSansNarrowRegular;
+	margin: 0px 0px 0px;
+	border-radius: 5px;
+	border: 1px solid #bfb3b3;
 }
 
 #container {
@@ -285,6 +273,11 @@ input[type=submit], button {
 
 h1, h2, h3, h4, h5, h6 {
 	font-family: PTSansNarrowBold;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 header {
@@ -292,14 +285,53 @@ header {
     height: 39px;
     padding: 7px 0px 8px;
     margin-bottom: 45px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.link-facebook-account {
+	width: 480px;
+	padding: 15px;
+	font-size: 16px;
+	margin: -15px auto 40px;
+	background-color: #fbf3c6;
+	border-radius: 5px;
+	border: 1px solid #e7d04d;
+	box-shadow: 0px 2px 8px rgba(179,173,138,0.5);
+}
+
+.link-facebook-account h1 {
+	font-size: 22px;
+	margin-bottom: 10px;
+}
+
+.link-facebook-account p {
+	margin-bottom: 10px;
+}
+
+.link-facebook-account button {
+	float: right;
 }
 
 .welcome-header .character {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     position: relative;
     margin: 30px auto;
     background: url(/images/characters/blusey.jpg) no-repeat;
     width: 500px;
     height: 169px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .welcome-header .character > h1 {
@@ -311,6 +343,37 @@ header {
 }
 
 .welcome-header .character > h2 {
+    position: absolute;
+    color: #666;
+    font-family: PTSansNarrowRegular;
+    font-weight: normal;
+    font-size: 30px;
+    top: 65px;
+    left: 230px;
+}
+
+.invitations-header .character {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: relative;
+    margin: 30px auto;
+    background: url(/images/characters/blusey.jpg) no-repeat;
+    width: 500px;
+    height: 169px;
+}
+
+.invitations-header .character > h1 {
+    position: absolute;
+    color: #1283d1;
+    font-size: 55px;
+    top: 10px;
+    left: 210px;
+}
+
+.invitations-header .character > h2 {
     position: absolute;
     color: #666;
     font-family: PTSansNarrowRegular;
@@ -369,6 +432,11 @@ header {
     position: relative;
     text-indent: -10000px;
 	background: url(../images/homepage-login-button.png) no-repeat 0 0px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 #homepage-login a.enter-button:hover {
 	animation: none;
@@ -380,6 +448,11 @@ header {
 #homepage-login a {
 	color: #888;
 	text-decoration: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 #homepage-login a:hover {
 	text-decoration: underline;
@@ -392,6 +465,50 @@ header {
     margin: 10px auto;
 }
 
+/* @group Request line items */
+
+ul.app-request-list {
+    width: 520px;
+    margin: 0px auto 40px;
+	list-style-type: none;
+}
+
+li.app-request {
+	position: relative;
+    margin: 10px 0px;
+    background-color: #edeff4;
+    border-radius: 3px;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.15);
+    border: 1px solid #bfc6d6;
+    padding: 10px;
+}
+
+li.app-request img {
+	float: left;
+	margin: 0px 10px 0px 0px;
+	padding: 1px;
+	border: 1px solid #CCC;
+	background-color: #FFF;
+}
+
+li.app-request p {
+	position: relative;
+    font-size: 14px;
+    width: 285px;
+    padding-left: 60px;
+}
+
+li.app-request .action-buttons {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+}
+
+li.app-request button:hover {
+	background-color: #EEE !important;
+}
+
+/* @end */
 
 /* @group Flashes */
 

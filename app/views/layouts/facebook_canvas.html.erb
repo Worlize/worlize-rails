@@ -36,6 +36,14 @@
   </script>
   
   <%= csrf_meta_tag %>
+  
+  <% if Rails.env == 'production' -%>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <%- else -%>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
+    <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.js"%3E%3C/script%3E'))</script>
+  <% end -%>
 
 </head>
 
@@ -63,12 +71,14 @@
     function recordLoadTime() {
       if (window['FB']) {
           FB.Canvas.setDoneLoading();
+          FB.Canvas.setSize();
       }
       else {
           var oldAsyncInitFn = window.fbAsyncInit;
           window.fbAsyncInit = function() {
               oldAsyncInitFn();
               FB.Canvas.setDoneLoading();
+              FB.Canvas.setSize();
           };
       } 
     }
@@ -77,6 +87,10 @@
   <img src="/images/ajax-loader.gif" style="position: absolute; top: -10000px">
 
   <div id="container" class="unselectable">
+    
+    <header>
+      <%= link_to image_tag('logo-fb-canvas.png'), root_url, 'data-action' => 'link' %>
+    </header>
     
     <% if flash[:notice] %>
     <div id="flash_notice">
@@ -91,21 +105,14 @@
     <% end %>
     
     <div id="main">
+      <% if @needs_to_link_account %>
+        <%= render :partial => '/facebook_canvas/prompt_to_link_account' %>
+      <% end %>
+      
       <%= yield %>
     </div>
 
   </div> <!--! end of #container -->
-
-
-  <!-- Javascript at the bottom for fast page loading -->
-  <% if Rails.env == 'production' -%>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-    <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <%- else -%>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
-    <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.js"%3E%3C/script%3E'))</script>
-  <% end -%>
-  
   
   <script src="/javascripts/plugins.js"></script>
   <script src="/javascripts/script.js"></script>
@@ -114,6 +121,15 @@
     <script src="/fancybox/jquery.fancybox-1.3.4.pack.js" type="text/javascript" charset="utf-8"></script>
     <link rel="stylesheet" href="/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
   <% end %>
+  
+  <script type="text/javascript" charset="utf-8">
+    jQuery(function($) {
+      $('a[data-action=link]').click(function(event) {
+        event.preventDefault();
+        top.location.href = $(this).attr('href');
+      });
+    });
+  </script>
   
   <%= yield :page_script %>
 

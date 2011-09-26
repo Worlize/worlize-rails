@@ -1,0 +1,45 @@
+<div class="link-facebook-account">
+  <h1>Link your Worlize Account</h1>
+  <p>You are currently logged into Worlize as <strong><%= current_user.username %></strong>.</p>
+  <p>If this is you, click the button below to link your Facebook account.  Otherwise, please <a class="signout-link" href="<%= logout_url %>">sign out of Worlize</a> before continuing.</p>
+  
+  <button class="link-account">Link Account</button>
+  <div class="clearfix"></div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  jQuery(function($) {
+    $('.link-facebook-account a.signout-link').click(function(event) {
+      event.preventDefault();
+      $.post(
+        '<%= escape_javascript(logout_path(:format => 'json')) %>',
+        function(data, textStatus, jqXHR) {
+          if (!data.success && data.message) {
+            alert(data.message);
+          }
+          $('.link-facebook-account').fadeOut('slow', function() {
+            FB.Canvas.setSize();
+          });
+        }
+      )
+    });
+    
+    $('.link-facebook-account button.link-account').click(function(event) {
+      $.post(
+        '<%= escape_javascript(url_for(
+          :controller => 'facebook_canvas',
+          :action => 'link_account',
+          :format => 'json',
+          :only_path => true )) %>',
+        function(data, textStatus, jqXHR) {
+          if (!data.success && data.message) {
+            alert(data.message);
+          }
+          $('.link-facebook-account').fadeOut('slow', function() {
+            FB.Canvas.setSize();
+          });
+        }
+      );
+    });
+  });
+</script>

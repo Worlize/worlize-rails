@@ -1,0 +1,65 @@
+<%= fancybox 'true' %>
+
+<div class="invitations-header">
+  <div class="character">
+    <h1>An Invitation!</h1>
+    <h2>Hurry and accept!</h2>
+  </div>
+</div>
+
+<ul class="app-request-list">
+<% @app_requests.each do |request| %>
+  <li class="app-request" data-requestid="<%= request['id'] %>" data-action="<%= request['data']['action'] %>" data-inviter="<%= request['data']['inviter_guid'] %>">
+    <div class="action-buttons">
+      <button class="accept">Accept</button>
+      <button class="ignore">Ignore</button>
+    </div>
+    <img src="https://graph.facebook.com/<%= request['from']['id'] %>/picture?type=square" width="50" height="50">
+    <p><strong><%= request['from']['name'] %></strong> has invited you to chat!</p>
+    <div class="clearfix"></div>
+  </li>
+<% end %>
+</ul>
+
+<div id="homepage-login">
+  <div class="enter-button-background">
+    <%= link_to 'Enter Worlize', url_for(:controller => 'facebook_canvas', :action => 'enter_worlize'),
+                :class => 'enter-button',
+                'data-action' => 'link' %>
+  </div>
+  <%= link_to 'What is this thing anyway?', about_url, :class => 'what-is-this-thing-link', :rel => 'nofollow' %>
+</div>
+
+<% content_for :page_script do %>
+<script>
+  jQuery(function($) {
+    
+    $('.what-is-this-thing-link').click(function(event) {
+      event.preventDefault();
+    });
+    $('.what-is-this-thing-link').fancybox({
+      type: 'iframe',
+      href: 'http://player.vimeo.com/video/17431869?title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1',
+      width: 500,
+      height: 298,
+      overlayShow: false
+    });
+    
+    $('button.accept').live('click', function(event) {
+      var request = $(this).closest('.app-request');
+      var requestId = request.data('requestid');
+      var form = $('<form>');
+      form.attr('method', 'post');
+      form.attr('action', '<%= request.scheme %>://<%= request.host_with_port %>/fb-canvas/handle_request/' + requestId);
+      $(document.body).append(form)
+      form.submit();
+    });
+    $('button.ignore').live('click', function(event) {
+      var request = $(this).closest('.app-request');
+      var requestId = request.data('requestid');
+      $.post('ignore_request/' + requestId);
+      request.fadeOut('slow');
+    });
+  });
+</script>
+<% end %>

@@ -1,9 +1,5 @@
 <%= fancybox 'true' %>
 
-<header>
-  <%= link_to image_tag('logo-fb-canvas.png'), root_url %>
-</header>
-
 <div class="welcome-header">
   <div class="character">
     <h1>I can't wait!</h1>
@@ -13,7 +9,9 @@
 
 <div id="homepage-login">
   <div class="enter-button-background">
-    <%= link_to 'Enter Worlize', "#{request.scheme}://#{request.host_with_port}/auth/facebook", :class => 'enter-button' %>
+    <%= link_to 'Enter Worlize', url_for(:controller => 'facebook_canvas', :action => 'enter_worlize'),
+                :class => 'enter-button',
+                'data-action' => 'link' %>
   </div>
   <%= link_to 'What is this thing anyway?', about_url, :class => 'what-is-this-thing-link' %>
 </div>
@@ -36,17 +34,6 @@
       event.preventDefault();
       top.location.href = $(this).attr('href');
     });
-    
-    if (window['FB']) {
-      FB.Canvas.setSize();
-    }
-    else {
-      var oldAsyncInitFn = window.fbAsyncInit;
-      window.fbAsyncInit = function() {
-          oldAsyncInitFn();
-          FB.Canvas.setSize();
-      };
-    }
   });
 </script>
 <% end %>

@@ -66,11 +66,13 @@ class UserSessionsController < ApplicationController
       # Log the user out of the forums also
       cookies["Vanilla"] = {:value => "", :domain => ".worlize.com"}
       cookies["Vanilla-Volatile"] = {:value => "", :domain => ".worlize.com"}
+      session.delete(:signed_request)
     rescue
     end
 
     respond_to do |format|
       format.html { redirect_to(root_url) }
+      format.json { render :json => { :success => true } }
     end
   end
   

@@ -68,7 +68,7 @@ class UsersController < ApplicationController
     if @user.online?
       redirect_to enter_room_url(@user.current_room_guid)
     else
-      redirect_to enter_room_url(@user.world.rooms.first.guid)
+      redirect_to enter_room_url(@user.worlds.first.rooms.first.guid)
     end
   end
 
