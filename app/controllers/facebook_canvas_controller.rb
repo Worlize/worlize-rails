@@ -99,8 +99,8 @@ class FacebookCanvasController < ApplicationController
     begin
       @request_to_handle = user_api.get_object(@request_id_to_handle)
       user_api.delete_object(@request_id_to_handle)
-    rescue
-      render :text => "There was an error while accessing the specified request.", :status => 500
+    rescue Exception => e
+      render :text => "There was an error while handling the request:\n#{e.to_s}", :status_code => 500
       return
     end
 

@@ -47,7 +47,11 @@
     
     $('button.accept').live('click', function(event) {
       var request = $(this).closest('.app-request');
-      var requestId = request.data('requestid');
+      // Must use attr() instead of data here, since data() coerces values
+      // that seem to be numeric into a JavaScript number type.  Facebook
+      // IDs are too large and will overflow JavaScript's 64-bit floating
+      // point number type.
+      var requestId = request.attr('data-requestid');
       var form = $('<form>');
       form.attr('method', 'post');
       form.attr('action', '<%= request.scheme %>://<%= request.host_with_port %>/fb-canvas/handle_request/' + requestId);
