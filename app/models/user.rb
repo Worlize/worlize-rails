@@ -225,7 +225,7 @@ class User < ActiveRecord::Base
         :online => self.online?
       }
       if self.facebook_authentication
-        friend_data[:facebook_profile] = self.facebook_authentication.profile_url || "http://www.facebook.com/#{accepted_friend.facebook_authentication.uid}"
+        friend_data[:facebook_profile] = self.facebook_authentication.profile_url || "http://www.facebook.com/#{self.facebook_authentication.uid}"
       end
       if self.twitter_authentication && self.twitter_authentication.profile_url
         friend_data[:twitter_profile] = self.twitter_authentication.profile_url
