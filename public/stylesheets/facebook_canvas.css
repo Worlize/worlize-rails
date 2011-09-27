@@ -281,6 +281,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 header {
+	position: relative;
     border-bottom: 1px solid #DDD;
     height: 39px;
     padding: 7px 0px 8px;
@@ -292,7 +293,27 @@ header {
     user-select: none;
 }
 
+header .current-user {
+	position: absolute;
+	right: 10px;
+	bottom: 5px;
+	font-size: 16px;
+}
+
+.shroud {
+	position: absolute;
+	z-index: 1000;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	background: #FFF;
+	opacity: 0.7;
+}
+
 .link-facebook-account {
+	position: relative;
+	z-index: 2000;
 	width: 480px;
 	padding: 15px;
 	font-size: 16px;
@@ -304,7 +325,7 @@ header {
 }
 
 .link-facebook-account h1 {
-	font-size: 22px;
+	font-size: 32px;
 	margin-bottom: 10px;
 }
 
@@ -314,6 +335,7 @@ header {
 
 .link-facebook-account button {
 	float: right;
+	margin: 0px 0px 0px 10px;
 }
 
 .welcome-header .character {

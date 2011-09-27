@@ -16,6 +16,11 @@ class ApplicationController < ActionController::Base
       @current_user_session = UserSession.find
     end
     
+    def reset_current_user
+      remove_instance_variable(:@current_user)
+      remove_instance_variable(:@current_user_session)
+    end
+    
     def current_user
       return @current_user if defined?(@current_user)
       @current_user = current_user_session && current_user_session.record
@@ -66,6 +71,9 @@ class ApplicationController < ActionController::Base
     end
     
     def get_redirect_back_or_default_url(default)
+      if Rails.env == 'development'
+        Rails.logger.debug "session[:return_to] = #{session[:return_to]}"
+      end
       url = session[:return_to] || default
       session[:return_to] = nil
       return url

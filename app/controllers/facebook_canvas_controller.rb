@@ -73,22 +73,20 @@ class FacebookCanvasController < ApplicationController
     else
       render :json => {
         'success' => false,
-        'message' => 'Unknown error while linking facebook account.'
+        'message' => authentication.errors.full_messages.join('; ')
       }
     end
   end
 
   def enter_worlize
     dest_url = dashboard_url
-    
-    authentication = Authentication.where(:provider => 'facebook', :uid => @signed_request['user_id']).first
-    if current_user.nil? || !(authentication && authentication.user_id == current_user.id)
+
+    if current_user.nil?
       # make sure we authenticate with the current user.
       session[:return_to] = dest_url
       dest_url = "#{request.scheme}://#{request.host_with_port}/auth/facebook"
-      log_user_out
     end
-    
+
     render :text => '<script>top.location.href="' + escape_javascript(dest_url) + '"</script>',
            :content_type => 'text/html'
   end
@@ -124,11 +122,10 @@ class FacebookCanvasController < ApplicationController
     end
 
     authentication = Authentication.where(:provider => 'facebook', :uid => @signed_request['user_id']).first
-    if current_user.nil? || !(authentication && authentication.user_id == current_user.id)
+    if current_user.nil?
       # make sure we authenticate with the current user.
       session[:return_to] = dest_url
       dest_url = "#{request.scheme}://#{request.host_with_port}/auth/facebook"
-      log_user_out
     end
 
     render :text => '<script>top.location.href="' + escape_javascript(dest_url) + '"</script>',
@@ -142,25 +139,13 @@ class FacebookCanvasController < ApplicationController
   end
 
   private
-  
-  def log_user_out
-    @user_session = UserSession.find()
-    begin
-      @user_session.destroy
-      
-      # Log the user out of the forums also
-      cookies["Vanilla"] = {:value => "", :domain => ".worlize.com"}
-      cookies["Vanilla-Volatile"] = {:value => "", :domain => ".worlize.com"}
-    rescue
-    end
-  end
 
   def log_headers
     # Rails.logger.debug "Headers:"
     # request.headers.each_pair do |k,v|
     #   Rails.logger.debug "#{k.slice(5..k.length)} - #{v}" if k.index('HTTP_') == 0
     # end
-    Rails.logger.debug "Session:\n#{session.to_yaml}"
+    # Rails.logger.debug "Session:\n#{session.to_yaml}"
   end
 
   def set_p3p
@@ -169,6 +154,7 @@ class FacebookCanvasController < ApplicationController
   
   def initialize_koala
     @needs_to_link_account = false
+    need_to_check_user = false
     
     @@oauth ||= Koala::Facebook::OAuth.new(
       Worlize.config['facebook']['app_id'],
@@ -177,58 +163,22 @@ class FacebookCanvasController < ApplicationController
     )
     @@app_api ||= Koala::Facebook::API.new(@@oauth.get_app_access_token)
     
-    if params[:signed_request]
+    if params[:signed_request].nil?
+      @signed_request = session[:signed_request]
+    else
       @signed_request = @@oauth.parse_signed_request(params[:signed_request])
       session[:signed_request] = @signed_request
-
-      if @signed_request['user_id']
-
-        # Check to see if a Worlize user is already logged in.
-        if current_user
-          # Now, verify that the current Worlize user's account is linked to
-          # the current Facebook account
-          authentication = current_user.facebook_authentication
-          
-          if authentication && authentication.user_id != current_user.id
-            # A Worlize user is logged in that is linked to a different
-            # Facebook account.  We'll need to log them out to proceed.
-            UserSession.find.destroy
-            need_to_check_for_authentication = true
-          
-          elsif authentication && authentication.user_id == current_user.id
-            # This facebook account is linked to the current Worlize user.
-            need_to_check_for_authentication = false
-          
-          elsif authentication.nil?
-            # A Worlize user is logged in, and has no Facebook account linked.
-            # We'll prompt the user to link their Facebook account.
-            @needs_to_link_account = true
-            need_to_check_for_authentication = false
-          end
-
-        else
-          need_to_check_for_authentication = true
-        end
-
-        if need_to_check_for_authentication
-          # Now see if there is a Worlize account already linked to this
-          # facebook account.
-          authentication = Authentication.where(
-            :provider => 'facebook',
-            :uid => @signed_request['user_id']
-          ).first
-        
-          # If so, log in the appropriate Worlize user.
-          if authentication
-            authentication.update_attribute(:token, @signed_request['oauth_token'])
-            UserSession.create(authentication.user)
-          end
-        end
-      end
-    else
-      @signed_request = session[:signed_request]
+      need_to_check_user = true
     end
-
+    
+    if current_user.nil?
+      need_to_check_user = true
+    end
+    
+    if need_to_check_user
+      check_user
+    end
+    
     if @signed_request.nil? || @signed_request['user_id'].nil?
       # With the new Authenticated Referrals system, all users will be logged
       # in by the time they get to our canvas page.
@@ -247,6 +197,55 @@ class FacebookCanvasController < ApplicationController
     end
     
     @user_api = Koala::Facebook::API.new(@signed_request['oauth_token'])
+  end
+  
+  def check_user
+    return if @signed_request.nil?
+    @needs_to_link_account = false
+    if @signed_request['user_id']
+      authentication = Authentication.where(
+        :provider => 'facebook',
+        :uid => @signed_request['user_id']
+      ).first
+
+      # Check to see if a Worlize user is already logged in.
+      if current_user
+        if authentication.nil?
+          if current_user.facebook_authentication.nil?
+            # Logged in Worlize user isn't linked to any facebook account
+            # Prompt user to link their account
+            @needs_to_link_account = true
+            
+          else
+            # Logged in Worlize user is linked to another facebook
+            # account, and the current facebook account isn't linked
+            # to any Worlize account.  Log out the current Worlize user.
+            UserSession.find.destroy
+            reset_current_user
+          end
+          
+        elsif authentication.user_id != current_user.id
+          # A Worlize user is logged in that is not the one linked to the
+          # current Facebook account.  We'll need to log them out to
+          # proceed.  Then we'll log in the correct Worlize user.
+          UserSession.find.destroy
+          reset_current_user
+          authentication.update_attribute(:token, @signed_request['oauth_token'])
+          UserSession.create(authentication.user)
+        
+        elsif authentication.user_id == current_user.id
+          # This facebook account is linked to the current Worlize user.
+        end
+
+      elsif authentication
+        # No worlize user logged in, but we have an authentication.
+        # Log in the current facebook user.
+        authentication.update_attribute(:token, @signed_request['oauth_token'])
+        reset_current_user
+        UserSession.create(authentication.user)
+      end
+
+    end
   end
   
   def signed_request

@@ -90,6 +90,9 @@
     
     <header>
       <%= link_to image_tag('logo-fb-canvas.png'), root_url, 'data-action' => 'link' %>
+      <% if current_user %>
+        <div class="current-user">Hello, <%= current_user.username %>.</div>
+      <% end %>
     </header>
     
     <% if flash[:notice] %>

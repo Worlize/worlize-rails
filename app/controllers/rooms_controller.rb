@@ -53,7 +53,6 @@ class RoomsController < ApplicationController
           :server_id => interact_server_id
         )
         format.html do
-          flash[:notice] = "Room #{@room.name} entered."
           redirect_to enter_world_url
         end
         format.json do
