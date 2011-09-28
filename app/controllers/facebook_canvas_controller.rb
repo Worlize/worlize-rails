@@ -141,10 +141,10 @@ class FacebookCanvasController < ApplicationController
   private
 
   def log_headers
-    # Rails.logger.debug "Headers:"
-    # request.headers.each_pair do |k,v|
-    #   Rails.logger.debug "#{k.slice(5..k.length)} - #{v}" if k.index('HTTP_') == 0
-    # end
+    Rails.logger.debug "Headers:"
+    request.headers.each_pair do |k,v|
+      Rails.logger.debug "#{k.slice(5..k.length)} - #{v}" if k.index('HTTP_') == 0
+    end
     # Rails.logger.debug "Session:\n#{session.to_yaml}"
   end
 
@@ -154,7 +154,9 @@ class FacebookCanvasController < ApplicationController
   
   def initialize_koala
     @needs_to_link_account = false
+    new_arrival = false
     need_to_check_user = false
+    need_to_check_permissions = false
     
     @@oauth ||= Koala::Facebook::OAuth.new(
       Worlize.config['facebook']['app_id'],
@@ -169,6 +171,7 @@ class FacebookCanvasController < ApplicationController
       @signed_request = @@oauth.parse_signed_request(params[:signed_request])
       session[:signed_request] = @signed_request
       need_to_check_user = true
+      need_to_check_permissions = true
     end
     
     if current_user.nil?
@@ -180,25 +183,35 @@ class FacebookCanvasController < ApplicationController
     end
     
     if @signed_request.nil? || @signed_request['user_id'].nil?
-      # With the new Authenticated Referrals system, all users will be logged
-      # in by the time they get to our canvas page.
-      # render :text => 'No usable signed_request available.', :status => 400 and return
-
-      # For now, we have to redirect to the permissions dialog
-      redirect_url = @@oauth.url_for_oauth_code(
-        :permissions => Worlize.config['facebook']['requested_permissions']
-      )
+      redirect_to_auth_page
+    else
+      @user_api = Koala::Facebook::API.new(@signed_request['oauth_token'])
       
-      render(
-        :text => "<script>top.location.href='#{escape_javascript(redirect_url)}';</script>",
-        :content_type => 'text/html'
-      )
-      return
+      # Make sure we have all the requested permissions before continuing.
+      if need_to_check_permissions && !verify_permissions
+        redirect_to_auth_page
+      end
     end
     
-    @user_api = Koala::Facebook::API.new(@signed_request['oauth_token'])
+    
   end
   
+  def redirect_to_auth_page
+    # With the new Authenticated Referrals system, all users will be logged
+    # in by the time they get to our canvas page.
+    # render :text => 'No usable signed_request available.', :status => 400 and return
+
+    # For now, we have to redirect to the permissions dialog
+    redirect_url = @@oauth.url_for_oauth_code(
+      :permissions => Worlize.config['facebook']['requested_permissions']
+    )
+    
+    render(
+      :text => "<script>top.location.href='#{escape_javascript(redirect_url)}';</script>",
+      :content_type => 'text/html'
+    )
+  end
+
   def check_user
     return if @signed_request.nil?
     @needs_to_link_account = false
@@ -248,6 +261,19 @@ class FacebookCanvasController < ApplicationController
     end
   end
   
+  def verify_permissions
+    Rails.logger.debug("Verifying user permissions")
+    @permissions = @user_api.get_connections('me', 'permissions')
+    if @permissions.empty?
+      return false
+    end
+    requested_permissions = Worlize.config['facebook']['requested_permissions'].split(',')
+    requested_permissions.each do |perm|
+      return false unless @permissions[0][perm]
+    end
+    return true
+  end
+
   def signed_request
     @signed_request
   end
