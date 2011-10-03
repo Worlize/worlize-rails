@@ -94,12 +94,13 @@ class FriendsController < ApplicationController
         {
           :username => friend.username,
           :guid => friend.guid,
-          :mutual_friends => friend.mutual_friends_with(current_user).map do |mutual_friend|
-            {
-              :guid => mutual_friend.guid,
-              :username => mutual_friend.username
-            }
-          end
+          :picture => "#{request.scheme}://#{request.host_with_port}/images/unknown_user.png",
+          # :mutual_friends => friend.mutual_friends_with(current_user).map do |mutual_friend|
+          #   {
+          #     :guid => mutual_friend.guid,
+          #     :username => mutual_friend.username
+          #   }
+          # end
         }
       end
     end

@@ -174,7 +174,7 @@ class User < ActiveRecord::Base
   ##  Friendship Functions                                         ##
   ###################################################################
   
-  def request_friendship_of(potential_friend)
+  def request_friendship_of(potential_friend, picture_base_url='')
     return false if self.is_friends_with?(potential_friend)
     return true if self.accept_friendship_request_from(potential_friend)
     if redis_relationships.sadd "#{potential_friend.guid}:friendRequests", self.guid
@@ -183,7 +183,8 @@ class User < ActiveRecord::Base
         :data => {
           :user => {
             :guid => self.guid,
-            :username => self.username
+            :username => self.username,
+            :picture => "#{picture_base_url}/images/unknown_user.png",
           }
         }
       })
@@ -212,7 +213,7 @@ class User < ActiveRecord::Base
     # Let's avoid sending an embarrassing "You've been rejected" message...
   end
   
-  def accept_friendship_request_from(accepted_friend, picture_base_url=nil)
+  def accept_friendship_request_from(accepted_friend, picture_base_url='')
     result = redis_relationships.srem "#{self.guid}:friendRequests", accepted_friend.guid
     if result
       self.befriend(accepted_friend)
