@@ -126,12 +126,7 @@ class User < ActiveRecord::Base
     return @online unless @online.nil?
     redis = Worlize::RedisConnectionPool.get_client(:presence)
   
-    # Find the last server they were connected to...
-    server_id = redis.get "interactServerForUser:#{self.guid}"
-    return false if server_id.nil?
-  
-    # ...and see if they're still there.
-    @online = redis.sismember "connectedUsers:#{server_id}", self.guid
+    @online = redis.get "online:#{self.guid}"
   end
   
   def current_room_guid
