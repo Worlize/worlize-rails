@@ -7,7 +7,7 @@
           path = '/flash'
         end
         
-        cache_bust = '35'
+        cache_bust = '36'
     -%>
     <head>
         <meta name="google" value="notranslate" />         
@@ -40,12 +40,33 @@
             status : true, // check login status
             cookie : true, // enable cookies to allow the server to access the session
             xfbml  : true,  // parse XFBML
-            channelUrl  : '<%= "#{request.scheme}://#{request.host_with_port}/channel.html" %>', // Custom Channel URL
+            channelUrl  : '<%= escape_javascript("#{request.scheme}://#{request.host_with_port}/channel.html") %>', // Custom Channel URL
             oauth : true //enables OAuth 2.0
+          });
+
+          var fbLoginTimeout = setTimeout(requireFacebookLogin, 5000);
+          
+          FB.getLoginStatus(function(response) {
+            clearTimeout(fbLoginTimeout);
+            if (response.authResponse) {
+              loadFlashApp();
+            }
+            else {
+              requireFacebookLogin();
+            }
           });
         };
         
-        requestedFacebookPermissions = '<%= Worlize.config['facebook']['requested_permissions'] %>';
+        function requireFacebookLogin() {
+          // Not logged into Facebook... display the login dialog.
+          // TODO: Create a nice UI for this.
+          alert("To provide a better and more engaging social experience " +
+                "we now require all users to connect with Facebook.\n\n" +
+                "Click ok to connect your Facebook account!");
+          top.location.href = "/auth/facebook";
+        }
+        
+        requestedFacebookPermissions = '<%= escape_javascript(Worlize.config['facebook']['requested_permissions']) %>';
 
         (function() {
           var e = document.createElement('script');
@@ -64,28 +85,30 @@
         })();
 
 
-        // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
-        var swfVersionStr = "10.2.0";
-        // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
-        var xiSwfUrlStr = "<%= path %>/playerProductInstall.swf";
-        var flashvars = {};
-        var params = {};
-        params.quality = "high";
-        params.wmode = "opaque";
-        params.bgcolor = "#ffffff";
-        params.allowscriptaccess = "sameDomain";
-        params.allowfullscreen = "true";
-        var attributes = {};
-        attributes.id = "FlashClient";
-        attributes.name = "FlashClient";
-        attributes.align = "middle";
-        swfobject.embedSWF(
-            "<%= path %>/FlashClient.swf?cb=<%= cache_bust %>", "flashContent", 
-            "100%", "100%", 
-            swfVersionStr, xiSwfUrlStr, 
-            flashvars, params, attributes);
-        // JavaScript enabled so display the flashContent div in case it is not replaced with a swf object.
-        swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+        function loadFlashApp() {
+          // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
+          var swfVersionStr = "10.2.0";
+          // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
+          var xiSwfUrlStr = "<%= path %>/playerProductInstall.swf";
+          var flashvars = {};
+          var params = {};
+          params.quality = "high";
+          params.wmode = "opaque";
+          params.bgcolor = "#e6e3dc";
+          params.allowscriptaccess = "sameDomain";
+          params.allowfullscreen = "true";
+          var attributes = {};
+          attributes.id = "FlashClient";
+          attributes.name = "FlashClient";
+          attributes.align = "middle";
+          swfobject.embedSWF(
+              "<%= path %>/FlashClient.swf?cb=<%= cache_bust %>", "flashContent", 
+              "100%", "100%", 
+              swfVersionStr, xiSwfUrlStr, 
+              flashvars, params, attributes);
+          // JavaScript enabled so display the flashContent div in case it is not replaced with a swf object.
+          swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+        }
       </script>
       
       <div id="flashContent">
@@ -103,8 +126,15 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
         <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.js"%3E%3C/script%3E'))</script>
       <% end -%>
-
+      
       <script src="/javascripts/enter.js?cb=<%= cache_bust %>" type="text/javascript" charset="utf-8"></script>
+
+      <div id="loading-overlay-container">
+        <div id="loading-overlay">
+          <div class="character"> </div>
+          <p>Loading.  Please Wait...</p>
+        </div>
+      </div>
 
    </body>
 </html>

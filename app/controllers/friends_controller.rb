@@ -3,146 +3,151 @@ class FriendsController < ApplicationController
 
   # List friends
   def index
-    if params[:user_id]
-      user = User.find_by_guid(params[:user_id])
-    else
-      user = current_user
-    end
-    
-    if user.nil?
-      render :json => {
-        :success => false,
-        :error => "Unable to find the specified user"
-      } and return
-    end
+    user = current_user
+
+    # For now we only support retrieving the current user's friends
+    # if params[:user_id]
+    #   user = User.find_by_guid(params[:user_id])
+    # else
+    #   user = current_user
+    # end
+    # 
+    # if user.nil?
+    #   render :json => {
+    #     :success => false,
+    #     :error => "Unable to find the specified user"
+    #   } and return
+    # end
 
     output = {
       :success => true,
       :data => {}
     }
-    
-    friends_by_guid = {}
-    friends = []
-    
-    # Load Facebook Friends
-    if user == current_user
-      if params[:access_token]
-        fb_friends = load_facebook_friends(params[:access_token])
 
-        on_worlize = fb_friends.select { |f| f['worlize_user'] }
-        on_worlize.each do |data|
-          friend = data['worlize_user']
-          is_worlize_friend = friend.is_friends_with?(current_user)
-          friend_data = {
-            :friend_type => 'facebook',
-            :name => data['name'], # Name from Facebook
-            :picture => data['picture'],
-            :username => friend.username,
-            :guid => friend.guid,
-            :online => friend.online?,
-            :is_worlize_friend => is_worlize_friend,
-            :facebook_id => data['id']
-          }
-          if friend.facebook_authentication
-            friend_data[:facebook_profile] = friend.facebook_authentication.profile_url || "http://www.facebook.com/#{friend.facebook_authentication.uid}"
-          end
-          if friend.twitter_authentication && friend.twitter_authentication.profile_url
-            friend_data[:twitter_profile] = friend.twitter_authentication.profile_url
-          end
-          if friend.worlds.first && friend.worlds.first.rooms.first
-            friend_data[:world_entrance] = friend.worlds.first.rooms.first.guid
-          end
-          if friend.online?
-            friend_data[:current_room_guid] = friend.current_room_guid
-          end
-          friends_by_guid[friend.guid] = friend_data
-          friends.push(friend_data)
-        end
-      end
-    end
+    friends_by_guid = {}
+    friends = output[:data][:friends] = []
     
     # Load Worlize Friends
     user.friends.each do |friend|
-      next if friends_by_guid[friend.guid]
-      friend_data = {
-        :friend_type => 'worlize',
-        :username => friend.username,
-        :guid => friend.guid,
-        :online => friend.online?,
-        :picture => "#{request.scheme}://#{request.host_with_port}/images/unknown_user.png"
-      }
-      if friend.facebook_authentication
-        friend_data[:facebook_profile] = friend.facebook_authentication.profile_url || "http://www.facebook.com/#{friend.facebook_authentication.uid}"
-      end
-      if friend.twitter_authentication && friend.twitter_authentication.profile_url
-        friend_data[:twitter_profile] = friend.twitter_authentication.profile_url
-      end
-      if friend.worlds.first && friend.worlds.first.rooms.first
-        friend_data[:world_entrance] = friend.worlds.first.rooms.first.guid
-      end
-      if friend.online?
-        friend_data[:current_room_guid] = friend.current_room_guid
-      end
+      friend_data = friend.hash_for_friends_list
       friends_by_guid[friend.guid] = friend_data
       friends.push(friend_data)
     end
     
-    output[:data][:friends] = friends
+    # Load Facebook Friends
+    if user == current_user
+      if params[:access_token]
+        
+        # Loads all facebook friends, both on worlize and otherwise
+        fb_friends = load_facebook_friends(params[:access_token])
+
+        # Grab list of friend guids that we aren't supposed to automatically
+        # sync in from Facebook.
+        nosync_friend_guids = current_user.nosync_friend_guids
+        
+        # List of auto-synced friend guids to drive the auto_synced property
+        autosynced_friend_guids = current_user.facebook_friend_guids
+        
+        # Filter to friends that are on Worlize
+        on_worlize = fb_friends.select { |f| f.has_key?('worlize_user') }
+
+        on_worlize.each do |fb_data|
+          friend = fb_data['worlize_user']
+          
+          # Existing friend.  Proceed to fill in Facebook info
+          if friends_by_guid.has_key? friend.guid
+            Rails.logger.debug("Existing friend: #{friend.username}")
+            friend_data = friends_by_guid[friend.guid]
+          else
+            
+            # User isn't already friends with this user, befriend them.
+            # If the user explicitly removed this friend previously, don't
+            # auto-add them again.  Also, If the other user explicitly
+            # removed the current user, don't auto-add them.
+            if nosync_friend_guids.include?(friend.guid) || friend.nosync_friend?(current_user)
+              Rails.logger.debug("Skipping #{friend.username} due to nosync")
+              next
+            end
+
+            # add facebook friend without sending a live notification
+            # If there's a problem adding them, just skip and move on.
+            next unless current_user.befriend(friend,
+                                              :facebook_friend => true,
+                                              :send_notification => false)
+
+            friend_data = friends_by_guid[friend.guid] = friend.hash_for_friends_list
+            autosynced_friend_guids.push(friend.guid)
+            friends.push(friend_data)
+            
+            # Send notification to new user of the friendship
+            fb_profile = my_facebook_profile(params[:access_token])
+            my_friend_data = current_user.hash_for_friends_list
+            my_friend_data[:friend_type] = 'facebook'
+            my_friend_data[:name] = fb_profile['name']
+            my_friend_data[:picture] = fb_profile['picture']
+            my_friend_data[:facebook_id] = fb_profile['id']
+            my_friend_data[:auto_synced] = true
+            my_friend_data[:facebook_profile] = fb_profile['link']
+            friend.send_message({
+              :msg => 'friend_request_accepted',
+              :data => {
+                :user => my_friend_data
+              }
+            })
+            
+            Rails.logger.debug("Added facebook friend #{friend.username}")
+          end
+          
+          # Fill in friend data with extra information from Facebook.
+          friend_data[:friend_type] = 'facebook'
+          friend_data[:name] = fb_data['name'] # Name from Facebook
+          friend_data[:picture] = fb_data['picture'] # Picture from Facebook
+          friend_data[:facebook_id] = fb_data['id']
+          friend_data[:auto_synced] = autosynced_friend_guids.include?(friend.guid)
+        end
+        
+        # Remove any automatically added friends that are no longer facebook
+        # friends.
+        new_list_of_facebook_friend_guids = on_worlize.map { |f| f['worlize_user'].guid }
+        current_user.facebook_friend_guids.each do |guid|
+          if !new_list_of_facebook_friend_guids.include?(guid)
+            current_user.unfriend(guid, :prevent_add_on_next_sync => false)
+          end
+        end
+        
+        # Grab list of online Facebook friends to suggest that the user invite
+        online_facebook_friends = fb_friends.select do |f|
+          !f.has_key?('worlize_user') && f['fb_online_presence'] == 'active'
+        end
+        output[:data][:online_facebook_friends] = online_facebook_friends
+      end
+    end
     
     if user == current_user
       output[:data][:pending_friends] = user.pending_friends.map do |friend|
         {
           :username => friend.username,
           :guid => friend.guid,
-          :picture => "#{request.scheme}://#{request.host_with_port}/images/unknown_user.png",
-          # :mutual_friends => friend.mutual_friends_with(current_user).map do |mutual_friend|
-          #   {
-          #     :guid => mutual_friend.guid,
-          #     :username => mutual_friend.username
-          #   }
-          # end
+          :picture => "#{request.scheme}://#{request.host_with_port}/images/unknown_user.png"
         }
       end
     end
     
     render :json => output
   end
-  
+
   # Unfriend
   def destroy
     sworn_enemy = User.find_by_guid(params[:id])
+    # Second parameter to unfriend() is true to indicate that
+    # this person shouldn't be automatically re-added while syncing
+    # Facebook friends, since they were explicitly removed.
+    friend_removed = current_user.unfriend(sworn_enemy)
     render :json => {
-      :success => current_user.unfriend(sworn_enemy)
+      :success => true,
+      :friend_removed => friend_removed
     }
   end
-  
-  # Find all facebook friends who are on worlize
-  def facebook
-    fb_friends = load_facebook_friends(params[:access_token])
-    
-    not_on_worlize   = fb_friends.reject { |f| f['worlize_user'] }
-    on_worlize       = fb_friends.select { |f| f['worlize_user'] }
-
-    on_worlize.each do |data|
-      user = data['worlize_user']
-      data.delete('worlize_user')
-      data['worlize'] = user.public_hash_for_api.merge({
-        'is_friend' => user.is_friends_with?(current_user)
-      })
-    end
-    
-    already_friended = on_worlize.select { |f| f['worlize']['is_friend'] }
-    not_yet_friended = on_worlize.reject { |f| f['worlize']['is_friend'] }
-    
-    render :json => {
-      'success' => true,
-      'data' => {
-        'not_yet_friended' => not_yet_friended,
-        'already_friended' => already_friended,
-        'not_on_worlize' => not_on_worlize
-      }
-    }
-  end  
   
   def request_friendship
     potential_friend = User.find_by_guid(params[:id])
@@ -162,18 +167,32 @@ class FriendsController < ApplicationController
     rejected_friend = User.find_by_guid(params[:id])
     render :nothing and return if rejected_friend == current_user
     
-    render :json => {
-      :success => current_user.reject_friendship_request_from(rejected_friend)
-    }
+    result = {}
+    result[:success] = current_user.reject_friendship_request_from(rejected_friend),
+    if result[:success]
+      result[:friend_guid] = rejected_friend.guid
+    else
+      result[:friend_guid] = params[:id]
+    end
+    
+    render :json => result
   end
   
   def accept_friendship
     new_friend = User.find_by_guid(params[:id])
     render :nothing and return if new_friend == current_user
     
-    render :json => {
-      :success => current_user.accept_friendship_request_from(new_friend, "#{request.scheme}://#{request.host_with_port}")
-    }
+    result = {}
+    if current_user.accept_friendship_request_from(new_friend, "#{request.scheme}://#{request.host_with_port}")
+      result[:success] = true
+    else
+      result[:success] = false
+    end
+    
+    if result[:success]
+      result[:friends_list_entry] = new_friend.hash_for_friends_list
+    end
+    render :json => result
   end
   
   def retract_friendship_request
@@ -266,23 +285,49 @@ class FriendsController < ApplicationController
   
   private
   
+  def my_facebook_profile(access_token)
+    return @my_facebook_profile if @my_facebook_profile
+    fb_api = Koala::Facebook::API.new(access_token)
+    return @my_facebook_profile = fb_api.get_object('me', {'fields' => 'id,name,link,picture'})
+  end
+  
   def load_facebook_friends(access_token)
     # Koala API methods will raise errors for things like expired tokens
-    begin
-      fb_graph = Koala::Facebook::API.new(access_token)
-      # Get user's list of facebook friends
-      fb_friends = fb_graph.get_connections('me', 'friends', {'fields' => 'id,name,picture'})
-    rescue Koala::Facebook::APIError => e
-      return []
-    end
+    # We probably actually want that for now.
+    fb_api = Koala::Facebook::API.new(access_token)
+    # Get user's list of facebook friends
     
-    fb_friends.sort! { |a,b| a['name'].downcase <=> b['name'].downcase }
+    # via Graph API
+    # fb_friends = fb_api.get_connections('me', 'friends', {'fields' => 'id,name,picture'})
+    
+    # via FQL - allows access to the 'online_presence' field!
+    query = 'SELECT uid, name, pic_square, online_presence ' +
+            'FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) ' +
+            'ORDER BY uid'
+    fb_friends = fb_api.fql_query(query)
+
+    # we sort on the client side so this is unnecessary
+    # fb_friends.sort! { |a,b| a['name'].downcase <=> b['name'].downcase }
       
     # Keep a reference to each by their Facebook ID so we can find and return
     # the facebook data once we find all the worlize users with matching
     # facebook IDs.
     fb_friends_by_id = Hash.new
     fb_friends.each do |fb_friend|
+      # Also take the opportunity to normalize the FQL data field names
+      # to their Graph API equivalents.
+      if fb_friend.has_key?('uid')
+        fb_friend['id'] = fb_friend['uid'].to_s
+        fb_friend.delete('uid')
+      end
+      if fb_friend.has_key?('pic_square')
+        fb_friend['picture'] = fb_friend['pic_square']
+        fb_friend.delete('pic_square')
+      end
+      if fb_friend.has_key?('online_presence')
+        fb_friend['fb_online_presence'] = fb_friend['online_presence']
+        fb_friend.delete('online_presence')
+      end
       fb_friends_by_id[fb_friend['id']] = fb_friend
     end
     
@@ -295,8 +340,8 @@ class FriendsController < ApplicationController
                       :uid => fb_friends.map { |f| f['id'] }
                    });
     
-    matches.find_each do |user|
-      fb_authentication = user.authentications.select { |a| a.provider == 'facebook' }.first
+    matches.all.each do |user|
+      fb_authentication = user.facebook_authentication
       fb_friend = fb_friends_by_id[fb_authentication.uid]
       fb_friend['worlize_user'] = user
     end

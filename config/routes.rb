@@ -78,7 +78,7 @@ Worlize::Application.routes.draw do |map|
       post :grant_permission_to_join
     end
     collection do
-      get  :facebook
+      post :sync_facebook_friends
     end
   end
 

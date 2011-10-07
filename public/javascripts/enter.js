@@ -1,3 +1,38 @@
+jQuery.extend( jQuery.easing, {
+    easeInBack: function (x, t, b, c, d, s) {
+		if (s == undefined) s = 1.70158;
+		return c*(t/=d)*t*((s+1)*t - s) + b;
+	},
+	easeOutBack: function (x, t, b, c, d, s) {
+		if (s == undefined) s = 1.70158;
+		return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
+	},
+	easeInOutBack: function (x, t, b, c, d, s) {
+		if (s == undefined) s = 1.70158; 
+		if ((t/=d/2) < 1) return c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b;
+		return c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
+	}
+});
+
+function hideLoadingOverlay() {
+    setTimeout(function() {
+        var $ = jQuery;
+        $('#loading-overlay-container').animate({
+            top: -180
+        },{
+            duration: 500,
+            easing: 'easeInBack',
+            complete: function() {
+                $('#loading-overlay-container').hide();
+            }
+        });
+    }, 1000);
+}
+
+function logout() {
+    top.location.href = "/logout";
+}
+
 var marketplaceShowing = false;
 var virtualCurrencyProductsShowing = false;
 

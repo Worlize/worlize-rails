@@ -88,6 +88,30 @@ class User < ActiveRecord::Base
       :world_guid => world.guid
     )
   end
+  
+  def hash_for_friends_list(picture_base_url='')
+    friend_data = {
+      :friend_type => 'worlize',
+      :auto_synced => false,
+      :picture => "#{picture_base_url}/images/unknown_user.png",
+      :guid => self.guid,
+      :username => self.username,
+      :presence_status => self.presence_status
+    }
+    if self.facebook_authentication
+      friend_data[:facebook_profile] =
+          (self.facebook_authentication.profile_url ||
+           "https://www.facebook.com/#{self.facebook_authentication.uid}")
+    end
+    if self.twitter_authentication && self.twitter_authentication.profile_url
+      friend_data[:twitter_profile] = self.twitter_authentication.profile_url
+    end
+    if self.worlds.first && self.worlds.first.rooms.first
+      friend_data[:world_entrance] = self.worlds.first.rooms.first.guid
+    end
+    
+    friend_data
+  end
 
   def create_world
     world = self.worlds.create(:name => "#{self.username.capitalize}'s World")
@@ -122,11 +146,30 @@ class User < ActiveRecord::Base
   end
   
   def online?
-    # Memoize for the life of the instance to help with sorting...
-    return @online unless @online.nil?
-    redis = Worlize::RedisConnectionPool.get_client(:presence)
+    presence_status == 'online'
+  end
   
-    @online = redis.get "online:#{self.guid}"
+  # there is no setter for this because presence_status is maintained by the
+  # presence server.  Any other mechanism attempting to change it would be in
+  # conflict with the canonical data source.
+  def presence_status
+    # Memoize for the life of the instance to help with sorting...
+    return @presence_status unless @presence_status.nil?
+    redis = Worlize::RedisConnectionPool.get_client(:presence)
+    result = redis.get("status:#{self.guid}")
+    
+    # an 'offline' status is represented by the absense of a key in Redis
+    # ... why waste prescious memory on users that aren't online?
+    return @presence_status = 'offline' if result.nil?
+    
+    statuses = [
+      'offline', # 'offline' is also optionally represented by a zero value
+      'online',
+      'idle',
+      'away',
+      'invisible'
+    ]
+    @presence_status = statuses[result.to_i]
   end
   
   def current_room_guid
@@ -170,8 +213,12 @@ class User < ActiveRecord::Base
   ###################################################################
   
   def request_friendship_of(potential_friend, picture_base_url='')
-    return false if self.is_friends_with?(potential_friend)
-    return true if self.accept_friendship_request_from(potential_friend)
+    if self.is_friends_with?(potential_friend)
+      return false
+    end
+    if self.accept_friendship_request_from(potential_friend)
+      return true
+    end
     if redis_relationships.sadd "#{potential_friend.guid}:friendRequests", self.guid
       potential_friend.send_message({
         :msg => 'new_friend_request',
@@ -213,30 +260,10 @@ class User < ActiveRecord::Base
     if result
       self.befriend(accepted_friend)
       
-      friend_data = {
-        :friend_type => 'worlize',
-        :picture => "#{picture_base_url}/images/unknown_user.png",
-        :guid => self.guid,
-        :username => self.username,
-        :online => self.online?
-      }
-      if self.facebook_authentication
-        friend_data[:facebook_profile] = self.facebook_authentication.profile_url || "http://www.facebook.com/#{self.facebook_authentication.uid}"
-      end
-      if self.twitter_authentication && self.twitter_authentication.profile_url
-        friend_data[:twitter_profile] = self.twitter_authentication.profile_url
-      end
-      if self.worlds.first && self.worlds.first.rooms.first
-        friend_data[:world_entrance] = self.worlds.first.rooms.first.guid
-      end
-      if self.online?
-        friend_data[:current_room_guid] = self.current_room_guid
-      end
-      
       accepted_friend.send_message({
         :msg => 'friend_request_accepted',
         :data => {
-          :user => friend_data
+          :user => self.hash_for_friends_list
         }
       })
       return true
@@ -256,38 +283,97 @@ class User < ActiveRecord::Base
     redis_relationships.scard "#{self.guid}:friendRequests"
   end
   
-  def befriend(new_friend)
-    redis_relationships.multi do
-      redis_relationships.sadd "#{self.guid}:friends", new_friend.guid
-      redis_relationships.sadd "#{new_friend.guid}:friends", self.guid
+  def befriend(new_friend, options={})
+    if !options.has_key?(:send_notification)
+      options[:send_notification] = true
     end
-    # send notification to current user
-    self.send_message({
-      :msg => 'friend_added',
-      :data => {
-        :user => {
-          :guid => new_friend.guid,
-          :username => new_friend.username
-        }
-      }
-    })
-    # send notification to new friend
-    new_friend.send_message({
-      :msg => 'friend_added',
-      :data => {
-        :user => {
-          :guid => self.guid,
-          :username => self.username
-        }
-      }
-    })
-    true
+    if !options.has_key?(:facebook_friend)
+      options[:facebook_friend] = false
+    end
+
+    result = redis_relationships.multi do
+      if options[:facebook_friend]
+        redis_relationships.sadd "#{self.guid}:fbFriends", new_friend.guid
+        redis_relationships.sadd "#{new_friend.guid}:fbFriends", self.guid
+      else
+        redis_relationships.sadd "#{self.guid}:friends", new_friend.guid
+        redis_relationships.sadd "#{new_friend.guid}:friends", self.guid
+      end
+
+      # If we're explicitly adding a new friend, we need to make
+      # sure they're no longer in the list of friends not to auto-sync.
+      redis_relationships.srem("#{self.guid}:nosyncFriends", new_friend.guid)
+    end
+    
+    if result[0] || result[1]
+      if options[:send_notification]
+        # send notification to current user
+        self.send_message({
+          :msg => 'friend_added',
+          :data => {
+            :facebook_friend => options[:facebook_friend],
+            :user => {
+              :guid => new_friend.guid,
+              :username => new_friend.username
+            }
+          }
+        })
+        # send notification to new friend
+        new_friend.send_message({
+          :msg => 'friend_added',
+          :data => {
+            :facebook_friend => options[:facebook_friend],
+            :user => {
+              :guid => self.guid,
+              :username => self.username
+            }
+          }
+        })
+      end
+      return true
+    end
+
+    return false
   end
   
-  def unfriend(sworn_enemy)
+  def unfriend(sworn_enemy, options={})
+    if sworn_enemy.instance_of? String
+      sworn_enemy = User.find_by_guid(sworn_enemy)
+      if sworn_enemy.nil?
+        return false
+      end
+    end
+    
+    if !options.has_key?(:prevent_add_on_next_sync)
+      options[:prevent_add_on_next_sync] = true
+    end
+    
+    if redis_relationships.sismember("#{self.guid}:fbFriends", sworn_enemy.guid)
+      # Facebook friend
+      facebook = true
+
+    elsif redis_relationships.sismember("#{self.guid}:friends", sworn_enemy.guid)
+      # Worlize friend
+      facebook = false
+    else
+      # Not a friend
+      return false
+    end
+
+    if options[:prevent_add_on_next_sync]
+      # Add this member to a list of Facebook friends that have been removed
+      # intentionally so they don't get re-added on the next sync
+      redis_relationships.sadd("#{self.guid}:nosyncFriends", sworn_enemy.guid)
+    end
+    
     redis_relationships.multi do
-      redis_relationships.srem "#{self.guid}:friends", sworn_enemy.guid
-      redis_relationships.srem "#{sworn_enemy.guid}:friends", self.guid
+      if facebook
+        redis_relationships.srem "#{self.guid}:fbFriends", sworn_enemy.guid
+        redis_relationships.srem "#{sworn_enemy.guid}:fbFriends", self.guid
+      else
+        redis_relationships.srem "#{self.guid}:friends", sworn_enemy.guid
+        redis_relationships.srem "#{sworn_enemy.guid}:friends", self.guid
+      end
     end
     sworn_enemy.send_message({
       :msg => 'friend_removed',
@@ -313,11 +399,11 @@ class User < ActiveRecord::Base
   end
   
   def mutual_friend_guids_with(user)
-    redis_relationships.sinter "#{self.guid}:friends", "#{user.guid}:friends"
+    self.friend_guids & user.friend_guids # intersection
   end
 
   def mutual_friends_with(user)
-    User.find_all_by_guid(self.mutual_friend_guids_with(user), :order => 'username')
+    User.where(:guid => self.mutual_friend_guids_with(user))
   end
   
   def is_mutual_friends_with?(user1, user2)
@@ -325,15 +411,46 @@ class User < ActiveRecord::Base
   end
   
   def is_friends_with?(user)
-    redis_relationships.sismember "#{self.guid}:friends", user.guid
+    result = redis_relationships.multi do
+      redis_relationships.sismember "#{self.guid}:friends", user.guid
+      redis_relationships.sismember "#{self.guid}:fbFriends", user.guid
+    end
+    result[0] || result[1]
   end
   
-  def friend_guids
+  def nosync_friend_guids
+    redis_relationships.smembers("#{self.guid}:nosyncFriends")
+  end
+  
+  def nosync_friend?(possible_friend)
+    redis_relationships.sismember("#{self.guid}:nosyncFriends", possible_friend.guid)
+  end
+  
+  def facebook_friend_guids
+    redis_relationships.smembers "#{self.guid}:fbFriends"
+  end
+  
+  def worlize_friend_guids
     redis_relationships.smembers "#{self.guid}:friends"
   end
   
+  def friend_guids
+    redis_relationships.sunion "#{self.guid}:friends", "#{self.guid}:fbFriends"
+  end
+  
+  # Returns both facebook and explicit worlize friends
   def friends
-    User.find_all_by_guid(self.friend_guids, :order => 'username')
+    User.where(:guid => self.friend_guids)
+  end
+  
+  # Returns only facebook friends
+  def facebook_friends
+    User.where(:guid => self.facebook_friend_guids)
+  end
+
+  # Returns only worlize friends
+  def worlize_friends
+    User.where(:guid => self.worlize_friend_guids)
   end
 
   

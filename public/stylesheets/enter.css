@@ -1,6 +1,7 @@
 /* @override 
 	http://localhost/stylesheets/enter.css?cb=19
 	http://turtle.office.worlize.com/stylesheets/enter.css?cb=30
+	https://turtle.office.worlize.com/stylesheets/enter.css?cb=36
 */
 
 @font-face {
@@ -13,6 +14,7 @@
 
 body {
 	font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+	background-color: #e6e3dc;
 }
 
 p {
@@ -226,4 +228,43 @@ button:hover {
 	bottom: 0px;
 	width: 100%;
 	height: 100%;
+}
+
+#loading-overlay-container {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	z-index: 32768;
+}
+
+#loading-overlay {
+	position: relative;
+	top: 70px;
+	margin: 0px auto;
+	width: 580px;
+	height: 150px;
+	background-color: rgba(236,250,199,0.9);
+	border-radius: 15px;
+	box-shadow: 0px 5px 20px rgba(0,0,0,0.6);
+}
+
+#loading-overlay .character {
+	position: absolute;
+	top: 30px;
+	left: 33px;
+	width: 128px;
+	height: 100px;
+	background: url(/images/login-overlay/green-jelly.png);
+}
+
+#loading-overlay p {
+	position: absolute;
+	top: 60px;
+	left: 195px;
+	width: 332px;
+	height: 35px;
+	text-indent: -10000px;
+	background-image: url(/images/loading-please-wait.png);
+	font-family: PTSansNarrowBold;
 }
