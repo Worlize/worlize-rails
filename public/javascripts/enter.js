@@ -100,7 +100,7 @@ function openMarketplace() {
 }
 
 function showFacebookDialog(options) {
-    console.log("ShowFacebookDialog", options);
+    // console.log("ShowFacebookDialog", options);
     function doShowDialog() {
         FB.ui(options);
     }
@@ -110,7 +110,7 @@ function showFacebookDialog(options) {
     else {
         FB.login(function(response) {
             if (response.authResponse) {
-                console.log("Login complete, showing requestsed dialog.");
+                // console.log("Login complete, showing requestsed dialog.");
                 doShowDialog();
             }
         }, { scope: requestedFacebookPermissions })
