@@ -214,6 +214,7 @@ class User < ActiveRecord::Base
   
   def request_friendship_of(potential_friend, picture_base_url='')
     if self.is_friends_with?(potential_friend)
+      Rails.logger.info "#{self.username} requested friendship with existing friend #{potential_friend.username}"
       return false
     end
     if self.accept_friendship_request_from(potential_friend)
@@ -305,7 +306,7 @@ class User < ActiveRecord::Base
       redis_relationships.srem("#{self.guid}:nosyncFriends", new_friend.guid)
     end
     
-    if result[0] || result[1]
+    if result[0] > 0 || result[1] > 0
       if options[:send_notification]
         # send notification to current user
         self.send_message({
@@ -415,7 +416,7 @@ class User < ActiveRecord::Base
       redis_relationships.sismember "#{self.guid}:friends", user.guid
       redis_relationships.sismember "#{self.guid}:fbFriends", user.guid
     end
-    result[0] || result[1]
+    (result[0] == 1) || (result[1] == 1)
   end
   
   def nosync_friend_guids
