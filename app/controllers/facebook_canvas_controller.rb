@@ -189,6 +189,7 @@ class FacebookCanvasController < ApplicationController
       
       # Make sure we have all the requested permissions before continuing.
       if need_to_check_permissions && !verify_permissions
+        Rails.logger.info "User does not have requested permissions."
         redirect_to_auth_page
       end
     end
@@ -200,6 +201,8 @@ class FacebookCanvasController < ApplicationController
     # With the new Authenticated Referrals system, all users will be logged
     # in by the time they get to our canvas page.
     # render :text => 'No usable signed_request available.', :status => 400 and return
+
+    Rails.logger.info "Redirecting to Facebook auth page."
 
     # For now, we have to redirect to the permissions dialog
     redirect_url = @@oauth.url_for_oauth_code(
@@ -262,7 +265,6 @@ class FacebookCanvasController < ApplicationController
   end
   
   def verify_permissions
-    Rails.logger.debug("Verifying user permissions")
     @permissions = @user_api.get_connections('me', 'permissions')
     if @permissions.empty?
       return false
