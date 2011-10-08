@@ -521,7 +521,20 @@ class User < ActiveRecord::Base
   
 
   def interactivity_session
-    InteractivitySession.find_by_user_guid(self.guid)
+    s = InteractivitySession.find_by_user_guid(self.guid)
+    return s unless s.nil?
+    world = self.worlds.first
+    room = world.rooms.first
+    server_id = room.interact_server_id
+    s = InteractivitySession.new
+    s.update_attributes(
+      :username => self.username,
+      :user_guid => self.guid,
+      :room_guid => room.guid,
+      :world_guid => world.guid,
+      :server_id => server_id
+    )
+    return s
   end
   
   def reset_appearance!
