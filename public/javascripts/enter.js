@@ -30,7 +30,9 @@ function hideLoadingOverlay() {
 }
 
 function logout() {
-    top.location.href = "/logout";
+    FB.logout(function(response) {
+        top.location.href = "/logout";
+    });
 }
 
 var marketplaceShowing = false;
