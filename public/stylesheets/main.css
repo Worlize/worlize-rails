@@ -3,6 +3,7 @@
 	http://localhost/stylesheets/main.css?v=3
 	http://worlize.local/stylesheets/main.css?v=3
 	http://turtle.office.worlize.com/stylesheets/main.css?v=3
+	https://turtle.office.worlize.com/stylesheets/main.css?v=3
 */
 
 /* @group Boilerplate */
@@ -887,6 +888,46 @@ footer nav a {
 	margin: 0px 5px;
 }
 
+.as-seen-on-container {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	z-index: 99999;
+}
+
+.as-seen-on {
+	position: relative;
+	font-family: PTSansNarrowBold;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	background: #FFF;
+	width: 600px;
+	margin: 30px auto;
+	height: 37px;
+	vertical-align: middle;
+	border: 1px solid #BBB;
+	padding: 10px 10px 5px;
+	-webkit-box-shadow: 0px 2px 3px rgba(0,0,0,0.25);
+	-moz-box-shadow: 0px 2px 3px rgba(0,0,0,0.25);
+	-ms-box-shadow: 0px 2px 3px rgba(0,0,0,0.25);
+	-o-box-shadow: 0px 2px 3px rgba(0,0,0,0.25);
+	box-shadow: 0px 2px 3px rgba(0,0,0,0.25);
+}
+
+.as-seen-on img {
+	margin: 0px 0px 0px 20px;
+}
+
+.as-seen-on h1 {
+	float: left;
+	font-weight: normal;
+	margin-top: 4px;
+	margin-left: 14px;
+	font-size: 16pt;
+	vertical-align: top;
+	text-align: left;
+}
 
 /* @end */
 
