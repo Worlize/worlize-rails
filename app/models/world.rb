@@ -7,7 +7,15 @@ class World < ActiveRecord::Base
   
   validates :name, :presence => true
 
-  def hash_for_api(current_user)
+  def basic_hash_for_api
+    {
+      :guid => self.guid,
+      :name => self.name,
+      :owner => self.user.public_hash_for_api
+    }
+  end
+
+  def hash_for_api(current_user=nil)
     {
       :guid => self.guid,
       :name => self.name,

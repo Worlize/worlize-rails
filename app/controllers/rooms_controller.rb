@@ -9,7 +9,8 @@ class RoomsController < ApplicationController
         {
           :name => room.name,
           :guid => room.guid,
-          :user_count => room.user_count
+          :user_count => room.user_count,
+          :thumbnail => room.background_instance.background.image.thumb.url
         }
       end
 
@@ -23,6 +24,56 @@ class RoomsController < ApplicationController
         :description => "There is no such world."
       }
     end
+  end
+  
+  # /rooms/directory
+  def directory
+    # Get list of active rooms
+    redis = Worlize::RedisConnectionPool.get_client(:presence)
+
+    room_population = Hash.new
+
+    active_room_guids_with_score = redis.zrangebyscore('activeRooms', '(0', '+inf', :withscores => true)
+    active_room_guids_with_score.each_index do |index|
+      if index % 2 == 0
+        room_population[active_room_guids_with_score[index]] = active_room_guids_with_score[index+1].to_i
+      end
+    end
+    
+    room_info = []
+    Room.where(:guid => room_population.keys).all.each do |room|
+      room_info.push({
+        :room => room.basic_hash_for_api.merge(
+          :user_count => room_population[room.guid],
+          :thumbnail => room.background_instance.background.image.thumb.url
+        ),
+        :world => room.world.basic_hash_for_api
+      })
+    end
+    
+    # Throw in the public worlds' room entrances
+    public_worlds = PublicWorld.all.each do |public_world|
+      world = public_world.world
+      entrance = world.rooms.first
+      
+      # If the room is already in the list, don't add a duplicate
+      next unless room_population[entrance.guid].nil?
+      
+      room_info.push({
+        :room => entrance.basic_hash_for_api.merge(
+          :user_count => entrance.user_count,
+          :thumbnail => entrance.background_instance.background.image.thumb.url
+        ),
+        :world => world.basic_hash_for_api
+      })
+    end
+    
+    render :json => {
+      :success => true,
+      :data => {
+        :rooms => room_info
+      }
+    }
   end
   
   def show

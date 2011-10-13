@@ -184,6 +184,9 @@ Worlize::Application.routes.draw do |map|
     resources :hotspots, :controller => 'in_world/hotspots'
     resources :objects, :controller => 'in_world/objects'
     resources :youtube_players, :controller => 'in_world/youtube_players'
+    collection do
+      get :directory
+    end
     member do
       post :enter
       get :enter, :as => :enter_room
