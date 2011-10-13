@@ -32,6 +32,7 @@ class RoomsController < ApplicationController
     redis = Worlize::RedisConnectionPool.get_client(:presence)
     
     current_user_friend_guids = current_user.friend_guids
+    current_user_facebook_friend_guids = current_user.facebook_friend_guids
 
     room_population = Hash.new
 
@@ -52,7 +53,11 @@ class RoomsController < ApplicationController
       friend_guids_in_room.each do |user_guid|
         friend = User.find_by_guid(user_guid)
         if friend
-          friends_in_room.push(friend.hash_for_friends_list('basic'))
+          friend_info = friend.hash_for_friends_list('basic')
+          if current_user_facebook_friend_guids.include?(friend.guid)
+            friend_info[:friend_type] = 'facebook'
+          end
+          friends_in_room.push(friend_info)
         end
       end
       
