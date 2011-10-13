@@ -140,11 +140,6 @@ class User < ActiveRecord::Base
     end
   end
   
-  def current_server_id
-    redis = Worlize::RedisConnectionPool.get_client(:presence)
-    redis.get "interactServerForUser:#{self.guid}"
-  end
-  
   def online?
     presence_status == 'online'
   end
