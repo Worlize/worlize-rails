@@ -30,6 +30,8 @@ class RoomsController < ApplicationController
   def directory
     # Get list of active rooms
     redis = Worlize::RedisConnectionPool.get_client(:presence)
+    
+    current_user_friend_guids = current_user.friend_guids
 
     room_population = Hash.new
 
@@ -42,12 +44,25 @@ class RoomsController < ApplicationController
     
     room_info = []
     Room.where(:guid => room_population.keys).all.each do |room|
+      
+      # Check to see if any of our friends are in the room and include them
+      # in the response if they are.
+      friends_in_room = []
+      friend_guids_in_room = room.connected_user_guids & current_user_friend_guids
+      friend_guids_in_room.each do |user_guid|
+        friend = User.find_by_guid(user_guid)
+        if friend
+          friends_in_room.push(friend.hash_for_friends_list('basic'))
+        end
+      end
+      
       room_info.push({
         :room => room.basic_hash_for_api.merge(
           :user_count => room_population[room.guid],
           :thumbnail => room.background_instance.background.image.thumb.url
         ),
-        :world => room.world.basic_hash_for_api
+        :world => room.world.basic_hash_for_api,
+        :friends_in_room => friends_in_room
       })
     end
     
@@ -59,12 +74,14 @@ class RoomsController < ApplicationController
       # If the room is already in the list, don't add a duplicate
       next unless room_population[entrance.guid].nil?
       
+      # If we're adding the room this way, it's empty      
       room_info.push({
         :room => entrance.basic_hash_for_api.merge(
-          :user_count => entrance.user_count,
+          :user_count => 0,  # entrance.user_count
           :thumbnail => entrance.background_instance.background.image.thumb.url
         ),
-        :world => world.basic_hash_for_api
+        :world => world.basic_hash_for_api,
+        :friends_in_room => []
       })
     end
     

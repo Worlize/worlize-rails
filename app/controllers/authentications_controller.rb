@@ -43,10 +43,10 @@ class AuthenticationsController < ApplicationController
   def create
     omniauth = request.env["omniauth.auth"]
     if Rails.env == 'development'
-      logger.debug "Authentication Details:\n#{omniauth.to_yaml}\n"
-      logger.debug "Session: \n#{session.to_yaml}\n"
+      Rails.logger.debug "Authentication Details:\n#{omniauth.to_yaml}\n"
+      Rails.logger.debug "Session: \n#{session.to_yaml}\n"
     end
-    
+
     authentication = Authentication.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'])
 
     # If we already have a user logged in, then we assume we're
@@ -59,7 +59,9 @@ class AuthenticationsController < ApplicationController
         create_options = {
           :provider => omniauth['provider'],
           :uid => omniauth['uid'],
-          :token => omniauth['credentials']['token']
+          :token => omniauth['credentials']['token'],
+          :profile_picture => omniauth['user_info']['image'],
+          :display_name => omniauth['user_info']['name']
         }
         
         if omniauth['provider'] == 'facebook'
@@ -79,7 +81,16 @@ class AuthenticationsController < ApplicationController
     # found when we looked up the external provider credentials.
     elsif authentication
       Rails.logger.debug "Found a matching authentication record, logging user in"
-      
+
+      # Omniauth seems to use an inefficient url for Facebook images that is
+      # different from the URL we get when querying the graph api.  We don't
+      # want to cache the Omniauth profile pic url because it will constantly
+      # get changed back and forth when the one of the user's friends loads
+      # their friends list and when the user logs in.
+      if omniauth['provider'] != 'facebook'
+        authentication.profile_picture = omniauth['user_info']['image']
+      end
+      authentication.display_name = omniauth['user_info']['name']
       if omniauth['credentials'] && omniauth['credentials']['token']
         authentication.token = omniauth['credentials']['token']
       end
@@ -106,7 +117,8 @@ class AuthenticationsController < ApplicationController
   end
   
   def connect_facebook_via_js
-    fb_authentication = current_user.authentications.where(:provider => 'facebook').first
+    fb_authentication = current_user.facebook_authentication
+    
     if fb_authentication
       render :json => {
         'success' => true,
@@ -118,7 +130,10 @@ class AuthenticationsController < ApplicationController
     begin
       fb_graph = Koala::Facebook::API.new(params[:access_token])
       # Get user's list of facebook friends
-      fb_profile = fb_graph.get_object('me')
+      fb_profile = fb_graph.get_object('me', {:fields => 'id,birthday,picture,link,name'})
+      if Rails.env == 'development'
+        Rails.logger.debug fb_profile.to_yaml
+      end
     rescue Koala::Facebook::APIError => e
       render :json => {
         'success' => false,
@@ -127,13 +142,17 @@ class AuthenticationsController < ApplicationController
     end
     
     if fb_profile['id']
-      fb_authentication = current_user.authentications.create(
-        :provider => 'facebook',
-        :uid => fb_profile['id'],
-        :token => params[:access_token],
-        :profile_url => fb_profile['link']
-      )
-      current_user.update_attribute(:birthday, fb_profile)
+      fb_authentication ||= current_user.authentications.create
+      fb_authentication.provider = 'facebook'
+      fb_authentication.uid = fb_profile['id']
+      fb_authentication.token = params[:access_token]
+      fb_authentication.profile_url = fb_profile['link']
+      fb_authentication.display_name = fb_profile['name']
+      fb_authentication.profile_picture = fb_profile['picture']
+      fb_authentication.save
+      
+      current_user.update_attribute(:birthday, fb_profile['birthday'])
+      
       render :json => {
         'success' => fb_authentication.persisted?
       }

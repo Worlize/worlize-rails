@@ -83,34 +83,76 @@ class User < ActiveRecord::Base
       :twitter => self.twitter,
       :email => self.email,
       :birthday => self.birthday,
+      :picture => self.profile_picture,
       :world_entrance => world.rooms.first.guid,
       :world_name => world.name,
       :world_guid => world.guid
     )
   end
   
-  def hash_for_friends_list(picture_base_url='')
+  def hash_for_friends_list(type='full')
     friend_data = {
       :friend_type => 'worlize',
-      :auto_synced => false,
-      :picture => "#{picture_base_url}/images/unknown_user.png",
+      :picture => self.profile_picture,
       :guid => self.guid,
       :username => self.username,
+      :name => self.name,
       :presence_status => self.presence_status
     }
-    if self.facebook_authentication
-      friend_data[:facebook_profile] =
-          (self.facebook_authentication.profile_url ||
-           "https://www.facebook.com/#{self.facebook_authentication.uid}")
+    friend_data[:facebook_profile] = self.facebook_profile_url
+    friend_data[:twitter_profile] = self.twitter_profile_url
+    if facebook_authentication
+      friend_data[:facebook_id] = facebook_authentication.uid
     end
-    if self.twitter_authentication && self.twitter_authentication.profile_url
-      friend_data[:twitter_profile] = self.twitter_authentication.profile_url
+    if type == 'full'
+      friend_data[:auto_synced] = false
+      if self.worlds.first && self.worlds.first.rooms.first
+        friend_data[:world_entrance] = self.worlds.first.rooms.first.guid
+      end
     end
-    if self.worlds.first && self.worlds.first.rooms.first
-      friend_data[:world_entrance] = self.worlds.first.rooms.first.guid
-    end
-    
     friend_data
+  end
+  
+  # If a facebook full name is available, use that.  Otherwise, mirror
+  # the username field
+  def name
+    if facebook_authentication && facebook_authentication.display_name
+      return facebook_authentication.display_name
+    end
+    return username
+  end
+  
+  # Profile picture is determined in order of precedence:
+  # 1.) Explicitly set avatar image for profile picture (not implemented yet)
+  # 2.) Facebook profile picture
+  # 3.) unknown_user.png
+  def profile_picture
+    if facebook_authentication && facebook_authentication.profile_picture
+      return facebook_authentication.profile_picture
+    end
+    return '/images/unknown_user.png'
+  end
+  
+  def profile_picture_small
+    if facebook_authentication && facebook_authentication.profile_picture
+      return facebook_authentication.profile_picture
+    end
+    return '/images/unknown_user_small.png'
+  end
+  
+  def facebook_profile_url
+    if self.facebook_authentication
+      return (self.facebook_authentication.profile_url ||
+       "https://www.facebook.com/#{self.facebook_authentication.uid}")
+    end
+    return nil
+  end
+  
+  def twitter_profile_url
+    if self.twitter_authentication
+      return self.twitter_authentication.profile_url
+    end
+    return nil
   end
 
   def create_world

@@ -7,7 +7,7 @@
           path = '/flash'
         end
         
-        cache_bust = '38'
+        cache_bust = '39'
     -%>
     <head>
         <meta name="google" value="notranslate" />         
@@ -34,6 +34,8 @@
     <body>
       <div id="fb-root"></div>
       <script>
+        window.fbLoggedIn = false;
+      
         window.fbAsyncInit = function() {
           FB.init({
             appId  : '<%= Worlize.config['facebook']['app_id'] %>',
@@ -43,28 +45,27 @@
             channelUrl  : '<%= escape_javascript("#{request.scheme}://#{request.host_with_port}/channel.html") %>', // Custom Channel URL
             oauth : true //enables OAuth 2.0
           });
-
-          var fbLoginTimeout = setTimeout(requireFacebookLogin, 5000);
           
+          var facebookLoginTimeoutHandler = function() {
+            if (fbLoginTimeout) {
+              fbLoginTimeout = null;
+            }
+            loadFlashApp();
+          };
+
+          var fbLoginTimeout = setTimeout(facebookLoginTimeoutHandler, 5000);
+          
+          // We want to make sure any potential facebook session is
+          // initialized before we launch the application.  We'll wait up to
+          // five seconds to get the login status response.
           FB.getLoginStatus(function(response) {
-            clearTimeout(fbLoginTimeout);
-            if (response.authResponse) {
-              loadFlashApp();
+            if (fbLoginTimeout) {
+              window.fbLoggedIn = true;
+              clearTimeout(fbLoginTimeout);
             }
-            else {
-              requireFacebookLogin();
-            }
+            loadFlashApp();
           });
         };
-        
-        function requireFacebookLogin() {
-          // Not logged into Facebook... display the login dialog.
-          // TODO: Create a nice UI for this.
-          alert("To provide a better and more engaging social experience " +
-                "we now require all users to connect with Facebook.\n\n" +
-                "Click ok to connect your Facebook account!");
-          top.location.href = "/auth/facebook";
-        }
         
         requestedFacebookPermissions = '<%= escape_javascript(Worlize.config['facebook']['requested_permissions']) %>';
 

@@ -27,11 +27,19 @@ class FriendsController < ApplicationController
     friends_by_guid = {}
     friends = output[:data][:friends] = []
     
+    facebook_friend_guids = current_user.facebook_friend_guids
+    
+    # List of auto-synced friend guids to drive the auto_synced property
+    autosynced_friend_guids = facebook_friend_guids
+    
     # Load Worlize Friends
     user.friends.each do |friend|
       friend_data = friend.hash_for_friends_list
       friends_by_guid[friend.guid] = friend_data
       friends.push(friend_data)
+      if facebook_friend_guids.include?(friend.guid)
+        friend_data[:friend_type] = 'facebook'
+      end
     end
     
     # Load Facebook Friends
@@ -45,19 +53,33 @@ class FriendsController < ApplicationController
         # sync in from Facebook.
         nosync_friend_guids = current_user.nosync_friend_guids
         
-        # List of auto-synced friend guids to drive the auto_synced property
-        autosynced_friend_guids = current_user.facebook_friend_guids
-        
         # Filter to friends that are on Worlize
         on_worlize = fb_friends.select { |f| f.has_key?('worlize_user') }
 
         on_worlize.each do |fb_data|
           friend = fb_data['worlize_user']
           
+          fb_cached_data_changed = false
+          
+          # Update cached Facebook data in the database
+          friend.facebook_authentication.profile_picture = fb_data['picture']
+          friend.facebook_authentication.display_name = fb_data['name']
+          friend.facebook_authentication.profile_url = fb_data['link']
+          
+          if friend.facebook_authentication.changed?
+            friend.facebook_authentication.save(:validate => false)
+            fb_cached_data_changed = true
+          end
+          
+          
           # Existing friend.  Proceed to fill in Facebook info
           if friends_by_guid.has_key? friend.guid
             Rails.logger.debug("Existing friend: #{friend.username}")
             friend_data = friends_by_guid[friend.guid]
+            if fb_cached_data_changed
+              # Merge updated facebook data into existing hash
+              friend_data.merge! friend.hash_for_friends_list
+            end
           else
             
             # User isn't already friends with this user, befriend them.
@@ -79,15 +101,12 @@ class FriendsController < ApplicationController
             autosynced_friend_guids.push(friend.guid)
             friends.push(friend_data)
             
-            # Send notification to new user of the friendship
+            # Send notification to new user of the friendship so that the
+            # current user will show up in their friends list right away
             fb_profile = my_facebook_profile(params[:access_token])
             my_friend_data = current_user.hash_for_friends_list
             my_friend_data[:friend_type] = 'facebook'
-            my_friend_data[:name] = fb_profile['name']
-            my_friend_data[:picture] = fb_profile['picture']
-            my_friend_data[:facebook_id] = fb_profile['id']
             my_friend_data[:auto_synced] = true
-            my_friend_data[:facebook_profile] = fb_profile['link']
             friend.send_message({
               :msg => 'friend_request_accepted',
               :data => {
@@ -100,9 +119,6 @@ class FriendsController < ApplicationController
           
           # Fill in friend data with extra information from Facebook.
           friend_data[:friend_type] = 'facebook'
-          friend_data[:name] = fb_data['name'] # Name from Facebook
-          friend_data[:picture] = fb_data['picture'] # Picture from Facebook
-          friend_data[:facebook_id] = fb_data['id']
           friend_data[:auto_synced] = autosynced_friend_guids.include?(friend.guid)
         end
         
@@ -301,7 +317,7 @@ class FriendsController < ApplicationController
     # fb_friends = fb_api.get_connections('me', 'friends', {'fields' => 'id,name,picture'})
     
     # via FQL - allows access to the 'online_presence' field!
-    query = 'SELECT uid, name, pic_square, online_presence ' +
+    query = 'SELECT uid, name, pic_square, online_presence, profile_url ' +
             'FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) ' +
             'ORDER BY uid'
     fb_friends = fb_api.fql_query(query)
@@ -327,6 +343,10 @@ class FriendsController < ApplicationController
       if fb_friend.has_key?('online_presence')
         fb_friend['fb_online_presence'] = fb_friend['online_presence']
         fb_friend.delete('online_presence')
+      end
+      if fb_friend.has_key?('profile_url')
+        fb_friend['link'] = fb_friend['profile_url']
+        fb_friend.delete('profile_url')
       end
       fb_friends_by_id[fb_friend['id']] = fb_friend
     end

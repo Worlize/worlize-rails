@@ -115,7 +115,8 @@ class UsersController < ApplicationController
       create_options = {
         :provider => omniauth['provider'],
         :uid => omniauth['uid'],
-        :token => omniauth['credentials']['token']
+        :token => omniauth['credentials']['token'],
+        :profile_picture => omniauth['user_info']['image']
       }
       
       if omniauth['provider'] == 'facebook'

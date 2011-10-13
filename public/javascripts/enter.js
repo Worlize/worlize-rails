@@ -30,9 +30,14 @@ function hideLoadingOverlay() {
 }
 
 function logout() {
-    FB.logout(function(response) {
+    if (window.fbLoggedIn) {
+        FB.logout(function(response) {
+            top.location.href = "/logout";
+        });
+    }
+    else {
         top.location.href = "/logout";
-    });
+    }
 }
 
 var marketplaceShowing = false;
@@ -61,10 +66,15 @@ function handleFacebookLogin(response) {
     // Once a user authorizes the app with facebook, make sure to connect
     // their facebook ID to their account in the database.
     if (response.status === 'connected') {
+        window.fbLoggedIn = true;
         $.post('/authentications/connect_facebook_via_js', {
             access_token: response.authResponse.accessToken
         });
     }
+}
+
+function getFacebookLoginStatus() {
+    return window.fbLoggedIn;
 }
 
 function namespace(namespace) {
