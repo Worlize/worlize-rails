@@ -47,9 +47,7 @@
           });
           
           var facebookLoginTimeoutHandler = function() {
-            if (fbLoginTimeout) {
-              fbLoginTimeout = null;
-            }
+            fbLoginTimeout = null;
             loadFlashApp();
           };
 
@@ -60,10 +58,29 @@
           // five seconds to get the login status response.
           FB.getLoginStatus(function(response) {
             if (fbLoginTimeout) {
-              window.fbLoggedIn = true;
               clearTimeout(fbLoginTimeout);
+
+              if (response.authResponse) {
+                window.fbLoggedIn = true;
+
+                <% if current_user.facebook_authentication %>
+                // Verify that the user's facebook account matches what we expect
+                if (response.authResponse.userID !== "<%= current_user.facebook_authentication.uid %>") {
+                  $.get('/logout.json', function() {
+                    FB.logout(function(response) {
+                      top.location.href = "/auth/facebook";
+                    });
+                  });
+                  alert("This Worlize account is associated to a Facebook account " +
+                        "other than the one that is currently logged in.  Click " +
+                        "OK to log in to the correct Facebook account.");
+                  return;
+                }
+                <% end %>
+
+              }
+              loadFlashApp();
             }
-            loadFlashApp();
           });
         };
         
