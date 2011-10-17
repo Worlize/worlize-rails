@@ -182,6 +182,48 @@ class User < ActiveRecord::Base
     end
   end
   
+  def add_to_mailchimp
+    if Rails.env != 'production'
+      Rails.logger.info "Not adding #{self.email} to MailChimp because we're not in production"
+      return true
+    end
+
+    result = false
+    
+    begin    
+      if !self.first_name.nil? && !self.last_name.nil?
+        full_name = self.first_name + " " + self.last_name
+      elsif self.facebook_authentication && !self.facebook_authentication.display_name.nil?
+        full_name = self.facebook_authentication.display_name
+      elsif self.twitter_authentication && !self.twitter_authentication.display_name.nil?
+        full_name = self.twitter_authentication.display_name
+      else
+        full_name = 'Worlize User'
+      end
+
+      gb = Gibbon.new(Worlize.config['mailchimp']['api_key'])
+      result = gb.listSubscribe({
+        'id' => Worlize.config['mailchimp']['all_users_list_id'],
+        'email_address' => self.email,
+        'merge_vars' => {
+          'FULLNAME' => full_name,
+          'USERNAME' => self.username,
+          'EUSERNAME' => URI.escape(self.username)
+        },
+        'double_optin' => false,
+        'send_welcome' => false
+      })
+    
+      if result
+        Rails.logger.info "#{self.email} added to the MailChimp All Users list."
+      else
+        Rails.logger.info "Unable to add #{self.email} to the MailChimp All Users list."
+      end
+    rescue
+    end
+    return result
+  end
+  
   def online?
     presence_status == 'online'
   end
