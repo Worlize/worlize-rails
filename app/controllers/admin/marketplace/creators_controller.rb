@@ -3,15 +3,16 @@ class Admin::Marketplace::CreatorsController < ApplicationController
   before_filter :require_admin
     
   def search
+    results = []
     if !params[:term].empty?
       query = params[:term];
       query.gsub!('%', '')
       results = MarketplaceCreator.where('display_name LIKE ?', "#{query}%")
-      
-      render :json => 
-        results.map do |creator|
-          creator.display_name
-        end
     end
+    names = results.map do |creator|
+      creator.display_name
+    end
+    render :json => names
   end
+  
 end
