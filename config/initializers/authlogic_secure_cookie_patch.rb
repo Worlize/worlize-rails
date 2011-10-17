@@ -14,7 +14,7 @@ module Authlogic
             :value => "#{record.persistence_token}::#{record.send(record.class.primary_key)}",
             :expires => remember_me_until,
             :domain => controller.cookie_domain,
-            :secure => Rails.env.production?, # Only send cookie over SSL when in production mode
+            :secure => true, # Rails.env.production?, # Only send cookie over SSL when in production mode
             :httponly => true
           }
         end
