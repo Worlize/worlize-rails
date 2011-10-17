@@ -43,7 +43,8 @@
             cookie : true, // enable cookies to allow the server to access the session
             xfbml  : true,  // parse XFBML
             channelUrl  : '<%= escape_javascript("#{request.scheme}://#{request.host_with_port}/channel.html") %>', // Custom Channel URL
-            oauth : true //enables OAuth 2.0
+            oauth : true, //enables OAuth 2.0
+            frictionlessRequests : true // Enable frictionless requests
           });
           
           var facebookLoginTimeoutHandler = function() {
