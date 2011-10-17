@@ -638,7 +638,9 @@ class User < ActiveRecord::Base
     self.friend_guids.each do |friend_guid|
       redis_relationships.multi do
         redis_relationships.srem "#{self.guid}:friends", friend_guid
+        redis_relationships.srem "#{self.guid}:fbFriends", friend_guid
         redis_relationships.srem "#{friend_guid}:friends", self.guid
+        redis_relationships.srem "#{friend_guid}:fbFriends", self.guid
       end
     end
   end
