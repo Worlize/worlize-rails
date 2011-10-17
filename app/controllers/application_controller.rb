@@ -6,7 +6,13 @@ class ApplicationController < ActionController::Base
   helper_method :current_user_session, :current_user
   helper_method :new_user_session_object
   
+  before_filter :set_vary_header
+  
   private
+    def set_vary_header
+      response.headers['Vary'] = 'Accept'
+    end
+  
     def new_user_session_object
       UserSession.new
     end
