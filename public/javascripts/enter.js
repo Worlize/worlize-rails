@@ -29,6 +29,72 @@ function hideLoadingOverlay() {
     }, 1000);
 }
 
+function launchShareDialog(options) {
+    $('<a href="#share-dialog"></a>').fancybox({
+        autoDimensions: false,
+        width: 500,
+        height: 320,
+        overlayShow: true,
+        overlayColor: "#333",
+        overlayOpacity: 0.15,
+        transitionIn: 'none',
+        transitionOut: 'none'
+    }).click();
+    
+    $('#share-dialog').show();
+    
+    var baseUrl = window.location.protocol + "//" + window.location.host;
+    var userUrl = baseUrl + "/users/" + encodeURIComponent(options.username) + "/join";
+    
+    var twitterLink = "https://twitter.com/share?";
+    var twitterParams = {
+        url: userUrl,
+        via: "worlize",
+        text: "I'm chatting right now in Worlize, a 2d virtual world platform.  Come join me!",
+        related: "worlize"
+    };
+    var temp = [];
+    for (var key in twitterParams) {
+        if (twitterParams.hasOwnProperty(key)) {
+            var value = twitterParams[key];
+            temp.push(encodeURIComponent(key) + "=" + encodeURIComponent(value));
+        }
+    }
+    twitterLink = twitterLink + temp.join("&");
+    
+    $('#share-dialog .twitter-share').unbind('click');
+    $('#share-dialog .facebook-share').unbind('click');
+    $('#share-dialog .twitter-share').bind('click', function(event) {
+        event.preventDefault();
+        if (window.twitterShareWindow && !window.twitterShareWindow.closed) {
+            window.twitterShareWindow.close();
+            window.twitterShareWindow = null;
+        }
+        var left = (window.screen.width/2) - (550/2);
+        var top = (window.screen.height/2) - (480/2);
+        window.twitterShareWindow = window.open(
+            twitterLink,
+            "twitterShareWindow",
+            "resizable=no,scrollbars=no,status=yes,height=450,width=550,left=" + left + ",top=" + top
+        );
+        $.fancybox.close();
+    });
+    $('#share-dialog .facebook-share').bind('click', function(event) {
+        event.preventDefault();
+        var obj = {
+            method: 'feed',
+            link: userUrl,
+            picture: 'https://www.worlize.com/images/share-facebook-link-picture.jpg',
+            name: 'Come chat with me in Worlize!',
+            caption: 'Worlize: Your World, Realized',
+            description: "I'm online now, hanging out in Worlize: a place where everyone " +
+                         "can create their own virtual world for free!  Come check it out with me!!"
+        };
+        showFacebookDialog(obj);
+        $.fancybox.close();
+    });
+}
+
 function logout() {
     if (window.fbLoggedIn) {
         FB.logout(function(response) {
@@ -168,23 +234,30 @@ function closeVirtualCurrencyProducts() {
     $('#virtual-currency-products').remove();
 }
 
+var shimRefCount = 0;
 function showShim() {
-    var shim = $('<div id="shim">');
-    shim.css({
-        'display': 'none',
-        'position': 'absolute',
-        'top': 0,
-        'left': 0,
-        'right': 0,
-        'bottom': 0,
-        'background-color': '#000000',
-        'opacity': 0.3,
-        'z-index': 1000
-    });
-    shim.appendTo($(document.body))
-    shim.fadeIn(250);
+    shimRefCount ++;
+    if (shimRefCount === 1) {
+        var shim = $('<div id="shim">');
+        shim.css({
+            'display': 'none',
+            'position': 'absolute',
+            'top': 0,
+            'left': 0,
+            'right': 0,
+            'bottom': 0,
+            'background-color': '#000000',
+            'opacity': 0.3,
+            'z-index': 1000
+        });
+        shim.appendTo($(document.body))
+        shim.fadeIn(250);
+    }
 }
 
 function hideShim() {
-    $('#shim').remove();
+    shimRefCount --;
+    if (shimRefCount <= 0) {
+        $('#shim').remove();
+    }
 }

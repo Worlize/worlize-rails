@@ -2,15 +2,8 @@
 	http://localhost/stylesheets/enter.css?cb=19
 	http://turtle.office.worlize.com/stylesheets/enter.css?cb=30
 	https://turtle.office.worlize.com/stylesheets/enter.css?cb=36
+	https://turtle.office.worlize.com/stylesheets/enter.css?cb=42
 */
-
-@font-face {
-	font-family: 'PTSansNarrowBold';
-	src: url('../fonts/pt-sans/PTN77F-webfont.eot');
-	src: local('☺'), url('../fonts/pt-sans/PTN77F-webfont.woff') format('woff'), url('../fonts/pt-sans/PTN77F-webfont.ttf') format('truetype'), url('../fonts/pt-sans/PTN77F-webfont.svg#webfontSAYAwFVt') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
 
 body {
 	font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -268,3 +261,64 @@ button:hover {
 	background-image: url(/images/loading-please-wait.png);
 	font-family: PTSansNarrowBold;
 }
+
+#share-dialog {
+	padding: 10px;
+	color: #444;
+	position: relative;
+	text-align: center;
+}
+
+#share-dialog h1 {
+	margin: 0px 0px 10px;
+	font: normal 40px PTSansNarrowBold;
+}
+
+#share-dialog p {
+	margin: 0px 0px 20px;
+	font: 20px PTSansNarrowRegular;
+}
+
+#share-dialog a {
+	display: inline-block;
+	color: #333;
+	width: 150px;
+	padding-top: 96px;
+	margin: 0px 10px;
+	background-repeat: no-repeat;
+	background-position: 27px 0px;
+	text-decoration: none;
+	font: 21px PTSansNarrowBold;
+/*  -webkit-transition: -webkit-transform 0.1s, opacity 0.1s;
+    -moz-transition: -moz-transform 0.1s, opacity 0.1s;
+    -ms-transition: -ms-transform 0.1s, opacity 0.1s;
+    -o-transition: -o-transform 0.1s, opacity 0.1s;
+    transition: transform 0.1s, opacity 0.1s;
+*/
+}
+
+#share-dialog a:hover {
+	opacity: 0.8;
+	color: #000;
+	-webkit-transform: scale(1.1);
+	-moz-transform: scale(1.1);
+	-ms-transform: scale(1.1);
+	-o-transform: scale(1.1);
+	transform: scale(1.1);
+}
+
+#share-dialog a.twitter-share {
+	background-image: url(/images/socialicons/twitter-96.png);
+}
+
+#share-dialog a.facebook-share {
+	background-image: url(/images/socialicons/facebook-96.png);
+}
+
+
+/*#share-dialog div {
+	margin: 0px auto;
+	width: 150px;
+	text-align: center;
+	padding: 10px;
+}*/
