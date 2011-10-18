@@ -64,7 +64,7 @@ class RoomsController < ApplicationController
       room_info.push({
         :room => room.basic_hash_for_api.merge(
           :user_count => room_population[room.guid],
-          :thumbnail => room.background_instance.background.image.thumb.url
+          :thumbnail => room.background_instance ? room.background_instance.background.image.thumb.url : '/images/no-background-thumb.png'
         ),
         :world => room.world.basic_hash_for_api,
         :friends_in_room => friends_in_room
@@ -83,7 +83,7 @@ class RoomsController < ApplicationController
       room_info.push({
         :room => entrance.basic_hash_for_api.merge(
           :user_count => 0,  # entrance.user_count
-          :thumbnail => entrance.background_instance.background.image.thumb.url
+          :thumbnail => entrance.background_instance ? entrance.background_instance.background.image.thumb.url : '/images/no-background-thumb.png'
         ),
         :world => world.basic_hash_for_api,
         :friends_in_room => []
