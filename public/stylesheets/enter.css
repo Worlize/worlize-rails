@@ -3,6 +3,7 @@
 	http://turtle.office.worlize.com/stylesheets/enter.css?cb=30
 	https://turtle.office.worlize.com/stylesheets/enter.css?cb=36
 	https://turtle.office.worlize.com/stylesheets/enter.css?cb=42
+	https://turtle.office.worlize.com/stylesheets/enter.css?cb=43
 */
 
 body {
@@ -263,6 +264,9 @@ button:hover {
 }
 
 #share-dialog {
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
 	padding: 10px;
 	color: #444;
 	position: relative;
@@ -313,6 +317,28 @@ button:hover {
 
 #share-dialog a.facebook-share {
 	background-image: url(/images/socialicons/facebook-96.png);
+}
+
+#share-dialog .or-copy-link {
+	position: relative;
+	margin-top: 10px;
+	font-size: 12pt;
+	font-family: PTSansNarrowBold;
+}
+
+#share-dialog .link-to-copy {
+	user-select: text;
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	margin: 15px auto;
+	font: 11pt "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	border: 1px solid #CCC;
+	border-radius: 5px;
+	text-align: left;
+	height: 18px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	padding: 3px 5px;
 }
 
 

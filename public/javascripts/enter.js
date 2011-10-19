@@ -33,7 +33,7 @@ function launchShareDialog(options) {
     $('<a href="#share-dialog"></a>').fancybox({
         autoDimensions: false,
         width: 500,
-        height: 320,
+        height: 370,
         overlayShow: true,
         overlayColor: "#333",
         overlayOpacity: 0.15,
@@ -93,6 +93,7 @@ function launchShareDialog(options) {
         showFacebookDialog(obj);
         $.fancybox.close();
     });
+    $('#share-dialog .link-to-copy').text(userUrl);
 }
 
 function logout() {
