@@ -84,11 +84,12 @@ function launchShareDialog(options) {
         var obj = {
             method: 'feed',
             link: userUrl,
-            picture: 'https://www.worlize.com/images/share-facebook-link-picture.jpg',
-            name: 'Come chat with me in Worlize!',
+            picture: 'https://www.worlize.com/images/share-facebook-link-picture-2.png',
+            name: 'Come chat with me LIVE right now in Worlize!',
             caption: 'Worlize: Your World, Realized',
-            description: "I'm online now, hanging out in Worlize: a place where everyone " +
-                         "can create their own virtual world for free!  Come check it out with me!!"
+            description: "I'm online right now in Worlize, a stylish avatar " +
+                         "chat hangout where you can be whatever you want.  " +
+                         "Come join me!"
         };
         showFacebookDialog(obj);
         $.fancybox.close();
