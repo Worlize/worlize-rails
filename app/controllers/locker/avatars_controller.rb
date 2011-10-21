@@ -1,7 +1,7 @@
 class Locker::AvatarsController < ApplicationController
 
   def index
-    avatar_instances = current_user.avatar_instances.all(:include => [:avatar, :user])
+    avatar_instances = current_user.avatar_instances.includes(:avatar, :user).order('created_at DESC').all
       
     render :json => {
       :success => true,
