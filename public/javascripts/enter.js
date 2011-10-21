@@ -29,72 +29,11 @@ function hideLoadingOverlay() {
     }, 1000);
 }
 
-function launchShareDialog(options) {
-    $('<a href="#share-dialog"></a>').fancybox({
-        autoDimensions: false,
-        width: 500,
-        height: 370,
-        overlayShow: true,
-        overlayColor: "#333",
-        overlayOpacity: 0.15,
-        transitionIn: 'none',
-        transitionOut: 'none'
-    }).click();
-    
-    $('#share-dialog').show();
-    
-    var baseUrl = window.location.protocol + "//" + window.location.host;
-    var userUrl = baseUrl + "/users/" + encodeURIComponent(options.username) + "/join";
-    
-    var twitterLink = "https://twitter.com/share?";
-    var twitterParams = {
-        url: userUrl,
-        via: "worlize",
-        text: "I'm chatting right now in Worlize, a 2d virtual world platform.  Come join me!",
-        related: "worlize"
-    };
-    var temp = [];
-    for (var key in twitterParams) {
-        if (twitterParams.hasOwnProperty(key)) {
-            var value = twitterParams[key];
-            temp.push(encodeURIComponent(key) + "=" + encodeURIComponent(value));
-        }
-    }
-    twitterLink = twitterLink + temp.join("&");
-    
-    $('#share-dialog .twitter-share').unbind('click');
-    $('#share-dialog .facebook-share').unbind('click');
-    $('#share-dialog .twitter-share').bind('click', function(event) {
-        event.preventDefault();
-        if (window.twitterShareWindow && !window.twitterShareWindow.closed) {
-            window.twitterShareWindow.close();
-            window.twitterShareWindow = null;
-        }
-        var left = (window.screen.width/2) - (550/2);
-        var top = (window.screen.height/2) - (480/2);
-        window.twitterShareWindow = window.open(
-            twitterLink,
-            "twitterShareWindow",
-            "resizable=no,scrollbars=no,status=yes,height=450,width=550,left=" + left + ",top=" + top
-        );
-        $.fancybox.close();
-    });
-    $('#share-dialog .facebook-share').bind('click', function(event) {
-        event.preventDefault();
-        var obj = {
-            method: 'feed',
-            link: userUrl,
-            picture: 'https://www.worlize.com/images/share-facebook-link-picture-2.png',
-            name: 'Come chat with me LIVE right now in Worlize!',
-            caption: 'Worlize: Your World, Realized',
-            description: "I'm online right now in Worlize, a stylish avatar " +
-                         "chat hangout where you can be whatever you want.  " +
-                         "Come join me!"
-        };
-        showFacebookDialog(obj);
-        $.fancybox.close();
-    });
-    $('#share-dialog .link-to-copy').text(userUrl);
+function launchCenteredPopup(url, width, height) {
+    var left = (window.screen.width/2) - (width/2);
+    var top = (window.screen.height/2) - ((height+30)/2);
+    var params = "resizable=no,scrollbars=no,status=yes,height=" + height + ",width=" + width + ",left=" + left + ",top=" + top;
+    window.open(url, "", params);
 }
 
 function logout() {
