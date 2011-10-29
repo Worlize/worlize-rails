@@ -36,11 +36,20 @@ module Worlize
     
     def server_for_room(room_guid)
       r = redis
-      assigned_server_id = r.hget 'serverForRoom', room_guid
+      r.watch "serverForRoom:#{room_guid}"
+      assigned_server_id = r.get "serverForRoom:#{room_guid}"
       
       unless assigned_server_id && active_server_ids.include?(assigned_server_id)
         assigned_server_id = find_least_loaded_server_id
-        r.hset 'serverForRoom', room_guid, assigned_server_id
+        result = r.multi do
+          # expires after 5:00
+          r.setex "serverForRoom:#{room_guid}", 300, assigned_server_id
+        end
+        
+        # If the transaction fails, repeat until it doesn't.
+        if result.nil?
+          return self.server_for_room(room_guid)
+        end
       end
       assigned_server_id
     end
