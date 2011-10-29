@@ -29,7 +29,7 @@ class RoomsController < ApplicationController
   # /rooms/directory
   def directory
     # Get list of active rooms
-    redis = Worlize::RedisConnectionPool.get_client(:presence)
+    redis = Worlize::RedisConnectionPool.get_client(:room_server_assignments)
     
     current_user_friend_guids = current_user.friend_guids
     current_user_facebook_friend_guids = current_user.facebook_friend_guids

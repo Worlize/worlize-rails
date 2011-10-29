@@ -25,12 +25,12 @@ class Room < ActiveRecord::Base
   end
   
   def user_count
-    redis = Worlize::RedisConnectionPool.get_client(:presence)
+    redis = Worlize::RedisConnectionPool.get_client(:room_server_assignments)
     redis.scard "roomUsers:#{self.guid}"
   end
   
   def connected_user_guids
-    redis = Worlize::RedisConnectionPool.get_client(:presence)
+    redis = Worlize::RedisConnectionPool.get_client(:room_server_assignments)
     redis.smembers "roomUsers:#{self.guid}"
   end
     

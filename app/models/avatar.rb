@@ -20,7 +20,7 @@ class Avatar < ActiveRecord::Base
       :tiny =>          self.image.tiny.url,
       :medium =>        self.image.medium.url,
       :fullsize =>      self.image.url,
-      :creator_guid =>  self.creator.guid
+      :creator_guid =>  self.creator.nil? ? nil : self.creator.guid
     }
   end
   

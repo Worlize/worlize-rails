@@ -7,18 +7,26 @@ module Worlize
     end
     
     def active_servers
-      r = Worlize::RedisConnectionPool.get_client('presence')
-      server_info = r.hgetall('interactServer').map do |server_id, json|
-        begin
-          data = Yajl::Parser.parse(json)
-          data['last_checkin'] = DateTime.parse(data['last_checkin'])
-        rescue
-          data = nil
+      r = redis
+      # Redis keeps this list sorted by connected users ascending
+      server_ids = r.zrange('serverIds', '0', '-1')
+      
+      server_info = server_ids.map do |server_id|
+        data = r.get("serverStatus:#{server_id}")
+        if !data.nil?
+          begin
+            data = Yajl::Parser.parse(data)
+            data['last_checkin'] = DateTime.parse(data['last_checkin'])
+          rescue
+          end
         end
         data
       end
-      server_info.select do |data|
-        !data.nil? && data['last_checkin'] > 11.seconds.ago
+      
+      # If the data is nil, redis has expired the key, meaning that the
+      # server has gone down.  So we filter those servers from the list.
+      server_info = server_info.select do |data|
+        !data.nil?
       end
     end
     
@@ -27,7 +35,7 @@ module Worlize
     end
     
     def server_for_room(room_guid)
-      r = Worlize::RedisConnectionPool.get_client('presence')
+      r = redis
       assigned_server_id = r.hget 'serverForRoom', room_guid
       
       unless assigned_server_id && active_server_ids.include?(assigned_server_id)
@@ -46,9 +54,12 @@ module Worlize
       if server_list.empty?
         raise RuntimeError, "There are no interactivity servers running."
       end
-      sorted_servers = server_list.sort_by { |server| server['session_count'] }
-      
-      sorted_servers[rand([sorted_servers.length-1,2].min)]['server_id']
+    
+      server_list[0]['server_id']
+    end
+    
+    def redis
+      Worlize::RedisConnectionPool.get_client('room_server_assignments')
     end
 
   end

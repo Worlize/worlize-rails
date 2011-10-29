@@ -62,6 +62,10 @@ else {
 }
 
 function handleLoggedOut() {
+    redirectToHomepage();
+}
+
+function redirectToHomepage() {
     top.location.href = "/";
 }
 
