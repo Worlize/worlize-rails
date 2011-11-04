@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Worlize Embed Badge</title>
+
+    <style type="text/css" media="screen">
+    /* YUI2 CSS Reset */
+html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,select,p,blockquote,th,td{margin:0;padding:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}address,button,caption,cite,code,dfn,em,input,optgroup,option,select,strong,textarea,th,var{font:inherit}del,ins{text-decoration:none}li{list-style:none}caption,th{text-align:left}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}q:before,q:after{content:''}abbr,acronym{border:0;font-variant:normal}sup{vertical-align:baseline}sub{vertical-align:baseline}legend{color:#000}
+
+    html,body {
+      width: 128px;
+      height: 128px;
+      overflow-y: hidden;
+      overflow-x: hidden;
+      background: transparent;
+    }
+    
+    body {
+      background: url(/images/embed/128x128.png) no-repeat;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      cursor: pointer !important;
+      -webkit-user-select: none;
+    	-moz-user-select: none;
+    	-o-user-select: none;
+    	-khtml-user-select: none;
+    	user-select: none;
+    	-moz-user-drag: none;
+    	-webkit-user-drag: none;
+    	user-drag:none;
+    }
+    
+    #population_display,
+    #join_callout {
+      position: absolute;
+      bottom: 6px;
+      left: 4px;
+      right: 4px;
+      text-align: center;
+      color: #FFFFFF;
+      text-shadow: 0px 1px 1px rgba(0,0,0,0.5);
+    }
+    
+    #join_callout {
+      display: none;
+      font-weight: bold;
+    }
+    
+    body:hover #join_callout {
+      display: block;
+    }
+    
+    body:hover #population_display {
+      display: none;
+    }
+
+    </style>
+    
+    <script type="text/javascript" charset="utf-8">
+      var popupWindow;
+      function handleClick() {
+        if (popupWindow && !popupWindow.closed) {
+          popupWindow.focus();
+          return;
+        }
+        launchCenteredPopup(
+          "<%= escape_javascript(enter_room_url(@entrance_guid)) %>",
+          Math.min(1211, window.screen.width),
+          Math.min(800, window.screen.height)
+        );
+      }
+      
+      function launchCenteredPopup(url, width, height) {
+          var left = Math.round((window.screen.width/2) - (width/2));
+          var top = Math.round((window.screen.height/2) - ((height+30)/2));
+          var params = "resizable=yes,scrollbars=no,status=yes,height=" + height + ",width=" + width + ",left=" + left + ",top=" + top;
+          popupWindow = window.open(url, "worlizeapp", params);
+      }
+    </script>
+  </head>
+  <body onclick="handleClick()">
+    <div id="population_display">
+      <% if @population == 0 %>
+        Click to Join!
+      <% elsif @population == 1 %>
+        1 User Online
+      <% else %>
+        <%= @population %> Users Online
+      <% end %>
+    </div>
+    <div id="join_callout">
+      Click to Join!
+    </div>
+    
+    <%- if Rails.env == 'production' -%>
+         <script type="text/javascript">
+
+           var _gaq = _gaq || [];
+           _gaq.push(['_setAccount', 'UA-7700604-3']);
+           _gaq.push(['_setDomainName', '.worlize.com']);
+           _gaq.push(['_trackPageview']);
+
+           (function() {
+             var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+           })();
+
+         </script>
+    <%- end -%>
+  </body>
+</html>

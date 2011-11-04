@@ -25,6 +25,8 @@ Worlize::Application.routes.draw do |map|
   match '/fb-canvas/enter_worlize' => 'facebook_canvas#enter_worlize', :via => :get
   match '/fb-canvas/link_account' => 'facebook_canvas#link_account', :via => :post
   
+  match '/embed/badge' => 'embed#render_badge', :via => :get
+  
   resources :authentications do
     collection do
       post :connect_facebook_via_js
