@@ -1,47 +1,37 @@
 <h1>Users</h1>
 
 <%= form_tag(admin_users_path, :method => 'get') do %>
-  <%= text_field_tag :q, @query_param %>
+  <%= text_field_tag :q, params[:q] %>
   <%= submit_tag 'Search' %>
 <% end %>
 
 <br/>
 
-<style type="text/css" media="screen">
-  #user-results-table {
-    table-layout: fixed;
-  }
-  
-  #user-results-table td {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .username-column {
-    width: 25%;
-  }
-  .online-column {
-    width: 10%;
-  }
-  .email-column {
-    width: 45%;
-  }
-  .time-column {
-    width: 25%;
-  }
-  .actions-column {
-    width: 15%;
-  }
-</style>
-
 <% if @users.count > 0 %>
 <table id="user-results-table" class="datagrid" width="100%">
   <tr>
     <th class="online-column">Online</th>
-    <th class="username-column">Username</th>
+    <th class="username-column">
+      <%= link_to 'Username', params.merge(
+            :sort => 'username',
+            :sort_direction => params[:sort] == 'username' ? @opposite_sort_direction : params[:sort_direction]
+          ) %>
+      <% if params[:sort] == 'username' %>
+        <% if params[:sort_direction] == 'asc' %> ▲<% end %>
+        <% if params[:sort_direction] == 'desc' %>▼<% end %>
+      <% end %>
+    </th>
     <th class="email-column">Email</th>
-    <th class="time-column">Time</th>
+    <th class="time-column">
+      <%= link_to 'Signed Up', params.merge(
+            :sort => 'created_at',
+            :sort_direction => params[:sort] == 'created_at' ? @opposite_sort_direction : params[:sort_direction]
+          ) %>
+      <% if params[:sort] == 'created_at' %>
+        <% if params[:sort_direction] == 'asc' %> ▲<% end %>
+        <% if params[:sort_direction] == 'desc' %>▼<% end %>
+      <% end %>
+    </th>
     <th class="actions-column">Actions</th>
   </tr>
   <% for user in @users %>

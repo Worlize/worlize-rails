@@ -126,7 +126,11 @@ Worlize::Application.routes.draw do |map|
       end
     end
     
-    resources :users
+    resources :users do
+      member do
+        post 'give_currency'
+      end
+    end
     resources :worlds do
       resources :rooms
     end

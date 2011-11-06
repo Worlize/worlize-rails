@@ -1,4 +1,7 @@
-/* @override http://localhost/stylesheets/admin.css */
+/* @override 
+	http://localhost/stylesheets/admin.css
+	https://turtle.office.worlize.com/stylesheets/admin.css
+*/
 
 /* 
   HTML5 ✰ Boilerplate 
@@ -518,6 +521,92 @@ footer {
 	color: #bec0c2;
 	font-size: 9pt;
 }
+
+/* @group Users */
+
+#user-results-table {
+	table-layout: fixed;
+}
+
+#user-results-table td {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.username-column {
+	width: 25%;
+}
+
+.online-column {
+	width: 10%;
+}
+
+.email-column {
+	width: 45%;
+}
+
+.time-column {
+	width: 25%;
+}
+
+.actions-column {
+	width: 15%;
+}
+
+.linked-service {
+	margin: 0px 0px 20px;
+	padding: 10px;
+	background-color: #cad4e3;
+	width: 300px;
+}
+
+.linked-service ul {
+	float: right;
+}
+
+.linked-service .service-name {
+	font-weight: bold;
+}
+
+ul.user-friends {
+	margin: 0px;
+	list-style-type: none;
+}
+
+ul.user-friends li {
+	position: relative;
+	float: left;
+	width: 200px;
+	padding: 5px;
+}
+
+ul.user-friends a {
+	text-decoration: none;
+}
+
+ul.user-friends a:hover li {
+	background: #cad4e3;
+}
+
+ul.user-friends li .username {
+	display: block;
+	position: absolute;
+	top: 2px;
+	left: 65px;
+	right: 3px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+ul.user-friends img {
+	display: block;
+	border: 2px solid white;
+	box-shadow: 0px 1px 4px rgba(0,0,0,0.5);
+}
+
+/* @end */
 
 /* @group Marketplace */
 

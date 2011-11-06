@@ -1,22 +1,77 @@
 <h1><%= @user.username %></h1>
+User is <strong><%= @user.online? ? 'online' : 'offline' %></strong>.<br><br>
 
-<%= @user.first_name %> <%= @user.last_name %><br/>
-User is <strong><%= @user.online? ? 'online' : 'offline' %></strong>.<br>
-<% if @user.twitter %>
-<%= link_to @user.twitter, "http://www.twitter.com/#{@user.twitter}" %>
+<%= form_for [:admin, @user] do |f| %>
+
+  <%= f.label :username %><br>
+  <%= f.text_field :username %><br>
+  
+  <br>
+  <%= f.label :email %><br>
+  <%= f.text_field :email %><br>
+  
+  <br>
+  <h2>Locker Slots</h2>
+  <table class="datagrid" id="locker-slots-table">
+    <tr>
+      <th>Locker</th>
+      <th>Slots</th>
+      <th>Used</th>
+      <th>Left</th>
+    </tr>
+    <% kind_map = {
+      'avatar' => 'Avatars',
+      'background' => 'Backgrounds',
+      'in_world_object' => 'Objects',
+      'prop' => 'Props'
+    } %>
+    <% ['avatar','background','in_world_object','prop'].each do |kind| %>
+      <tr>
+        <td><%= kind_map[kind] %></td>
+        <td>
+          <%= f.text_field "#{kind}_slots", :size => 4 %>
+        </td>
+        <td><%= @user.send("#{kind}_slots_used") %></td>
+        <td><%= @user.send("#{kind}_slots") - @user.send("#{kind}_slots_used") %></td>
+      </tr>
+    <% end %>
+  </table>
+
+  <%= f.submit %>
+
 <% end %>
 
-<br>
-<h2>Linked Services</h2>
-<% if @user.authentications %>
+
+<br><br>
+<h2>Linked Authentication Services</h2>
+<% if @user.authentications.length == 0 %>
+  <p>(This user has no linked services)</p>
+<% else %>
   <% @user.authentications.each do |authentication| %>
-  <div>
-    <%= authentication.provider.capitalize %>, uid: <%= authentication.uid %>
-      (<%= link_to "Unlink", admin_authentication_path(authentication), :method => :delete %>)
+  <div class="linked-service">
+    <% if authentication.profile_picture %>
+      <%= image_tag authentication.profile_picture, :class => 'profile-pic' %>
+    <% end %>
+    <ul class="links">
+    <% if authentication.profile_url %>
+      <li>
+        <%= link_to 'Profile Page', authentication.profile_url, { :target => '_blank' } %>
+      </li>
+    <% end %>
+      <li>
+        <%= link_to "Unlink", admin_authentication_path(authentication), :method => :delete, :confirm => "Are you sure?  The user will no longer be able to use #{authentication.provider} to log into their account!" %>
+      </li>
+    </ul>
+    
+    <div class="service-name">
+      <%= authentication.provider.capitalize %>
+    </div>
+    <div class="service-uid">
+      uid: <%= authentication.uid %>
+    </div>
+    <div class="clearfix"></div>
   </div>
   <% end %>
-<% else %>
-  <p>There are no linked services</p>
 <% end %>
 
 <br>
@@ -78,4 +133,35 @@ User is <strong><%= @user.online? ? 'online' : 'offline' %></strong>.<br>
   </table>
 <% else %>
   <p>(There are no virtual currency transactions on this account)</p>
+<% end %>
+
+<br>
+<h2>Credit Virtual Currency</h2>
+<%= form_tag give_currency_admin_user_path(@user), :method => 'post' do %>
+  <%= label_tag :comment %><br>
+  <%= text_field_tag :comment, 'Given by admin'  %><br>
+  <%= label_tag :amount %><br>
+  <%= text_field_tag :amount, '', :size => 4 %>
+  <%= select_tag('currency_type', options_for_select([
+    ['Coins', 'coins'],
+    ['Bucks', 'bucks']
+  ], 'coins')) %>
+  <%= submit_tag 'Give Currency' %>
+<% end %>
+
+<br>
+<h2>Friends</h2>
+<% if @friends.length == 0 %>
+  <p>(This user has no friends)</p>
+<% else %>
+  <ul class="user-friends">
+    <% @friends.each do |friend| %>
+      <%= link_to admin_user_path(friend) do %>
+        <li class="user-friend">
+          <%= image_tag friend.profile_picture, :class => 'profile-picture' %>
+          <span class="username"><%= friend.username %></span>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
 <% end %>

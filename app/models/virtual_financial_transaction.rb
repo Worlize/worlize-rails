@@ -11,6 +11,9 @@ class VirtualFinancialTransaction < ActiveRecord::Base
     102 => "Product Purchase"
   }
   
+  validates :coins_amount, :numericality => { :only_integer => true }, :allow_nil => true
+  validates :bucks_amount, :numericality => { :only_integer => true }, :allow_nil => true
+  
   belongs_to :user
   belongs_to :marketplace_item
   belongs_to :payment

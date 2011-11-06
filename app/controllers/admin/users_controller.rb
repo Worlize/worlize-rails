@@ -4,18 +4,40 @@ class Admin::UsersController < ApplicationController
   before_filter :require_admin
   
   def index
+    # Handle query parameter
     if params[:q]
-      @query_param = params[:q]
       query = "#{params[:q]}%"
-      relation = User.where(['username LIKE ? OR email LIKE ?', query, query])
+      @users = User.where(['username LIKE ? OR email LIKE ?', query, query])
     else
-      relation = User.active
+      @users = User.active
     end
-    @users = relation.paginate(:page => params[:page], :per_page => 50).order('created_at DESC')
+    
+    # Apply pagination
+    @users = @users.paginate(:page => params[:page], :per_page => 10)
+    
+    # Set up the correct sorting
+    default_sort_direction = {
+      'created_at' => 'desc',
+      'username' => 'asc'
+    }
+    
+    params[:sort] = 'created_at' unless params[:sort]
+    unless params[:sort_direction]
+      params[:sort_direction] = default_sort_direction[params[:sort].downcase]
+    end
+    
+    @opposite_sort_direction = params[:sort_direction] == 'desc' ? 'asc' : 'desc'
+    
+    if params[:sort] == 'username'
+      @users = @users.order('username ' + (params[:sort_direction] == 'desc' ? 'DESC' : 'ASC'))
+    elsif params[:sort] == 'created_at'
+      @users = @users.order('created_at ' + (params[:sort_direction] == 'desc' ? 'DESC' : 'ASC'))
+    end
   end
   
   def show
     @user = User.find(params[:id])
+    @friends = @user.friends
     @payments = @user.payments
     @total_payments = 0
     @payments.each do |p|
@@ -32,7 +54,49 @@ class Admin::UsersController < ApplicationController
   end
   
   def update
-    
+    @user = User.find(params[:id])
+    @user.accessible = :all
+    respond_to do |format|
+      if @user.update_attributes(params[:user])
+        format.html { redirect_to(admin_user_url(@user), :notice => 'User was successfully updated.') }
+      else
+        format.html { render :action => "edit" }
+      end
+    end
+  end
+  
+  def give_currency
+    @user = User.find(params[:id])
+    if params[:amount].nil? || params[:amount].to_i <= 0
+      flash[:error] = "Amount must be a positive integer."
+      redirect_to admin_user_url(@user) and return
+    end
+    if params[:currency_type] == 'coins'
+      transaction = @user.virtual_financial_transactions.create(
+        :kind => VirtualFinancialTransaction::KIND_CREDIT_ADJUSTMENT,
+        :comment => params[:comment],
+        :coins_amount => params[:amount]
+      )
+    elsif params[:currency_type] == 'bucks'
+      transaction = @user.virtual_financial_transactions.create(
+        :kind => VirtualFinancialTransaction::KIND_CREDIT_ADJUSTMENT,
+        :comment => params[:comment],
+        :bucks_amount => params[:amount]
+      )
+    else
+      flash[:error] = "Currency type must be either coins or bucks"
+      redirect_to admin_user_url(@user) and return
+    end
+
+    if transaction.persisted?
+      flash[:notice] = "Successfully credited #{params[:currency_type]} to #{@user.username}."
+      @user.recalculate_balances
+      @user.notify_client_of_balance_change
+    else
+      flash[:error] = "There was an error while crediting #{@user.username}'s account: <br>".html_safe +
+                      "#{transaction.errors.full_messages.join(', ')}"
+    end
+    redirect_to admin_user_url(@user)
   end
   
   def destroy

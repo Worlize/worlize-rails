@@ -33,6 +33,8 @@ class User < ActiveRecord::Base
   attr_accessible :username,
                   :email,
                   :accepted_tos
+                  
+  attr_accessor :accessible
   
   # validates :birthday, :timeliness => {
   #       :before => :thirteen_years_ago,
@@ -640,6 +642,14 @@ class User < ActiveRecord::Base
   
   private
   
+  def mass_assignment_authorizer
+    if accessible == :all
+      self.class.protected_attributes
+    else
+      super + (accessible || [])
+    end
+  end
+  
   def redis_relationships
     @redis_relationships ||= Worlize::RedisConnectionPool.get_client(:relationships)
   end
@@ -674,6 +684,22 @@ class User < ActiveRecord::Base
     self.background_slots = 20
     self.avatar_slots = 20
     self.in_world_object_slots = 20
+  end
+  
+  def avatar_slots_used
+    self.avatar_instances.count
+  end
+  
+  def background_slots_used
+    self.background_instances.count
+  end
+  
+  def in_world_object_slots_used
+    self.in_world_object_instances.count
+  end
+  
+  def prop_slots_used
+    self.prop_instances.count
   end
   
   def unlink_friendships
