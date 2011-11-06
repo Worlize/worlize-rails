@@ -13,7 +13,7 @@ class Admin::UsersController < ApplicationController
     end
     
     # Apply pagination
-    @users = @users.paginate(:page => params[:page], :per_page => 10)
+    @users = @users.paginate(:page => params[:page], :per_page => 30)
     
     # Set up the correct sorting
     default_sort_direction = {
