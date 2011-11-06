@@ -4,7 +4,14 @@ class Admin::UsersController < ApplicationController
   before_filter :require_admin
   
   def index
-    @users = User.active.paginate(:page => params[:page], :order => 'created_at DESC')
+    if params[:q]
+      @query_param = params[:q]
+      query = "#{params[:q]}%"
+      relation = User.where(['username LIKE ? OR email LIKE ?', query, query])
+    else
+      relation = User.active
+    end
+    @users = relation.paginate(:page => params[:page], :per_page => 50).order('created_at DESC')
   end
   
   def show

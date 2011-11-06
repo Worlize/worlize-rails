@@ -1,23 +1,56 @@
 <h1>Users</h1>
 
+<%= form_tag(admin_users_path, :method => 'get') do %>
+  <%= text_field_tag :q, @query_param %>
+  <%= submit_tag 'Search' %>
+<% end %>
+
+<br/>
+
+<style type="text/css" media="screen">
+  #user-results-table {
+    table-layout: fixed;
+  }
+  
+  #user-results-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .username-column {
+    width: 25%;
+  }
+  .online-column {
+    width: 10%;
+  }
+  .email-column {
+    width: 45%;
+  }
+  .time-column {
+    width: 25%;
+  }
+  .actions-column {
+    width: 15%;
+  }
+</style>
+
 <% if @users.count > 0 %>
-<table class="datagrid" width="100%">
+<table id="user-results-table" class="datagrid" width="100%">
   <tr>
-    <th>Username</th>
-    <th>Online</th>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Time</th>
-    <th>Actions</th>
+    <th class="online-column">Online</th>
+    <th class="username-column">Username</th>
+    <th class="email-column">Email</th>
+    <th class="time-column">Time</th>
+    <th class="actions-column">Actions</th>
   </tr>
   <% for user in @users %>
   <tr class="<%= cycle('even','odd') %>">
-    <td><%= link_to user.username, admin_user_path(user) %></td>
-    <td><%= user.online? ? "Yes" : "" %></td>
-    <td><%= "#{user.first_name} #{user.last_name}".truncate(20) %></td>
-    <td><%= user.email %></td>
-    <td><%= user.created_at.strftime("%Y-%m-%d %I:%M%p") %></td>
-    <td><%= button_to "Suspend", admin_user_path(user), :method => :delete, :confirm => "Are you sure?" %></td>
+    <td class="online-column"><%= user.online? ? "✓" : "" %></td>
+    <td class="username-column"><%= link_to user.username, admin_user_path(user) %></td>
+    <td class="email-column"><%= user.email %></td>
+    <td class="time-column"><%= user.created_at.strftime("%Y-%m-%d %I:%M%p") %></td>
+    <td class="actions-column"><%= button_to "Suspend", admin_user_path(user), :method => :delete, :confirm => "Are you sure?" %></td>
   </tr>
   <% end %>
 </table>

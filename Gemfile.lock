@@ -205,7 +205,7 @@ GEM
       macaddr (~> 1.0)
     validates_timeliness (3.0.6)
       timeliness (~> 0.3.3)
-    will_paginate (3.0.1)
+    will_paginate (3.0.2)
     yajl-ruby (1.0.0)
 
 PLATFORMS
@@ -235,5 +235,5 @@ DEPENDENCIES
   state_machine!
   unicorn (= 3.1.0)
   validates_timeliness (~> 3.0.0)
-  will_paginate (~> 3.0.pre2)
+  will_paginate (~> 3.0.2)
   yajl-ruby
