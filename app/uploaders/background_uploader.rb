@@ -2,7 +2,8 @@
 
 class BackgroundUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
-
+  include CarrierWave::MimeTypes
+  
   # Choose what kind of storage to use for this uploader
   #storage :file
   storage :s3
@@ -27,18 +28,22 @@ class BackgroundUploader < CarrierWave::Uploader::Base
   #     end
 
   process :resize_to_fill => [950, 570], :convert_to_jpg => 85
+  process :set_content_type
   
   version :thumb do
     process :resize_to_fill => [133, 80], :convert_to_jpg => 80
+    process :set_content_type
   end
   
   version :square_thumb do
     process :resize_to_fill => [80, 80], :convert_to_jpg => 80
+    process :set_content_type
   end
   
   version :medium do
     # process :resize_to_fill => [275, 165]
     process :resize_to_fill => [200, 120], :convert_to_jpg => 80
+    process :set_content_type
   end
   
   def convert_to_jpg(quality)

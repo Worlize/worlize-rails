@@ -2,7 +2,8 @@
 
 class AvatarUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
-
+  include CarrierWave::MimeTypes
+  
   # Choose what kind of storage to use for this uploader
   # storage :file
   storage :s3
@@ -23,25 +24,31 @@ class AvatarUploader < CarrierWave::Uploader::Base
   end
 
   process :resize_to_limit => [400, 400]
+  process :set_content_type
   
   version :icon do
     process :resize_and_pad => [32, 32, "#F0F0F0"]
+    process :set_content_type
   end
   
   version :thumb do
     process :resize_and_pad => [80, 80, "#F0F0F0"]
+    process :set_content_type
   end
   
   version :medium do
     process :resize_to_limit => [200, 200]
+    process :set_content_type
   end
   
   version :small do
     process :resize_to_limit => [100, 100]
+    process :set_content_type
   end
   
   version :tiny do
     process :resize_to_limit => [50, 50]
+    process :set_content_type
   end
 
 

@@ -6,6 +6,8 @@ class InWorldObject < ActiveRecord::Base
   belongs_to :creator, :class_name => 'User'
   before_create :assign_guid
   
+  attr_accessor :is_thumbnable
+  
   mount_uploader :image, InWorldObjectUploader
   
   validates :image,
@@ -29,5 +31,4 @@ class InWorldObject < ActiveRecord::Base
   def assign_guid()
     self.guid = Guid.new.to_s
   end
-
 end

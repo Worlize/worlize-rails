@@ -2,6 +2,7 @@
 
 class InWorldObjectUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
+  include CarrierWave::MimeTypes
 
   # Choose what kind of storage to use for this uploader:
   # storage :file
@@ -20,15 +21,18 @@ class InWorldObjectUploader < CarrierWave::Uploader::Base
   def store_dir
     "#{model.guid}"
   end
-  
+
   process :resize_to_limit => [950, 570]
+  process :set_content_type
   
-  version :thumb do
-    process :resize_and_pad => [80, 80, "#F0F0F0"]    
+  version :thumb, :if => :image? do
+    process :resize_and_pad => [80, 80, "#F0F0F0"]
+    process :set_content_type
   end
   
-  version :medium do
+  version :medium, :if => :image? do
     process :resize_to_limit => [200,200]
+    process :set_content_type
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
@@ -50,9 +54,9 @@ class InWorldObjectUploader < CarrierWave::Uploader::Base
 
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
-  # def extension_white_list
-  #   %w(jpg jpeg gif png)
-  # end
+  def extension_white_list
+    %w(jpg jpeg gif png)
+  end
 
   # Override the filename of the uploaded files:
   # def filename
