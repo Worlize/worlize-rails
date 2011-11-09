@@ -1,0 +1,33 @@
+<h1>Flash Client Errors</h1>
+<% if @errors.count > 0 %>
+<table id="client-errors-results-table" class="datagrid" width="100%">
+  <tr>
+    <th>Username</th>
+    <th>Type</th>
+    <th>ID</th>
+    <th>Message</th>
+    <th>Stack Trace?</th>
+  </tr>
+  <% for error in @errors %>
+  <tr class="<%= cycle('even','odd') %>" data-id="<%= error.id %>" style="cursor: pointer;">
+    <td class="username-column"><%= error.user.username %></td>
+    <td class="type-column"><%= error.error_type %></td>
+    <td class="errorid-column"><%= error.error_id %></td>
+    <td class="message-column"><%= error.message %></td>
+    <td class="stacktrace-column"><%= error.stack_trace ? "✓" : "" %></td>
+  </tr>
+  <% end %>
+</table>
+<%= will_paginate @errors %>
+<% else %>
+<h2>There are no errors to show</h2>
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+  jQuery(function($) {
+    $('#client-errors-results-table tr').live('click', function(event) {
+      var id = $(event.target).closest('tr').attr('data-id');
+      window.location.href = "/admin/client_errors/" + id;
+    });
+  });
+</script>

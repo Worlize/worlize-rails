@@ -1,5 +1,7 @@
 Worlize::Application.routes.draw do |map|
 
+  get "client_errors/create"
+
   match '/auth/:provider/callback' => 'authentications#create'
   match '/auth/failure' => 'authentications#failure'
 
@@ -32,6 +34,8 @@ Worlize::Application.routes.draw do |map|
       post :connect_facebook_via_js
     end
   end
+  
+  resources :client_errors, :only => :create
   
   resource :dashboard, :controller => :dashboard
 
@@ -116,6 +120,7 @@ Worlize::Application.routes.draw do |map|
   match 'admin' => 'admin#index', :as => :admin_index
   
   namespace "admin" do
+    resources :client_errors
     resources :authentications
     resources :beta_registrations do
       collection do

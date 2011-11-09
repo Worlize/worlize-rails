@@ -1,0 +1,40 @@
+<h1>Flash Client Error Detail</h1>
+
+<style type="text/css" media="screen">
+  td:first-child {
+    font-weight: bold;
+    width: 90px;
+    text-align: right;
+  }
+</style>
+
+<table border="0" cellspacing="0" cellpadding="2">
+  <tr>
+    <td>User:</td>
+    <td><%= link_to @error.user.username, admin_user_path(@error.user) %></td>
+  </tr>
+  <tr>
+    <td>Type:</td>
+    <td><%= @error.error_type %></td>
+  </tr>
+  <tr>
+    <td>Error ID:</td>
+    <td><%= @error.error_id %></td>
+  </tr>
+  <tr>
+    <td>Name:</td>
+    <td><%= @error.name %></td>
+  </tr>
+  <tr>
+    <td>Message:</td>
+    <td><%= @error.message %></td>
+  </tr>
+  <tr>
+    <td>Stack Trace:</td>
+    <td><pre><%= @error.stack_trace %></pre></td>
+  </tr>
+</table>
+
+<br>
+
+<%= link_to "Back to List", admin_client_errors_path %>
