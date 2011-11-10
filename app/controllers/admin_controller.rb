@@ -6,8 +6,18 @@ class AdminController < ApplicationController
   def index
     @user_count = User.count;
     @registration_count = Registration.count;
-    @new_users_this_week = User.where(['created_at >= ?', Date.today - 1.week]).count
-    @new_users_this_month = User.where(['created_at >= ?', Date.today - 1.month]).count
+    
+    @new_users_this_week = User.where(
+      "date(convert_tz(created_at, 'UTC', 'America/Los_Angeles')) >= convert_tz(curdate() - interval 1 week, 'UTC', 'America/Los_Angeles')"
+    ).count
+    
+    @new_users_this_month = User.where(
+      "date(convert_tz(created_at, 'UTC', 'America/Los_Angeles')) >= convert_tz(curdate() - interval 1 month, 'UTC', 'America/Los_Angeles')"
+    ).count
+    
+    @new_users_today = User.where(
+      "date(convert_tz(created_at, 'UTC', 'America/Los_Angeles')) >= convert_tz(curdate() - interval 1 day, 'UTC', 'America/Los_Angeles')"
+    ).count
     
     User.connection.execute(<<-eof)
       SET @running_total := (
@@ -37,10 +47,8 @@ class AdminController < ApplicationController
       }
     end
     
-    @new_users_today = data_hash[Date.today.to_s] ? data_hash[Date.today.to_s][:signups] : 0
-    
     new_users_by_day = []
-    ((Date.today-3.months)..Date.today).each do |day|
+    ((Date.today-3.months)..Date.yesterday).each do |day|
       day_string = day.to_s
       new_users_by_day.push([
         day_string,
@@ -51,7 +59,7 @@ class AdminController < ApplicationController
     
     running_total = 0
     total_users_by_day = []
-    ((Date.today-3.months)..Date.today).each do |day|
+    ((Date.today-3.months)..Date.yesterday).each do |day|
       if data_hash[day.to_s]
         running_total = data_hash[day.to_s][:running_total]
       end
