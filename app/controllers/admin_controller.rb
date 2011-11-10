@@ -8,22 +8,22 @@ class AdminController < ApplicationController
     @registration_count = Registration.count;
     
     @new_users_this_week = User.where(
-      "date(convert_tz(created_at, 'UTC', 'America/Los_Angeles')) >= convert_tz(curdate() - interval 1 week, 'UTC', 'America/Los_Angeles')"
+      "date(convert_tz(created_at, 'UTC', 'America/Los_Angeles')) >= date(convert_tz(now() - interval 1 week, 'UTC', 'America/Los_Angeles'))"
     ).count
     
     @new_users_this_month = User.where(
-      "date(convert_tz(created_at, 'UTC', 'America/Los_Angeles')) >= convert_tz(curdate() - interval 1 month, 'UTC', 'America/Los_Angeles')"
+      "date(convert_tz(created_at, 'UTC', 'America/Los_Angeles')) >= date(convert_tz(now() - interval 1 month, 'UTC', 'America/Los_Angeles'))"
     ).count
     
     @new_users_today = User.where(
-      "date(convert_tz(created_at, 'UTC', 'America/Los_Angeles')) >= convert_tz(curdate() - interval 1 day, 'UTC', 'America/Los_Angeles')"
+      "date(convert_tz(created_at, 'UTC', 'America/Los_Angeles')) >= date(convert_tz(now(), 'UTC', 'America/Los_Angeles'))"
     ).count
     
     User.connection.execute(<<-eof)
       SET @running_total := (
           SELECT COUNT(1)
           FROM users
-          WHERE convert_tz(created_at, 'UTC', 'America/Los_Angeles') <= convert_tz(curdate() - interval 3 month, 'UTC', 'America/Los_Angeles')
+          WHERE convert_tz(created_at, 'UTC', 'America/Los_Angeles') <= date(convert_tz(now() - interval 3 month, 'UTC', 'America/Los_Angeles'))
       );
     eof
     query = <<-eof
@@ -32,7 +32,7 @@ class AdminController < ApplicationController
        FROM
       (SELECT date(convert_tz(created_at, 'UTC', 'America/Los_Angeles')) AS day, count(1) AS signups
         FROM  users
-        WHERE convert_tz(created_at, 'UTC', 'America/Los_Angeles') > convert_tz(curdate() - interval 3 month, 'UTC', 'America/Los_Angeles')
+        WHERE convert_tz(created_at, 'UTC', 'America/Los_Angeles') > date(convert_tz(now() - interval 3 month, 'UTC', 'America/Los_Angeles'))
         GROUP BY day
       ) AS raw;
     eof
