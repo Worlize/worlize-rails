@@ -10,12 +10,14 @@
   </ul>
   
   <div id="new-users-graph" style="width: 750px; height: 250px;"></div>
+  <div id="user-count-by-day-graph" style="width: 750px; height: 250px; margin-top: 15px;"></div>
   
   <script type="text/javascript" charset="utf-8">
     $(function() {
-      var data = <%= @new_user_graph_data.html_safe %>;
+      var userSignupsByDayData = <%= @new_user_graph_data.html_safe %>;
+      var userCountByDayData = <%= @user_count_by_day_data.html_safe %>;
       
-      $.jqplot('new-users-graph', [data], {
+      $.jqplot('new-users-graph', [userSignupsByDayData], {
         title: "User Signups by Day",
         gridPadding: { right: 35 },
         axes: {
@@ -30,6 +32,23 @@
           showMarker: false
         }]
       });
+      
+      $.jqplot('user-count-by-day-graph', [userCountByDayData], {
+        title: "Total Users by Day",
+        gridPadding: { right: 35 },
+        axes: {
+          xaxis: {
+            renderer: $.jqplot.DateAxisRenderer,
+            tickOptions: { formatString: '%b %#d, %y' },
+            tickInterval: '2 week'
+          }
+        },
+        series: [{
+          lineWidth: 2,
+          showMarker: false
+        }]
+      });
+      
     });
   </script>
   
