@@ -10,6 +10,10 @@
 
 <table border="0" cellspacing="0" cellpadding="2">
   <tr>
+    <td>Time:</td>
+    <td><%= @error.created_at %></td>
+  </tr>
+  <tr>
     <td>User:</td>
     <td><%= link_to @error.user.username, admin_user_path(@error.user) %></td>
   </tr>

@@ -2,6 +2,7 @@
 <% if @errors.count > 0 %>
 <table id="client-errors-results-table" class="datagrid" width="100%">
   <tr>
+    <th>Time</th>
     <th>Username</th>
     <th>Type</th>
     <th>ID</th>
@@ -10,6 +11,7 @@
   </tr>
   <% for error in @errors %>
   <tr class="<%= cycle('even','odd') %>" data-id="<%= error.id %>" style="cursor: pointer;">
+    <td class="time-column" nowrap><%= error.created_at.strftime("%Y-%m-%d %I:%M %p") %></td>
     <td class="username-column"><%= error.user.username %></td>
     <td class="type-column"><%= error.error_type %></td>
     <td class="errorid-column"><%= error.error_id %></td>
