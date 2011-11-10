@@ -22,15 +22,15 @@ class InWorldObjectUploader < CarrierWave::Uploader::Base
     "#{model.guid}"
   end
 
-  process :resize_to_limit => [950, 570], :if => :image?
+  process :resize_to_limit => [950, 570]
   process :set_content_type
   
-  version :thumb, :if => :image? do
+  version :thumb do
     process :resize_and_pad => [80, 80, "#F0F0F0"]
     process :set_content_type
   end
   
-  version :medium, :if => :image? do
+  version :medium do
     process :resize_to_limit => [200,200]
     process :set_content_type
   end
@@ -62,12 +62,5 @@ class InWorldObjectUploader < CarrierWave::Uploader::Base
   # def filename
   #   "something.jpg" if original_filename
   # end
-
-  protected
-  
-  def image?(new_file)
-    return model.is_thumbnable unless model.is_thumbnable.nil?
-    model.is_thumbnable = new_file.content_type.include?('image')
-  end
 
 end
