@@ -1,5 +1,6 @@
 <h1><%= @user.username %></h1>
 User is <strong><%= @user.online? ? 'online' : 'offline' %></strong>.<br><br>
+<%= link_to "Log in as #{@user.username}", login_as_user_admin_user_path(@user), :method => 'POST' %><br><br>
 
 <%= form_for [:admin, @user] do |f| %>
 

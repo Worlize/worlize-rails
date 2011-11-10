@@ -134,6 +134,7 @@ Worlize::Application.routes.draw do |map|
     resources :users do
       member do
         post 'give_currency'
+        post 'login_as_user'
       end
     end
     resources :worlds do

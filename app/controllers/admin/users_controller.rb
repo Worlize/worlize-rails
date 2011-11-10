@@ -65,6 +65,13 @@ class Admin::UsersController < ApplicationController
     end
   end
   
+  def login_as_user
+    UserSession.find.destroy
+    @user = User.find(params[:id])
+    UserSession.create(@user)
+    redirect_to dashboard_url
+  end
+  
   def give_currency
     @user = User.find(params[:id])
     if params[:amount].nil? || params[:amount].to_i <= 0
