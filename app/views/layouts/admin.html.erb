@@ -40,6 +40,42 @@
   <%= csrf_meta_tag %>
 </head>
 <body>
+  <div id="fb-root"></div>
+  <script type="text/javascript" charset="utf-8">
+    window.fbLoggedIn = false;
+  
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId  : '<%= Worlize.config['facebook']['app_id'] %>',
+        status : true, // check login status
+        cookie : true, // enable cookies to allow the server to access the session
+        xfbml  : true,  // parse XFBML
+        channelUrl  : '<%= escape_javascript("#{request.scheme}://#{request.host_with_port}/channel.html") %>', // Custom Channel URL
+        oauth : true, //enables OAuth 2.0
+        frictionlessRequests : true // Enable frictionless requests
+      });
+      
+      FB.Event.subscribe('auth.login', function(response) {
+        if (response.status === 'connected') {
+           window.fbLoggedIn = true;
+        }
+      });
+    
+      FB.getLoginStatus(function(response) {
+        if (response.authResponse) {
+          window.fbLoggedIn = true;
+        }
+      });
+    };
+    
+    (function() {
+      var e = document.createElement('script');
+      e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+      e.async = true;
+      document.getElementById('fb-root').appendChild(e);
+    }());
+  </script>
+  
   <div id="container">
     <header>
       <div id="loginLinks">

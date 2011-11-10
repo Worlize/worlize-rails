@@ -1,6 +1,7 @@
 <h1><%= @user.username %></h1>
 User is <strong><%= @user.online? ? 'online' : 'offline' %></strong>.<br><br>
-<%= link_to "Log in as #{@user.username}", login_as_user_admin_user_path(@user), :method => 'POST' %><br><br>
+
+<a href="<%= login_as_user_admin_user_path(@user) %>" id="login-as-user-link">Login as <%= @user.username %></a><br><br>
 
 <%= form_for [:admin, @user] do |f| %>
 
@@ -166,3 +167,27 @@ User is <strong><%= @user.online? ? 'online' : 'offline' %></strong>.<br><br>
     <% end %>
   </ul>
 <% end %>
+
+
+<script type="text/javascript" charset="utf-8">
+  jQuery(function($) {
+    $('#login-as-user-link').click(function(event) {
+      event.preventDefault();
+      var doLoginAsUser = function() {
+        var form = $('<form>');
+        form.attr('action', $(event.target).attr('href'));
+        form.attr('method', 'POST');
+        $(document.body).append(form);
+        form.submit();
+      };
+      if (window.fbLoggedIn) {
+        FB.logout(function() {
+          doLoginAsUser();
+        });
+      }
+      else {
+        doLoginAsUser();
+      }
+    });
+  })
+</script>
