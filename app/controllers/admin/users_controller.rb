@@ -1,7 +1,8 @@
 class Admin::UsersController < ApplicationController
   layout 'admin'
   
-  before_filter :require_admin
+  before_filter :require_admin, :except => ['login_as_user']
+  before_filter :require_admin_without_storing_location, :only => ['login_as_user']
   
   def index
     # Handle query parameter

@@ -45,6 +45,18 @@ class ApplicationController < ActionController::Base
       end
     end
     
+    def require_admin_without_storing_location
+      unless current_user && current_user.admin?
+        if current_user
+          flash[:notice] = "You must have administrator privileges to access this page"
+        else
+          flash[:notice] = "You must be logged in to access this page"
+        end
+        redirect_to new_user_session_url
+        return false
+      end
+    end
+    
     def require_user
       unless current_user
         store_location
