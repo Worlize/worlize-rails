@@ -22,7 +22,7 @@ class InWorldObjectUploader < CarrierWave::Uploader::Base
     "#{model.guid}"
   end
 
-  process :resize_to_limit => [950, 570]
+  process :resize_to_limit => [950, 570], :if => :image?
   process :set_content_type
   
   version :thumb, :if => :image? do
@@ -55,12 +55,19 @@ class InWorldObjectUploader < CarrierWave::Uploader::Base
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
   def extension_white_list
-    %w(jpg jpeg gif png)
+    %w(jpg jpeg gif png swf)
   end
 
   # Override the filename of the uploaded files:
   # def filename
   #   "something.jpg" if original_filename
   # end
+
+  protected
+  
+  def image?(new_file)
+    return model.is_thumbnable unless model.is_thumbnable.nil?
+    model.is_thumbnable = new_file.content_type.include?('image')
+  end
 
 end
