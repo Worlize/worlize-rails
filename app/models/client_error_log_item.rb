@@ -7,4 +7,5 @@ class ClientErrorLogItem < ActiveRecord::Base
   attr_accessible :log_text
   attr_accessible :message
   attr_accessible :error_id
+  attr_accessible :flash_version
 end
