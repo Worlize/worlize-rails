@@ -18,6 +18,10 @@
     <td><%= link_to @error.user.username, admin_user_path(@error.user) %></td>
   </tr>
   <tr>
+    <td>Flash Version:</td>
+    <td><%= @error.flash_version %></td>
+  </tr>
+  <tr>
     <td>Type:</td>
     <td><%= @error.error_type %></td>
   </tr>
