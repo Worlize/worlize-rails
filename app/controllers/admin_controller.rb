@@ -48,7 +48,7 @@ class AdminController < ApplicationController
     end
     
     new_users_by_day = []
-    ((Date.today-3.months)..Date.yesterday).each do |day|
+    ((Date.today-3.months+1.day)..Date.yesterday).each do |day|
       day_string = day.to_s
       new_users_by_day.push([
         day_string,
@@ -59,7 +59,7 @@ class AdminController < ApplicationController
     
     running_total = 0
     total_users_by_day = []
-    ((Date.today-3.months)..Date.yesterday).each do |day|
+    ((Date.today-3.months+1.day)..Date.yesterday).each do |day|
       if data_hash[day.to_s]
         running_total = data_hash[day.to_s][:running_total]
       end
