@@ -48,8 +48,13 @@ class AdminController < ApplicationController
     end
     
     new_users_by_day = []
-    ((Date.today-3.months+1.day)..Date.yesterday).each do |day|
+    found_start = false
+    ((Date.today-3.months)..Date.yesterday).each do |day|
       day_string = day.to_s
+      if !found_start && !data_hash[day_string]
+        next
+      end
+      found_start = true
       new_users_by_day.push([
         day_string,
         data_hash[day_string] ? data_hash[day_string][:signups] : 0
@@ -59,9 +64,13 @@ class AdminController < ApplicationController
     
     running_total = 0
     total_users_by_day = []
-    ((Date.today-3.months+1.day)..Date.yesterday).each do |day|
+    found_start = false
+    ((Date.today-3.months)..Date.yesterday).each do |day|
       if data_hash[day.to_s]
+        found_start = true
         running_total = data_hash[day.to_s][:running_total]
+      else
+        next if !found_start
       end
       total_users_by_day.push([
         day.to_s,
@@ -69,7 +78,6 @@ class AdminController < ApplicationController
       ])
     end
     @user_count_by_day_data = Yajl::Encoder.encode(total_users_by_day)
-    
   end
 
 end
