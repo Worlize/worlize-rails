@@ -12,7 +12,7 @@ class MarketplaceCarouselThumbnailUploader < CarrierWave::Uploader::Base
   storage :s3
   
   def s3_use_ssl
-    true
+    false
   end
 
   def s3_cnamed
