@@ -4,6 +4,7 @@
 	http://worlize.local/stylesheets/main.css?v=3
 	http://turtle.office.worlize.com/stylesheets/main.css?v=3
 	https://turtle.office.worlize.com/stylesheets/main.css?v=3
+	https://turtle.office.worlize.com/stylesheets/main.css?v=5
 */
 
 /* @group Boilerplate */
@@ -295,6 +296,22 @@ input[type=submit], button {
 	position: relative;
 	width: 960px;
 	margin: 105px auto 100px;
+}
+
+#container > .beta-banner {
+	position: fixed;
+	width: 131px;
+	height: 131px;
+	top: 0px;
+	left: 0px;
+	z-index: 99999;
+	background: url(../images/beta-banner-cyan.png);
+	pointer-events: none;
+	opacity: 0.8;
+}
+
+#container > .beta-banner > h1 {
+	text-indent: -10000px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -802,11 +819,21 @@ footer nav a {
 	font: 18px/15px 'PTSansNarrowRegular', Arial, sans-serif;
 }
 #homepage-login .enter-button-background {
+	position: relative;
     display:block;
     width: 312px;
     height: 81px;
     margin: 25px auto 10px;
 	background: url(../images/homepage-login-button.png) no-repeat 0 -81px;
+}
+#homepage-login .beta-badge {
+	position: absolute;
+	width: 67px;
+	height: 67px;
+	background: url(../images/beta-badge-red.png);
+	top: -20px;
+	right: -30px;
+	pointer-events: none;
 }
 #homepage-login a.enter-button {
 	animation: pulsate 1.5s infinite alternate;
@@ -854,6 +881,7 @@ footer nav a {
 	width: 850px;
 	height: 370px;
 	margin: 0px auto 10px;
+	pointer-events: none;
 }
 
 #homepage_login_layer {

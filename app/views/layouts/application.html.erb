@@ -42,7 +42,11 @@
 
 </head>
 
+<% if content_for?(:page_id) %>
+<body id="<%= yield(:page_id) %>">
+<% else %>
 <body>
+<% end %>
   <div id="fb-root"></div>
   <script>
     window.fbAsyncInit = function() {
@@ -65,6 +69,10 @@
   </script>
 
   <div id="container">
+    <div class="beta-banner">
+      <h1>Worlize Beta</h1>
+    </div>
+    
     <header>
         <% if current_user %>
           <%= render :partial => 'layouts/logged_in_header' %>

@@ -1,4 +1,7 @@
-/* @override http://turtle.office.worlize.com/stylesheets/login.css */
+/* @override 
+	http://turtle.office.worlize.com/stylesheets/login.css
+	https://turtle.office.worlize.com/stylesheets/login.css
+*/
 
 html,body {
 	background-color: #e6e2dc !important;
@@ -55,6 +58,22 @@ input:focus {
 	width: 966px;
 	height: 636px;
 	background-image: url(/images/login-overlay/app-background.jpg);
+}
+
+#container > .beta-banner {
+	position: fixed;
+	width: 131px;
+	height: 131px;
+	top: 0px;
+	left: 0px;
+	z-index: 99999;
+	background: url(../images/beta-banner-cyan.png);
+	pointer-events: none;
+	opacity: 0.8;
+}
+
+#container > .beta-banner > h1 {
+	text-indent: -10000px;
 }
 
 #login-overlay-shroud {
