@@ -11,10 +11,6 @@ class MarketplaceCarouselThumbnailUploader < CarrierWave::Uploader::Base
   #storage :file
   storage :s3
   
-  def s3_use_ssl
-    false
-  end
-
   def s3_cnamed
     ::Rails.env == 'production'
   end
