@@ -209,9 +209,6 @@ class RoomsController < ApplicationController
             updated_background_instances.push(old_background_instance.hash_for_api)
           end
           updated_background_instances.push(background_instance.hash_for_api)
-          Worlize::InteractServerManager.instance.broadcast_to_room(room.guid, {
-            :msg => 'room_definition_updated'
-          })
         end
       end
 

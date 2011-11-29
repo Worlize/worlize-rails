@@ -49,11 +49,7 @@ class Locker::BackgroundsController < ApplicationController
     if instance.room
       room = instance.room
       room.background_instance = nil
-      if room.save
-        Worlize::InteractServerManager.instance.broadcast_to_room(room.guid, {
-          :msg => 'room_definition_updated'
-        })
-      end
+      room.save
     end
     
     if instance.background.do_not_delete
