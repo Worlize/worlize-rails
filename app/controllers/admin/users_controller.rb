@@ -7,8 +7,12 @@ class Admin::UsersController < ApplicationController
   def index
     # Handle query parameter
     if params[:q]
-      query = "#{params[:q]}%"
-      @users = User.where(['username LIKE ? OR email LIKE ?', query, query])
+      if /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.match(params[:q].downcase)
+        @users = User.where(['guid = ?', params[:q]])
+      else
+        query = "#{params[:q]}%"
+        @users = User.where(['username LIKE ? OR email LIKE ?', query, query])
+      end
     else
       @users = User.active
     end
