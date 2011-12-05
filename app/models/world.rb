@@ -31,6 +31,17 @@ class World < ActiveRecord::Base
     }
   end
   
+  def to_xml
+    builder = Nokogiri::XML::Builder.new do |xml|
+      xml.world(:name => self.name) {
+        self.rooms.each do |room|
+          room.build_xml(xml)
+        end
+      }
+    end
+    builder.to_xml
+  end
+  
   def connected_user_guids
     user_guids = []
     self.rooms.each do |room|
