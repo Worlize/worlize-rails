@@ -25,7 +25,7 @@ class RoomDefinition::InWorldObjectManager
     redis.hdel('in_world_objects', room_definition.guid)
   end
   
-  def add_object_instance(in_world_object_instance, x, y)
+  def add_object_instance(in_world_object_instance, x, y, dest=nil)
     if in_world_object_instance.room.nil?
       in_world_object_instance.update_attribute(:room, room_definition.room)
       in_world_object = in_world_object_instance.in_world_object
@@ -34,7 +34,7 @@ class RoomDefinition::InWorldObjectManager
         'fullsize_url' => in_world_object.image.url,
         'x' => x,
         'y' => y,
-        'dest' => nil
+        'dest' => dest
       }
       raw_data << object_definition
       save
