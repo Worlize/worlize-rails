@@ -27,34 +27,25 @@ class BackgroundUploader < CarrierWave::Uploader::Base
   #       "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   #     end
 
-  process :resize_to_fill => [950, 570], :convert_to_jpg => 85
+  process :resize_to_fill => [950, 570], :convert => 'jpg', :quality => 90
   process :set_content_type
   
   version :thumb do
-    process :resize_to_fill => [133, 80], :convert_to_jpg => 80
+    process :resize_to_fill => [133, 80], :convert => 'jpg', :quality => 90
     process :set_content_type
   end
   
   version :square_thumb do
-    process :resize_to_fill => [80, 80], :convert_to_jpg => 90
+    process :resize_to_fill => [80, 80], :convert => 'jpg', :quality => 90
     process :set_content_type
   end
   
   version :medium do
     # process :resize_to_fill => [275, 165]
-    process :resize_to_fill => [200, 120], :convert_to_jpg => 90
+    process :resize_to_fill => [200, 120], :convert => 'jpg', :quality => 90
     process :set_content_type
   end
   
-  def convert_to_jpg(quality)
-    manipulate! do |img|
-      img.strip
-      img.compress 'jpeg'
-      img.quality quality
-      img
-    end
-  end
-
   # Process files as they are uploaded.
   #     process :scale => [200, 300]
   #
