@@ -34,7 +34,7 @@ class MarketplaceCarouselThumbnailUploader < CarrierWave::Uploader::Base
   # end
 
   # Process files as they are uploaded:
-  process :convert => 'jpg', :quality => 90 :resize_to_fill => [200,100]
+  process :convert => 'jpg', :quality => 90, :resize_to_fill => [200,100]
 
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
