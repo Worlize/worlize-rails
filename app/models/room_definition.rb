@@ -15,7 +15,7 @@ class RoomDefinition < RedisModel
   }
   
   after_update :broadcast_update_notification
-  after_destroy :remove_dependent_objects
+  before_destroy :remove_dependent_objects
   
   validates :guid, :presence => true
   validates :background, :presence => true
@@ -80,6 +80,7 @@ class RoomDefinition < RedisModel
   def remove_dependent_objects
     in_world_object_manager.unlink_all
     in_world_object_manager.destroy
+    youtube_manager.destroy
   end
   
 end

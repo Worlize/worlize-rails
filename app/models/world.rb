@@ -1,5 +1,6 @@
 class World < ActiveRecord::Base
   before_create :assign_guid
+  before_destroy :check_destroy_preconditions
 
   belongs_to :user
   has_many :rooms, :dependent => :destroy
@@ -90,22 +91,25 @@ class World < ActiveRecord::Base
   end
   
   def rebuild_from_template_world(template)
-    old_room_guids = self.rooms.map { |r| r.guid }
-    self.rooms.destroy_all
-    add_rooms_from_template_world(template)
-
-    new_dest_guid = self.rooms.first.guid
-    old_room_guids.each do |room_guid|
+    old_rooms = self.rooms.clone
+    
+    new_rooms = add_rooms_from_template_world(template)
+    new_dest_guid = new_rooms.first.guid
+    
+    old_rooms.each do |room|
       # Move everyone to the new first room in the world
-      Worlize::InteractServerManager.instance.broadcast_to_room(room_guid, {
+      Worlize::InteractServerManager.instance.broadcast_to_room(room.guid, {
         :msg => 'goto_room',
         :data => new_dest_guid
       })
+      room.destroy
     end
     nil
   end
   
   def add_rooms_from_template_world(template)
+    new_rooms = []
+    
     # We need to iterate through the rooms multiple times to create the
     # new room copies and populate the hotspots and objects
     room_data = template.rooms.map do |room|
@@ -147,6 +151,7 @@ class World < ActiveRecord::Base
       new_room.save
       
       data[:new_room] = new_room
+      new_rooms.push(new_room)
     end
     
     # Now that we have the base rooms created, we can start creating the
@@ -216,11 +221,25 @@ class World < ActiveRecord::Base
       end
     end
 
-    nil
+    new_rooms
+  end
+  
+  def self.initial_template_world_guid
+    redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
+    redis.get 'initial_world_guid'
+  end
+  
+  def self.initial_template_world_guid=(guid)
+    redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
+    redis.set 'initial_world_guid', guid
   end
 
   private
   def assign_guid()
     self.guid = Guid.new.to_s
+  end
+  
+  def check_destroy_preconditions
+    return false if World.initial_template_world_guid == self.guid
   end
 end

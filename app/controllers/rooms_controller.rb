@@ -113,7 +113,13 @@ class RoomsController < ApplicationController
   end
   
   def enter
-    @room = Room.find_by_guid!(params[:id])
+    if params[:id] == 'home'
+      # special case for going to a user's home world entrance
+      @room = current_user.worlds.first.rooms.first
+    else
+      @room = Room.find_by_guid!(params[:id])
+    end
+    
     @user = current_user
     interact_server_id = @room.interact_server_id
     s = current_user.interactivity_session || InteractivitySession.new

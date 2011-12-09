@@ -7,6 +7,7 @@ class Admin::UsersController < ApplicationController
   def index
     # Handle query parameter
     if params[:q]
+      # If the user pastes a GUID, then they're looking for a specific user.
       if /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.match(params[:q].downcase)
         @users = User.where(['guid = ?', params[:q]])
       else
@@ -125,6 +126,14 @@ class Admin::UsersController < ApplicationController
       flash[:error] = detail.message
     end
     redirect_to admin_users_url
+  end
+  
+  def set_world_as_initial_template_world
+    @user = User.find(params[:id])
+    world = @user.worlds.first
+    World.initial_template_world_guid = world.guid
+    flash[:notice] = "#{world.name} has been set as the template for the initial world created for new users."
+    redirect_to admin_user_url(@user)
   end
   
   def create

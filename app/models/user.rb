@@ -157,9 +157,19 @@ class User < ActiveRecord::Base
     return nil
   end
 
+  # Old create_world deprecated
   def create_world
     world = self.worlds.create(:name => "#{self.username.capitalize}'s World")
+    template_world = World.find_by_guid(World.initial_template_world_guid)
+
+    # Fall back to basic world creation if template world isn't available
+    initialize_world_first_room and return if template_world.nil?
     
+    world.add_rooms_from_template_world(template_world)
+  end
+  
+  def initialize_world_first_room
+    world = self.worlds.first
     default_background_guid = Background.initial_world_background_guid
     default_background = Background.find_by_guid(default_background_guid)
     if default_background.nil?

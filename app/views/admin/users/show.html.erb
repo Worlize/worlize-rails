@@ -155,6 +155,14 @@
 <br>
 <h2>World</h2>
 Name: <%= @world.name %><br>
+<% if World.initial_template_world_guid == @world.guid %>
+  <p>(This world is the template world for new users.)</p>
+<% else %>
+  <%= link_to "Set as template world for new users", set_world_as_initial_template_world_admin_user_url(@user),
+              :method => :post,
+              :confirm => "Are you sure you want to set this user's world as the template for the initial world created for new users?" %>
+<% end %>
+
 <table class="datagrid">
   <tr>
     <th>Room Name</th>

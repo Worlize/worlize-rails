@@ -135,6 +135,7 @@ Worlize::Application.routes.draw do |map|
       member do
         post 'give_currency'
         post 'login_as_user'
+        post 'set_world_as_initial_template_world'
       end
     end
     resources :worlds do
