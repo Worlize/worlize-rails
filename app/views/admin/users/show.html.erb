@@ -153,6 +153,24 @@
 <% end %>
 
 <br>
+<h2>World</h2>
+Name: <%= @world.name %><br>
+<table class="datagrid">
+  <tr>
+    <th>Room Name</th>
+    <th>Users</th>
+    <th></th>
+  </tr>
+  <% for room in @rooms do %>
+  <tr class="<%= cycle('even','odd') %>">
+    <td><%= room.name %></td>
+    <td><%= room.user_count %></td>
+    <td><%= link_to "Enter", enter_room_path(room.guid), :method => :post %></td>
+  </tr>
+  <% end %>
+</table>
+
+<br>
 <h2>Friends</h2>
 <% if @friends.length == 0 %>
   <p>(This user has no friends)</p>

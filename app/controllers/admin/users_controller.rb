@@ -42,6 +42,8 @@ class Admin::UsersController < ApplicationController
   
   def show
     @user = User.find(params[:id])
+    @world = @user.worlds.first
+    @rooms = @world.rooms
     @friends = @user.friends
     @payments = @user.payments
     @total_payments = 0
