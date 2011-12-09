@@ -36,20 +36,19 @@ class BackgroundUploader < CarrierWave::Uploader::Base
   end
   
   version :square_thumb do
-    process :resize_to_fill => [80, 80], :convert_to_jpg => 80
+    process :resize_to_fill => [80, 80], :convert_to_jpg => 90
     process :set_content_type
   end
   
   version :medium do
     # process :resize_to_fill => [275, 165]
-    process :resize_to_fill => [200, 120], :convert_to_jpg => 80
+    process :resize_to_fill => [200, 120], :convert_to_jpg => 90
     process :set_content_type
   end
   
   def convert_to_jpg(quality)
     manipulate! do |img|
       img.strip
-      img.sampling_factor '4:2:0'
       img.compress 'jpeg'
       img.quality quality
       img
