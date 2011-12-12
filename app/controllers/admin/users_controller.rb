@@ -136,24 +136,25 @@ class Admin::UsersController < ApplicationController
     redirect_to admin_user_url(@user)
   end
   
+  def new
+    @user = User.new
+  end
+  
   def create
-    begin
-      User.transaction do
-        @user = User.new(params[:user])
-        @user.save!
-        world = World.new(:user => @user, :name => "#{@user.name}'s Worlz")
-        world.save!
-        background = Background.first
-        bi = BackgroundInstance.create!(:user => @user, :background => background)
-        3.times do |i|
-          room = world.rooms.create!(:name => "Example room #{i+1}", :background_instance => bi, :world => world)
-        end
-      end
-    rescue
-      render :template => 'admin/beta_registrations/build_account'
-      return
+    User.transaction do
+      @user = User.new(params[:user])
+      @user.password = params[:user][:password]
+      @user.accepted_tos = true
+      @user.save
     end
-    flash[:notice] = "Account for #{@user.name} successfully created."
-    redirect_to admin_beta_registrations_url
+    
+    if @user.persisted?
+      @user.create_world
+      @user.first_time_login
+      flash[:notice] = "Account for #{@user.name} successfully created."
+      redirect_to admin_user_url(@user)
+    else
+      render :action => :new
+    end
   end
 end

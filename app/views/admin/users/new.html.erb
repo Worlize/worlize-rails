@@ -1,0 +1,23 @@
+<h1>Create New User</h1>
+
+<% if @user.errors.length > 0 %>
+<%= error_messages_for @user %>
+<% end %>
+
+<%= form_for [:admin, @user], :method => 'post' do |f| %>
+
+  <%= f.label :username %><br>
+  <%= f.text_field :username %><br>
+  <br>
+  
+  <%= f.label :password %><br>
+  <%= f.password_field :password %><br>
+  <br>
+  
+  <%= f.label :email %><br>
+  <%= f.text_field :email %><br>
+  <br>
+  
+  <%= f.submit %>
+
+<% end %>
