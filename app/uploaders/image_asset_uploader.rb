@@ -17,6 +17,10 @@ class ImageAssetUploader < CarrierWave::Uploader::Base
       Worlize.config['amazon']['media_cdn_bucket']
   }
   
+  define_method 'fog_host', lambda {
+      'https://s3.amazonaws.com/' + fog_directory
+  }
+  
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir

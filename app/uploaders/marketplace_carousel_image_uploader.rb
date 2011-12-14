@@ -14,6 +14,10 @@ class MarketplaceCarouselImageUploader < CarrierWave::Uploader::Base
   define_method 'fog_directory', lambda {
       Worlize.config['amazon']['media_cdn_bucket']
   }
+  
+  define_method 'fog_host', lambda {
+      'https://s3.amazonaws.com/' + fog_directory
+  }
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
