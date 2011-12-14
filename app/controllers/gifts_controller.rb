@@ -79,6 +79,60 @@ class GiftsController < ApplicationController
           :description => "An unknown error occurred while accepting your gift."
         }
       end
+    elsif gift.giftable_type == 'Background'
+      
+      # Check for available slots..
+      if (current_user.background_instances.count >= current_user.background_slots)
+        render :json => {
+          :success => false,
+          :description => "You don't have enough empty slots in your backgrounds locker.  You must buy more slots or delete a background before you can accept this gift."
+        } and return
+      end
+      
+      background = gift.giftable
+      background_instance = current_user.background_instances.create(
+        :background => background,
+        :gifter => gift.sender
+      )
+      if background_instance.persisted?
+        gift.destroy
+        render :json => {
+          :success => true,
+          :data => background_instance.hash_for_api
+        }
+      else
+        render :json => {
+          :success => false,
+          :description => "An unknown error occurred while accepting your gift."
+        }
+      end
+    elsif gift.giftable_type == 'InWorldObject'
+      
+      # Check for available slots..
+      if (current_user.in_world_object_instances.count >= current_user.in_world_object_slots)
+        render :json => {
+          :success => false,
+          :description => "You don't have enough empty slots in your objects locker.  You must buy more slots or delete an object before you can accept this gift."
+        } and return
+      end
+      
+      in_world_object = gift.giftable
+      object_instance = current_user.in_world_object_instances.create(
+        :in_world_object => in_world_object,
+        :gifter => gift.sender
+      )
+      if object_instance.persisted?
+        gift.destroy
+        render :json => {
+          :success => true,
+          :data => object_instance.hash_for_api
+        }
+      else
+        render :json => {
+          :success => false,
+          :description => "An unknown error occurred while accepting your gift."
+        }
+      end
     else
       render :json => {
         :success => false,

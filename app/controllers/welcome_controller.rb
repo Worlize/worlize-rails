@@ -23,6 +23,7 @@ class WelcomeController < ApplicationController
   
   def enter
     current_user.disable_webcam!
+    
     @configJSON = Yajl::Encoder.encode({
       'marketplace_enabled' => Worlize.config['marketplace_enabled'],
       'user_guid' => current_user.guid,

@@ -1,7 +1,7 @@
 class Locker::InWorldObjectsController < ApplicationController
   before_filter :require_user
   def index
-    result = current_user.in_world_object_instances.map do |o|
+    result = current_user.in_world_object_instances.includes(:in_world_object, :user).order('created_at DESC').map do |o|
       o.hash_for_api
     end
     

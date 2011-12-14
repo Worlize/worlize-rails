@@ -30,6 +30,7 @@ Worlize::Application.routes.draw do |map|
   match '/embed/badge' => 'embed#render_badge', :via => :get
   
   match '/dialogs/check_for_dialogs' => 'dialogs#check_for_dialogs', :via => :get
+  match '/dialogs/css' => 'dialogs#css', :via => :get
   
   resources :authentications do
     collection do

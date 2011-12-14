@@ -31,6 +31,14 @@ class Background < ActiveRecord::Base
     }
   end
   
+  def hash_for_gift_api
+    {
+      :name =>          self.name,
+      :guid =>          self.guid,
+      :thumbnail =>     self.image.thumb.url
+    }
+  end
+  
   def instances
     self.background_instances
   end

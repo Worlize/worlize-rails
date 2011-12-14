@@ -23,22 +23,26 @@ class BackgroundUploader < CarrierWave::Uploader::Base
   #       "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   #     end
 
-  process :resize_to_fill => [950, 570], :convert => 'jpg', :quality => 90
+  process :resize_to_fill => [950, 570]
+  process :convert => 'jpg'#, :quality => 90
   process :set_content_type
   
   version :thumb do
-    process :resize_to_fill => [133, 80], :convert => 'jpg', :quality => 90
+    process :resize_to_fill => [133, 80]
+    process :convert => 'jpg'#, :quality => 90
     process :set_content_type
   end
   
   version :square_thumb do
-    process :resize_to_fill => [80, 80], :convert => 'jpg', :quality => 90
+    process :resize_to_fill => [80, 80]
+    process :convert => 'jpg'#, :quality => 90
     process :set_content_type
   end
   
   version :medium do
     # process :resize_to_fill => [275, 165]
-    process :resize_to_fill => [200, 120], :convert => 'jpg', :quality => 90
+    process :resize_to_fill => [200, 120]
+    process :convert => 'jpg'#, :quality => 90
     process :set_content_type
   end
   
@@ -61,8 +65,8 @@ class BackgroundUploader < CarrierWave::Uploader::Base
   #     end
 
   # Override the filename of the uploaded files
-  #     def filename
-  #       "something.jpg" if original_filename
-  #     end
+  def filename
+    "background.jpg" if original_filename
+  end
 
 end

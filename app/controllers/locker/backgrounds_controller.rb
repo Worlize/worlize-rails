@@ -1,7 +1,7 @@
 class Locker::BackgroundsController < ApplicationController
   before_filter :require_user
   def index
-    result = current_user.background_instances.map do |i|
+    result = current_user.background_instances.includes(:background, :user).order('created_at DESC').map do |i|
       i.hash_for_api
     end
     

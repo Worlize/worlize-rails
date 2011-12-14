@@ -15,4 +15,13 @@ class MarketplaceItemGiveaway < ActiveRecord::Base
   validates :name, :presence => true
   validates :date, :presence => true
 
+  scope :not_received_by_user, lambda { |user|
+    where([
+     "(SELECT count(1)
+          FROM marketplace_item_giveaway_receipts AS r
+          WHERE r.marketplace_item_giveaway_id = marketplace_item_giveaways.id
+              AND r.user_id = ?
+      ) = 0", user.id])
+  }
+
 end

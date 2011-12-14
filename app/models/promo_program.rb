@@ -1,5 +1,5 @@
 class PromoProgram < ActiveRecord::Base
-  has_many :marketplace_item_giveaways
+  has_many :marketplace_item_giveaways, :order => 'date ASC'
   has_many :marketplace_item_giveaway_receipts, :through => :marketplace_item_giveaways
   
   has_many :image_assets, :as => :imageable, :dependent => :destroy

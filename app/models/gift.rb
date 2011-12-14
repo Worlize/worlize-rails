@@ -13,7 +13,7 @@ class Gift < ActiveRecord::Base
   def hash_for_api
     if giftable.respond_to? 'hash_for_gift_api'
       item_detail = giftable.hash_for_gift_api
-    elsif giftable.resond_to? 'hash_for_api'
+    elsif giftable.respond_to? 'hash_for_api'
       item_detail = giftable.hash_for_api
     else
       item_detail = nil

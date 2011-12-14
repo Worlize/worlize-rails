@@ -70,7 +70,7 @@ function redirectToHomepage() {
 }
 
 function checkForDialogs() {
-    
+    PromoDialog.checkForDialogs();
 }
 
 function initializeFacebook() {
