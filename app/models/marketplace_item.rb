@@ -4,7 +4,6 @@ class MarketplaceItem < ActiveRecord::Base
   belongs_to :marketplace_theme
   belongs_to :item, :polymorphic => true
   has_many :marketplace_featured_items, :as => :featured_item, :dependent => :destroy
-  has_many :marketplace_purchase_records, :dependent => :restrict
   has_many :virtual_financial_transactions, :dependent => :restrict
   has_many :marketplace_item_giveaways, :dependent => :destroy
   
