@@ -19,16 +19,34 @@ class GiftsController < ApplicationController
       } and return
     end
     
-    # If this is the last gift remaining for an avatar that has no
-    # instances left, delete the actual avatar.
+    # If this is the last gift remaining for an item that has no
+    # instances left, delete the actual item.
     # FIXME: Re-architect so that this isn't specific to the
     #        type of gift involved
     if gift.giftable_type == 'Avatar'
       avatar = gift.giftable
       instances_remaining = avatar.avatar_instances.count
       gifts_remaining = avatar.gifts.count
-      if instances_remaining == 0 && gifts_remaining == 1
+      if instances_remaining == 0 && gifts_remaining == 1 && avatar.marketplace_item.nil?
         avatar.destroy
+      else
+        gift.destroy
+      end
+    elsif gift.giftable_type == 'Background'
+      background = gift.giftable
+      instances_remaining = background.background_instances.count
+      gifts_remaining = background.gifts.count
+      if instances_remaining == 0 && gifts_remaining == 1 && background.marketplace_item.nil?
+        background.destroy
+      else
+        gift.destroy
+      end
+    elsif gift.giftable_type == 'InWorldObject'
+      in_world_object = gift.giftable
+      instances_remaining = in_world_object.in_world_object_instances.count
+      gifts_remaining = in_world_object.gifts.count
+      if instances_remaining == 0 && gifts_remaining == 1 && in_world_object.marketplace_item.nil?
+        in_world_object.destroy
       else
         gift.destroy
       end
