@@ -6,6 +6,7 @@ class MarketplaceItem < ActiveRecord::Base
   has_many :marketplace_featured_items, :as => :featured_item, :dependent => :destroy
   has_many :marketplace_purchase_records, :dependent => :restrict
   has_many :virtual_financial_transactions, :dependent => :restrict
+  has_many :marketplace_item_giveaways, :dependent => :destroy
   
   acts_as_taggable_on :tags
   

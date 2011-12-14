@@ -69,6 +69,10 @@ function redirectToHomepage() {
     top.location.href = "/";
 }
 
+function checkForDialogs() {
+    
+}
+
 function initializeFacebook() {
     FB.Event.subscribe('auth.login', handleFacebookLogin);
 }

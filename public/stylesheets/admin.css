@@ -268,6 +268,18 @@ header h1 a {
 	text-decoration: none !important;
 }
 
+#currentTime {
+    float: right;
+	margin: 15px 10px 15px 0px;
+	background-color: #f7f9ff;
+	padding: 5px 15px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	-moz-box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+}
+
 #loginLinks {
 	float: right;
 	margin: 15px 0px;
@@ -511,6 +523,23 @@ div.pagination span.disabled {
 	color: #666;
 }
 
+div.image-asset {
+    padding: 10px;
+    background: #bec8d8;
+    border: 1px solid #91a7bd;
+    margin: 10px 0px;
+}
+
+div.image-asset .thumbnail {
+    display: block;
+    float: left;
+    margin: 0px 20px 0px 0px;
+}
+
+div.image-asset .url {
+    font-size: 11px;
+}
+
 /* @end */
 
 footer {
@@ -550,7 +579,7 @@ footer {
 	width: 25%;
 }
 
-.actions-column {
+.suspended-column {
 	width: 15%;
 }
 

@@ -6,7 +6,7 @@ class Gift < ActiveRecord::Base
   before_create :assign_guid
   after_create :notify_recipient
   
-  validates :sender, :presence => true
+  # validates :sender, :presence => true
   validates :recipient, :presence => true
   validates :giftable, :presence => true
   
@@ -23,7 +23,7 @@ class Gift < ActiveRecord::Base
       :guid => guid,
       :type => giftable_type,
       :note => note,
-      :sender => sender.public_hash_for_api,
+      :sender => sender.nil? ? nil : sender.public_hash_for_api,
       :item => item_detail
     }
   end
@@ -40,12 +40,14 @@ class Gift < ActiveRecord::Base
           }
         })
       else
-        email = EventNotifier.new_gift_email({
-          :sender => sender,
-          :recipient => recipient,
-          :gift => self
-        })
-        email.deliver
+        unless sender.nil?
+          email = EventNotifier.new_gift_email({
+            :sender => sender,
+            :recipient => recipient,
+            :gift => self
+          })
+          email.deliver
+        end
       end
     end
   end

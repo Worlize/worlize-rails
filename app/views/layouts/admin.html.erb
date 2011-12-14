@@ -89,7 +89,8 @@
           <%= link_to "Login", login_path %>
         <% end %>
       </div>
-
+      <div id="currentTime"><%= Time.now.strftime('%a. %b. %e, %Y %-I:%M %p (%Z)') %></div>
+      
       <h1><%= link_to "Worlize Admin", admin_index_path %></h1>
     </header>
 

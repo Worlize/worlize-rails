@@ -29,6 +29,8 @@ Worlize::Application.routes.draw do |map|
   
   match '/embed/badge' => 'embed#render_badge', :via => :get
   
+  match '/dialogs/check_for_dialogs' => 'dialogs#check_for_dialogs', :via => :get
+  
   resources :authentications do
     collection do
       post :connect_facebook_via_js
@@ -136,10 +138,18 @@ Worlize::Application.routes.draw do |map|
         post 'give_currency'
         post 'login_as_user'
         post 'set_world_as_initial_template_world'
+        post 'reactivate'
       end
     end
     resources :worlds do
       resources :rooms
+    end
+    
+    resources :promo_programs do
+      member do
+        post 'upload_image_asset'
+        delete 'destroy_image_asset'
+      end
     end
     
     resource :management, :controller => 'management' do
@@ -161,6 +171,7 @@ Worlize::Application.routes.draw do |map|
         end
         resources :items, :except => [:edit]
       end
+      resources :item_giveaways
       resources :tag_contexts
       resources :items do
         collection do

@@ -1,0 +1,60 @@
+<%= form_for([:admin, @promo_program]) do |f| %>
+  <% if @promo_program.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@promo_program.errors.count, "error") %> prohibited this promo program from being saved:</h2>
+
+      <ul>
+      <% @promo_program.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name, :size => 40 %>
+  </div>
+  <div class="field">
+    <%= f.label :mode %><br>
+    <%= f.select :mode,
+                 options_for_select(PromoProgram.mode_options, @promo_program.mode),
+                 { :include_blank => true } %>
+  </div>
+  <div class="field">
+    <%= f.label :start_date %><br />
+    <%= text_field_tag 'start_date', @promo_program.start_date.nil? ? '' : @promo_program.start_date.strftime('%A, %B %d, %Y'), :size => 24 %>
+    <%= f.hidden_field :start_date %>
+  </div>
+  <div class="field">
+    <%= f.label :end_date %><br />
+    <%= text_field_tag 'end_date', @promo_program.end_date.nil? ? '' : @promo_program.end_date.strftime('%A, %B %d, %Y'), :size => 24 %>
+    <%= f.hidden_field :end_date %>
+  </div>
+  <% if @promo_program.persisted? %>
+    <div class="field">
+      <%= f.label :dialog_css %><br />
+      <p>(Base element class: .promo-dialog-<%= @promo_program.id %>)</p>
+      <%= f.text_area :dialog_css, :rows => 15, :cols => 80 %>
+    </div>
+  <% end %>
+  
+  <div class="actions">
+    <%= f.submit "Save" %>
+  </div>
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+  jQuery(function($) {
+    $('#start_date').datepicker({
+      dateFormat: 'DD, MM dd, yy',
+      altFormat: "yy-mm-dd",
+      altField: '#promo_program_start_date'
+    });
+    $('#end_date').datepicker({
+      dateFormat: 'DD, MM dd, yy',
+      altFormat: "yy-mm-dd",
+      altField: '#promo_program_end_date'
+    });
+  });
+</script>

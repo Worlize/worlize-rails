@@ -15,7 +15,7 @@ class Admin::UsersController < ApplicationController
         @users = User.where(['username LIKE ? OR email LIKE ?', query, query])
       end
     else
-      @users = User.active
+      @users = User.where('1=1') # start with a base no-op query
     end
     
     # Apply pagination
@@ -125,7 +125,21 @@ class Admin::UsersController < ApplicationController
     rescue => detail
       flash[:error] = detail.message
     end
-    redirect_to admin_users_url
+    redirect_to admin_user_url(@user)
+  end
+  
+  def reactivate
+    begin
+      @user = User.find(params[:id])
+      if @user.update_attribute(:suspended, false)
+        flash[:notice] = "#{@user.username} successfully re-activated."
+      else
+        flash[:error] = "Unable to re-activate #{@user.username}."
+      end
+    rescue => detail
+      flash[:error] = detail.message
+    end
+    redirect_to admin_user_url(@user)
   end
   
   def set_world_as_initial_template_world

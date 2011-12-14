@@ -1,0 +1,27 @@
+<% if @item.marketplace_item_giveaways.length == 0 %>
+  <p>(There are no scheduled giveaways of this item.)</p>
+<% else %>
+  <table class="datagrid">
+    <tr>
+      <th>Promo Program</th>
+      <th>Giveaway Date</th>
+      <th># Given Away</th>
+      <th>Completed</th>
+      <th></th>
+    </tr>
+    <% for giveaway in @item.marketplace_item_giveaways do %>
+    <tr>
+      <td><%= giveaway.promo_program.name %></td>
+      <td><%= giveaway.date.strftime('%a. %b. %e, %Y') %></td>
+      <td><%= giveaway.marketplace_item_giveaway_receipts.count %></td>
+      <td><%= giveaway.date < Date.today ? 'Yes' : 'No' %></td>
+      <td><%= link_to 'Edit', admin_marketplace_item_giveaway_path(giveaway) %> |
+          <%= link_to 'Delete', admin_marketplace_item_giveaway_path(giveaway), :method => 'delete',
+                      :confirm => 'Are you sure you want to delete this giveaway?' %></td>
+    </tr>
+    <% end %>
+  </table>
+<% end %>
+
+<%= link_to 'Add new Giveaway of this item', new_admin_marketplace_item_giveaway_path(:marketplace_item => @item) %>
+<br>

@@ -2,7 +2,14 @@
 <p>guid: <%= @user.guid %></p><br>
 <p>User is <strong><%= @user.online? ? 'online' : 'offline' %></strong>.</p><br>
 
-<a href="<%= login_as_user_admin_user_path(@user) %>" id="login-as-user-link">Login as <%= @user.username %></a><br><br>
+<% if @user.active? %>
+  <%= button_to "Suspend Account", admin_user_path(@user), :method => :delete, :confirm => "Are you sure you want to suspend this account?" %><br>
+  <%= button_to "Login as #{@user.username}", login_as_user_admin_user_path(@user), :method => 'get' %><br>
+<% else %>
+  <strong>Account is suspended!</strong><br><br>
+  <%= button_to "Re-activate account", reactivate_admin_user_path(@user) %><br>
+<% end %>
+
 
 <%= form_for [:admin, @user] do |f| %>
 
@@ -29,7 +36,7 @@
       'prop' => 'Props'
     } %>
     <% ['avatar','background','in_world_object','prop'].each do |kind| %>
-      <tr>
+      <tr class="<%= cycle('even','odd') %>">
         <td><%= kind_map[kind] %></td>
         <td>
           <%= f.text_field "#{kind}_slots", :size => 4 %>

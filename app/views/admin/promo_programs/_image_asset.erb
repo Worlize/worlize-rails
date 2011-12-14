@@ -1,0 +1,8 @@
+<div class="image-asset">
+  <%= image_tag image_asset.image.thumb.url, :class => 'thumbnail' %>
+  <h1><%= image_asset.name %></h1>
+  <%= button_to "Delete", destroy_image_asset_admin_promo_program_path(image_asset), :method => :delete,
+                :confirm => "Are you sure?" %>
+  <p class="url"><%= link_to image_asset.image.url, image_asset.image.url, :target => '_blank' %></p>
+  <div class="clearfix"></div>
+</div>

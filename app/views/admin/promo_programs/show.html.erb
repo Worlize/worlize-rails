@@ -1,0 +1,45 @@
+<h1>Editing Promo Program</h1>
+
+<h2>Items to give away</h2>
+<% if @promo_program.marketplace_item_giveaways.length == 0 %>
+  <p>(There are no items scheduled to be given away in this promo program.)</p>
+<% else %>
+  <table class="datagrid">
+    <tr>
+      <th>Thumbnail</th>
+      <th>Name</th>
+      <th>Date</th>
+      <th># Given Away</th>
+      <th>Completed</th>
+    </tr>
+  <% for item_giveaway in @promo_program.marketplace_item_giveaways do %>
+    <tr class="<%= cycle('odd','even') %>">
+      <td><%= image_tag item_giveaway.marketplace_item.item.image.thumb.url %></td>
+      <td><%= link_to item_giveaway.name, admin_marketplace_item_giveaway_path(item_giveaway) %></td>
+      <td><%= item_giveaway.date.strftime('%a. %b. %e, %Y') %></td>
+      <td><%= item_giveaway.marketplace_item_giveaway_receipts.count %></td>
+      <td><%= item_giveaway.date < Date.today ? 'Yes' : 'No' %></td>
+    </tr>
+  <% end %>
+  </table>
+<% end %>
+<br>
+<%= render 'form' %><br>
+
+<h2>Image Assets</h2>
+<% if @promo_program.image_assets.length == 0 %>
+<p>(There are no image assets for this promo program.)</p><br>
+<% else %>
+<%= render :partial => 'image_asset', :collection => @promo_program.image_assets %>
+<% end %>
+
+<h2>Upload Image Asset</h2>
+<%= form_for @image_asset, :url => upload_image_asset_admin_promo_program_path(@promo_program), :html => {:multipart => true} do |image_asset_form| %>
+  <%= image_asset_form.label :name %><br>
+  <%= image_asset_form.text_field :name %><br>
+  <%= image_asset_form.label :image %><br>
+  <%= image_asset_form.file_field :image %>
+  <%= image_asset_form.submit :upload %><br>
+<% end %>
+<br>
+<%= link_to 'Back to Promo Programs', admin_promo_programs_path %>

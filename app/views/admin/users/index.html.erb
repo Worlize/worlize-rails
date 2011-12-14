@@ -32,15 +32,21 @@
         <% if params[:sort_direction] == 'desc' %>▼<% end %>
       <% end %>
     </th>
-    <th class="actions-column">Actions</th>
+    <th class="suspended-column">Suspended</th>
   </tr>
   <% for user in @users %>
-  <tr class="<%= cycle('even','odd') %>">
+  <%
+       row_classes = [ cycle('even', 'odd') ]
+       if user.suspended?
+         row_classes.push('suspended')
+       end
+  %>
+  <tr class="<%= row_classes.join(' ') %>">
     <td class="online-column"><%= user.online? ? "✓" : "" %></td>
     <td class="username-column"><%= link_to user.username, admin_user_path(user) %></td>
     <td class="email-column"><%= user.email %></td>
     <td class="time-column"><%= user.created_at.strftime("%Y-%m-%d %I:%M%p") %></td>
-    <td class="actions-column"><%= button_to "Suspend", admin_user_path(user), :method => :delete, :confirm => "Are you sure?" %></td>
+    <td class="suspended-column"><%= user.suspended? ? "✓" : "" %></td>
   </tr>
   <% end %>
 </table>
