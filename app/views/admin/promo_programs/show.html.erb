@@ -18,7 +18,7 @@
       <td><%= link_to item_giveaway.name, admin_marketplace_item_giveaway_path(item_giveaway) %></td>
       <td><%= item_giveaway.date.strftime('%a. %b. %e, %Y') %></td>
       <td><%= item_giveaway.marketplace_item_giveaway_receipts.count %></td>
-      <td><%= item_giveaway.date < Date.today ? 'Yes' : 'No' %></td>
+      <td><%= item_giveaway.date < Time.current.to_date ? 'Yes' : 'No' %></td>
     </tr>
   <% end %>
   </table>
@@ -42,4 +42,5 @@
   <%= image_asset_form.submit :upload %><br>
 <% end %>
 <br>
+
 <%= link_to 'Back to Promo Programs', admin_promo_programs_path %>
