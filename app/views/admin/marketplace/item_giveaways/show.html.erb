@@ -3,5 +3,8 @@
 <%= render 'form' %>
 
 <br>
+<%= button_to 'Delete Item Giveaway', admin_marketplace_item_giveaway_path, :method => 'delete', :confirm => 'Are you sure?' %>
+<br>
+
 <%= link_to 'Back to Item', admin_marketplace_item_path(@item) %><br><br>
 <%= link_to 'Back to Promo Program', admin_promo_program_path(@item_giveaway.promo_program) %>
