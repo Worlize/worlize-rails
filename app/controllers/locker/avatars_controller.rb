@@ -52,6 +52,12 @@ class Locker::AvatarsController < ApplicationController
   
   def destroy
     avatar_instance = current_user.avatar_instances.find_by_guid(params[:id])
+    if avatar_instance.nil?
+      render :json => {
+        :sucess => false
+      } and return
+    end
+    
     num_instances_remaining = avatar_instance.avatar.avatar_instances.count
     gifts_remaining = avatar_instance.avatar.gifts.count
     if num_instances_remaining == 1 && gifts_remaining == 0 &&
