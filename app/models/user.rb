@@ -159,6 +159,27 @@ class User < ActiveRecord::Base
     return nil
   end
 
+  def total_time_spent_online
+    redis = Worlize::RedisConnectionPool.get_client(:stats)
+    redis.get("userTime:#{self.guid}").to_i
+  end
+
+  def total_time_spent_online_hms
+    t = self.total_time_spent_online
+    mm, ss = t.divmod(60)
+    hh, mm = mm.divmod(60)
+    dd, hh = hh.divmod(24)
+    "%d:%02d:%02d:%02d" % [dd, hh, mm, ss]
+  end
+  
+  def total_time_spent_online_hms_long
+    t = self.total_time_spent_online
+    mm, ss = t.divmod(60)
+    hh, mm = mm.divmod(60)
+    dd, hh = hh.divmod(24)
+    "%d days, %d hours, %d minutes and %d seconds" % [dd, hh, mm, ss]
+  end
+
   # Old create_world deprecated
   def create_world
     world = self.worlds.create(:name => "#{self.username.capitalize}'s World")

@@ -557,7 +557,7 @@ footer {
 	table-layout: fixed;
 }
 
-#user-results-table td {
+#user-results-table td,th {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -572,7 +572,11 @@ footer {
 }
 
 .email-column {
-	width: 45%;
+	width: 32%;
+}
+
+.time-spent-column {
+    width: 15%;
 }
 
 .time-column {
@@ -580,7 +584,7 @@ footer {
 }
 
 .suspended-column {
-	width: 15%;
+	width: 10%;
 }
 
 .linked-service {
