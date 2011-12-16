@@ -240,8 +240,9 @@ class RoomsController < ApplicationController
   def destroy
     room = Room.find_by_guid!(params[:id])
     world = room.world
+    room_owner = world.user
     description = ''
-    if world.user == current_user
+    if room_owner == current_user
       if world.rooms.count == 1
         render :json => {
           :success => false,
@@ -249,8 +250,16 @@ class RoomsController < ApplicationController
         } and return
       end
       
+      background_instance = room.background_instance
       room.destroy
       if room.destroyed?
+        if !background_instance.nil?
+          background_instance = BackgroundInstance.find_by_guid(background_instance.guid)
+          room_owner.send_message({
+            :msg => 'background_instance_updated',
+            :data => background_instance.reload.hash_for_api
+          })
+        end
         Worlize::InteractServerManager.instance.broadcast_to_room(room.guid, {
           :msg => 'goto_room',
           :data => world.rooms.first.guid
