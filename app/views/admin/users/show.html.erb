@@ -5,7 +5,7 @@
 
 <% if @user.active? %>
   <%= button_to "Suspend Account", admin_user_path(@user), :method => :delete, :confirm => "Are you sure you want to suspend this account?" %><br>
-  <%= button_to "Login as #{@user.username}", login_as_user_admin_user_path(@user), :method => 'get' %><br>
+  <%= button_to "Login as #{@user.username}", login_as_user_admin_user_path(@user), :method => 'post' %><br>
 <% else %>
   <strong>Account is suspended!</strong><br><br>
   <%= button_to "Re-activate account", reactivate_admin_user_path(@user) %><br>
