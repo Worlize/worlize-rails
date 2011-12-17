@@ -65,16 +65,12 @@ class World < ActiveRecord::Base
     end
     user_guids.uniq!
     
-    users = user_guids.map do |user_guid|
-      User.find_by_guid(user_guid)
-    end
-    users.reject! { |user| user.nil? }
-    users.map do |user|
+    User.where(:guid => user_guids).order('username ASC').map do |user|
       room = rooms_by_user_guid[user.guid]
       {
         :room_guid => room.guid,
         :room_name => room.name,
-        :user_name => user.username,
+        :username => user.username,
         :user_guid => user.guid
       }
     end
