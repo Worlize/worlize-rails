@@ -46,7 +46,7 @@
             xfbml  : true,  // parse XFBML
             channelUrl  : '<%= escape_javascript("#{request.scheme}://#{request.host_with_port}/channel.html") %>', // Custom Channel URL
             oauth : true, //enables OAuth 2.0
-            frictionlessRequests : true // Enable frictionless requests
+            frictionlessRequests : false // Enable frictionless requests
           });
           
           var facebookLoginTimeoutHandler = function() {
