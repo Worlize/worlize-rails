@@ -69,7 +69,7 @@ class RoomDefinition < RedisModel
     @room = room
     self.guid = room.guid
     self.world_guid = room.world.guid
-    self.owner_guid = room.world.user.guid
+    self.owner_guid = room.world.user ? room.world.user.guid : nil
     self.name = room.name
     self.background = room.background_instance.nil? ? nil : room.background_instance.background.image.url
   end
