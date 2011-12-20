@@ -7,7 +7,9 @@ class RoomDefinition < RedisModel
     :guid,
     :world_guid,
     :name,
-    :background
+    :background,
+    :properties,
+    :owner_guid
   )
   
   define_method 'background', lambda {
@@ -24,14 +26,15 @@ class RoomDefinition < RedisModel
     serializable_hash.merge({
       :hotspots => self.hotspots,
       :objects => self.in_world_object_manager.object_instances,
-      :youtube_players => self.youtube_manager.youtube_players
+      :youtube_players => self.youtube_manager.youtube_players,
+      :properties => self.properties
     })
   end
   
   def initialize(attributes = {})
     super
     room_object = attributes[:room] || attributes['room']
-    self.room = room_object unless room_object.nil?
+    self.properties ||= {}
   end
   
   def room
@@ -66,8 +69,13 @@ class RoomDefinition < RedisModel
     @room = room
     self.guid = room.guid
     self.world_guid = room.world.guid
+    self.owner_guid = room.world.user.guid
     self.name = room.name
     self.background = room.background_instance.nil? ? nil : room.background_instance.background.image.url
+  end
+  
+  def update_property(name, value)
+    self.properties[name] = value
   end
   
   def broadcast_update_notification
