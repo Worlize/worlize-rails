@@ -34,6 +34,7 @@ class RoomDefinition < RedisModel
   def initialize(attributes = {})
     super
     room_object = attributes[:room] || attributes['room']
+    self.room = room_object unless room_object.nil?
     self.properties ||= {}
   end
   
