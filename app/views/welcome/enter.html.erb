@@ -7,7 +7,7 @@
           path = '/flash'
         end
         
-        cache_bust = '72'
+        cache_bust = '73'
     -%>
     <head>
         <meta name="google" value="notranslate" />         
@@ -109,7 +109,7 @@
 
         function loadFlashApp() {
           // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
-          var swfVersionStr = "10.2.0";
+          var swfVersionStr = "11.1.0";
 
           if (!swfobject.hasFlashPlayerVersion(swfVersionStr)) {
             response = confirm("Flash Player " + swfVersionStr + " or higher is required to run Worlize.  Click OK to install it from Adobe's site, or Cancel to return to the Worlize homepage.");
@@ -147,7 +147,7 @@
       <div id="flashContent">
       	<p>
         	To view this page ensure that Adobe Flash Player version 
-			    10.2.0 or greater is installed. 
+			    11.1.0 or greater is installed. 
 		    </p>
       </div>
       
