@@ -108,6 +108,16 @@
         })();
 
         function loadFlashApp() {
+          if (!swfobject.hasFlashPlayerVersion('11.1')) {
+            response = confirm("Flash Player 11.1 or higher is required to run Worlize.  Click OK to install it from Adobe's site, or Cancel to return to the Worlize homepage.");
+            if (response) {
+              top.location.href = "http://get.adobe.com/flashplayer/";
+            }
+            else {
+              window.location.href = "/";
+            }
+          }
+          
           // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
           var swfVersionStr = "10.2.0";
           // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
