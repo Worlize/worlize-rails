@@ -2,6 +2,14 @@ class ClientErrorsController < ApplicationController
   before_filter :require_user
   
   def create
+    a = params[:log_text]
+    if a && a.length > 60000
+      # Slice out the last 60,000 characters from the log to make sure that
+      # we don't overflow the 64KiB limit in a MySQL TEXT column while getting
+      # the most relevant data - the data at the end of the log.
+      params[:log_text] = a[a.length-60000..a.length]
+    end
+    
     @client_error_log_item = ClientErrorLogItem.new(params)
     @client_error_log_item.user = current_user
 
