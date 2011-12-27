@@ -42,6 +42,24 @@ class User < ActiveRecord::Base
   #       :before => :thirteen_years_ago,
   #       :type => :date
   #   }
+  
+  validates :avatar_slots, :numericality => {
+    :greater_than_or_equal_to => 0, 
+    :if => Proc.new { !self.new_record? }
+  }
+  validates :background_slots, :numericality => {
+    :greater_than_or_equal_to => 0, 
+    :if => Proc.new { !self.new_record? }
+  }
+  validates :in_world_object_slots, :numericality => {
+    :greater_than_or_equal_to => 0, 
+    :if => Proc.new { !self.new_record? }
+  }
+  validates :prop_slots, :numericality => {
+    :greater_than_or_equal_to => 0, 
+    :if => Proc.new { !self.new_record? }
+  }
+
 
   state_machine :initial => :new_user do
     

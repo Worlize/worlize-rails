@@ -43,7 +43,11 @@
           <%= f.text_field "#{kind}_slots", :size => 4 %>
         </td>
         <td><%= @user.send("#{kind}_slots_used") %></td>
-        <td><%= @user.send("#{kind}_slots") - @user.send("#{kind}_slots_used") %></td>
+        <td>
+          <% if @user.send("#{kind}_slots") %>
+            <%= @user.send("#{kind}_slots") - @user.send("#{kind}_slots_used") %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </table>
