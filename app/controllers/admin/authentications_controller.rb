@@ -7,7 +7,7 @@ class Admin::AuthenticationsController < ApplicationController
   # DELETE /authentications/1.xml
   def destroy
     @authentication = Authentication.find(params[:id])
-    Worlize.audit_logger.info("action=external_authentication_unlinked_by_admin auth_provider=#{@authentication.provider} auth_uid=#{@authentication.uid} user=#{@authentication.user.guid} admin=#{current_user.guid} admin_username=\"#{current_user.username}\"")
+    Worlize.audit_logger.info("action=external_authentication_unlinked_by_admin auth_provider=#{@authentication.provider} auth_uid=#{@authentication.uid} user=#{@authentication.user.guid} user_username=\"#{@authentication.user.username}\" admin=#{current_user.guid} admin_username=\"#{current_user.username}\"")
     @authentication.destroy
 
     respond_to do |format|
