@@ -65,17 +65,47 @@ class Admin::UsersController < ApplicationController
     @user = User.find(params[:id])
     @user.accessible = :all
     respond_to do |format|
-      if @user.update_attributes(params[:user])
+      if !params[:user]
+        format.html { redirect_to(admin_user_url(@user), :notice => 'No attributes provided to update') }
+        return
+      end
+      
+      params[:user].each_pair do |key,value|
+        @user.send("#{key.to_s}=", value)
+      end
+      if @user.save
+        # Record audit log items
+        @user.previous_changes.each_pair do |key,changes|
+          # Record special information if the admin user changed the number of
+          # slots in a user's locker.
+          if key =~ /^(.*)_slots$/
+            begin
+              prev_value = changes[0]
+              new_value = changes[1]
+              difference = new_value.to_i - prev_value.to_i
+            rescue
+              difference = 0
+            end
+            Worlize.audit_logger.info("action=locker_slots_changed_by_admin user=#{@user.guid} admin=#{current_user.guid} admin_username=\"#{current_user.username}\" slot_type=#{$1} difference=#{difference}")
+            next
+          end
+          
+          # Otherwise just log the relevant changes
+          unless ['perishable_token','updated_at'].include?(key)
+            Worlize.audit_logger.info("action=user_field_changed_by_admin user=#{@user.guid} admin=#{current_user.guid} admin_username=\"#{current_user.username}\" field_name=#{key} old_value=#{changes[0]} new_value=#{changes[1]}")
+          end
+        end
         format.html { redirect_to(admin_user_url(@user), :notice => 'User was successfully updated.') }
       else
-        format.html { render :action => "edit" }
+        format.html { redirect_to(admin_user_url(@user), :error => 'Unable to update user.  Invalid data.') }
       end
     end
   end
   
   def login_as_user
-    UserSession.find.destroy
     @user = User.find(params[:id])
+    Worlize.audit_logger.info("action=admin_logged_in_as_user user=#{@user.guid} admin=#{current_user.guid} admin_username=\"#{current_user.username}\"")
+    UserSession.find.destroy
     UserSession.create(@user)
     redirect_to dashboard_url
   end
@@ -104,6 +134,8 @@ class Admin::UsersController < ApplicationController
     end
 
     if transaction.persisted?
+      escaped_comment = params[:comment] ? params[:comment].gsub('"','\"') : ''
+      Worlize.audit_logger.info("action=currency_given_by_admin user=#{@user.guid} admin=#{current_user.guid} admin_username=\"#{current_user.username}\" currency_type=#{params[:currency_type]} amount=#{params[:amount]} comment=\"#{escaped_comment}\"")
       flash[:notice] = "Successfully credited #{params[:currency_type]} to #{@user.username}."
       @user.recalculate_balances
       @user.notify_client_of_balance_change
@@ -118,6 +150,7 @@ class Admin::UsersController < ApplicationController
     begin
       @user = User.find(params[:id])
       if @user.update_attribute(:suspended, true)
+        Worlize.audit_logger.info("action=account_suspended_by_admin user=#{@user.guid} admin=#{current_user.guid} admin_username=\"#{current_user.username}\"")
         flash[:notice] = "#{@user.username} suspended successfully."
       else
         flash[:error] = "Unable to suspend #{@user.username}."
@@ -132,6 +165,7 @@ class Admin::UsersController < ApplicationController
     begin
       @user = User.find(params[:id])
       if @user.update_attribute(:suspended, false)
+        Worlize.audit_logger.info("action=account_unsuspended_by_admin user=#{@user.guid} admin=#{current_user.guid} admin_username=\"#{current_user.username}\"")
         flash[:notice] = "#{@user.username} successfully re-activated."
       else
         flash[:error] = "Unable to re-activate #{@user.username}."
@@ -146,6 +180,7 @@ class Admin::UsersController < ApplicationController
     @user = User.find(params[:id])
     world = @user.worlds.first
     World.initial_template_world_guid = world.guid
+    Worlize.audit_logger.info("action=world_set_as_initial_template_world world_guid=#{world.guid} admin=#{current_user.guid} admin_username=\"#{current_user.username}\"")
     flash[:notice] = "#{world.name} has been set as the template for the initial world created for new users."
     redirect_to admin_user_url(@user)
   end
@@ -163,6 +198,7 @@ class Admin::UsersController < ApplicationController
     end
     
     if @user.persisted?
+      Worlize.audit_logger.info("action=account_created_by_admin user=#{@user.guid} admin=#{current_user.guid} admin_username=\"#{current_user.username}\"")
       @user.create_world
       @user.first_time_login
       flash[:notice] = "Account for #{@user.name} successfully created."
