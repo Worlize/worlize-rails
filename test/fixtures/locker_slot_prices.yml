@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  slot_kind: MyString
+  bucks_amount: 1
+
+two:
+  slot_kind: MyString
+  bucks_amount: 1
