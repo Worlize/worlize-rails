@@ -139,6 +139,8 @@ Worlize::Application.routes.draw do |map|
         post 'give_currency'
         post 'login_as_user'
         post 'set_world_as_initial_template_world'
+        post 'add_to_public_worlds'
+        post 'remove_from_public_worlds'
         post 'reactivate'
       end
     end

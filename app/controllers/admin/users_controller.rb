@@ -207,4 +207,26 @@ class Admin::UsersController < ApplicationController
       render :action => :new
     end
   end
+  
+  
+  def add_to_public_worlds
+    @user = User.find(params[:id])
+    @world = @user.worlds.first
+    if @world && @world.public_world.nil?
+      @world.public_world = PublicWorld.new
+      @world.public_world.save
+    end
+    Worlize.audit_logger.info("action=world_added_to_public_worlds_by_admin world_guid=#{@world.guid} admin=#{current_user.guid} admin_username=\"#{current_user.username}\"")
+    redirect_to admin_user_url(@user), :notice => "Added #{@world.name} to the list of public worlds."
+  end
+  
+  def remove_from_public_worlds
+    @user = User.find(params[:id])
+    @world = @user.worlds.first
+    if @world && @world.public_world
+      @world.public_world.destroy
+    end
+    Worlize.audit_logger.info("action=world_removed_from_public_worlds_by_admin world_guid=#{@world.guid} admin=#{current_user.guid} admin_username=\"#{current_user.username}\"")
+    redirect_to admin_user_url(@user), :notice => "Removed #{@world.name} from the list of public worlds."
+  end
 end
