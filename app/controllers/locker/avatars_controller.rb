@@ -1,5 +1,6 @@
 class Locker::AvatarsController < ApplicationController
-
+  before_filter :require_user
+  
   def index
     avatar_instances = current_user.avatar_instances.includes(:avatar, :user).order('created_at DESC').all
       
@@ -11,33 +12,6 @@ class Locker::AvatarsController < ApplicationController
     }
   end
   
-  def buy_slots
-    slot_kind = 'avatar'
-    quantity = params[:quantity].to_i
-    
-    begin
-      current_user.buy_slots(slot_kind, quantity)
-    rescue Worlize::InsufficientFundsException => e
-      render :json => {
-        :success => false,
-        :insufficient_funds => true,
-        :message => e.message
-      } and return
-    rescue => e
-      render :json => {
-        :success => false,
-        :insufficient_funds => false,
-        :message => e.message
-      } and return
-    end
-    
-    render :json => {
-      :success => true,
-      :slot_kind => slot_kind,
-      :quantity => quantity
-    }
-  end
-
   def create
     if current_user.avatar_slots <= current_user.avatar_instances.count
       render :json => {

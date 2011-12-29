@@ -13,33 +13,6 @@ class Locker::InWorldObjectsController < ApplicationController
     }
   end
   
-  def buy_slots
-    slot_kind = 'in_world_object'
-    quantity = params[:quantity].to_i
-    
-    begin
-      current_user.buy_slots(slot_kind, quantity)
-    rescue Worlize::InsufficientFundsException => e
-      render :json => {
-        :success => false,
-        :insufficient_funds => true,
-        :message => e.message
-      } and return
-    rescue => e
-      render :json => {
-        :success => false,
-        :insufficient_funds => false,
-        :message => e.message
-      } and return
-    end
-    
-    render :json => {
-      :success => true,
-      :slot_kind => slot_kind,
-      :quantity => quantity
-    }
-  end
-  
   def create
     name = params[:name] || "Object by #{current_user.username}"
     

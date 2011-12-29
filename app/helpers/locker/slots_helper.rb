@@ -1,0 +1,2 @@
+module Locker::SlotsHelper
+end

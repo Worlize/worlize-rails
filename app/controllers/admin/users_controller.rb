@@ -74,11 +74,14 @@ class Admin::UsersController < ApplicationController
         @user.send("#{key.to_s}=", value)
       end
       if @user.save
+        should_notify_client_that_slots_changed = false
+        
         # Record audit log items
         @user.previous_changes.each_pair do |key,changes|
           # Record special information if the admin user changed the number of
           # slots in a user's locker.
           if key =~ /^(.*)_slots$/
+            should_notify_client_that_slots_changed = true
             begin
               prev_value = changes[0]
               new_value = changes[1]
@@ -95,6 +98,9 @@ class Admin::UsersController < ApplicationController
             Worlize.audit_logger.info("action=user_field_changed_by_admin user=#{@user.guid} user_username=\"#{@user.username}\" admin=#{current_user.guid} admin_username=\"#{current_user.username}\" field_name=#{key} old_value=#{changes[0]} new_value=#{changes[1]}")
           end
         end
+        
+        @user.notify_client_of_slots_change if should_notify_client_that_slots_changed
+        
         format.html { redirect_to(admin_user_url(@user), :notice => 'User was successfully updated.') }
       else
         format.html { redirect_to(admin_user_url(@user), :error => 'Unable to update user.  Invalid data.') }

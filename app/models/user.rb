@@ -659,6 +659,50 @@ class User < ActiveRecord::Base
     self.bucks = self.virtual_financial_transactions.sum('bucks_amount')
   end
   
+  def buy_slots(slot_kind, quantity)
+    # Make sure slot_kind is valid
+    unless (['avatar','in_world_object','background','prop'].include?(slot_kind))
+      raise StandardError.new("#{slot_kind} is not a valid slot_kind.")
+    end
+    
+    quantity = quantity.to_i
+    if quantity <= 0
+      raise StandardError.new("You must specify a valid quantity of slots to buy")
+    end
+    
+    # Look up the price
+    price = LockerSlotPrice.find_by_slot_kind(slot_kind)
+    if price.nil?
+      raise StandardError.new("Unable to look up pricing information for locker slots.")
+    end
+
+    # Make sure the user has enough money
+    if self.bucks < (price.bucks_amount * quantity)
+      raise Worlize::InsufficientFundsException.new("You do not have enough Worlize Bucks to complete your purchase.")
+    end
+    
+    # Charge the customer
+    VirtualFinancialTransaction.transaction do
+      transaction = VirtualFinancialTransaction.new(
+        :user => self,
+        :kind => VirtualFinancialTransaction::KIND_DEBIT_SLOT_PURCHASE,
+        :bucks_amount => 0 - price.bucks_amount * quantity,
+        :comment => "Purchased #{quantity} #{slot_kind.humanize} Slot" + (quantity == 1 ? '' : 's')
+      )
+      transaction.save!
+      
+      # Put the product into the user's locker...
+      existing_slots = self.send("#{slot_kind}_slots")
+      self.send("#{slot_kind}_slots=", existing_slots + quantity)
+      self.save!
+      
+      self.recalculate_balances
+      self.notify_client_of_balance_change
+      self.notify_client_of_slots_change
+    end
+    self.send("#{slot_kind}_slots")
+  end
+  
   ###################################################################
   ##  END: Financial Functions                                     ##
   ###################################################################
@@ -763,50 +807,6 @@ class User < ActiveRecord::Base
   
   def prop_slots_used
     self.prop_instances.count
-  end
-  
-  def buy_slots(slot_kind, quantity)
-    # Make sure slot_kind is valid
-    unless (['avatar','in_world_object','background','prop'].include?(slot_kind))
-      raise StandardError.new("#{slot_kind} is not a valid slot_kind.")
-    end
-    
-    quantity = quantity.to_i
-    if quantity <= 0
-      raise StandardError.new("You must specify a valid quantity of slots to buy")
-    end
-    
-    # Look up the price
-    price = LockerSlotPrice.find_by_slot_kind(slot_kind)
-    if price.nil?
-      raise StandardError.new("Unable to look up pricing information for locker slots.")
-    end
-
-    # Make sure the user has enough money
-    if self.bucks < price.bucks_amount
-      raise Worlize::InsufficientFundsException.new("You do not have enough Worlize Bucks to complete your purchase.")
-    end
-    
-    # Charge the customer
-    VirtualFinancialTransaction.transaction do
-      transaction = VirtualFinancialTransaction.new(
-        :user => self,
-        :kind => VirtualFinancialTransaction::KIND_DEBIT_SLOT_PURCHASE,
-        :bucks_amount => 0 - price.bucks_amount,
-        :comment => "Purchased #{quantity} #{slot_kind.humanize} Slot" + (quantity == 1) ? 's' : ''
-      )
-      transaction.save!
-      
-      # Put the product into the user's locker...
-      existing_slots = self.send("#{slot_kind}_slots")
-      self.send("#{slot_kind}_slots=", existing_slots + quantity)
-      self.save!
-      
-      self.recalculate_balances
-      self.notify_client_of_balance_change
-      self.notify_client_of_slots_change
-    end
-    self.send("#{slot_kind}_slots")
   end
   
   def unlink_friendships
