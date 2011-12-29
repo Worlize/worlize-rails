@@ -126,7 +126,7 @@ class PaypalController < ApplicationController
         :comment => product.name
       )
       
-      Worlize.event_logger.info("action=payment_received amount=#{notification.gross} payment_type=paypal user=#{user.guid} user_username=\"#{user.username}\" paypal_txn=#{paypal_txn} virtual_currency_product_id=#{product.id}")
+      Worlize.event_logger.info("action=payment_received amount=#{notification.gross} payment_type=paypal user=#{user.guid} user_username=\"#{user.username}\" paypal_txn=#{notification.transaction_id} virtual_currency_product_id=#{product.id}")
     
       if product.coins_to_add > 0 || product.bucks_to_add > 0
         transaction = VirtualFinancialTransaction.new(
