@@ -54,6 +54,8 @@ class GiftsController < ApplicationController
       gift.destroy
     end
     
+    Worlize.event_logger.info("action=gift_ignored giftable_type=#{gift.giftable_type} giftable_guid=#{gift.giftable.guid} gift_id=#{gift.id} sender=#{gift.sender ? gift.sender.guid : 'none'} recipient=#{gift.recipient.guid}")
+    
     render :json => {
       :success => true
     }
@@ -87,6 +89,7 @@ class GiftsController < ApplicationController
       )
       if avatar_instance.persisted?
         gift.destroy
+        Worlize.event_logger.info("action=gift_accepted giftable_type=#{gift.giftable_type} giftable_guid=#{gift.giftable.guid} gift_id=#{gift.id} sender=#{gift.sender ? gift.sender.guid : 'none'} recipient=#{gift.recipient.guid}")
         render :json => {
           :success => true,
           :data => avatar_instance.hash_for_api
@@ -114,6 +117,7 @@ class GiftsController < ApplicationController
       )
       if background_instance.persisted?
         gift.destroy
+        Worlize.event_logger.info("action=gift_accepted giftable_type=#{gift.giftable_type} giftable_guid=#{gift.giftable.guid} gift_id=#{gift.id} sender=#{gift.sender ? gift.sender.guid : 'none'} recipient=#{gift.recipient.guid}")
         render :json => {
           :success => true,
           :data => background_instance.hash_for_api
@@ -141,6 +145,7 @@ class GiftsController < ApplicationController
       )
       if object_instance.persisted?
         gift.destroy
+        Worlize.event_logger.info("action=gift_accepted giftable_type=#{gift.giftable_type} giftable_guid=#{gift.giftable.guid} gift_id=#{gift.id} sender=#{gift.sender ? gift.sender.guid : 'none'} recipient=#{gift.recipient.guid}")
         render :json => {
           :success => true,
           :data => object_instance.hash_for_api

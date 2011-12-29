@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   before_create :assign_guid
   before_create :initialize_default_slots
   after_create :initialize_currency
+  after_create :log_creation
   before_destroy :unlink_friendships
   
   scope :active, lambda {
@@ -818,5 +819,9 @@ class User < ActiveRecord::Base
         redis_relationships.srem "#{friend_guid}:fbFriends", self.guid
       end
     end
+  end
+  
+  def log_creation
+    Worlize.event_logger.info("action=user_created user=#{self.guid} user_username=\"#{self.username}\"")
   end
 end

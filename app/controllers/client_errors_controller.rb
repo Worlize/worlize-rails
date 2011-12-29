@@ -13,6 +13,8 @@ class ClientErrorsController < ApplicationController
     @client_error_log_item = ClientErrorLogItem.new(params)
     @client_error_log_item.user = current_user
 
+    Worlize.event_logger.info("action=flash_client_error user=#{current_user.guid} user_username=\"#{current_user.username}\"")
+
     respond_to do |format|
       if @client_error_log_item.save
         format.json do

@@ -36,6 +36,7 @@ class AvatarsController < ApplicationController
 
     gift = avatar.gifts.build(:sender => current_user, :recipient => recipient, :note => params[:note])
     if gift.save
+      Worlize.event_logger.info("action=gift_sent giftable_type=#{gift.giftable_type} giftable_guid=#{gift.giftable.guid} gift_id=#{gift.id} sender=#{gift.sender ? gift.sender.guid : 'none'} recipient=#{gift.recipient.guid}")
       render :json => {
         :success => true
       }

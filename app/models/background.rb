@@ -5,6 +5,8 @@ class Background < ActiveRecord::Base
   has_one :marketplace_item, :as => :item
   belongs_to :creator, :class_name => 'User'
   before_create :assign_guid
+  before_create :log_creation
+  after_destroy :log_destruction
 
   mount_uploader :image, BackgroundUploader
 
@@ -46,6 +48,14 @@ class Background < ActiveRecord::Base
   private
   def assign_guid()
     self.guid = Guid.new.to_s
+  end
+  
+  def log_creation
+    Worlize.event_logger.info("action=background_created user=#{self.creator ? self.creator.guid : 'none'} user_username=\"#{self.creator ? self.creator.username : ''}\" guid=#{self.guid}")
+  end
+  
+  def log_destruction
+    Worlize.event_logger.info("action=background_destroyed user=#{self.creator ? self.creator.guid : 'none'} user_username=\"#{self.creator ? self.creator.username : ''}\" guid=#{self.guid}")
   end
 
 end
