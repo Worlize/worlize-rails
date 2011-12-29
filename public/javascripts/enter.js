@@ -158,7 +158,7 @@ function openVirtualCurrencyProducts() {
     var virtualCurrencyProductsTemplate =
         '<div id="virtual-currency-products">' +
             '<div id="virtual-currency-products-close-button">Close</div>' +
-            '<iframe frameborder="0" sandbox="allow-forms allow-scripts allow-same-origin" src="/virtual_currency_products" id="virtual-currency-products-iframe">' +
+            '<iframe frameborder="0" src="/virtual_currency_products" id="virtual-currency-products-iframe">' +
         '</div>';
     
     var virtualCurrencyProductsElement = $(virtualCurrencyProductsTemplate);
