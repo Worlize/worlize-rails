@@ -20,4 +20,8 @@ CarrierWave.configure do |config|
     :aws_access_key_id => Worlize.config['amazon']['access_key_id'],
     :aws_secret_access_key => Worlize.config['amazon']['secret_access_key']
   }
+  config.fog_attributes = {
+    'Cache-Control' => 'max-age=2592000',
+    'Expires' => 'Sun, 17 Jan 2038 19:14:07 GMT'
+  }
 end
