@@ -22,7 +22,8 @@ class Avatar < ActiveRecord::Base
       :tiny =>          self.image.tiny.url,
       :medium =>        self.image.medium.url,
       :fullsize =>      self.image.url,
-      :creator_guid =>  self.creator.nil? ? nil : self.creator.guid
+      :creator_guid =>  self.creator.nil? ? nil : self.creator.guid,
+      :animated_gif =>  self.animated_gif
     }
   end
   
@@ -30,7 +31,8 @@ class Avatar < ActiveRecord::Base
     {
       :name =>          self.name,
       :guid =>          self.guid,
-      :thumbnail =>     self.image.thumb.url
+      :thumbnail =>     self.image.thumb.url,
+      :animated_gif =>  self.animated_gif
     }
   end
   

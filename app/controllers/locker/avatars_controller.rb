@@ -27,6 +27,7 @@ class Locker::AvatarsController < ApplicationController
                          :offset_y => 0,
                          :active => true,
                          :creator => current_user,
+                         :animated_gif => params[:animated_gif],
                          :image => params[:filedata])
     
     if @avatar.save
