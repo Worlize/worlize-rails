@@ -116,6 +116,13 @@ class Admin::UsersController < ApplicationController
     redirect_to dashboard_url
   end
   
+  def set_as_global_moderator
+    @user = User.find(params[:id])
+    @user.set_as_global_moderator
+    flash[:notice] = "User #{@user.username} set as global moderator."
+    redirect_to admin_user_url(@user)
+  end
+  
   def give_currency
     @user = User.find(params[:id])
     if params[:amount].nil? || params[:amount].to_i <= 0

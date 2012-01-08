@@ -144,6 +144,7 @@ Worlize::Application.routes.draw do |map|
       member do
         post 'give_currency'
         post 'login_as_user'
+        post 'set_as_global_moderator'
         post 'set_world_as_initial_template_world'
         post 'add_to_public_worlds'
         post 'remove_from_public_worlds'
