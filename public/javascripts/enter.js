@@ -1,3 +1,18 @@
+var isFocused = true;
+
+jQuery(function($) {
+    $(window).bind('focus', function(event) {
+        isFocused = true;
+    });
+    $(window).bind('blur', function(event) {
+        isFocused = false;
+    });
+})
+
+function checkIsFocused() {
+    return isFocused;
+}
+
 jQuery.extend( jQuery.easing, {
     easeInBack: function (x, t, b, c, d, s) {
 		if (s == undefined) s = 1.70158;
