@@ -180,12 +180,22 @@ class User < ActiveRecord::Base
 
   def total_time_spent_online
     redis = Worlize::RedisConnectionPool.get_client(:stats)
-    redis.get("userTime:#{self.guid}").to_i
+    redis.zscore('userTime', self.guid).to_i
+  end
+  
+  def is_global_moderator?
+    redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
+    redis.sismember("global_moderators", self.guid)
   end
   
   def set_as_global_moderator
     redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
     redis.sadd("global_moderators", self.guid)
+  end
+  
+  def unset_as_global_moderator
+    redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
+    redis.srem("global_moderators", self.guid)
   end
 
   def total_time_spent_online_hms

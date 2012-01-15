@@ -123,6 +123,13 @@ class Admin::UsersController < ApplicationController
     redirect_to admin_user_url(@user)
   end
   
+  def unset_as_global_moderator
+    @user = User.find(params[:id])
+    @user.unset_as_global_moderator
+    flash[:notice] = "User #{@user.username} removed as global moderator."
+    redirect_to admin_user_url(@user)
+  end
+  
   def give_currency
     @user = User.find(params[:id])
     if params[:amount].nil? || params[:amount].to_i <= 0

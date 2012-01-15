@@ -11,8 +11,14 @@
   <%= button_to "Re-activate account", reactivate_admin_user_path(@user) %><br>
 <% end %>
 
-<%= button_to "Make user a global moderator", set_as_global_moderator_admin_user_path(@user), :method => 'post',
-              :confirm => "Are you sure you want to make this user a global moderator?" %>
+<% if !@user.is_global_moderator? %>
+  <%= button_to "Make user a global moderator", set_as_global_moderator_admin_user_path(@user), :method => 'post',
+                :confirm => "Are you sure you want to make this user a global moderator?" %>
+<% else %>
+  <%= button_to "Remove global moderator privileges", unset_as_global_moderator_admin_user_path(@user), :method => 'post',
+                :confirm => "Are you sure you want to remove global moderator privileges from this user?" %>
+<% end %>
+<br>
 
 <%= form_for [:admin, @user] do |f| %>
   <%= f.label :username %><br>
