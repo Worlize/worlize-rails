@@ -10,7 +10,7 @@ jQuery(function($) {
 })
 
 function checkIsFocused() {
-    return isFocused;
+    return isFocused || document.hasFocus();
 }
 
 jQuery.extend( jQuery.easing, {
@@ -225,3 +225,193 @@ function hideShim() {
         $('#shim').remove();
     }
 }
+
+
+// Title Bar Flashing
+(function() {
+    var originalTitle = document.title;
+    var flashInterval = null;
+    var currentlyFlashing = false;
+    var notificationText = null;
+    var currentCount;
+    var maxCount;
+
+    window.flashTitle = function(newText, count) {
+        if (document.hasFocus()) {
+            // console.log("Document has focus.  Not flashing title.");
+        }
+        // console.log("Flashing text " + count + " times: " + newText);
+        reset();
+        maxCount = (typeof(count) !== 'number') ? 0xFFFFFFFF : count;
+        notificationText = newText;
+        currentlyFlashing = true;
+        currentCount = 0;
+        flashInterval = setInterval(handleFlashInterval, 1000);
+    };
+    
+    window.cancelFlashTitle = function(text) {
+        // console.log("cancelFlashTitle: " + text);
+        if (notificationText === text) {
+            reset();
+        }
+    };
+
+    var reset = function() {
+        // console.log("Reset");
+        document.title = originalTitle;
+        currentlyFlashing = false;
+        notificationText = null;
+        if (flashInterval) {
+            clearInterval(flashInterval);
+            flashInterval = null;
+        }
+    };
+
+    var handleFlashInterval = function() {
+        // console.log("handleFlashInterval");
+        if (currentlyFlashing && !document.hasFocus()) {
+            if (document.title === originalTitle) {
+                currentCount ++;
+                document.title = notificationText;
+            }
+            else if (currentCount < maxCount) {
+                // console.log(currentCount + " < " + maxCount);
+                document.title = originalTitle;
+            }
+            else {
+                currentlyFlashing = false;
+                if (flashInterval) {
+                    clearInterval(flashInterval);
+                    flashInterval = null;
+                }
+            }
+        }
+        else {
+            reset();
+        }
+    };
+
+    jQuery(function($) {
+        $(window).bind('focus', function() {
+            // console.log("Window focused.");
+            reset();
+        });
+    });
+})();
+
+// Desktop Notifications
+(function() {
+    var notifications = window.webkitNotifications;
+    
+    var activeNotifications = {};
+    
+    NotificationManager = {
+        currentId: 0,
+        isSupported: function() {
+            return (window.webkitNotifications) ? true : false;
+        },
+        hasPermission: function() {
+            if (!this.isSupported()) { return false; }
+            return notifications.checkPermission() === 0;
+        },
+        displayPermissionRequestDialog: function() {
+            if (!this.isSupported()) { return; }
+            if (notifications.checkPermission() === 2) { return; } // 2 == PERMISSION_DENIED
+            var el = $('<div class="notifications-permission-prompt">' + 
+                        '<div class="text-container">' +
+                         '<h1>Enable Desktop Notifications</h1> - ' +
+                         '<p>Never miss a beat!</p>' +
+                        '</div>' +
+                       '</div>');
+            var acceptButton = $('<div class="accept-button">Yes, please!</div>');
+            var rejectButton = $('<div class="reject-button">No, thanks.</div>');
+            el.append(acceptButton);
+            el.append(rejectButton);
+            el.append($('<div class="clearfix"></div>'));
+            
+            acceptButton.bind('click', function() {
+                el.remove();
+                NotificationManager.requestPermission();
+            });
+            rejectButton.bind('click', function() {
+                el.remove();
+            });
+            
+            $('object').before(el);
+        },
+        requestPermission: function() {
+            if (!this.isSupported() || this.hasPermission()) { return; }
+            notifications.requestPermission();
+        },
+        displayNotification: function(options) {
+            if (!this.isSupported() || !this.hasPermission()) { return; }
+            var notification = this.createNotificationInstance(options);
+            activeNotifications[notification.worlizeId] = notification;
+            notification.show();
+            return notification.worlizeId;
+        },
+        clearNotification: function(notificationId) {
+            var notification = activeNotifications[notificationId];
+            if (notification) {
+                notification.clear();
+                delete activeNotifications[notificationId];
+            }
+        },
+        clearAllNotifications: function() {
+            if (!this.isSupported()) { return; }
+            // console.log("Clearing notifications", activeNotifications);
+            for (var notificationId in activeNotifications) {
+                var notification = activeNotifications[notificationId];
+                notification.cancel();
+                delete activeNotifications[notificationId];
+            }
+        },
+        createNotificationInstance: function(options) {
+            if (!this.isSupported()) { return; }
+            
+            if (typeof(options.icon) !== 'string') {
+                var server = document.location.protocol + "//" + document.location.host;
+                options.icon = server + "/images/notifications/default_icon.jpg"
+                // console.log(options.icon);
+            }
+            if (typeof(options.title) !== 'string') {
+                options.title = "Worlize";
+            }
+            var notification;
+            if (options.notificationType == 'simple') {
+                notification = notifications.createNotification(
+                    options.icon,
+                    options.title,
+                    options.content
+                );
+            } else if (options.notificationType == 'html') {
+                notification = notifications.createHTMLNotification(options.htmlContentURL);
+            }
+            notification.worlizeId = this.currentId++;
+            notification.onclose = function() {
+                delete activeNotifications[notification.worlizeId];
+            }
+            return notification;
+        }
+    };
+
+    if (NotificationManager.isSupported()) {
+        jQuery(function($) {
+            $(window).bind('focus', function() {
+                NotificationManager.clearAllNotifications();
+            })
+        });
+    }
+
+})();
+
+
+
+
+
+
+
+
+
+
+

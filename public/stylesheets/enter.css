@@ -342,6 +342,58 @@ button:hover {
 }
 
 
+.notifications-permission-prompt {
+    position: block;
+    padding: 4px 5px 4px 10px;
+    background: #f8f98a;
+    font-size: 12pt;
+    border-bottom: 1px solid black;
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+}
+
+.notifications-permission-prompt .text-container {
+    float: left;
+    margin-top: 3px;
+}
+
+.notifications-permission-prompt h1 {
+    font-size: 12pt;
+    margin: 0px;
+    display: inline;
+    font-weight: bold;
+}
+
+.notifications-permission-prompt p {
+    display: inline;
+}
+
+.notifications-permission-prompt .accept-button,
+.notifications-permission-prompt .reject-button {
+    font-size: 10pt;
+    float: right;
+    padding: 3px 7px;
+    border: 1px solid black;
+    cursor: pointer;
+    margin: 0px 0px 0px 10px;
+    border-radius: 3px;
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.25);
+    text-shadow: 0px 1px 0px rgba(0,0,0,1);
+    color: #FFF;
+}
+
+.notifications-permission-prompt .accept-button {
+    background-color: #268700;
+}
+
+.notifications-permission-prompt .reject-button {
+    background-color: #870000;
+}
+
+.clearfix {
+    clear: both;
+}
+
 /*#share-dialog div {
 	margin: 0px auto;
 	width: 150px;
