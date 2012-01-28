@@ -96,7 +96,8 @@ class User < ActiveRecord::Base
   
   def hash_for_api
     world = self.worlds.first
-    self.public_hash_for_api.merge(
+    data = {
+      :name => self.name,
       :background_slots => self.background_slots,
       :avatar_slots => self.avatar_slots,
       :prop_slots => self.prop_slots,
@@ -104,13 +105,19 @@ class User < ActiveRecord::Base
       :coins => self.coins,
       :bucks => self.bucks,
       :twitter => self.twitter,
+      :twitter_profile => self.twitter_profile_url,
+      :facebook_profile => self.facebook_profile_url,
       :email => self.email,
       :birthday => self.birthday,
       :picture => self.profile_picture,
       :world_entrance => world.rooms.first.guid,
       :world_name => world.name,
       :world_guid => world.guid
-    )
+    }
+    if facebook_authentication
+      data[:facebook_id] = facebook_authentication.uid
+    end
+    self.public_hash_for_api.merge(data)
   end
   
   def hash_for_friends_list(type='full')
