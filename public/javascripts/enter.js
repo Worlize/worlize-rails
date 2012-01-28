@@ -10,7 +10,9 @@ jQuery(function($) {
 })
 
 function checkIsFocused() {
-    return isFocused || document.hasFocus();
+    // Can't use document.hasFocus() on Chrome because it returns true for
+    // some reason if the document is in a background tab.
+    return isFocused;
 }
 
 jQuery.extend( jQuery.easing, {
@@ -237,7 +239,7 @@ function hideShim() {
     var maxCount;
 
     window.flashTitle = function(newText, count) {
-        if (document.hasFocus()) {
+        if (isFocused /* document.hasFocus() */) {
             // console.log("Document has focus.  Not flashing title.");
         }
         // console.log("Flashing text " + count + " times: " + newText);
@@ -269,7 +271,7 @@ function hideShim() {
 
     var handleFlashInterval = function() {
         // console.log("handleFlashInterval");
-        if (currentlyFlashing && !document.hasFocus()) {
+        if (currentlyFlashing && !isFocused /* document.hasFocus() */) {
             if (document.title === originalTitle) {
                 currentCount ++;
                 document.title = notificationText;
@@ -340,10 +342,12 @@ function hideShim() {
             $('object').before(el);
         },
         requestPermission: function() {
+            // console.log("requestPermission");
             if (!this.isSupported() || this.hasPermission()) { return; }
             notifications.requestPermission();
         },
         displayNotification: function(options) {
+            // console.log("displayNotification", options);
             if (!this.isSupported() || !this.hasPermission()) { return; }
             var notification = this.createNotificationInstance(options);
             activeNotifications[notification.worlizeId] = notification;
@@ -367,6 +371,7 @@ function hideShim() {
             }
         },
         createNotificationInstance: function(options) {
+            // console.log("createNotificationInstance", options);
             if (!this.isSupported()) { return; }
             
             if (typeof(options.icon) !== 'string') {
@@ -376,6 +381,9 @@ function hideShim() {
             }
             if (typeof(options.title) !== 'string') {
                 options.title = "Worlize";
+            }
+            if (typeof(options.content) !== 'string') {
+                options.content = "";
             }
             var notification;
             if (options.notificationType == 'simple') {
@@ -390,6 +398,9 @@ function hideShim() {
             notification.worlizeId = this.currentId++;
             notification.onclose = function() {
                 delete activeNotifications[notification.worlizeId];
+            }
+            notification.onclick = function() {
+                window.focus();
             }
             return notification;
         }
