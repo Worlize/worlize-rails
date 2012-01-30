@@ -204,7 +204,8 @@ Name: <%= @world.name %><br>
   <tr class="<%= cycle('even','odd') %>">
     <td><%= room.name %></td>
     <td><%= room.user_count %></td>
-    <td><%= link_to "Enter", enter_room_path(room.guid), :method => :post %></td>
+    <td><%= link_to "Enter", enter_room_path(room.guid), :method => :post %> |
+        <%= link_to "Set as Worlize Gate", set_as_gate_room_admin_room_path(room), :method => :post %></td>
   </tr>
   <% end %>
 </table>

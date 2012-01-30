@@ -152,6 +152,13 @@ Worlize::Application.routes.draw do |map|
         post 'reactivate'
       end
     end
+    
+    resources :rooms do
+      member do
+        post 'set_as_gate_room'
+      end
+    end
+    
     resources :worlds do
       resources :rooms
     end

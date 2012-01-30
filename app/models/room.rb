@@ -78,7 +78,17 @@ class Room < ActiveRecord::Base
       }
     }
   end
-    
+  
+  def self.gate_room_guid=(guid)
+    redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
+    redis.set 'gate_room_guid', guid
+  end
+  
+  def self.gate_room_guid
+    redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
+    redis.get 'gate_room_guid'
+  end
+  
   private
   def assign_guid()
     self.guid = Guid.new.to_s

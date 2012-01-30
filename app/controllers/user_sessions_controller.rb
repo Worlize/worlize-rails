@@ -36,7 +36,8 @@ class UserSessionsController < ApplicationController
         cookies["Vanilla"] = {:value => "", :domain => ".worlize.com"}
         cookies["Vanilla-Volatile"] = {:value => "", :domain => ".worlize.com"}
 
-        default_url = enter_room_url(@user_session.user.worlds.first.rooms.first.guid)
+        # default_url = enter_room_url(@user_session.user.worlds.first.rooms.first.guid)
+        default_url = enter_room_url(Room.gate_room_guid)
 
         format.html { redirect_back_or_default(default_url) }
         format.json do
