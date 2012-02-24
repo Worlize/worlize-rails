@@ -29,6 +29,7 @@ class WelcomeController < ApplicationController
       'user_guid' => current_user.guid,
       'username' => current_user.username,
       'admin' => current_user.admin?,
+      'current_user' => current_user.hash_for_api,
       'interactivity_session' => current_user.interactivity_session.serializable_hash,
       'authenticity_token' => form_authenticity_token,
       'cookies' => cookies,

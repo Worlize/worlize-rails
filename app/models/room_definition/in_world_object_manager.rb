@@ -30,12 +30,29 @@ class RoomDefinition::InWorldObjectManager
       in_world_object_instance.update_attribute(:room, room_definition.room)
       in_world_object = in_world_object_instance.in_world_object
       object_definition = {
+        'kind' => in_world_object.kind,
         'guid' => in_world_object_instance.guid,
-        'fullsize_url' => in_world_object.image.url,
+        'object_guid' => in_world_object.guid,
         'x' => x,
-        'y' => y,
-        'dest' => dest
+        'y' => y
       }
+      
+      if in_world_object.kind == 'app'
+        object_definition['app_url'] = in_world_object.app.url
+        object_definition['width'] = in_world_object.width
+        object_definition['height'] = in_world_object.height
+        object_definition['small_icon'] = in_world_object.icon.small.url
+        if in_world_object.requires_approval && in_world_object.reviewal_status != 'accepted'
+          object_definition['test_mode'] = true
+        end
+      elsif in_world_object.kind == 'image'
+        object_definition['fullsize_url'] = in_world_object.image.url
+        object_definition['dest'] = dest
+      end
+      
+      require 'pp'
+      pp object_definition
+      
       raw_data << object_definition
       save
       Worlize::InteractServerManager.instance.broadcast_to_room(

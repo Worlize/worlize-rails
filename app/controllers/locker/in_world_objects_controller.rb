@@ -14,11 +14,52 @@ class Locker::InWorldObjectsController < ApplicationController
   end
   
   def create
+    filename_parts = params[:filedata].original_filename.split('.');
+    if filename_parts.last.downcase == 'swf'
+      uploadSwf(params)
+    else
+      uploadImage(params)
+    end
+  end
+  
+  def destroy
+    instance = current_user.in_world_object_instances.find_by_guid(params[:id])
+    
+    if instance.room
+      # must yank it from the room where its currently used
+      manager = instance.room.room_definition.in_world_object_manager
+      begin
+        manager.remove_object_instance(instance)
+      rescue
+        # do nothing
+      end
+    end
+    
+    num_instances_remaining = instance.in_world_object.in_world_object_instances.count
+    if num_instances_remaining == 1 && instance.in_world_object.marketplace_item.nil?
+      instance.in_world_object.destroy
+    else
+      instance.destroy
+    end
+
+    render :json => {
+      :success => instance.destroyed?,
+      :balance => {
+        :coins => current_user.coins,
+        :bucks => current_user.bucks
+      }
+    }
+  end
+  
+  private
+  
+  def uploadImage(params)
     name = params[:name] || "Object by #{current_user.username}"
     
     @in_world_object = InWorldObject.new(
       :name => name,
       :creator => current_user,
+      :requires_approval => false,
       :image => params[:filedata]
     )
     
@@ -44,29 +85,41 @@ class Locker::InWorldObjectsController < ApplicationController
     end
   end
   
-  def destroy
-    instance = current_user.in_world_object_instances.find_by_guid(params[:id])
+  def uploadSwf(params)
+    name = params[:name] || "Untitled App Object"
     
-    if instance.room
-      # must yank it from the room where its currently used
-      manager = instance.room.room_definition.in_world_object_manager
-      manager.remove_object_instance(instance)
-    end
+    @in_world_object = InWorldObject.new(
+      :kind => 'app',
+      :name => name,
+      :creator => current_user,
+      :width => params[:width],
+      :height => params[:height],
+      :app => params[:filedata],
+      :requires_approval => true,
+      :reviewal_status => 'new'
+    )
     
-    num_instances_remaining = instance.in_world_object.in_world_object_instances.count
-    if num_instances_remaining == 1 && instance.in_world_object.marketplace_item.nil?
-      instance.in_world_object.destroy
+    if @in_world_object.save
+      oi = current_user.in_world_object_instances.create(:in_world_object => @in_world_object)
+      if (oi.persisted?)
+        render :json => {
+          :success => true,
+          :data => oi.hash_for_api
+        }
+      else
+        render :json => {
+          :success => false,
+          :description => "Unable to create in-world object instance."
+        }
+      end
     else
-      instance.destroy
-    end
-
-    render :json => {
-      :success => instance.destroyed?,
-      :balance => {
-        :coins => current_user.coins,
-        :bucks => current_user.bucks
+      Rails.logger.debug("Model errors:\n" + @in_world_object.errors.to_s)
+      render :json => {
+        :success => false,
+        :description => "In-world object is invalid.",
+        :errors => @in_world_object.errors
       }
-    }
+    end
   end
   
 end

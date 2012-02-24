@@ -7,23 +7,47 @@ class InWorldObject < ActiveRecord::Base
   before_create :assign_guid
   before_create :log_creation
   after_destroy :log_destruction
-  
-  
-  attr_accessor :is_thumbnable
-  
+
   mount_uploader :image, InWorldObjectUploader
+  mount_uploader :app, AppUploader
+  mount_uploader :icon, AppIconUploader
   
   validates :image,
-              :presence => true
+              :presence => true, :if => lambda { self.kind == 'image' }
+
+  validates :app,
+              :presence => true, :if => lambda { self.kind == 'app' }
+
   
   def hash_for_api
-    {
-      :name =>          self.name,
-      :guid =>          self.guid,
-      :thumbnail =>     self.image.thumb.url,
-      :medium =>        self.image.medium.url,
-      :fullsize =>      self.image.url
-    }
+    if self.kind == 'app'
+      return {
+        :name =>          self.name,
+        :guid =>          self.guid,
+        :kind =>          self.kind,
+        :width =>         self.width,
+        :height =>        self.height,
+        
+        :app =>           self.app.url,
+        :icon =>          self.icon.url,
+        :medium_icon =>   self.icon.medium.url,
+        :small_icon =>    self.icon.small.url,
+      }
+    elsif self.kind == 'image'
+      return {
+        :name =>          self.name,
+        :guid =>          self.guid,
+        :kind =>          self.kind,
+        :width =>         self.width,
+        :height =>        self.height,
+        
+        :thumbnail =>     self.image.thumb.url,
+        :medium =>        self.image.medium.url,
+        :fullsize =>      self.image.url
+      }
+    else
+      raise "unknown kind: #{self.kind}"
+    end
   end
   
   def instances

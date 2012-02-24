@@ -98,6 +98,7 @@ class User < ActiveRecord::Base
     world = self.worlds.first
     data = {
       :name => self.name,
+      :developer => self.developer?,
       :background_slots => self.background_slots,
       :avatar_slots => self.avatar_slots,
       :prop_slots => self.prop_slots,
