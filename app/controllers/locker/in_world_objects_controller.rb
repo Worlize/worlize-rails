@@ -86,6 +86,13 @@ class Locker::InWorldObjectsController < ApplicationController
   end
   
   def uploadSwf(params)
+    if !current_user.developer?
+      render :json => {
+        :success => false,
+        :description => "Only developers can upload SWF objects."
+      } and return
+    end
+    
     name = params[:name] || "Untitled App Object"
     
     @in_world_object = InWorldObject.new(
