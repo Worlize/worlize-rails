@@ -811,9 +811,9 @@ class User < ActiveRecord::Base
   end
   
   def initialize_default_slots
-    self.prop_slots = 6
+    self.prop_slots = 12
     self.background_slots = 5
-    self.avatar_slots = 6
+    self.avatar_slots = 12
     self.in_world_object_slots = 13
   end
   
