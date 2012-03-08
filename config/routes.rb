@@ -11,6 +11,8 @@ Worlize::Application.routes.draw do |map|
   
   match '/press(/:action)', { :controller => :press, :as => :press }
   
+  match '/developers', { :controller => :developers, :action => :index }
+  
   match '/about' => 'welcome#about', :as => :about
 
   match '/registrations/new' => redirect('/users/new')
