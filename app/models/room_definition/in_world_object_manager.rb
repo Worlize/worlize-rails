@@ -30,6 +30,8 @@ class RoomDefinition::InWorldObjectManager
       in_world_object_instance.update_attribute(:room, room_definition.room)
       in_world_object = in_world_object_instance.in_world_object
       object_definition = {
+        'creator' => in_world_object.creator.guid,
+        'name' => in_world_object.name,
         'kind' => in_world_object.kind,
         'guid' => in_world_object_instance.guid,
         'object_guid' => in_world_object.guid,
