@@ -33,6 +33,14 @@
   margin-bottom: 40px;
 }
 
+.linkedin-signup-button-bottom {
+  display: block;
+  height: 37px;
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 40px;
+}
+
 
 a.eternal-glory {
   text-decoration: none !important;
@@ -46,17 +54,23 @@ a.eternal-glory {
 </div>
 
 <p class="linkedin-signup-button">
+<% if Rails.env == 'production' %>
   <script src="//platform.linkedin.com/in.js" type="text/javascript">
     api_key: x79h7ojo5xvm
   </script>
+<% else %>
+  <script src="//platform.linkedin.com/in.js" type="text/javascript">
+    api_key: xdoher5yhbwz
+  </script>
+<% end %>
   <script type="IN/Apply" data-companyname="Worlize Inc." data-jobtitle="Worlize Developer Program" data-companyId="1057164" data-showText="false"  data-logo="https://s3.amazonaws.com/worlize/red-fire-100x60.png" data-themecolor="#f16522" data-email="developer-program@worlize.com"></script>
 </p>
 
 <section class="description-odd">
   <h1 style="margin-top:0px;">Apply Now</h1>
-  <p>Just use the super-slick LinkedIn button above to apply for early access to the developer preview of our new SDK!  Once you're accepted we'll open the kimono and give you the SDK and documentation.  And <a class="eternal-glory" href="http://www.hark.com/clips/cvljpxywvn-eternal-glory" target="_blank">eternal glory</a>.</p>
-  <p>C'mon, you know you want to!  Did we mention the <a href="http://memegenerator.net/instance/9378685" class="eternal-glory" target="_blank">eternal glory</a>?  Just do it.  Go ahead.  Click the button.</p>
-  <p>What?  <a href="http://www.youtube.com/watch?v=4Z3r9X8OahA" target="_blank" class="eternal-glory">Eternal glory</a> isn't good enough for you?!  Fine, keep reading…</p>
+  <p>Just use the super-slick LinkedIn button above to apply for early access to the developer preview of our new SDK!  Once you're accepted we'll escort you behind the curtain and give you a copy of the SDK and documentation.  And <a class="eternal-glory" href="http://www.hark.com/clips/cvljpxywvn-eternal-glory" target="_blank">eternal glory</a>.</p>
+  <p>C'mon, you know you want to!  Did we mention the <a href="http://www.youtube.com/watch?v=4Z3r9X8OahA" class="eternal-glory" target="_blank">eternal glory</a>?  Just do it.  Go ahead.  Click the button.</p>
+  <p>What?  <a href="http://cdn.memegenerator.net/instances/400x/9378685.jpg" target="_blank" class="eternal-glory">Eternal glory</a> isn't good enough for you?!  Fine, keep reading…</p>
 </section>
 
 <section class="description-even">
@@ -86,10 +100,12 @@ a.eternal-glory {
 <section class="description-even">
   <h1><small class="accent-color-6">Achieve</small><br>
       Eternal Glory</h1>
-  <p>Well duh!  Obviously!  You're getting in on the ground floor.  You're the one who gets to create and sell the all-important first <strong>fart-sound app</strong> in a totally new app marketplace!  Just imagine the glory!  And the money!  Persons of your preferred gender will be lining up to bow before you and feed you peeled grapes while fanning you with palm fronds**.  What's not to like?  Now scroll back up to the top of the page and click the apply button already!  Go now!  Hurry!</p>
+  <p>Well duh!  Obviously!  You're getting in on the ground floor.  You're the one who gets to create and sell the all-important first <strong>fart-sound app</strong> in a totally new app marketplace!  Just imagine the glory!  And the money!  Persons of your preferred gender will be lining up to bow before you and feed you peeled grapes while fanning you with palm fronds**.  What's not to like?  Now click the apply button already.  Hurry up!  Go now!</p>
 <br><br><br>
 <small>* Except Stage 3D and Stage Video or direct access to the stage.</small><br>
 <small>** Well, maybe that's a bit of an exaggeration.  But you get the idea.</small>
 </section>
 
-
+<p class="linkedin-signup-button-bottom">
+  <script type="IN/Apply" data-companyname="Worlize Inc." data-jobtitle="Worlize Developer Program" data-companyId="1057164" data-showText="false"  data-logo="https://s3.amazonaws.com/worlize/red-fire-100x60.png" data-themecolor="#f16522" data-email="developer-program@worlize.com"></script>
+</p>
