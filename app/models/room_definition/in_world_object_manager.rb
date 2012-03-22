@@ -44,6 +44,7 @@ class RoomDefinition::InWorldObjectManager
         object_definition['width'] = in_world_object.width
         object_definition['height'] = in_world_object.height
         object_definition['small_icon'] = in_world_object.icon.small.url
+        object_definition['config'] = {}
         if in_world_object.requires_approval && in_world_object.reviewal_status != 'accepted'
           object_definition['test_mode'] = true
         end
@@ -118,6 +119,9 @@ class RoomDefinition::InWorldObjectManager
   def remove_object_instance(in_world_object_instance)
     # unlink the room from the instance.
     in_world_object_instance.update_attribute(:room, nil)
+    
+    # Remove any app config data
+    redis.hdel('app_config', in_world_object_instance.guid)
 
     # find instance in the list, remove it, and announce the change to the room
     raw_data.each_index do |i|
