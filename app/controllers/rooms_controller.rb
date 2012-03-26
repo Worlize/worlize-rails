@@ -120,6 +120,13 @@ class RoomsController < ApplicationController
       @room = Room.find_by_guid!(params[:id])
     end
     
+    if @room.locked? && @room.world.user.id != current_user.id
+      render :json => {
+        :success => false,
+        :room_locked => true
+      } and return
+    end
+    
     @user = current_user
     interact_server_id = @room.interact_server_id
     s = current_user.interactivity_session || InteractivitySession.new

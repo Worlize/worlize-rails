@@ -41,6 +41,11 @@ class Room < ActiveRecord::Base
   def room_definition
     @rd ||= (RoomDefinition.find(self.guid) || RoomDefinition.new(:room => self))
   end
+  
+  def locked?
+    redis = Worlize::RedisConnectionPool.get_client(:room_server_assignments)
+    redis.get("lock:#{self.guid}") == '1'
+  end
 
   def can_be_edited_by?(user)
     owner = self.world.user
