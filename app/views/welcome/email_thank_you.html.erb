@@ -1,0 +1,43 @@
+<%= title 'Subscription Confirmed' %>
+
+<% content_for :extra_styles do %>
+#confirmation-header {
+  position: relative;
+  width: 850px;
+  margin: 0px auto;
+}
+
+#confirmation-header h1 {
+  font-size: 40pt;
+  line-height: 60pt;
+  position: absolute;
+  top: 40px;
+  left: 290px;
+  text-align: left;
+}
+
+#confirmation-header h2 {
+  position: absolute;
+  font-size: 20pt;
+  top: 105px;
+  left: 310px;
+  text-align: left;
+  color: #ff7b00;
+}
+
+section h2 {
+  font-family: PTSansNarrowBold;
+}
+<% end %>
+
+<div id="confirmation-header">
+  <img src="https://s3.amazonaws.com/worlize/red-fire-256x256.png" width="256" height="256">
+  <h1>Thank you</h1>
+  <h2>You're all set and ready to go!</h2>
+</div>
+
+<section class="description-odd">
+  <h2>Your subscription is confirmed.</h2>
+  <p>We look forward to sharing exciting developments in the Worlize community with you.</p>
+  <p>See you online!</p>
+</section>
