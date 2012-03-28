@@ -35,6 +35,7 @@ class User < ActiveRecord::Base
   
   attr_accessible :username,
                   :email,
+                  :newsletter_optin,
                   :accepted_tos
                   
   attr_accessor :accessible
@@ -268,27 +269,17 @@ class User < ActiveRecord::Base
     result = false
     
     begin    
-      if !self.first_name.nil? && !self.last_name.nil?
-        full_name = self.first_name + " " + self.last_name
-      elsif self.facebook_authentication && !self.facebook_authentication.display_name.nil?
-        full_name = self.facebook_authentication.display_name
-      elsif self.twitter_authentication && !self.twitter_authentication.display_name.nil?
-        full_name = self.twitter_authentication.display_name
-      else
-        full_name = 'Worlize User'
-      end
-
       gb = Gibbon.new(Worlize.config['mailchimp']['api_key'])
       result = gb.listSubscribe({
         'id' => Worlize.config['mailchimp']['all_users_list_id'],
         'email_address' => self.email,
         'merge_vars' => {
-          'FULLNAME' => full_name,
+          'NAME' => self.name,
           'USERNAME' => self.username,
           'EUSERNAME' => URI.escape(self.username)
         },
         'double_optin' => false,
-        'send_welcome' => false
+        'send_welcome' => true
       })
     
       if result

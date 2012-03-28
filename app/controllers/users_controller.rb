@@ -127,7 +127,9 @@ class UsersController < ApplicationController
       
       success = @user.authentications.create(create_options)
       
-      @user.add_to_mailchimp
+      if @user.newsletter_optin
+        @user.add_to_mailchimp
+      end
 
       if !success
         flash[:alert] = "Unable to associate your #{omniauth['provider'].capitalize} account."

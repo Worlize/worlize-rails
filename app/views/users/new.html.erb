@@ -21,41 +21,32 @@
 
   	  <table>
   	    <tr>
-          <% if @email_autofilled && @user.errors['email'].empty? %>
-            <th colspan="2" width="300" style="text-align: center; text-indent: -65px;">
-              <%= f.label :username, 'Screen Name' %>
-            </th>
-          <% else %>
-            <th>
-              <%= f.label :username, 'Screen Name' %>
-            </th>
-            <th>
-              <%= f.label :email, 'Email' %>
-            </th>
-          <% end %>
+          <th>
+            <%= f.label :username, 'Screen Name' %>
+          </th>
+          <th>
+            <%= f.label :email, 'Email' %>
+          </th>
   	    </tr>
   	    <tr>
-          <% if @email_autofilled && @user.errors['email'].empty? %>
-            <td colspan="2" width="300" style="text-align: center;">
-              <%= f.text_field :username, :tabindex => 1 %>
-              <%= f.hidden_field :email %>
-            </td>
-          <% else %>
-            <td>
-              <%= f.text_field :username, :tabindex => 1 %>
-            </td>
-            <td>
-              <%= f.text_field :email, :tabindex => 2 %>
-            </td>
-          <% end %>
+          <td>
+            <%= f.text_field :username, :tabindex => 1 %>
+          </td>
+          <td>
+            <%= f.text_field :email, :tabindex => 2 %>
+          </td>
   	    </tr>
   	    <tr>
   	      <td colspan="2">
         	  <div class="submit-button">
-              <%= f.submit 'Let\'s Go!', :tabindex => 4 %>
+              <%= f.submit 'Let\'s Go!', :tabindex => 5 %>
+        	  </div>
+        	  <div class="newsletter-checkbox">
+        	    <%= f.check_box :newsletter_optin, :tabindex => 3 %>
+        	    <%= f.label :newsletter_optin, 'Send me Worlize updates (3-4 emails/mo.)' %>
         	  </div>
         	  <div class="tos-checkbox">
-              <%= f.check_box :accepted_tos, :tabindex => 3, :checked => true %>
+              <%= f.check_box :accepted_tos, :tabindex => 4, :checked => true %>
               <%= f.label :accepted_tos, 'I agree to the' %><%= link_to('terms and conditions', '/tos.html', :class => 'tos_link', :target => '_BLANK').html_safe %>
         	  </div>
   	      </td>
@@ -153,13 +144,13 @@
                   }
                 );
               }
-              $('input#user_username').removeClass('valid');
+              $('input#user_username').removeClass('valid').addClass('error');
             }
             else {
               if (showTooltip) {
                 hideValidationTooltip();                
               }
-              $('input#user_username').addClass('valid');
+              $('input#user_username').addClass('valid').removeClass('error');
             }
           }
         );
@@ -168,7 +159,7 @@
         if (showTooltip) {
           hideValidationTooltip();
         }
-        $('input#user_username').removeClass('valid');
+        $('input#user_username').removeClass('valid').removeClass('error');
       } 
     }
     
@@ -191,13 +182,13 @@
                 }
               );
             }
-            $('input#user_email').removeClass('valid');
+            $('input#user_email').removeClass('valid').addClass('error');
           }
           else {
             if (showTooltip) {
               hideValidationTooltip();
             }
-            $('input#user_email').addClass('valid');
+            $('input#user_email').addClass('valid').removeClass('error');
           }
         }
       );
