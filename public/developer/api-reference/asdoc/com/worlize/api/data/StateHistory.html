@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- saved from url=(0014)about:internet --><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen"><link rel="stylesheet" href="../../../../print.css" type="text/css" media="print"><link rel="stylesheet" href="../../../../override.css" type="text/css"><meta name="keywords" content="StateHistory,com.worlize.api.data.StateHistory,data,length,addEventListener,addEventListener,clear,dispatchEvent,dispatchEvent,get,getItemAt,hasEventListener,hasEventListener,push,remove,removeEventListener,removeEventListener,save,set,shift,willTrigger,willTrigger"><title>com.worlize.api.data.StateHistory</title></head><body><script language="javascript" type="text/javascript" src="../../../../asdoc.js"></script><script language="javascript" type="text/javascript" src="../../../../help.js"></script><script language="javascript" type="text/javascript" src="../../../../cookies.js"></script><script language="javascript" type="text/javascript"><!--
+				asdocTitle = 'StateHistory - Worlize API Documentation';
+				var baseRef = '../../../../';
+				window.onload = configPage;
+			--></script>
+<script type="text/javascript">
+			scrollToNameAnchor();
+		</script><table class="titleTable" cellpadding="0" cellspacing="0" id="titleTable" style="display:none"><tr><td class="titleTableTitle" align="left">Worlize API Documentation</td><td class="titleTableTopNav" align="right"><a href="../../../../package-summary.html" onclick="loadClassListFrame('../../../../all-classes.html')">All Packages</a>&nbsp;|&nbsp;<a href="../../../../class-summary.html" onclick="loadClassListFrame('../../../../all-classes.html')">All Classes</a>&nbsp;|&nbsp;<a href="../../../../all-index-A.html" onclick="loadClassListFrame('../../../../index-list.html')">Index</a>&nbsp;|&nbsp;<a id="framesLink1" href="../../../../index.html?com/worlize/api/data/StateHistory.html&amp;com/worlize/api/data/class-list.html">Frames</a><a id="noFramesLink1" style="display:none" href="" onclick="parent.location=document.location"> No Frames </a></td><td class="titleTableLogo" align="right" rowspan="3"><img src="../../../../images/logo.jpg" class="logoImage" alt=" Adobe Logo " title=" Adobe Logo "></td></tr><tr class="titleTableRow2"><td class="titleTableSubTitle" id="subTitle" align="left">StateHistory</td><td class="titleTableSubNav" id="subNav" align="right"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a>&nbsp;| <a href="#eventSummary">Events</a></td></tr><tr class="titleTableRow3"><td colspan="3">&nbsp;</td></tr></table><script language="javascript" type="text/javascript" xml:space="preserve">
+				<!--
+				
+					if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("StateHistory"); titleBar_setSubNav(false,true,false,false,false,false,true,false,true,false,false	,false,false,false,false,false);}	
+				-->
+			</script><div xmlns:fn="http://www.w3.org/2005/xpath-functions" class="MainContent"><table class="classHeaderTable" cellpadding="0" cellspacing="0"><tr><td class="classHeaderTableLabel">Package</td><td><a href="package-detail.html" onclick="javascript:loadClassListFrame('class-list.html')">com.worlize.api.data</a></td></tr><tr><td class="classHeaderTableLabel">Class</td><td class="classSignature">public dynamic   class  StateHistory</td></tr><tr><td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">StateHistory  <img src="../../../../images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> flash.utils.Proxy</td></tr><tr><td class="classHeaderTableLabel">Implements</td><td> flash.events.IEventDispatcher</td></tr></table><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p></p>
+	 Synchronizes the app's state across all connected clients.
+	 	 <p>The <code>StateHistory</code> class provides a list of objects, each
+	 of which make up a single entry in a list of past actions that can be
+	 used to reconstitute the application's current state.</p>
+	 
+	              <p>This class subclasses <code>flash.utils.Proxy</code> so
+	 you can access state history entries directly using bracket notation
+	 like <code>stateHistory[4]</code> or use it in <code>for</code> or
+	 <code>for each</code> loops.</p> 
+	 
+	              <p>This class facilitates the app's ability to reconstitute the current
+	 app state based on a history of sequential events for new users who
+	 enter the room.</p>
+	 
+	              <p>Imagine, for example, that you're writing an app that allows multiple
+	 users to draw on a shared canvas.  You want new lines to appear in real
+	 time as they are being drawn, and new users who come into the room
+	 should see the same drawing as those who have already been interacting
+	 with the app for a while.</p>
+	 
+	              <p>You could broadcast new line segments using the message broadcasting
+	 facilities provided by methods like
+	 <code>api.thisObject.sendMessage()</code>
+	 but when a new user entered the room, they would see a blank canvas
+	 because they would be missing the data about all the existing lines that
+	 have already been drawn.  Instead, it is better to push each line
+	 segment into the app's SharedHistory instance and listen for the
+	 <code>itemAdded</code> events that it emits to do the actual drawing.
+	 </p>
+	 
+	              <p>The <code>StateHistory</code> class guarantees the following:
+	 <ul>
+	                    <li>State entries will always be in the same consistent order
+	       across all connected clients.</li>
+	 	                  <li>New users will receive the complete state history before the app
+	       initializes.</li>
+	                    <li>Events will be emitted when any user adds or removes a state
+	       entry using the <code>push()</code> and <code>unshift()</code>
+	       methods, or clears the list with the <code>clear()</code>
+	       method.</li>
+	                 </ul>
+	 Because of this, it's the perfect way to synchronize application state
+	 that is derived from a history of events.</p>
+	 
+	              <p>When a user does something in the application that should be
+	 reflected on all connected clients, it's best to just <code>push()</code>
+	 information about the action to your app's <code>StateHistory</code>
+	 instead of updating the display directly.  Then listen for the
+	 <code>itemAdded</code> event and handle the display updates there, based
+	 on the state history data that was received.  In this way, the display
+	 updates are tied to the state history and will be consistent across all
+	 connected clients.</p> 
+	 
+	           <p></p><p><span class="classHeaderTableLabel">See also</span></p><div class="seeAlso"><a href="../../../../com/worlize/api/event/StateHistoryEvent.html" target="">com.worlize.api.event.StateHistoryEvent</a><br/><a href="SyncedDataStore.html" target="">com.worlize.api.data.SyncedDataStore</a></div><br/><hr></div><a name="propertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Properties</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#length" class="signatureLink">length</a> : uint<div class="summaryTableDescription">[read-only] 
+		 Get the number of entries in the state history list.</div></td><td class="summaryTableOwnerCol">StateHistory</td></tr></table></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#StateHistory()" class="signatureLink">StateHistory</a>(sourceItems:Array = null)</div><div class="summaryTableDescription">
+		 Constructor.</div></td><td class="summaryTableOwnerCol">StateHistory</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#addEventListener()" class="signatureLink">addEventListener</a>(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void</div><div class="summaryTableDescription">
+		 Registers an event listener object with an EventDispatcher object
+		 so that the listener receives notification of an event.</div></td><td class="summaryTableOwnerCol">StateHistory</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#clear()" class="signatureLink">clear</a>(initialItem:Object = null):void</div><div class="summaryTableDescription">
+		 Clears the state history.</div></td><td class="summaryTableOwnerCol">StateHistory</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#dispatchEvent()" class="signatureLink">dispatchEvent</a>(event:Event):Boolean</div><div class="summaryTableDescription">
+		 Dispatches an event into the event flow.</div></td><td class="summaryTableOwnerCol">StateHistory</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getItemAt()" class="signatureLink">getItemAt</a>(index:int):*</div><div class="summaryTableDescription">
+		 Get the state history entry at index.</div></td><td class="summaryTableOwnerCol">StateHistory</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#hasEventListener()" class="signatureLink">hasEventListener</a>(type:String):Boolean</div><div class="summaryTableDescription">
+		 Checks whether the EventDispatcher object has any listeners
+		 registered for a specific type of event.</div></td><td class="summaryTableOwnerCol">StateHistory</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#push()" class="signatureLink">push</a>(item:Object):void</div><div class="summaryTableDescription">
+		 Adds a new state history entry.</div></td><td class="summaryTableOwnerCol">StateHistory</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#removeEventListener()" class="signatureLink">removeEventListener</a>(type:String, listener:Function, useCapture:Boolean = false):void</div><div class="summaryTableDescription">
+		 Removes a listener from the EventDispatcher object.</div></td><td class="summaryTableOwnerCol">StateHistory</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#shift()" class="signatureLink">shift</a>():void</div><div class="summaryTableDescription">
+		 Removes the oldest state history.</div></td><td class="summaryTableOwnerCol">StateHistory</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#willTrigger()" class="signatureLink">willTrigger</a>(type:String):Boolean</div><div class="summaryTableDescription">
+		 Checks whether an event listener is registered with this
+		 EventDispatcher object or any of its ancestors for the specified
+		 event type.</div></td><td class="summaryTableOwnerCol">StateHistory</td></tr></table></div><a name="eventSummary"></a><div class="summarySection"><div class="summaryTableTitle">Events</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableEvent"><tr><th>&nbsp;</th><th colspan="2">Event</th><th> Summary </th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#event:cleared" class="signatureLink">cleared</a></div></td><td class="summaryTableDescription summaryTableCol">Dispatched when the state history is cleared.</td><td class="summaryTableOwnerCol">StateHistory</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#event:entryAdded" class="signatureLink">entryAdded</a></div></td><td class="summaryTableDescription summaryTableCol">Dispatched when a new state history entry is added.</td><td class="summaryTableOwnerCol">StateHistory</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#event:entryRemoved" class="signatureLink">entryRemoved</a></div></td><td class="summaryTableDescription summaryTableCol">Dispatched when a state history entry is removed.</td><td class="summaryTableOwnerCol">StateHistory</td></tr></table></div><script language="javascript" type="text/javascript"><!--
+										showHideInherited();
+										--></script><div class="MainContent"><div class="detailSectionHeader">Property Detail</div><a name="propertyDetail"></a><a name="length"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">length</td><td class="detailHeaderType">property</td></tr></table><div class="detailBody"><code>length:uint</code>&nbsp;&nbsp;[read-only] <p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 Get the number of entries in the state history list. 
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get length():uint</code><br/></div><a name="constructorDetail"></a><div class="detailSectionHeader">Constructor Detail</div><a name="StateHistory()"></a><a name="StateHistory(Array)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">StateHistory</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">Constructor</td></tr></table><div class="detailBody"><code>public function StateHistory(sourceItems:Array = null)</code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize API.v1</td></tr></table><p></p><p>
+		 Constructor.
+		 
+		 <p>The <code>StateHistory</code> instance is created and managed by
+		 the <code>WorlizeAPI</code> class.  You do not instantiate this
+		 object yourself.</p>
+		 
+		 </p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">sourceItems</span>:Array</code> (default = <code>null</code>)<code></code></td></tr></table><p><span class="label">See also</span></p><div class="seeAlso"><a href="../../../../com/worlize/api/event/StateHistoryEvent.html" target="">com.worlize.api.event.StateHistoryEvent</a><br/><a href="../../../../com/worlize/api/WorlizeAPI.html" target="">com.worlize.api.WorlizeAPI</a></div><br/><span class="label"> Example </span><br/><div class="detailBody">How to get a reference to the StateHistory instance
+		 <div class="listing" version="3.0"><pre>
+         
+         var api:WorlizeAPI = WorlizeAPI.getInstance();
+         var history:StateHistory = api.stateHistory;
+         
+         </pre></div> 
+		 </div></div><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="addEventListener()"></a><a name="addEventListener(String,Function,Boolean,int,Boolean)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">addEventListener</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code> public function addEventListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void</code><p></p><p></p><p>
+		 Registers an event listener object with an EventDispatcher object
+		 so that the listener receives notification of an event.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">type</span>:String</code></td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">listener</span>:Function</code></td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">useCapture</span>:Boolean</code> (default = <code>false</code>)<code></code></td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">priority</span>:int</code> (default = <code>0</code>)<code></code></td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">useWeakReference</span>:Boolean</code> (default = <code>false</code>)<code></code></td></tr></table></p><p><span class="label">See also</span></p><div class="seeAlso"><a href="http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/events/EventDispatcher.html#addEventListener()" target="mm_external">http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/events/EventDispatcher.html#addEventListener()</a></div></div><a name="clear()"></a><a name="clear(Object)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">clear</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function clear(initialItem:Object = null):void</code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 Clears the state history.
+		 		 <p>This method does not immediately clear the local copy of the
+		 state history, but rather just sends a request to the server to
+		 clear the history.  The local copy will be cleared when the server
+		 broadcasts the update to all connected clients.</p>
+		 
+		 <p>Therefore, you cannot count on the list to be emptied immediately
+		 after calling this method.  You must wit for the corresponding
+		 <code>cleared</code> event.</p>
+		 
+		 <p>You can optionally specify a value for the
+		 <code>initialItem</code> property to atomically add an initial entry
+		 to the newly cleared list.  This may be useful for consolidating
+		 long state histories into a single composite entry to save space
+		 and bandwidth for new users entering the room if the history becomes
+		 long through extended usage of the app by other users in the room
+		 </p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">initialItem</span>:Object</code> (default = <code>null</code>)<code></code> &mdash; an AMF3 serializable object representing the
+		 first state entry to add immediately after clearing the list.
+		 
+		 </td></tr></table></p><p><span class="label">See also</span></p><div class="seeAlso"><a href="StateHistory.html#event:cleared" target="">cleared</a></div></div><a name="dispatchEvent()"></a><a name="dispatchEvent(flash.events.Event)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">dispatchEvent</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function dispatchEvent(event:Event):Boolean</code><p></p><p></p><p>
+		 Dispatches an event into the event flow. The event target is the
+		 EventDispatcher object upon which the dispatchEvent() method is
+		 called.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">event</span>:Event</code></td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Boolean</code></td></tr></table><p><span class="label">See also</span></p><div class="seeAlso"><a href="http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/events/EventDispatcher.html#dispatchEvent()" target="mm_external">http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/events/EventDispatcher.html#dispatchEvent()</a></div></div><a name="getItemAt()"></a><a name="getItemAt(int)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getItemAt</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function getItemAt(index:int):*</code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 Get the state history entry at <code>index</code>.
+		 
+		 <p>Alternatively, you can use bracket notation as you would with a
+		 normal <code>Array</code>.</p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">index</span>:int</code> &mdash; the index of the entry to retrieve
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>*</code> &mdash; a state entry object
+		 
+		 </td></tr></table><br/><span class="label"> Example </span><br/><div class="detailBody">Get the third item in the state history list
+		 <div class="listing" version="3.0"><pre>
+         
+         var api:WorlizeAPI = WorlizeAPI.getInstance();
+         
+         var item:= api.stateHistory.getItemAt(2);
+         
+         // Equivalently:
+         var item:= api.stateHistory[2];
+         
+         </pre></div>
+		 </div></div><a name="hasEventListener()"></a><a name="hasEventListener(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">hasEventListener</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function hasEventListener(type:String):Boolean</code><p></p><p></p><p>
+		 Checks whether the EventDispatcher object has any listeners
+		 registered for a specific type of event.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">type</span>:String</code></td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Boolean</code></td></tr></table><p><span class="label">See also</span></p><div class="seeAlso"><a href="http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/events/EventDispatcher.html#hasEventListener()" target="mm_external">http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/events/EventDispatcher.html#hasEventListener()</a></div></div><a name="push()"></a><a name="push(Object)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">push</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function push(item:Object):void</code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 Adds a new state history entry.
+		 
+		 <p>This method does not immediately add the new entry to the local
+		 copy of the list, but simply sends it to the server.  The entry will
+		 be added to the local copy when the server sends back confirmation
+		 that the update has been broadcast to all connected clients.</p>
+		 
+		 <p>Therefore, you cannot immediately access the newly pushed item until
+		 its corresponding <code>itemAdded</code> event.</p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">item</span>:Object</code> &mdash; an AMF3 serializable object representing the new state
+		 history entry to add
+		 
+		 </td></tr></table></p><p><span class="label">See also</span></p><div class="seeAlso"><a href="StateHistory.html#event:itemAdded" target="">itemAdded</a></div></div><a name="removeEventListener()"></a><a name="removeEventListener(String,Function,Boolean)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">removeEventListener</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function removeEventListener(type:String, listener:Function, useCapture:Boolean = false):void</code><p></p><p></p><p>
+		 Removes a listener from the EventDispatcher object. If there is no
+		 matching listener registered with the EventDispatcher object, a call
+		 to this method has no effect.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">type</span>:String</code></td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">listener</span>:Function</code></td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">useCapture</span>:Boolean</code> (default = <code>false</code>)<code></code></td></tr></table></p><p><span class="label">See also</span></p><div class="seeAlso"><a href="http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/events/EventDispatcher.html#removeEventListener()" target="mm_external">http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/events/EventDispatcher.html#removeEventListener()</a></div></div><a name="shift()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">shift</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function shift():void</code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 Removes the oldest state history.
+		 
+		 <p>This method does not immediately remove the old entry from the
+		 local copy of the list, but simply sends the request to the server.
+		 The entry will be removed from the local copy when the server sends
+		 back confirmation that the update has been broadcast to all
+		 connected clients.</p>
+		 
+		 <p>Therefore, you cannot rely upon the local list to be updated
+		 until the corresponding <code>itemRemoved</code> event.</p>
+		 
+		 </p><p><span class="label">See also</span></p><div class="seeAlso"><a href="StateHistory.html#event:itemRemoved" target="">itemRemoved</a></div></div><a name="willTrigger()"></a><a name="willTrigger(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">willTrigger</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function willTrigger(type:String):Boolean</code><p></p><p></p><p>
+		 Checks whether an event listener is registered with this
+		 EventDispatcher object or any of its ancestors for the specified
+		 event type.
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">type</span>:String</code></td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Boolean</code></td></tr></table><p><span class="label">See also</span></p><div class="seeAlso"><a href="http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/events/EventDispatcher.html#willTrigger()" target="mm_external">http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/events/EventDispatcher.html#willTrigger()</a></div></div><div class="detailSectionHeader"> Event Detail </div><a name="event:cleared"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">cleared</td><td class="detailHeaderType"> Event </td></tr></table><div class="detailBody"><span class="label">Event Object Type: </span><a href="../../../../com/worlize/api/event/StateHistoryEvent.html"><code>com.worlize.api.event.StateHistoryEvent</code></a><br/><span class="label">StateHistoryEvent.type property = </span><a href="../../../../com/worlize/api/event/StateHistoryEvent.html#CLEARED"><code>com.worlize.api.event.StateHistoryEvent.CLEARED</code></a><br/><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize API.v1</td></tr></table><p></p><p></p><p>
+	 Dispatched when the state history is cleared.
+	 
+	 </p>
+		  The <code>StateHistoryEvent.CLEARED</code> constant defines the value of the
+		  <code>type</code> property of the event object for a <code>cleared</code> event.
+		 		  <p>The properties of the event object have the following values:</p>
+		  <table class="innertable" ><tr><th>Property</th><th>Value</th></tr><tr><td><code>bubbles</code></td><td>false</td></tr><tr><td><code>cancelable</code></td><td>false</td></tr><tr><td><code>currentTarget</code></td><td>The Object that defines the
+		       event listener that handles the event. For example, if you use
+		       <code>myButton.addEventListener()</code> to register an event listener,
+		       myButton is the value of the <code>currentTarget</code>. </td></tr><tr><td><code>target</code></td><td>The Object that dispatched the event;
+		       it is not always the Object listening for the event.
+		       Use the <code>currentTarget</code> property to always access the
+		       Object listening for the event.</td></tr></table>
+		 		  </div><a name="event:entryAdded"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">entryAdded</td><td class="detailHeaderType"> Event </td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><span class="label">Event Object Type: </span><a href="../../../../com/worlize/api/event/StateHistoryEvent.html"><code>com.worlize.api.event.StateHistoryEvent</code></a><br/><span class="label">StateHistoryEvent.type property = </span><a href="../../../../com/worlize/api/event/StateHistoryEvent.html#ENTRY_ADDED"><code>com.worlize.api.event.StateHistoryEvent.ENTRY_ADDED</code></a><br/><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize API.v1</td></tr></table><p></p><p></p><p>
+	 Dispatched when a new state history entry is added.
+	 
+	 </p>
+		  The <code>StateHistoryEvent.ENTRY_ADDED</code> constant defines the value of the
+		  <code>type</code> property of the event object for a <code>entryAdded</code> event.
+		 		  <p>The properties of the event object have the following values:</p>
+		  <table class="innertable" ><tr><th>Property</th><th>Value</th></tr><tr><td><code>bubbles</code></td><td>false</td></tr><tr><td><code>cancelable</code></td><td>false</td></tr><tr><td><code>currentTarget</code></td><td>The Object that defines the
+		       event listener that handles the event. For example, if you use
+		       <code>myButton.addEventListener()</code> to register an event listener,
+		       myButton is the value of the <code>currentTarget</code>. </td></tr><tr><td><code>entry</code></td><td>The object representing the state data
+		       being added.</td></tr><tr><td><code>index</code></td><td>An integer indicating the zero-based
+		       position of the state data being added.</td></tr><tr><td><code>target</code></td><td>The Object that dispatched the event;
+		       it is not always the Object listening for the event.
+		       Use the <code>currentTarget</code> property to always access the
+		       Object listening for the event.</td></tr></table>
+		 		  </div><a name="event:entryRemoved"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">entryRemoved</td><td class="detailHeaderType"> Event </td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><span class="label">Event Object Type: </span><a href="../../../../com/worlize/api/event/StateHistoryEvent.html"><code>com.worlize.api.event.StateHistoryEvent</code></a><br/><span class="label">StateHistoryEvent.type property = </span><a href="../../../../com/worlize/api/event/StateHistoryEvent.html#ENTRY_REMOVED"><code>com.worlize.api.event.StateHistoryEvent.ENTRY_REMOVED</code></a><br/><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize API.v1</td></tr></table><p></p><p></p><p>
+	 Dispatched when a state history entry is removed.
+	 
+	 </p>
+		  The <code>StateHistoryEvent.ENTRY_REMOVED</code> constant defines the value of the
+		  <code>type</code> property of the event object for a <code>entryRemoved</code> event.
+		 		  <p>The properties of the event object have the following values:</p>
+		  <table class="innertable" ><tr><th>Property</th><th>Value</th></tr><tr><td><code>bubbles</code></td><td>false</td></tr><tr><td><code>cancelable</code></td><td>false</td></tr><tr><td><code>currentTarget</code></td><td>The Object that defines the
+		       event listener that handles the event. For example, if you use
+		       <code>myButton.addEventListener()</code> to register an event listener,
+		       myButton is the value of the <code>currentTarget</code>. </td></tr><tr><td><code>entry</code></td><td>The object representing the state data
+		       being removed.</td></tr><tr><td><code>index</code></td><td>An integer indicating the zero-based
+		       position of the state data being removed.</td></tr><tr><td><code>target</code></td><td>The Object that dispatched the event;
+		       it is not always the Object listening for the event.
+		       Use the <code>currentTarget</code> property to always access the
+		       Object listening for the event.</td></tr></table>
+		 		  </div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Wed Mar 28 2012, 06:49 PM -07:00  </center></div></body></html><!--<br/>Wed Mar 28 2012, 06:49 PM -07:00  -->

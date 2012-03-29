@@ -1,0 +1,233 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- saved from url=(0014)about:internet --><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="../../../style.css" type="text/css" media="screen"><link rel="stylesheet" href="../../../print.css" type="text/css" media="print"><link rel="stylesheet" href="../../../override.css" type="text/css"><meta name="keywords" content="WorlizeAPI,com.worlize.api.WorlizeAPI,VERSION,authorMode,config,defaultHeight,defaultWidth,editMode,editModeSupported,fullSize,maxHeight,maxWidth,minHeight,minWidth,name,nonVisual,options,resizableByUser,stateHistory,syncedDataStore,thisObject,thisRoom,thisUser,thisWorld,getInstance,init,log"><title>com.worlize.api.WorlizeAPI</title></head><body><script language="javascript" type="text/javascript" src="../../../asdoc.js"></script><script language="javascript" type="text/javascript" src="../../../help.js"></script><script language="javascript" type="text/javascript" src="../../../cookies.js"></script><script language="javascript" type="text/javascript"><!--
+				asdocTitle = 'WorlizeAPI - Worlize API Documentation';
+				var baseRef = '../../../';
+				window.onload = configPage;
+			--></script>
+<script type="text/javascript">
+			scrollToNameAnchor();
+		</script><table class="titleTable" cellpadding="0" cellspacing="0" id="titleTable" style="display:none"><tr><td class="titleTableTitle" align="left">Worlize API Documentation</td><td class="titleTableTopNav" align="right"><a href="../../../package-summary.html" onclick="loadClassListFrame('../../../all-classes.html')">All Packages</a>&nbsp;|&nbsp;<a href="../../../class-summary.html" onclick="loadClassListFrame('../../../all-classes.html')">All Classes</a>&nbsp;|&nbsp;<a href="../../../all-index-A.html" onclick="loadClassListFrame('../../../index-list.html')">Index</a>&nbsp;|&nbsp;<a id="framesLink1" href="../../../index.html?com/worlize/api/WorlizeAPI.html&amp;com/worlize/api/class-list.html">Frames</a><a id="noFramesLink1" style="display:none" href="" onclick="parent.location=document.location"> No Frames </a></td><td class="titleTableLogo" align="right" rowspan="3"><img src="../../../images/logo.jpg" class="logoImage" alt=" Adobe Logo " title=" Adobe Logo "></td></tr><tr class="titleTableRow2"><td class="titleTableSubTitle" id="subTitle" align="left">WorlizeAPI</td><td class="titleTableSubNav" id="subNav" align="right"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a>&nbsp;| <a href="#eventSummary">Events</a>&nbsp;| <a href="#constantSummary">Constants</a></td></tr><tr class="titleTableRow3"><td colspan="3">&nbsp;</td></tr></table><script language="javascript" type="text/javascript" xml:space="preserve">
+				<!--
+				
+					if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("WorlizeAPI"); titleBar_setSubNav(true,true,false,false,false,false,true,false,true,false,false	,false,false,false,false,false);}	
+				-->
+			</script><div xmlns:fn="http://www.w3.org/2005/xpath-functions" class="MainContent"><table class="classHeaderTable" cellpadding="0" cellspacing="0"><tr><td class="classHeaderTableLabel">Package</td><td><a href="package-detail.html" onclick="javascript:loadClassListFrame('class-list.html')">com.worlize.api</a></td></tr><tr><td class="classHeaderTableLabel">Class</td><td class="classSignature">public  class  WorlizeAPI</td></tr><tr><td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">WorlizeAPI  <img src="../../../images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> flash.events.EventDispatcher</td></tr></table><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p></p>
+	 The entry point into the Worlize API functionality.
+	 
+	 <p>The WorlizeAPI class must be initialized before your app will become
+	 active and visible to users.  If your app does not call the static
+	 <code>WorlizeAPI.init()</code> function within 30 seconds of your SWF's
+	 constructor executing, your app will be terminated.</p>
+	 
+	              <p>Once the API is initialized, you can get a reference to the singleton
+	 instance by calling the static <code>WorlizeAPI.getInstance()</code>
+	 method.  The instance is also returned when you call
+	 <code>WorlizeAPI.init()</code>.</p>
+	 
+	           <p></p><br/><hr></div><a name="propertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Properties</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#authorMode" class="signatureLink">authorMode</a> : Boolean<div class="summaryTableDescription">[read-only] 
+		 True if the current user has enabled author mode.</div></td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#config" class="signatureLink">config</a> : <a href="../../../com/worlize/api/data/ConfigData.html">ConfigData</a><div class="summaryTableDescription">[read-only] 
+		 Stores this app instance's persistent configuration data.</div></td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#editMode" class="signatureLink">editMode</a> : Boolean<div class="summaryTableDescription">[read-only] 
+		 True if the edit mode is active within author mode.</div></td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#options" class="signatureLink">options</a> : <a href="../../../com/worlize/api/APIOptions.html">APIOptions</a><div class="summaryTableDescription">[static] 
+		 The APIOptions instance that defines the app's API
+		 settings.</div></td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#stateHistory" class="signatureLink">stateHistory</a> : <a href="../../../com/worlize/api/data/StateHistory.html">StateHistory</a><div class="summaryTableDescription">[read-only] 
+		 Use the StateHistory object to synchronize state across all
+		 connected users in the room.</div></td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#syncedDataStore" class="signatureLink">syncedDataStore</a> : <a href="../../../com/worlize/api/data/SyncedDataStore.html">SyncedDataStore</a><div class="summaryTableDescription">[read-only] 
+		 Use the SyncedDataStore object to synchronize key/value pairs across
+		 all connected users in the room.</div></td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#thisObject" class="signatureLink">thisObject</a> : <a href="../../../com/worlize/api/model/ThisRoomObject.html">ThisRoomObject</a><div class="summaryTableDescription">[read-only] 
+		 An object representing the current object (app).</div></td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#thisRoom" class="signatureLink">thisRoom</a> : <a href="../../../com/worlize/api/model/ThisRoom.html">ThisRoom</a><div class="summaryTableDescription">[read-only] 
+		 An object representing the current room.</div></td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#thisUser" class="signatureLink">thisUser</a> : <a href="../../../com/worlize/api/model/ThisUser.html">ThisUser</a><div class="summaryTableDescription">[read-only] 
+		 An object representing the current user.</div></td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#thisWorld" class="signatureLink">thisWorld</a> : <a href="../../../com/worlize/api/model/World.html">World</a><div class="summaryTableDescription">[read-only] 
+		 An object describing the current world.</div></td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr></table></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#WorlizeAPI()" class="signatureLink">WorlizeAPI</a>(rootObject:DisplayObject, loaderInfo:LoaderInfo = null)</div><div class="summaryTableDescription">
+		 Constructor.</div></td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getInstance()" class="signatureLink">getInstance</a>():<a href="../../../com/worlize/api/WorlizeAPI.html">WorlizeAPI</a></div><div class="summaryTableDescription">[static] 
+		 Returns a reference to the WorlizeAPI singleton instance.</div></td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#init()" class="signatureLink">init</a>(rootObject:DisplayObject, loaderInfo:LoaderInfo = null):<a href="../../../com/worlize/api/WorlizeAPI.html">WorlizeAPI</a></div><div class="summaryTableDescription">[static] 
+		 Initializes the Worlize API;  Must be called before the API is
+		 available for use.</div></td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#log()" class="signatureLink">log</a>(text:String):void</div><div class="summaryTableDescription">
+		 Write arbitrary text into the chat log.</div></td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr></table></div><a name="eventSummary"></a><div class="summarySection"><div class="summaryTableTitle">Events</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableEvent"><tr><th>&nbsp;</th><th colspan="2">Event</th><th> Summary </th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#event:authorModeDisabled" class="signatureLink">authorModeDisabled</a></div></td><td class="summaryTableDescription summaryTableCol">Dispatched after author mode has been disabled by the user.</td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#event:authorModeEnabled" class="signatureLink">authorModeEnabled</a></div></td><td class="summaryTableDescription summaryTableCol">Dispatched after author mode mode has been enabled by the user.</td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#event:editModeDisabled" class="signatureLink">editModeDisabled</a></div></td><td class="summaryTableDescription summaryTableCol">Dispatched after the app's edit mode has been disabled by the user.</td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#event:editModeEnabled" class="signatureLink">editModeEnabled</a></div></td><td class="summaryTableDescription summaryTableCol">Dispatched after the app's edit mode has been enabled by the user.</td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#event:mouseUp" class="signatureLink">mouseUp</a></div></td><td class="summaryTableDescription summaryTableCol">Dispatched when the user releases the mouse button anywhere on the screen.</td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr></table></div><a name="constantSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Constants</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableConstant"><tr><th>&nbsp;</th><th colspan="2">Constant</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#VERSION" class="signatureLink">VERSION</a> : int = 1<div class="summaryTableDescription">[static] 
+		 A constant indicating the version of the Worlize API.</div></td><td class="summaryTableOwnerCol">WorlizeAPI</td></tr></table></div><script language="javascript" type="text/javascript"><!--
+										showHideInherited();
+										--></script><div class="MainContent"><div class="detailSectionHeader">Property Detail</div><a name="propertyDetail"></a><a name="authorMode"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">authorMode</td><td class="detailHeaderType">property</td></tr></table><div class="detailBody"><code>authorMode:Boolean</code>&nbsp;&nbsp;[read-only] <p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 True if the current user has enabled author mode.
+		 
+		 <p>Only users with the <code>canAuthor</code> privilege will be
+		 able to author the room, and this property can only be true when
+		 the app is running on a computer where the user has access to author
+		 mode.</p>
+		  
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get authorMode():Boolean</code><br/></div><a name="propertyDetail"></a><a name="config"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">config</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>config:<a href="../../../com/worlize/api/data/ConfigData.html">ConfigData</a></code>&nbsp;&nbsp;[read-only] <p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 Stores this app instance's persistent configuration data.
+		 
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get config():<a href="../../../com/worlize/api/data/ConfigData.html">ConfigData</a></code><br/><p><span class="label">See also</span></p><div class="seeAlso"><a href="../../../com/worlize/api/data/ConfigData.html" target="">com.worlize.api.data.ConfigData</a></div></div><a name="propertyDetail"></a><a name="editMode"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">editMode</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>editMode:Boolean</code>&nbsp;&nbsp;[read-only] <p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 True if the edit mode is active within author mode.
+		 
+		 <p>This becomes active when the user selects the "Edit Settings..."
+		 option from the Object Properties dialog for this object within
+		 author mode.</p>
+		 
+		 <p>Can only be true if the current user has the
+		 <code>canAuthor</code> privilege and the
+		 <code>editModeSupported</code> API option is <code>true</code>.</p>
+		 
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get editMode():Boolean</code><br/><p><span class="label">See also</span></p><div class="seeAlso"><a href="APIOptions.html#editModeSupported" target="">APIOptions.editModeSupported</a></div></div><a name="propertyDetail"></a><a name="options"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">options</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public static var options:<a href="../../../com/worlize/api/APIOptions.html">APIOptions</a></code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 The <code>APIOptions</code> instance that defines the app's API
+		 settings.
+		 
+		 </p></div><a name="propertyDetail"></a><a name="stateHistory"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">stateHistory</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>stateHistory:<a href="../../../com/worlize/api/data/StateHistory.html">StateHistory</a></code>&nbsp;&nbsp;[read-only] <p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 Use the StateHistory object to synchronize state across all
+		 connected users in the room.
+		  
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get stateHistory():<a href="../../../com/worlize/api/data/StateHistory.html">StateHistory</a></code><br/><p><span class="label">See also</span></p><div class="seeAlso"><a href="../../../com/worlize/api/data/StateHistory.html" target="">com.worlize.api.data.StateHistory</a></div></div><a name="propertyDetail"></a><a name="syncedDataStore"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">syncedDataStore</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>syncedDataStore:<a href="../../../com/worlize/api/data/SyncedDataStore.html">SyncedDataStore</a></code>&nbsp;&nbsp;[read-only] <p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 Use the SyncedDataStore object to synchronize key/value pairs across
+		 all connected users in the room.
+		 
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get syncedDataStore():<a href="../../../com/worlize/api/data/SyncedDataStore.html">SyncedDataStore</a></code><br/><p><span class="label">See also</span></p><div class="seeAlso"><a href="../../../com/worlize/api/data/SyncedDataStore.html" target="">com.worlize.api.data.SyncedDataStore</a></div></div><a name="propertyDetail"></a><a name="thisObject"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">thisObject</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>thisObject:<a href="../../../com/worlize/api/model/ThisRoomObject.html">ThisRoomObject</a></code>&nbsp;&nbsp;[read-only] <p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 An object representing the current object (app).
+		 
+		 <p>Use this object to control aspects of this app's execution, such
+		 as its size and position, and to listen for broadcast messages
+		 from this or other apps.</p>
+		 
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get thisObject():<a href="../../../com/worlize/api/model/ThisRoomObject.html">ThisRoomObject</a></code><br/><p><span class="label">See also</span></p><div class="seeAlso">com.worlize.api.model.ThisObject.messageReceived<br/>com.worlize.api.model.ThisObject.setSize()<br/>com.worlize.api.model.ThisObject.moveTo()</div></div><a name="propertyDetail"></a><a name="thisRoom"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">thisRoom</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>thisRoom:<a href="../../../com/worlize/api/model/ThisRoom.html">ThisRoom</a></code>&nbsp;&nbsp;[read-only] <p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 An object representing the current room.
+		 
+		 <p>This is the entry point to much of the API functionality,
+		 since the <code>ThisRoom</code> instance provides access to the
+		 list of users in the room, other objects (apps) in the room,
+		 etc..  It also dispatches crucial events, such as
+		 <code>incomingChat</code>, <code>outgoingChat</code>, and
+		 <code>userMoved</code>.</p>
+		 
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get thisRoom():<a href="../../../com/worlize/api/model/ThisRoom.html">ThisRoom</a></code><br/></div><a name="propertyDetail"></a><a name="thisUser"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">thisUser</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>thisUser:<a href="../../../com/worlize/api/model/ThisUser.html">ThisUser</a></code>&nbsp;&nbsp;[read-only] <p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 An object representing the current user.
+		 
+		 <p>Use this object to control the user's avatar, move the user
+		 on screen, cause the user to say things, etc.</p>
+		  
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get thisUser():<a href="../../../com/worlize/api/model/ThisUser.html">ThisUser</a></code><br/><p><span class="label">See also</span></p><div class="seeAlso"><a href="../../../com/worlize/api/model/ThisUser.html#moveTo()" target="">com.worlize.api.model.ThisUser.moveTo()</a><br/><a href="../../../com/worlize/api/model/ThisUser.html#say()" target="">com.worlize.api.model.ThisUser.say()</a><br/><a href="../../../com/worlize/api/model/ThisUser.html#avatar" target="">com.worlize.api.model.ThisUser.avatar</a></div></div><a name="propertyDetail"></a><a name="thisWorld"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">thisWorld</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>thisWorld:<a href="../../../com/worlize/api/model/World.html">World</a></code>&nbsp;&nbsp;[read-only] <p></p><p></p><p>
+		 An object describing the current world. 
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get thisWorld():<a href="../../../com/worlize/api/model/World.html">World</a></code><br/></div><a name="constructorDetail"></a><div class="detailSectionHeader">Constructor Detail</div><a name="WorlizeAPI()"></a><a name="WorlizeAPI(flash.display.DisplayObject,flash.display.LoaderInfo)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">WorlizeAPI</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">Constructor</td></tr></table><div class="detailBody"><code>public function WorlizeAPI(rootObject:DisplayObject, loaderInfo:LoaderInfo = null)</code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p>
+		 Constructor.
+		 
+		 <p>You may not instantiate the <code>WorlizeAPI</code> class
+		 directly.  WorlizeAPI is a Singleton class, and as such, you must
+		 gain access to its singleton instance by calling
+		 <code>getInstance()</code>, which will construct the instance
+		 internally if necessary.</p>
+		  
+		 </p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">rootObject</span>:DisplayObject</code></td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">loaderInfo</span>:LoaderInfo</code> (default = <code>null</code>)<code></code></td></tr></table><br/><span class="label">Throws</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Error </code> &mdash; if you try to instantiate more than one copy of
+		 WorlizeAPI
+		 </td></tr></table><p><span class="label">See also</span></p><div class="seeAlso"><a href="WorlizeAPI.html#getInstance()" target="">getInstance()</a></div></div><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="getInstance()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getInstance</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code> public static function getInstance():<a href="../../../com/worlize/api/WorlizeAPI.html">WorlizeAPI</a></code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 Returns a reference to the WorlizeAPI singleton instance.
+		 
+		 <p>Use this throughout your app to gain access to the Worlize API
+		 functionality.</p>
+		 
+		 </p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../com/worlize/api/WorlizeAPI.html">WorlizeAPI</a></code> &mdash; the WorlizeAPI singleton instance
+		 </td></tr></table><br/><span class="label">Throws</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Error </code> &mdash; if the API has not yet been initialized.
+		 </td></tr></table><p><span class="label">See also</span></p><div class="seeAlso"><a href="WorlizeAPI.html#init()" target="">init()</a></div></div><a name="init()"></a><a name="init(flash.display.DisplayObject,flash.display.LoaderInfo)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">init</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function init(rootObject:DisplayObject, loaderInfo:LoaderInfo = null):<a href="../../../com/worlize/api/WorlizeAPI.html">WorlizeAPI</a></code><p></p><p></p><p>
+		 Initializes the Worlize API;  Must be called before the API is
+		 available for use.
+		 
+		 <p>Call this as soon as possible in your app's lifecycle, preferably
+		 in your constructor function.  This method will create the WorlizeAPI
+		 singleton instance and set up communications with the main Worlize
+		 application across the sandbox bridge.</p>
+		 
+		 <p>When calling <code>init</code> you must pass your root
+		 <code>DisplayObject</code> as the <code>rootObject</code> parameter.
+		 </p>
+		 
+		 <p><b>NOTE:</b> If you are building a Flex app, your top-
+		 level application class does not contain a handy reference to the
+		 SWF's LoaderInfo instance, and you must pass it separately as the
+		 <code>loaderInfo</code> parameter.  If you are building a standard
+		 Flash application and have easy access to the true top-level
+		 <code>DisplayObject</code> instance, just omit the
+		 <code>loaderInfo</code> parameter.</p>
+		 
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">rootObject</span>:DisplayObject</code> &mdash; the top level <code>DisplayObject</code> for your
+		 application.
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">loaderInfo</span>:LoaderInfo</code> (default = <code>null</code>)<code></code> &mdash; (optional) the main LoaderInfo instance for your
+		 application, if not available from the provided
+		 <code>rootObject</code>.
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../com/worlize/api/WorlizeAPI.html">WorlizeAPI</a></code> &mdash; the WorlizeAPI singleton instance
+		 </td></tr></table><p><span class="label">See also</span></p><div class="seeAlso"><a href="WorlizeAPI.html#getInstance()" target="">getInstance()</a><br/><a href="APIOptions.html" target="">APIOptions</a></div></div><a name="log()"></a><a name="log(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">log</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function log(text:String):void</code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 Write arbitrary text into the chat log. 
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">text</span>:String</code> &mdash; the text to log
+		 </td></tr></table></p><p><span class="label">See also</span></p><div class="seeAlso"><a href="../../../com/worlize/api/model/ThisRoom.html#announceLocal()" target="">com.worlize.api.model.ThisRoom.announceLocal()</a></div></div><div class="detailSectionHeader"> Event Detail </div><a name="event:authorModeDisabled"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">authorModeDisabled</td><td class="detailHeaderType"> Event </td></tr></table><div class="detailBody"><span class="label">Event Object Type: </span><a href="../../../com/worlize/api/event/AuthorEvent.html"><code>com.worlize.api.event.AuthorEvent</code></a><br/><span class="label">AuthorEvent.type property = </span><a href="../../../com/worlize/api/event/AuthorEvent.html#AUTHOR_MODE_DISABLED"><code>com.worlize.api.event.AuthorEvent.AUTHOR_MODE_DISABLED</code></a><br/><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize API.v1</td></tr></table><p></p><p></p><p>
+	 Dispatched after author mode has been disabled by the user.
+	 
+	 </p>
+		  The <code>AuthorEvent.AUTHOR_MODE_DISABLED</code> constant defines the value of the
+		  <code>type</code> property of the event object for a <code>authorModeDisabled</code> event.
+		 		  <p>The properties of the event object have the following values:</p>
+		  <table class="innertable" ><tr><th>Property</th><th>Value</th></tr><tr><td><code>bubbles</code></td><td>false</td></tr><tr><td><code>cancelable</code></td><td>false</td></tr><tr><td><code>currentTarget</code></td><td>The Object that defines the
+		       event listener that handles the event. For example, if you use
+		       <code>myButton.addEventListener()</code> to register an event listener,
+		       myButton is the value of the <code>currentTarget</code>. </td></tr><tr><td><code>target</code></td><td>The Object that dispatched the event;
+		       it is not always the Object listening for the event.
+		       Use the <code>currentTarget</code> property to always access the
+		       Object listening for the event.</td></tr></table>
+		 		  </div><a name="event:authorModeEnabled"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">authorModeEnabled</td><td class="detailHeaderType"> Event </td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><span class="label">Event Object Type: </span><a href="../../../com/worlize/api/event/AuthorEvent.html"><code>com.worlize.api.event.AuthorEvent</code></a><br/><span class="label">AuthorEvent.type property = </span><a href="../../../com/worlize/api/event/AuthorEvent.html#AUTHOR_MODE_ENABLED"><code>com.worlize.api.event.AuthorEvent.AUTHOR_MODE_ENABLED</code></a><br/><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize API.v1</td></tr></table><p></p><p></p><p>
+	 Dispatched after author mode mode has been enabled by the user.
+	 
+	 </p>
+		  The <code>AuthorEvent.AUTHOR_MODE_ENABLED</code> constant defines the value of the
+		  <code>type</code> property of the event object for a <code>authorModeEnabled</code> event.
+		 		  <p>The properties of the event object have the following values:</p>
+		  <table class="innertable" ><tr><th>Property</th><th>Value</th></tr><tr><td><code>bubbles</code></td><td>false</td></tr><tr><td><code>cancelable</code></td><td>false</td></tr><tr><td><code>currentTarget</code></td><td>The Object that defines the
+		       event listener that handles the event. For example, if you use
+		       <code>myButton.addEventListener()</code> to register an event listener,
+		       myButton is the value of the <code>currentTarget</code>. </td></tr><tr><td><code>target</code></td><td>The Object that dispatched the event;
+		       it is not always the Object listening for the event.
+		       Use the <code>currentTarget</code> property to always access the
+		       Object listening for the event.</td></tr></table>
+		 		  </div><a name="event:editModeDisabled"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">editModeDisabled</td><td class="detailHeaderType"> Event </td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><span class="label">Event Object Type: </span><a href="../../../com/worlize/api/event/AuthorEvent.html"><code>com.worlize.api.event.AuthorEvent</code></a><br/><span class="label">AuthorEvent.type property = </span><a href="../../../com/worlize/api/event/AuthorEvent.html#EDIT_MODE_DISABLED"><code>com.worlize.api.event.AuthorEvent.EDIT_MODE_DISABLED</code></a><br/><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize API.v1</td></tr></table><p></p><p></p><p>
+	 Dispatched after the app's edit mode has been disabled by the user.
+	 
+	 </p>
+		  The <code>AuthorEvent.EDIT_MODE_DISABLED</code> constant defines the value of the
+		  <code>type</code> property of the event object for a <code>editModeDisabled</code> event.
+		 		  <p>The properties of the event object have the following values:</p>
+		  <table class="innertable" ><tr><th>Property</th><th>Value</th></tr><tr><td><code>bubbles</code></td><td>false</td></tr><tr><td><code>cancelable</code></td><td>false</td></tr><tr><td><code>currentTarget</code></td><td>The Object that defines the
+		       event listener that handles the event. For example, if you use
+		       <code>myButton.addEventListener()</code> to register an event listener,
+		       myButton is the value of the <code>currentTarget</code>. </td></tr><tr><td><code>target</code></td><td>The Object that dispatched the event;
+		       it is not always the Object listening for the event.
+		       Use the <code>currentTarget</code> property to always access the
+		       Object listening for the event.</td></tr></table>
+		 		  </div><a name="event:editModeEnabled"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">editModeEnabled</td><td class="detailHeaderType"> Event </td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><span class="label">Event Object Type: </span><a href="../../../com/worlize/api/event/AuthorEvent.html"><code>com.worlize.api.event.AuthorEvent</code></a><br/><span class="label">AuthorEvent.type property = </span><a href="../../../com/worlize/api/event/AuthorEvent.html#EDIT_MODE_ENABLED"><code>com.worlize.api.event.AuthorEvent.EDIT_MODE_ENABLED</code></a><br/><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize API.v1</td></tr></table><p></p><p></p><p>
+	 Dispatched after the app's edit mode has been enabled by the user.
+	 
+	 </p>
+		  The <code>AuthorEvent.EDIT_MODE_ENABLED</code> constant defines the value of the
+		  <code>type</code> property of the event object for a <code>editModeEnabled</code> event.
+		 		  <p>The properties of the event object have the following values:</p>
+		  <table class="innertable" ><tr><th>Property</th><th>Value</th></tr><tr><td><code>bubbles</code></td><td>false</td></tr><tr><td><code>cancelable</code></td><td>false</td></tr><tr><td><code>currentTarget</code></td><td>The Object that defines the
+		       event listener that handles the event. For example, if you use
+		       <code>myButton.addEventListener()</code> to register an event listener,
+		       myButton is the value of the <code>currentTarget</code>. </td></tr><tr><td><code>target</code></td><td>The Object that dispatched the event;
+		       it is not always the Object listening for the event.
+		       Use the <code>currentTarget</code> property to always access the
+		       Object listening for the event.</td></tr></table>
+		 		  </div><a name="event:mouseUp"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">mouseUp</td><td class="detailHeaderType"> Event </td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><span class="label">Event Object Type: </span><code>flash.events.MouseEvent</code><br/><span class="label">MouseEvent.type property = </span><code>flash.events.MouseEvent</code><br/><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize API.v1</td></tr></table><p></p><p></p><p>
+	 Dispatched when the user releases the mouse button anywhere on the
+	 screen.
+	  
+	 <p>Since embedded apps don't have access to the screen area outside
+	 the boundaries of their own rectangle, listen to this event to track
+	 mouseUp events that occur outside the app's boundaries.</p>
+	 
+	 <p>Traditionally, ActionScript 3 components like a Button would listen
+	 for a mouseUp event on the stage.  However, since embedded apps are
+	 sandboxed and attempting to listen to mouse events on the stage will
+	 throw a SecurityError, the Worlize API provides this equivalent event
+	 proxied through the sandbox boundaries.</p>
+	 
+	 </p></div><div class="detailSectionHeader">Constant Detail</div><a name="constantDetail"></a><a name="VERSION"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">VERSION</td><td class="detailHeaderType">Constant</td></tr></table><div class="detailBody"><code>public static const VERSION:int = 1</code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.1</td></tr></table><p></p><p></p><p>
+		 A constant indicating the version of the Worlize API.  The Worlize
+		 API version is an integer, which means that there is no major or
+		 minor revision number.  It increments by one every time there is a
+		 released change to the API.
+		 
+		 </p></div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Wed Mar 28 2012, 06:49 PM -07:00  </center></div></body></html><!--<br/>Wed Mar 28 2012, 06:49 PM -07:00  -->
