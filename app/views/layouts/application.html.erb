@@ -113,6 +113,20 @@
       </nav>
       <div class="copyright">© 2010-<%= Date.today.year %> Worlize Inc.</div>
     </footer>
+    
+    <%# if current_user.nil? || !current_user.developer? %>
+    <div id="developer-tease">
+      <a href="/developer">
+        <div class="tease1">
+          <h1>Psst... Over here!</h1>
+        </div>
+        <div class="tease2">
+          <h1>Are you a flash developer?</h1>
+          <p>Join our SDK developer preview and start building sweet multiplayer games and apps inside Worlize!</p>
+        </div>
+      </a>
+    </div>
+    <%# end %>
   </div> <!--! end of #container -->
 
 

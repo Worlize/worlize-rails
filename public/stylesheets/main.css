@@ -785,6 +785,71 @@ footer nav a {
 
 /* @end */
 
+/* @group Developer SDK Tease */
+
+#developer-signup #developer-tease {
+	display: none;
+}
+
+#developer-tease {
+	-webkit-transition: left 0.3s ease-in-out;
+	-moz-transition: left 0.3s ease-in-out;
+	-ms-transition: left 0.3s ease-in-out;
+	-o-transition: left 0.3s ease-in-out;
+	transition: left 0.3s ease-in-out;
+	cursor: pointer;
+	height: 121px;
+	width: 151px;
+	position: fixed;
+	bottom: 5px;
+	left: 10px;
+	z-index: 9999999;
+}
+
+#developer-tease:hover {
+	-webkit-transition: left 0.2s ease-out;
+	-moz-transition: left 0.2s ease-out;
+	-ms-transition: left 0.2s ease-out;
+	-o-transition: left 0.2s ease-out;
+	transition: left 0.2s ease-out;
+	left: 45px;
+}
+
+#developer-tease:hover .tease1 {
+	display: none;
+}
+
+#developer-tease:hover .tease2 {
+	display: block;
+}
+
+#developer-tease h1,
+#developer-tease p {
+	text-indent: -10000px;
+}
+
+#developer-tease .tease1 {
+	position: absolute;
+	display: block;
+	bottom: 0px;
+	left: 0px;
+	width: 151px;
+	height: 121px;
+	background-image: url(/developer/tease1.png);
+}
+
+#developer-tease .tease2 {
+	position: absolute;
+	display: none;
+	width: 235px;
+	height: 193px;
+	bottom: 0px;
+	left: -32px;
+	background-image: url(/developer/tease2.png);
+}
+
+/* @end */
+
 /* @group Homepage */
 
 @keyframes pulsate {
@@ -956,6 +1021,37 @@ footer nav a {
 	font-size: 16pt;
 	vertical-align: top;
 	text-align: left;
+}
+
+/* @end */
+
+/* @group Developer Signup Page */
+
+h1.docs-callout {
+	z-index: 99999999;
+	position: relative;
+	font-size: 26px;
+	text-decoration: none;
+	text-shadow: 0px 1px 1px rgba(0,0,0,0.7);
+	width: 300px;
+	text-align: center;
+	margin: -40px auto 35px;
+	padding: 10px 15px;
+	border-radius: 5px;
+	background-color: #c7c6b3;
+	border: 1px solid #a1a090;
+	box-shadow: 0px 3px 0px #a1a090;
+}
+
+h1.docs-callout:hover {
+	background-color: #aead9d;
+	border: 1px solid #888779;
+	box-shadow: 0px 3px 0px #888779;
+}
+
+a.docs-callout {
+	color: #fff;
+	text-decoration: none;
 }
 
 /* @end */
