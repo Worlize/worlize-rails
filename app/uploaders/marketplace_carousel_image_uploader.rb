@@ -2,6 +2,9 @@
 
 class MarketplaceCarouselImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
+  include CarrierWave::MimeTypes
+  
+  after :store, :delete_old_tmp_file
   
   # Include RMagick or ImageScience support:
   # include CarrierWave::RMagick
@@ -45,6 +48,16 @@ class MarketplaceCarouselImageUploader < CarrierWave::Uploader::Base
   # Override the filename of the uploaded files:
   def filename
     "banner.jpg" if original_filename
+  end
+  
+  # remember the tmp file
+  def cache!(new_file)
+    super
+    @old_tmp_file = new_file
+  end
+  
+  def delete_old_tmp_file(dummy)
+    @old_tmp_file.try :delete
   end
 
 end

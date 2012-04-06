@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-class AvatarUploader < CarrierWave::Uploader::Base
+class PropUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
   include CarrierWave::MimeTypes
-
+  
   after :store, :delete_old_tmp_file
   
   # Choose what kind of storage to use for this uploader
@@ -11,7 +11,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
   storage :fog
 
   define_method 'fog_directory', lambda {
-      Worlize.config['amazon']['avatars_bucket']
+      Worlize.config['amazon']['props_bucket']
   }
 
   define_method 'fog_host', lambda {
@@ -24,35 +24,13 @@ class AvatarUploader < CarrierWave::Uploader::Base
     "#{model.guid}"
   end
 
-  process :resize_to_limit => [400, 400]
   process :set_content_type
   
-  version :icon do
-    process :resize_and_pad => [32, 32, "#F0F0F0"]
-    process :set_content_type
-  end
+  # version :medium do
+  #   process :resize_to_limit => [200, 200]
+  #   process :set_content_type
+  # end
   
-  version :thumb do
-    process :resize_and_pad => [80, 80, "#F0F0F0"]
-    process :set_content_type
-  end
-  
-  version :medium do
-    process :resize_to_limit => [200, 200]
-    process :set_content_type
-  end
-  
-  version :small do
-    process :resize_to_limit => [100, 100]
-    process :set_content_type
-  end
-  
-  version :tiny do
-    process :resize_to_limit => [50, 50]
-    process :set_content_type
-  end
-
-
   # Provide a default URL as a default if there hasn't been a file uploaded
   #     def default_url
   #       "/images/fallback/" + [version_name, "default.png"].compact.join('_')
@@ -71,15 +49,16 @@ class AvatarUploader < CarrierWave::Uploader::Base
   #     end
 
   # Add a white list of extensions which are allowed to be uploaded,
-  # for images you might use something like this:
-  #     def extension_white_list
-  #       %w(jpg jpeg gif png)
-  #     end
+  def extension_white_list
+    %w(jpg jpeg gif png)
+  end
 
   # Override the filename of the uploaded files
   #     def filename
   #       "something.jpg" if original_filename
   #     end
+  
+  
   
   # remember the tmp file
   def cache!(new_file)
