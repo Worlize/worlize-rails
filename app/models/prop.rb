@@ -18,8 +18,8 @@ class Prop < ActiveRecord::Base
       :name =>          self.name,
       :guid =>          self.guid,
       :image =>         self.image.url,
-      :creator_guid =>  self.creator.nil? ? nil : self.creator.guid,
-      :animated_gif =>  self.animated_gif
+      :thumbnail =>     self.image.thumb.url,
+      :creator_guid =>  self.creator.nil? ? nil : self.creator.guid
     }
   end
   
@@ -27,8 +27,7 @@ class Prop < ActiveRecord::Base
     {
       :name =>          self.name,
       :guid =>          self.guid,
-      :thumbnail =>     self.image.thumb.url,
-      :animated_gif =>  self.animated_gif
+      :thumbnail =>     self.image.thumb.url
     }
   end
   

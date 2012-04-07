@@ -25,6 +25,11 @@ class PropUploader < CarrierWave::Uploader::Base
   end
 
   process :set_content_type
+
+  version :thumb do
+    process :resize_and_pad => [80, 80, "#F0F0F0"]
+    process :set_content_type
+  end
   
   # version :medium do
   #   process :resize_to_limit => [200, 200]
