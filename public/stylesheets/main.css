@@ -835,7 +835,7 @@ footer nav a {
 	left: 0px;
 	width: 151px;
 	height: 121px;
-	background-image: url(/developer/tease1.png);
+	background-image: url(/developer/tease.png);
 }
 
 #developer-tease .tease2 {
@@ -845,7 +845,7 @@ footer nav a {
 	height: 193px;
 	bottom: 0px;
 	left: -32px;
-	background-image: url(/developer/tease2.png);
+	background: url(/developer/tease.png) 0 -121px;
 }
 
 /* @end */
