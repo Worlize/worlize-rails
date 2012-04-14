@@ -156,6 +156,34 @@ class GiftsController < ApplicationController
           :description => "An unknown error occurred while accepting your gift."
         }
       end
+    elsif gift.giftable_type == 'Prop'
+      
+      # Check for available slots..
+      if (current_user.prop_instances.count >= current_user.prop_slots)
+        render :json => {
+          :success => false,
+          :description => "You don't have enough empty slots in your props locker.  You must buy more slots or delete a prop before you can accept this gift."
+        } and return
+      end
+      
+      prop = gift.giftable
+      prop_instance = current_user.prop_instances.create(
+        :prop => prop,
+        :gifter => gift.sender
+      )
+      if prop_instance.persisted?
+        gift.destroy
+        Worlize.event_logger.info("action=gift_accepted giftable_type=#{gift.giftable_type} giftable_guid=#{gift.giftable.guid} gift_id=#{gift.id} sender=#{gift.sender ? gift.sender.guid : 'none'} recipient=#{gift.recipient.guid}")
+        render :json => {
+          :success => true,
+          :data => prop_instance.hash_for_api
+        }
+      else
+        render :json => {
+          :success => false,
+          :description => "An unknown error occurred while accepting your gift."
+        }
+      end
     else
       render :json => {
         :success => false,

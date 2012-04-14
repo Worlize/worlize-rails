@@ -5,8 +5,6 @@ class AppUploader < CarrierWave::Uploader::Base
 
   storage :fog
   
-  after :store, :delete_old_tmp_file
-
   define_method 'fog_directory', lambda {
       Worlize.config['amazon']['swf_api_bucket']
   }
@@ -32,14 +30,4 @@ class AppUploader < CarrierWave::Uploader::Base
     'app.swf' if original_filename
   end
   
-  # remember the tmp file
-  def cache!(new_file)
-    super
-    @old_tmp_file = new_file
-  end
-  
-  def delete_old_tmp_file(dummy)
-    @old_tmp_file.try :delete
-  end
-
 end

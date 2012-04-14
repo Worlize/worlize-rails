@@ -30,7 +30,7 @@ class Locker::PropsController < ApplicationController
                      :image => params[:filedata])
     
     if @prop.save
-      pi = current_user.avatar_instances.create(:prop => @prop)
+      pi = current_user.prop_instances.create(:prop => @prop)
       if (pi.persisted?)
         render :json => {
           :success => true,
@@ -51,7 +51,6 @@ class Locker::PropsController < ApplicationController
     end
   end
   
-
   def destroy
     prop_instance = current_user.prop_instances.find_by_guid(params[:id])
     if prop_instance.nil?
@@ -66,7 +65,13 @@ class Locker::PropsController < ApplicationController
         prop_instance.prop.marketplace_item.nil?
       # destroy the prop itself if this is its last instance
       # but don't destroy the prop if it exists in the marketplace
-      prop_instance.prop.destroy
+
+      # FIXME: We can't delete props at all right now because
+      # they could still be sitting in a room even after being
+      # deleted from the person's locker, and subsequent people
+      # who entered the room would get a broken image.
+
+      # prop_instance.prop.destroy
     else
       # otherwise just destroy the instance
       prop_instance.destroy

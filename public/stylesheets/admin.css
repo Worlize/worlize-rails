@@ -683,6 +683,12 @@ ul.user-friends img {
 	color: black;
 }
 
+.marketplace_thumbnail_container a .item_type_prop {
+	font-size: 11px;
+	background-color: #CCEEEE;
+	color: black;
+}
+
 .marketplace_thumbnail_container a .item_type_background {
 	font-size: 11px;
 	background-color: #c2d3e9;

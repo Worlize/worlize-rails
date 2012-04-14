@@ -20,6 +20,8 @@
           <div class="item_type_avatar">Avatar</div>
         <% elsif item.item_type == 'InWorldObject' %>
           <div class="item_type_object">Object</div>
+        <% elsif item.item_type == 'Prop' %>
+          <div class="item_type_prop">Prop</div>
         <% elsif item.featured_item_type == 'MarketplaceCategory' %>
           <div class="item_type_category">Category</div>
         <% end %>

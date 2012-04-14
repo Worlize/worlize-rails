@@ -119,13 +119,20 @@ Worlize::Application.routes.draw do |map|
   
   resources :gifts do
     member do
-      post 'accept'
+      post :accept
     end
   end
   
   resources :avatars do
     member do
-      post 'send_as_gift'
+      post :send_as_gift
+    end
+  end
+  
+  resources :props do
+    member do
+      post :send_as_gift
+      post :save_to_locker
     end
   end
   

@@ -82,7 +82,8 @@
   Add new: 
   <%= link_to 'Avatar', new_admin_marketplace_category_item_path(@category, :item_type => 'Avatar') %> |
   <%= link_to 'Background', new_admin_marketplace_category_item_path(@category, :item_type => 'Background') %> |
-  <%= link_to 'Object', new_admin_marketplace_category_item_path(@category, :item_type => 'InWorldObject') %>
+  <%= link_to 'Object', new_admin_marketplace_category_item_path(@category, :item_type => 'InWorldObject') %> |
+  <%= link_to 'Prop', new_admin_marketplace_category_item_path(@category, :item_type => 'Prop') %>
 
   <br><br>
   <%= link_to 'Feature This Category', new_admin_marketplace_featured_item_path(:featured_item_id => @category.id, :featured_item_type => @category.class.to_s) %><br>

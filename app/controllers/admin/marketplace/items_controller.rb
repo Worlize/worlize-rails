@@ -52,6 +52,8 @@ class Admin::Marketplace::ItemsController < ApplicationController
         Background.new
       when 'InWorldObject'
         InWorldObject.new
+      when 'Prop'
+        Prop.new
     end
 
     respond_to do |wants|
@@ -86,6 +88,8 @@ class Admin::Marketplace::ItemsController < ApplicationController
         Background.create(params[:background])
       when 'InWorldObject'
         InWorldObject.create(params[:in_world_object])
+      when 'Prop'
+        Prop.create(params[:prop])
       else
         raise "Invalid item type #{params[:item_type]}"
     end

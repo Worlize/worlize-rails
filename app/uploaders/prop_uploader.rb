@@ -4,8 +4,6 @@ class PropUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
   include CarrierWave::MimeTypes
   
-  after :store, :delete_old_tmp_file
-  
   # Choose what kind of storage to use for this uploader
   # storage :file
   storage :fog
@@ -25,6 +23,11 @@ class PropUploader < CarrierWave::Uploader::Base
   end
 
   process :set_content_type
+  
+  version :medium do
+    process :resize_to_limit => [200, 200]
+    process :set_content_type
+  end
 
   version :thumb do
     process :resize_and_pad => [80, 80, "#F0F0F0"]
@@ -64,15 +67,4 @@ class PropUploader < CarrierWave::Uploader::Base
   #     end
   
   
-  
-  # remember the tmp file
-  def cache!(new_file)
-    super
-    @old_tmp_file = new_file
-  end
-  
-  def delete_old_tmp_file(dummy)
-    @old_tmp_file.try :delete
-  end
-
 end
