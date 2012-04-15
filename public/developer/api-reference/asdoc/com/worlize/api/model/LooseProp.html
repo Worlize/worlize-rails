@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- saved from url=(0014)about:internet --><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen"><link rel="stylesheet" href="../../../../print.css" type="text/css" media="print"><link rel="stylesheet" href="../../../../override.css" type="text/css"><meta name="keywords" content="LooseProp,com.worlize.api.model.LooseProp,avatar,balloonColor,balloonColor,canAuthor,color,color,creatorGuid,destinationRoomGuid,dimLevel,guid,guid,guid,guid,guid,guid,height,height,height,id,identifier,instanceGuid,locked,looseProps,mouseX,mouseY,name,name,name,name,name,objects,ownerGuid,privileges,prop,state,thumbnailURL,thumbnailURL,type,users,width,width,width,x,x,x,x,y,y,y,y,addLooseProp,announce,announceLocal,bringForward,bringToFront,broadcastMessage,broadcastMessageLocal,clearLooseProps,creatorGuid,getLoosePropById,getObjectByGuid,getUserByGuid,gotoRoom,lock,moveTo,moveTo,moveTo,remove,removeAvatar,say,sendBackward,sendMessage,sendMessageLocal,sendToBack,setAvatar,setSize,unlock"><title>com.worlize.api.model.LooseProp</title></head><body><script language="javascript" type="text/javascript" src="../../../../asdoc.js"></script><script language="javascript" type="text/javascript" src="../../../../help.js"></script><script language="javascript" type="text/javascript" src="../../../../cookies.js"></script><script language="javascript" type="text/javascript"><!--
+				asdocTitle = 'LooseProp - Worlize API Documentation';
+				var baseRef = '../../../../';
+				window.onload = configPage;
+			--></script>
+<script type="text/javascript">
+			scrollToNameAnchor();
+		</script><table class="titleTable" cellpadding="0" cellspacing="0" id="titleTable" style="display:none"><tr><td class="titleTableTitle" align="left">Worlize API Documentation</td><td class="titleTableTopNav" align="right"><a href="../../../../package-summary.html" onclick="loadClassListFrame('../../../../all-classes.html')">All Packages</a>&nbsp;|&nbsp;<a href="../../../../class-summary.html" onclick="loadClassListFrame('../../../../all-classes.html')">All Classes</a>&nbsp;|&nbsp;<a href="../../../../all-index-A.html" onclick="loadClassListFrame('../../../../index-list.html')">Index</a>&nbsp;|&nbsp;<a id="framesLink1" href="../../../../index.html?com/worlize/api/model/LooseProp.html&amp;com/worlize/api/model/class-list.html">Frames</a><a id="noFramesLink1" style="display:none" href="" onclick="parent.location=document.location"> No Frames </a></td><td class="titleTableLogo" align="right" rowspan="3"><img src="../../../../images/logo.jpg" class="logoImage" alt=" Adobe Logo " title=" Adobe Logo "></td></tr><tr class="titleTableRow2"><td class="titleTableSubTitle" id="subTitle" align="left">LooseProp</td><td class="titleTableSubNav" id="subNav" align="right"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a>&nbsp;| <a href="#eventSummary">Events</a></td></tr><tr class="titleTableRow3"><td colspan="3">&nbsp;</td></tr></table><script language="javascript" type="text/javascript" xml:space="preserve">
+				<!--
+				
+					if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("LooseProp"); titleBar_setSubNav(false,true,false,false,false,false,true,false,true,false,false	,false,false,false,false,false);}	
+				-->
+			</script><div xmlns:fn="http://www.w3.org/2005/xpath-functions" class="MainContent"><table class="classHeaderTable" cellpadding="0" cellspacing="0"><tr><td class="classHeaderTableLabel">Package</td><td><a href="package-detail.html" onclick="javascript:loadClassListFrame('class-list.html')">com.worlize.api.model</a></td></tr><tr><td class="classHeaderTableLabel">Class</td><td class="classSignature">public  class  LooseProp</td></tr><tr><td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">LooseProp  <img src="../../../../images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> flash.events.EventDispatcher</td></tr></table><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.2</td></tr></table><p></p><p></p><p></p>
+	 Represents an instance of a Prop image in the room.
+	 
+	 <p>Props can be placed in and moved around the room by anyone as a way
+	 temporararily decorate the room or perhaps to virtually give your friend
+	 a cup of coffee by placing it next to them in the room.</p>
+	 
+	              <p>To add loose props to the room, use the <code>addLooseProp</code>
+	 method of the <code>ThisRoom</code> instance.</p>
+	 
+	              <p>All loose props will be removed from the room once it becomes empty
+	 to prevent abuse.</p>
+	 
+	           <p></p><p><span class="classHeaderTableLabel">See also</span></p><div class="seeAlso"><a href="ThisRoom.html#addLooseProp()" target="">ThisRoom.addLooseProp()</a></div><br/><hr></div><a name="propertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Properties</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#id" class="signatureLink">id</a> : uint<div class="summaryTableDescription">[read-only] 
+		 A unique identifier for this specific LooseProp
+		 instance.</div></td><td class="summaryTableOwnerCol">LooseProp</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#prop" class="signatureLink">prop</a> : <a href="../../../../com/worlize/api/model/Prop.html">Prop</a><div class="summaryTableDescription">[read-only] 
+		 The Prop associated with this LooseProp
+		 instance.</div></td><td class="summaryTableOwnerCol">LooseProp</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#x" class="signatureLink">x</a> : int<div class="summaryTableDescription">[read-only] 
+		 The horizontal position in pixels of the center point of the prop
+		 relative to the room's coordinate space.</div></td><td class="summaryTableOwnerCol">LooseProp</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#y" class="signatureLink">y</a> : int<div class="summaryTableDescription">[read-only] 
+		 The vertical position in pixels of the center point of the prop
+		 relative to the room's coordinate space.</div></td><td class="summaryTableOwnerCol">LooseProp</td></tr></table></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#LooseProp()" class="signatureLink">LooseProp</a>()</div><div class="summaryTableDescription">
+		 Constructor.</div></td><td class="summaryTableOwnerCol">LooseProp</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#bringForward()" class="signatureLink">bringForward</a>(layerCount:int):void</div><div class="summaryTableDescription">
+		 Bring the prop forward in the stacking order.</div></td><td class="summaryTableOwnerCol">LooseProp</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#bringToFront()" class="signatureLink">bringToFront</a>():void</div><div class="summaryTableDescription">
+		 Bring the prop all the way forward in the stacking order.</div></td><td class="summaryTableOwnerCol">LooseProp</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#moveTo()" class="signatureLink">moveTo</a>(x:int, y:int):void</div><div class="summaryTableDescription">
+		 Move the prop to a different location in the room
+		  
+		 </div></td><td class="summaryTableOwnerCol">LooseProp</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#remove()" class="signatureLink">remove</a>():void</div><div class="summaryTableDescription">
+		 Remove the loose prop from the room.</div></td><td class="summaryTableOwnerCol">LooseProp</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#sendBackward()" class="signatureLink">sendBackward</a>(layerCount:int):void</div><div class="summaryTableDescription">
+		 Send the prop backward in the stacking order.</div></td><td class="summaryTableOwnerCol">LooseProp</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#sendToBack()" class="signatureLink">sendToBack</a>():void</div><div class="summaryTableDescription">
+		 Send the prop all the way backward in the stacking order.</div></td><td class="summaryTableOwnerCol">LooseProp</td></tr></table></div><a name="eventSummary"></a><div class="summarySection"><div class="summaryTableTitle">Events</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableEvent"><tr><th>&nbsp;</th><th colspan="2">Event</th><th> Summary </th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#event:propLayerChanged" class="signatureLink">propLayerChanged</a></div></td><td class="summaryTableDescription summaryTableCol">Dispatched after the prop has changed position in the stacking order.</td><td class="summaryTableOwnerCol">LooseProp</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#event:propMoved" class="signatureLink">propMoved</a></div></td><td class="summaryTableDescription summaryTableCol">Dispatched after the prop has been moved in the room.</td><td class="summaryTableOwnerCol">LooseProp</td></tr></table></div><script language="javascript" type="text/javascript"><!--
+										showHideInherited();
+										--></script><div class="MainContent"><div class="detailSectionHeader">Property Detail</div><a name="propertyDetail"></a><a name="id"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">id</td><td class="detailHeaderType">property</td></tr></table><div class="detailBody"><code>id:uint</code>&nbsp;&nbsp;[read-only] <p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.2</td></tr></table><p></p><p></p><p>
+		 A unique identifier for this specific <code>LooseProp</code>
+		 instance.
+		  
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get id():uint</code><br/><p><span class="label">See also</span></p><div class="seeAlso">com.worlize.model.ThisRoom.getPropById()</div></div><a name="propertyDetail"></a><a name="prop"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">prop</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>prop:<a href="../../../../com/worlize/api/model/Prop.html">Prop</a></code>&nbsp;&nbsp;[read-only] <p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.2</td></tr></table><p></p><p></p><p>
+		 The <code>Prop</code> associated with this <code>LooseProp</code>
+		 instance.
+		 
+		 <p>The <code>Prop</code> class defines the image that is displayed
+		 while the LooseProp identifies a particular instance of that
+		 <code>Prop</code> in the room.</p>
+		  
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get prop():<a href="../../../../com/worlize/api/model/Prop.html">Prop</a></code><br/><p><span class="label">See also</span></p><div class="seeAlso"><a href="Prop.html" target="">com.worlize.api.model.Prop</a></div></div><a name="propertyDetail"></a><a name="x"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">x</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>x:int</code>&nbsp;&nbsp;[read-only] <p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.2</td></tr></table><p></p><p></p><p>
+		 The horizontal position in pixels of the center point of the prop
+		 relative to the room's coordinate space.
+		  
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get x():int</code><br/></div><a name="propertyDetail"></a><a name="y"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">y</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>y:int</code>&nbsp;&nbsp;[read-only] <p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.2</td></tr></table><p></p><p></p><p>
+		 The vertical position in pixels of the center point of the prop
+		 relative to the room's coordinate space.
+		  
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get y():int</code><br/></div><a name="constructorDetail"></a><div class="detailSectionHeader">Constructor Detail</div><a name="LooseProp()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">LooseProp</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">Constructor</td></tr></table><div class="detailBody"><code>public function LooseProp()</code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.2</td></tr></table><p></p><p>
+		 Constructor.
+		 
+		 <p>Not meant to be instantiated manually, <code>LooseProp</code>
+		 instances are created internally by the Worlize API</p>
+		 		 </p></div><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="bringForward()"></a><a name="bringForward(int)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">bringForward</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code> public function bringForward(layerCount:int):void</code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.2</td></tr></table><p></p><p></p><p>
+		 Bring the prop forward in the stacking order.
+		 
+		 <p>This does not immediately affect the stacking order, but rather
+		 sends a request to the server to update the stacking order.  The
+		 actual stacking order will be updated when the confirmation response
+		 is received from the server, and a
+		 <code>LoosePropEvent.PROP_LAYER_CHANGED</code> event will be
+		 dispatched.</p>
+		 
+		 <p><code>bringToFront</code> uses this method internally, passing
+		 the largest possible integer <code>0x7FFFFFFF</code> as the
+		 layerCount parameter.</p>
+		  
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">layerCount</span>:int</code> &mdash; how many layers to bring the prop forward
+		 
+		 </td></tr></table></p><p><span class="label">See also</span></p><div class="seeAlso"><a href="LooseProp.html#event:propLayerChanged" target="">propLayerChanged event</a></div></div><a name="bringToFront()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">bringToFront</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function bringToFront():void</code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.2</td></tr></table><p></p><p></p><p>
+		 Bring the prop all the way forward in the stacking order.
+		 
+		 <p>This does not immediately affect the stacking order, but rather
+		 sends a request to the server to update the stacking order.  The
+		 actual stacking order will be updated when the confirmation response
+		 is received from the server, and a
+		 <code>LoosePropEvent.PROP_LAYER_CHANGED</code> event will be
+		 dispatched.</p>
+		 
+		 <p>Internally calls <code>sendForward()</code>, passing
+		 the largest possible integer <code>0x7FFFFFFF</code> as the
+		 layerCount parameter.</p>
+		 
+		 </p><p><span class="label">See also</span></p><div class="seeAlso"><a href="LooseProp.html#event:propLayerChanged" target="">propLayerChanged event</a></div></div><a name="moveTo()"></a><a name="moveTo(int,int)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">moveTo</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function moveTo(x:int, y:int):void</code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.2</td></tr></table><p></p><p></p><p>
+		 Move the prop to a different location in the room
+		  
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">x</span>:int</code> &mdash; the horizontal position for the prop's center
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">y</span>:int</code> &mdash; the vertical position for the prop's center
+		 
+		 </td></tr></table></p><p><span class="label">See also</span></p><div class="seeAlso"><a href="LooseProp.html#event:propMoved" target="">propMoved event</a></div></div><a name="remove()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">remove</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function remove():void</code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.2</td></tr></table><p></p><p></p><p>
+		 Remove the loose prop from the room.
+		 
+		 <p>This does not immediately remove the prop from the room, but
+		 rather sends the request to have the prop removed to the server.
+		 Once the server processes the request and broadcasts the update
+		 to all the connected clients, then the prop will be removed and a
+		 <code>LoosePropEvent.PROP_REMOVED</code> will be dispatched.</p> 
+		 
+		 </p><p><span class="label">See also</span></p><div class="seeAlso"><a href="ThisRoom.html#event:propRemoved" target="">propRemoved event</a><br/><a href="ThisRoom.html#addLooseProp()" target="">ThisRoom.addLooseProp()</a></div></div><a name="sendBackward()"></a><a name="sendBackward(int)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">sendBackward</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function sendBackward(layerCount:int):void</code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.2</td></tr></table><p></p><p></p><p>
+		 Send the prop backward in the stacking order.
+		 
+		 <p>This does not immediately affect the stacking order, but rather
+		 sends a request to the server to update the stacking order.  The
+		 actual stacking order will be updated when the confirmation response
+		 is received from the server, and a
+		 <code>LoosePropEvent.PROP_LAYER_CHANGED</code> event will be
+		 dispatched.</p>
+		 
+		 <p><code>sendToBack</code> uses this method internally, passing
+		 the largest possible integer <code>0x7FFFFFFF</code> as the
+		 layerCount parameter.</p>
+		  
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">layerCount</span>:int</code> &mdash; how many layers to send the prop backward
+		 
+		 </td></tr></table></p><p><span class="label">See also</span></p><div class="seeAlso"><a href="LooseProp.html#event:propLayerChanged" target="">propLayerChanged event</a></div></div><a name="sendToBack()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">sendToBack</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function sendToBack():void</code><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize APIv.2</td></tr></table><p></p><p></p><p>
+		 Send the prop all the way backward in the stacking order.
+		 
+		 <p>This does not immediately affect the stacking order, but rather
+		 sends a request to the server to update the stacking order.  The
+		 actual stacking order will be updated when the confirmation response
+		 is received from the server, and a
+		 <code>LoosePropEvent.PROP_LAYER_CHANGED</code> event will be
+		 dispatched.</p>
+		 
+		 <p>Internally calls <code>sendBackward()</code>, passing
+		 the largest possible integer <code>0x7FFFFFFF</code> as the
+		 layerCount parameter.</p>
+		  
+		 </p><p><span class="label">See also</span></p><div class="seeAlso"><a href="LooseProp.html#event:propLayerChanged" target="">propLayerChanged event</a></div></div><div class="detailSectionHeader"> Event Detail </div><a name="event:propLayerChanged"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">propLayerChanged</td><td class="detailHeaderType"> Event </td></tr></table><div class="detailBody"><span class="label">Event Object Type: </span><a href="../../../../com/worlize/api/event/LoosePropEvent.html"><code>com.worlize.api.event.LoosePropEvent</code></a><br/><span class="label">LoosePropEvent.type property = </span><a href="../../../../com/worlize/api/event/LoosePropEvent.html#PROP_LAYER_CHANGED"><code>com.worlize.api.event.LoosePropEvent.PROP_LAYER_CHANGED</code></a><br/><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize API.v2</td></tr></table><p></p><p></p><p>
+	 Dispatched after the prop has changed position in the stacking order. 
+ 	 </p>
+		  The <code>LoosePropEvent.PROP_LAYER_CHANGED</code> constant defines the value of the
+		  <code>type</code> property of the event object for a <code>propLayerChanged</code> event.
+		 		  <p>The properties of the event object have the following values:</p>
+		  <table class="innertable" ><tr><th>Property</th><th>Value</th></tr><tr><td><code>bubbles</code></td><td>false</td></tr><tr><td><code>cancelable</code></td><td>true</td></tr><tr><td><code>currentTarget</code></td><td>The Object that defines the
+		       event listener that handles the event. For example, if you use
+		       <code>myButton.addEventListener()</code> to register an event listener,
+		       myButton is the value of the <code>currentTarget</code>. </td></tr><tr><td><code>looseProp</code></td><td>A LooseProp instance representing
+		       the loose prop that was moved in the stacking order.</td></tr><tr><td><code>oldIndex</code></td><td>The LooseProp's previous
+		       position in the stacking order.</td></tr><tr><td><code>newIndex</code></td><td>The LooseProp's new
+		       position in the stacking order.</td></tr><tr><td><code>delta</code></td><td>The change between the
+		       LooseProp's old and new position in the stacking order. Will
+		       be a positive integer when the prop is brought forward and
+		       a negative integer when sent backward.</td></tr><tr><td><code>target</code></td><td>The Object that dispatched the event;
+		       it is not always the Object listening for the event.
+		       Use the <code>currentTarget</code> property to always access the
+		       Object listening for the event.</td></tr></table>
+		 		  </div><a name="event:propMoved"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">propMoved</td><td class="detailHeaderType"> Event </td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><span class="label">Event Object Type: </span><a href="../../../../com/worlize/api/event/LoosePropEvent.html"><code>com.worlize.api.event.LoosePropEvent</code></a><br/><span class="label">LoosePropEvent.type property = </span><a href="../../../../com/worlize/api/event/LoosePropEvent.html#PROP_MOVED"><code>com.worlize.api.event.LoosePropEvent.PROP_MOVED</code></a><br/><p></p><table cellpadding="0" cellspacing="0" border="0"><tr><td style="white-space:nowrap" valign="top"><b> Product Version :&nbsp;</b></td><td>Worlize API.v2</td></tr></table><p></p><p></p><p>
+	 Dispatched after the prop has been moved in the room.
+	 </p>
+		  The <code>LoosePropEvent.PROP_MOVED</code> constant defines the value of the
+		  <code>type</code> property of the event object for a <code>propMoved</code> event.
+		 		  <p>The properties of the event object have the following values:</p>
+		  <table class="innertable" ><tr><th>Property</th><th>Value</th></tr><tr><td><code>bubbles</code></td><td>false</td></tr><tr><td><code>cancelable</code></td><td>true</td></tr><tr><td><code>currentTarget</code></td><td>The Object that defines the
+		       event listener that handles the event. For example, if you use
+		       <code>myButton.addEventListener()</code> to register an event listener,
+		       myButton is the value of the <code>currentTarget</code>. </td></tr><tr><td><code>looseProp</code></td><td>A LooseProp instance representing
+		       the loose prop that was moved.</td></tr><tr><td><code>target</code></td><td>The Object that dispatched the event;
+		       it is not always the Object listening for the event.
+		       Use the <code>currentTarget</code> property to always access the
+		       Object listening for the event.</td></tr></table>
+		 		  </div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Sat Apr 14 2012, 06:31 PM -07:00  </center></div></body></html><!--<br/>Sat Apr 14 2012, 06:31 PM -07:00  -->
