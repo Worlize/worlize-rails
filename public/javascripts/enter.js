@@ -1,5 +1,16 @@
 var isFocused = true;
 
+function getSWF(movieName) { 
+    if (navigator.appName.indexOf("Microsoft") != -1) 
+    { 
+        return window[movieName]; 
+    } 
+    else 
+    { 
+        return document[movieName]; 
+    }
+}
+
 jQuery(function($) {
     $(window).bind('focus', function(event) {
         isFocused = true;
@@ -159,6 +170,14 @@ function showFacebookDialog(options) {
             }
         }, { scope: requestedFacebookPermissions })
     }
+}
+
+function fbLoginForSnapshot() {
+    FB.login(function(response) {
+        if (response.authResponse) {
+            getSWF('FlashClient').fbLoginForSnapshotComplete();
+        }
+    }, { scope: requestedFacebookPermissions });
 }
 
 function closeMarketplace() {

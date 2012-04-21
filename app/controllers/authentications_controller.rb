@@ -142,6 +142,17 @@ class AuthenticationsController < ApplicationController
     end
     
     if fb_profile['id']
+      existing_authentication = Authentication.find(
+        :provider => 'facebook',
+        :uid => fb_profile['id']
+      )
+      unless existing_authentication.empty?
+        render :json => {
+          'success' => false,
+          'detail' => 'Facebook account is already connected to a different Worlize account'
+        } and return
+      end
+      
       fb_authentication ||= current_user.authentications.create
       fb_authentication.provider = 'facebook'
       fb_authentication.uid = fb_profile['id']
