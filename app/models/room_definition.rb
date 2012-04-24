@@ -80,9 +80,19 @@ class RoomDefinition < RedisModel
   end
   
   def broadcast_update_notification
+    # Worlize::PubSub.publish(
+    #   "room:#{self.guid}",
+    #   '{"msg":"room_definition_updated"}'
+    # )
     Worlize::PubSub.publish(
-      "room:#{self.guid}",
-      '{"msg":"room_definition_updated"}'
+        "room:#{self.guid}",
+        Yajl::Encoder.encode({
+          :msg => 'room_definition_updated',
+          :data => {
+            :guid => self.guid,
+            :changes => previous_changes
+          }
+        })
     )
   end
   

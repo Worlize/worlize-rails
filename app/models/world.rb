@@ -23,11 +23,7 @@ class World < ActiveRecord::Base
       :owner => self.user.public_hash_for_api,
       :can_create_new_room => current_user == self.user,
       :rooms => self.rooms.map do |room|
-        {
-          :name => room.name,
-          :guid => room.guid,
-          :user_count => room.user_count
-        }
+        room.basic_hash_for_api
       end
     }
   end

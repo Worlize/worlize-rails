@@ -2,17 +2,22 @@ class Room < ActiveRecord::Base
   belongs_to :world
   has_one :background_instance, :dependent => :nullify
   has_many :in_world_object_instances, :dependent => :nullify
-  
   has_many :sharing_links, :dependent => :destroy
   
+  acts_as_list :scope => :world
+  
   before_create :assign_guid
-  after_save :update_room_definition
-  after_destroy :delete_room_definition
+  after_create :notify_users_of_creation
+  after_save [:update_room_definition, :notify_users_of_changes]
+  after_destroy [:delete_room_definition, :notify_users_of_deletion]
     
   def basic_hash_for_api
     {
       :name => name,
-      :guid => guid
+      :guid => guid,
+      :user_count => user_count,
+      :world_guid => world.guid,
+      :thumbnail => background_instance ? background_instance.background.image.thumb.url : nil
     }
   end
     
@@ -20,7 +25,10 @@ class Room < ActiveRecord::Base
     {
       :room_definition => self.room_definition.hash_for_api,
       :user_count => user_count,
-      :can_author => world.user == current_user
+      :can_author => world.user == current_user,
+      :thumbnail => background_instance ? background_instance.background.image.thumb.url : nil,
+      :world_guid => world.guid,
+      :guid => guid
     }
   end
   
@@ -106,6 +114,31 @@ class Room < ActiveRecord::Base
   
   def delete_room_definition
     room_definition.destroy
+  end
+
+  def notify_users_of_creation
+    Worlize::InteractServerManager.instance.broadcast_to_world(world.guid, {
+      :msg => 'room_created',
+      :data => basic_hash_for_api
+    })
+  end
+  
+  def notify_users_of_deletion
+    Worlize::InteractServerManager.instance.broadcast_to_world(world.guid, {
+      :msg => 'room_destroyed',
+      :data => {
+        :name => name,
+        :guid => guid,
+        :world_guid => world.guid
+      }
+    })
+  end
+  
+  def notify_users_of_changes
+    Worlize::InteractServerManager.instance.broadcast_to_world(world.guid, {
+      :msg => 'room_updated',
+      :data => basic_hash_for_api
+    })
   end
   
   # before_create :create_room_definition

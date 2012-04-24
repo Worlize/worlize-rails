@@ -43,8 +43,10 @@ class RedisModel
     # Build accessors with hooks into ActiveModel::Dirty
     define_method attribute_name, lambda { attributes[attribute_name] }
     define_method "#{attribute_name}=", lambda { |newvalue|
-      self.send "#{attribute_name}_will_change!"
-      attributes[attribute_name] = newvalue
+      if attributes[attribute_name] != newvalue
+        self.send "#{attribute_name}_will_change!"
+        attributes[attribute_name] = newvalue
+      end
     }
   end
   

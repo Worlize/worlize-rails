@@ -228,7 +228,7 @@ Worlize::Application.routes.draw do |map|
   end
   
   resources :worlds do
-    resources :rooms
+    resources :rooms, :only => [:index, :create, :show, :update, :destroy]
     member do
       get :user_list
     end
@@ -236,7 +236,7 @@ Worlize::Application.routes.draw do |map|
   
   resources :public_worlds
   
-  resources :rooms do
+  resources :rooms, :only => [:show, :update, :destroy] do
     resources :hotspots, :controller => 'in_world/hotspots'
     resources :objects, :controller => 'in_world/objects'
     resources :youtube_players, :controller => 'in_world/youtube_players'

@@ -6,12 +6,7 @@ class RoomsController < ApplicationController
     world = World.find_by_guid(params[:world_id])
     if world
       rooms = world.rooms.map do |room|
-        {
-          :name => room.name,
-          :guid => room.guid,
-          :user_count => room.user_count,
-          :thumbnail => room.background_instance.background.image.thumb.url
-        }
+        room.basic_hash_for_api
       end
 
       render :json => {
@@ -163,7 +158,7 @@ class RoomsController < ApplicationController
         render :json => {
           :success => true,
           :data => {
-            :room_guid => room.guid
+            :room => room.basic_hash_for_api
           }
         } and return
       else
