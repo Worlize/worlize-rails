@@ -1,11 +1,12 @@
 class World < ActiveRecord::Base
-  before_create :assign_guid
-  before_destroy :check_destroy_preconditions
-  after_update :notify_users_of_changes
-
   belongs_to :user
   has_many :rooms, :order => 'position, id', :dependent => :destroy
   has_one :public_world, :dependent => :destroy
+  has_one :permalink, :as => :linkable, :dependent => :destroy
+
+  before_create :assign_guid
+  before_destroy :check_destroy_preconditions
+  after_update :notify_users_of_changes
   
   validates :name, :presence => true
   
@@ -15,20 +16,18 @@ class World < ActiveRecord::Base
     {
       :guid => self.guid,
       :name => self.name,
-      :owner => self.user.public_hash_for_api
+      :owner => self.user.public_hash_for_api,
+      :permalink => self.permalink ? self.permalink.link : nil
     }
   end
 
   def hash_for_api(current_user=nil)
-    {
-      :guid => self.guid,
-      :name => self.name,
-      :owner => self.user.public_hash_for_api,
+    basic_hash_for_api.merge({
       :can_create_new_room => current_user == self.user,
       :rooms => self.rooms.map do |room|
         room.basic_hash_for_api
       end
-    }
+    })
   end
   
   def to_xml
@@ -234,6 +233,15 @@ class World < ActiveRecord::Base
     redis.set 'initial_world_guid', guid
   end
 
+  def notify_users_of_changes
+    Worlize::InteractServerManager.instance.broadcast_to_world(self.guid, {
+      :msg => 'world_definition',
+      :data => {
+        :world => basic_hash_for_api
+      }
+    })
+  end
+
   private
   def assign_guid()
     self.guid = Guid.new.to_s
@@ -243,12 +251,4 @@ class World < ActiveRecord::Base
     return false if World.initial_template_world_guid == self.guid
   end
   
-  def notify_users_of_changes
-    Worlize::InteractServerManager.instance.broadcast_to_world(self.guid, {
-      :msg => 'world_definition',
-      :data => {
-        :world => basic_hash_for_api
-      }
-    })
-  end
 end

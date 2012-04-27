@@ -1,18 +1,83 @@
 class WorldsController < ApplicationController
   before_filter :require_user
-  
+
+  def set_permalink
+    world = World.find_by_guid(params[:id])
+    if world
+      if !current_user.can_edit?(world)
+        respond_to do |format|
+          format.json do
+            render :json => {
+              :success => false,
+              :error => {
+                :message => "Permission denied.",
+                :code => 0
+              }
+            }
+          end
+          format.html do
+            redirect_to root_url
+          end
+        end
+        return
+      end
+      
+      if world.permalink
+        world.permalink.link = params[:permalink]
+      else
+        world.permalink = Permalink.new(:link => params[:permalink])
+      end
+      successful = world.permalink.save
+      if successful
+        world.notify_users_of_changes
+      end
+      respond_to do |format|
+        format.json do
+          render :json => {
+            :success => successful,
+            :permalink => world.permalink.link,
+            :message => world.permalink.errors.map { |k,v| "- #{k.to_s.humanize} #{v}" }.join(".\n")
+          }
+        end
+      end
+    else
+      respond_to do |format|
+        format.json do
+          render :json => {
+            :success => false,
+            :description => "There is no such world."
+          }
+        end
+      end
+    end
+  end
+
   def show
     world = World.find_by_guid(params[:id])
     if world
-      render :json => {
-        :success => true,
-        :data => world.hash_for_api(current_user)
-      }
+      respond_to do |format|
+        format.json do
+          render :json => {
+            :success => true,
+            :data => world.hash_for_api(current_user)
+          }
+        end
+        format.html do
+          redirect_to enter_room_url(world.rooms.first.guid)
+        end
+      end
     else
-      render :json => {
-        :success => false,
-        :description => "There is no such world."
-      }
+      respond_to do |format|
+        format.json do
+          render :json => {
+            :success => false,
+            :description => "There is no such world."
+          }
+        end
+        format.html do
+          redirect_to root_url
+        end
+      end
     end
   end
   

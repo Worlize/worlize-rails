@@ -42,6 +42,12 @@ Worlize::Application.routes.draw do |map|
     end
   end
   
+  resources :permalinks, :only => [] do
+    collection do
+      post :check_availability
+    end
+  end
+  
   resources :client_errors, :only => :create
   
   resource :dashboard, :controller => :dashboard
@@ -231,6 +237,7 @@ Worlize::Application.routes.draw do |map|
     resources :rooms, :only => [:index, :create, :show, :update, :destroy]
     member do
       get :user_list
+      post :set_permalink
     end
   end
   
@@ -265,9 +272,8 @@ Worlize::Application.routes.draw do |map|
 
   match 'enter', :to => "welcome#enter", :as => :enter_world
   
-
-  match '/:link_code', :to => "sharing_link#show"
-
+  match '/:permalink', :to => "permalinks#show", :as => :permalink
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

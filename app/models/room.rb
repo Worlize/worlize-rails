@@ -4,6 +4,8 @@ class Room < ActiveRecord::Base
   has_many :in_world_object_instances, :dependent => :nullify
   has_many :sharing_links, :dependent => :destroy
   
+  has_one :permalink, :as => :linkable, :dependent => :destroy
+  
   acts_as_list :scope => :world
   
   before_create :assign_guid
