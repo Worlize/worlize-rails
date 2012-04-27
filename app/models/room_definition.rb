@@ -9,7 +9,8 @@ class RoomDefinition < RedisModel
     :name,
     :background,
     :properties,
-    :owner_guid
+    :owner_guid,
+    :hidden
   )
   
   define_method 'background', lambda {
@@ -72,6 +73,7 @@ class RoomDefinition < RedisModel
     self.world_guid = room.world.guid
     self.owner_guid = room.world.user ? room.world.user.guid : nil
     self.name = room.name
+    self.hidden = room.hidden?
     self.background = room.background_instance.nil? ? nil : room.background_instance.background.image.url
   end
   

@@ -10,6 +10,8 @@ class Room < ActiveRecord::Base
   after_create :notify_users_of_creation
   after_save [:update_room_definition, :notify_users_of_changes]
   after_destroy [:delete_room_definition, :notify_users_of_deletion]
+  
+  attr_accessible :name, :hidden
     
   def basic_hash_for_api
     {
@@ -17,15 +19,18 @@ class Room < ActiveRecord::Base
       :guid => guid,
       :user_count => user_count,
       :world_guid => world.guid,
+      :hidden => hidden,
+      :properties => self.room_definition.properties,
       :thumbnail => background_instance ? background_instance.background.image.thumb.url : nil
     }
   end
-    
+
   def hash_for_api(current_user)
     {
       :room_definition => self.room_definition.hash_for_api,
       :user_count => user_count,
       :can_author => world.user == current_user,
+      :hidden => hidden,
       :thumbnail => background_instance ? background_instance.background.image.thumb.url : nil,
       :world_guid => world.guid,
       :guid => guid
@@ -41,7 +46,7 @@ class Room < ActiveRecord::Base
     redis = Worlize::RedisConnectionPool.get_client(:room_server_assignments)
     redis.smembers "roomUsers:#{self.guid}"
   end
-    
+  
   def interact_server_id
     Worlize::InteractServerManager.instance.server_for_room(self.guid)
   end

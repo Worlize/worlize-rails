@@ -1,12 +1,15 @@
 class World < ActiveRecord::Base
   before_create :assign_guid
   before_destroy :check_destroy_preconditions
+  after_update :notify_users_of_changes
 
   belongs_to :user
-  has_many :rooms, :dependent => :destroy
+  has_many :rooms, :order => 'position, id', :dependent => :destroy
   has_one :public_world, :dependent => :destroy
   
   validates :name, :presence => true
+  
+  attr_accessible :name
 
   def basic_hash_for_api
     {
@@ -37,6 +40,11 @@ class World < ActiveRecord::Base
       }
     end
     builder.to_xml
+  end
+  
+  def can_be_edited_by?(user)
+    owner = self.user
+    return user == owner
   end
   
   def connected_user_guids
@@ -233,5 +241,14 @@ class World < ActiveRecord::Base
   
   def check_destroy_preconditions
     return false if World.initial_template_world_guid == self.guid
+  end
+  
+  def notify_users_of_changes
+    Worlize::InteractServerManager.instance.broadcast_to_world(self.guid, {
+      :msg => 'world_definition',
+      :data => {
+        :world => basic_hash_for_api
+      }
+    })
   end
 end

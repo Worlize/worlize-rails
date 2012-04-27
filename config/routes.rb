@@ -227,7 +227,7 @@ Worlize::Application.routes.draw do |map|
     end
   end
   
-  resources :worlds do
+  resources :worlds, :only => [:show, :update] do
     resources :rooms, :only => [:index, :create, :show, :update, :destroy]
     member do
       get :user_list
