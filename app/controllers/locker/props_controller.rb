@@ -72,6 +72,7 @@ class Locker::PropsController < ApplicationController
       # who entered the room would get a broken image.
 
       # prop_instance.prop.destroy
+      prop_instance.destroy
     else
       # otherwise just destroy the instance
       prop_instance.destroy
