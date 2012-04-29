@@ -12,14 +12,14 @@ class PermalinksController < ApplicationController
   def check_availability
     p = Permalink.new(
       :link => params[:permalink],
-      :linkable_id => 1,
-      :linkable_type => 'World'
+      :linkable => World.first
     )
     
     respond_to do |format|
       format.json do
         render :json => {
-          :success => p.valid?
+          :success => p.valid?,
+          :message => p.errors.map { |k,v| "- #{k.to_s.humanize} #{v}" }.join(".\n")
         }
       end
     end
