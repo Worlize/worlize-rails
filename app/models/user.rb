@@ -73,6 +73,9 @@ class User < ActiveRecord::Base
 
   acts_as_authentic do |c|
     c.login_field = 'username'
+    c.validates_length_of_login_field_options = {
+      :in => 3..50
+    }
     c.validates_format_of_login_field_options = {
       :with => /^[a-zA-Z\d_\-\ ]+$/,
       :message => 'can only contain letters, numbers, spaces, and the dash or underscore characters'
