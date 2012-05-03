@@ -840,7 +840,7 @@ class User < ActiveRecord::Base
   end
   
   def update_interactivity_session
-    if username_changed?
+    if !new_user? && username_changed?
       interactivity_session.update_attributes(:username => username)
     end
   end
