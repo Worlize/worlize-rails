@@ -117,8 +117,16 @@ Worlize::Application.routes.draw do |map|
     collection do
       get :search
       get :validate_field
+      post :check_username_availability
     end
     resources :friends
+  end
+  
+  resource :me, :only => [:show], :controller => 'Users' do
+    member do
+      post :change_password
+      put :settings
+    end
   end
   
   resource :preferences

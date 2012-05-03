@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   after_create :initialize_currency
   after_create :log_creation
   before_destroy :unlink_friendships
+  after_save [:update_interactivity_session, :notify_users_of_changes]
   
   scope :active, lambda {
     where(:suspended => false)
@@ -102,6 +103,7 @@ class User < ActiveRecord::Base
     world = self.worlds.first
     data = {
       :name => self.name,
+      :password_changed_at => self.password_changed_at,
       :developer => self.developer?,
       :background_slots => self.background_slots,
       :avatar_slots => self.avatar_slots,
@@ -840,5 +842,31 @@ class User < ActiveRecord::Base
   
   def log_creation
     Worlize.event_logger.info("action=user_created user=#{self.guid} user_username=\"#{self.username}\"")
+  end
+  
+  def update_interactivity_session
+    if username_changed?
+      interactivity_session.update_attributes(:username => username)
+    end
+  end
+  
+  def notify_users_of_changes
+    if username_changed? && online?
+      Worlize::InteractServerManager.instance.broadcast_to_world(
+        interactivity_session.world_guid,
+        {
+          :msg => 'user_updated',
+          :data => public_hash_for_api
+        }
+      )
+      
+      message = {
+        :msg => 'friend_data_updated',
+        :data => hash_for_friends_list
+      }
+      friend_guids.each do |friend_guid|
+        Worlize::PubSub.publish("user:#{friend_guid}", message)
+      end
+    end
   end
 end

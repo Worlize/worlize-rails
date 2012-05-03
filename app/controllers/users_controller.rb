@@ -144,10 +144,14 @@ class UsersController < ApplicationController
   end
 
   def show
-    begin
-      @user = User.find_by_guid(Guid.from_s(params[:id]).to_s)
-    rescue ArgumentError
-      @user = User.find_by_username!(params[:id])
+    if params[:id].nil?
+      @user = current_user
+    else
+      begin
+        @user = User.find_by_guid(Guid.from_s(params[:id]).to_s)
+      rescue ArgumentError
+        @user = User.find_by_username!(params[:id])
+      end
     end
     
     respond_to do |format|
@@ -209,6 +213,68 @@ class UsersController < ApplicationController
         }
       end
     }
+  end
+  
+  def change_password
+    current_user.password = params[:password]
+    current_user.password_changed_at = Time.now
+    if current_user.save
+      render :json => {
+        :success => true,
+        :password_changed_at => current_user.password_changed_at
+      }
+    else
+      render :json => {
+        :success => false,
+        :message => current_user.errors.map { |k,v| "- #{k.to_s.humanize} #{v}" }.join(".\n")
+      }
+    end
+  end
+  
+  def settings
+    begin
+      data = Yajl::Parser.parse(params[:data])
+    rescue
+      render :json => {
+        :success => false,
+        :message => "Invalid JSON data provided"
+      }, :status => 400
+      return
+    end
+    
+    success = current_user.update_attributes(data['user'])
+    # Record audit log items
+    current_user.previous_changes.each_pair do |key,changes|
+      unless ['perishable_token','updated_at'].include?(key)
+        Worlize.audit_logger.info("action=user_field_changed_by_user user=#{current_user.guid} user_username=\"#{current_user.username}\" field_name=#{key} old_value=\"#{changes[0]}\" new_value=\"#{changes[1]}\"")
+      end
+    end
+    
+    if success
+      render :json => {
+        :success => true,
+        :user => current_user.hash_for_api
+      }
+    else
+      render :json => {
+        :success => false,
+        :message => current_user.errors.map { |k,v| "- #{k.to_s.humanize} #{v}" }.join(".\n")
+      }
+    end
+  end
+  
+  def check_username_availability
+    u = User.new(:username => params[:username])
+    u.valid?
+      
+    respond_to do |format|
+      format.json do
+        render :json => {
+          :success => !u.errors.include?(:username),
+          :username => params[:username]
+        }
+      end
+    end
   end
 
 end
