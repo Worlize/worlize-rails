@@ -32,15 +32,23 @@ class AuthenticationsController < ApplicationController
   end
 
   def failure
+    session.delete(:popup_auth)
     flash[:error] = "Your authentication was unsuccessful."
     respond_to do |format|
       format.html { redirect_to current_user ? dashboard_url : root_url }
     end
   end
+  
+  def popup_auth
+    session[:popup_auth] = Time.now
+    redirect_to "/auth/#{params[:provider]}"
+  end
 
   # POST /authentications
   # POST /authentications.xml
   def create
+    popup_auth = session[:popup_auth] && session[:popup_auth] > 5.minutes.ago
+    session.delete(:popup_auth)
     omniauth = request.env["omniauth.auth"]
     if Rails.env == 'development'
       Rails.logger.debug "Authentication Details:\n#{omniauth.to_yaml}\n"
@@ -60,7 +68,6 @@ class AuthenticationsController < ApplicationController
           :provider => omniauth['provider'],
           :uid => omniauth['uid'],
           :token => omniauth['credentials']['token'],
-          :profile_picture => omniauth['user_info']['image'],
           :display_name => omniauth['user_info']['name']
         }
         
@@ -68,6 +75,7 @@ class AuthenticationsController < ApplicationController
           create_options[:profile_url] = omniauth['user_info']['urls']['Facebook']
         elsif omniauth['provider'] == 'twitter'
           create_options[:profile_url] = omniauth['user_info']['urls']['Twitter']
+          create_options[:profile_picture] = omniauth['user_info']['image']
         end
         
         success = current_user.authentications.create(create_options)
@@ -75,7 +83,12 @@ class AuthenticationsController < ApplicationController
           flash[:alert] = "Unable to associate your #{omniauth['provider'].capitalize} account."
         end
       end
-      redirect_to dashboard_url
+      
+      if popup_auth
+        render 'authentications/popup_auth', :layout => false and return
+      else
+        redirect_to dashboard_url
+      end
 
     # If we don't have a currently logged in user, we log in as the user we
     # found when we looked up the external provider credentials.
@@ -178,13 +191,22 @@ class AuthenticationsController < ApplicationController
   # DELETE /authentications/1
   # DELETE /authentications/1.xml
   def destroy
-    @authentication = current_user.authentications.find(params[:id])
-    @authentication.destroy
+    success = false
+    
+    @authentication = current_user.authentications.where(:provider => params[:id]).first
+    if @authentication
+      @authentication.destroy
+      success = true
+    end
 
     respond_to do |format|
       format.html { redirect_to(profile_url) }
       format.xml  { head :ok }
-      format.json { head :ok }
+      format.json {
+        render :json => {
+          :success => success
+        }
+      }
     end
   end
 end
