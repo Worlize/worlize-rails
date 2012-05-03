@@ -44,8 +44,8 @@ class FriendsController < ApplicationController
     
     # Load Facebook Friends
     if user == current_user
-      if params[:access_token]
-        
+      if (params[:access_token] && !user.facebook_authentication.nil? &&
+          user.facebook_authentication.uid == params[:facebook_user_id])
         # Loads all facebook friends, both on worlize and otherwise
         fb_friends = load_facebook_friends(params[:access_token])
 
