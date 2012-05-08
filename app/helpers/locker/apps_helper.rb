@@ -1,0 +1,2 @@
+module Locker::AppsHelper
+end

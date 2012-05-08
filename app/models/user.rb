@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
   has_many :worlds, :dependent => :destroy
   has_many :background_instances, :dependent => :nullify
   has_many :in_world_object_instances, :dependent => :nullify
+  has_many :apps, :dependent => :nullify
   has_many :avatar_instances, :dependent => :nullify
   has_many :prop_instances, :dependent => :nullify
   
@@ -55,6 +56,10 @@ class User < ActiveRecord::Base
     :if => Proc.new { !self.new_record? }
   }
   validates :in_world_object_slots, :numericality => {
+    :greater_than_or_equal_to => 0, 
+    :if => Proc.new { !self.new_record? }
+  }
+  validates :app_slots, :numericality => {
     :greater_than_or_equal_to => 0, 
     :if => Proc.new { !self.new_record? }
   }
@@ -109,6 +114,7 @@ class User < ActiveRecord::Base
       :avatar_slots => self.avatar_slots,
       :prop_slots => self.prop_slots,
       :in_world_object_slots => self.in_world_object_slots,
+      :app_slots => self.app_slots,
       :coins => self.coins,
       :bucks => self.bucks,
       :email => self.email,
@@ -664,6 +670,7 @@ class User < ActiveRecord::Base
         :avatar_slots => self.avatar_slots,
         :background_slots => self.background_slots,
         :in_world_object_slots => self.in_world_object_slots,
+        :app_slots => self.app_slots,
         :prop_slots => self.prop_slots
       }
     })
@@ -806,6 +813,7 @@ class User < ActiveRecord::Base
     self.background_slots = 5
     self.avatar_slots = 12
     self.in_world_object_slots = 13
+    self.app_slots = 20
   end
   
   def avatar_slots_used
@@ -818,6 +826,10 @@ class User < ActiveRecord::Base
   
   def in_world_object_slots_used
     self.in_world_object_instances.count
+  end
+  
+  def app_slots_used
+    self.app_instances.count
   end
   
   def prop_slots_used

@@ -1,53 +1,62 @@
-class Locker::InWorldObjectsController < ApplicationController
+class Locker::AppsController < ApplicationController
   before_filter :require_user
-
+  
   def index
-    result = current_user.in_world_object_instances.includes(:in_world_object).order('created_at DESC').map do |o|
+    result = current_user.app_instances.includes(:app).order('created_at DESC').map do |o|
       o.hash_for_api
     end
     
     render :json => {
       :success => true,
-      :capacity => current_user.in_world_object_slots,
+      :capacity => current_user.app_slots,
       :count => result.length,
       :data => result
     }
   end
   
   def create
-    name = params[:name] || "Object by #{current_user.username}"
+    if !current_user.developer?
+      render :json => {
+        :success => false,
+        :description => "Only developers can upload SWF apps."
+      } and return
+    end
     
-    @in_world_object = InWorldObject.new(
+    name = params[:name] || "Untitled App"
+    
+    @app = App.new(
       :name => name,
       :creator => current_user,
-      :requires_approval => false,
-      :image => params[:filedata]
+      :width => params[:width],
+      :height => params[:height],
+      :app => params[:filedata],
     )
     
-    if @in_world_object.save
-      oi = current_user.in_world_object_instances.create(:in_world_object => @in_world_object)
-      if (oi.persisted?)
+    if @app.save
+      ai = current_user.app_instances.create(:app => @app)
+      if (ai.persisted?)
         render :json => {
           :success => true,
-          :data => oi.hash_for_api
+          :data => ai.hash_for_api
         }
       else
         render :json => {
           :success => false,
-          :description => "Unable to create in-world object instance."
+          :description => "Unable to create app instance."
         }
       end
     else
+      Rails.logger.debug("Model errors:\n" + @app.errors.to_s)
       render :json => {
         :success => false,
-        :description => "In-world object is invalid.",
-        :errors => @in_world_object.errors
+        :description => "App is invalid.",
+        :errors => @app.errors
       }
     end
   end
   
   def destroy
-    instance = current_user.in_world_object_instances.find_by_guid(params[:id])
+    instance = current_user.app_instances.find_by_guid(params[:id])
     
     if instance.room
       # must yank it from the room where its currently used

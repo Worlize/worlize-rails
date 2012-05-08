@@ -53,9 +53,6 @@ class RoomDefinition::InWorldObjectManager
         object_definition['dest'] = dest
       end
       
-      require 'pp'
-      pp object_definition
-      
       raw_data << object_definition
       save
       Worlize::InteractServerManager.instance.broadcast_to_room(

@@ -101,6 +101,8 @@ class RoomDefinition < RedisModel
   def remove_dependent_objects
     in_world_object_manager.unlink_all
     in_world_object_manager.destroy
+    app_manager.unlink_all
+    app_manager.destroy
     youtube_manager.destroy
   end
   

@@ -2,6 +2,7 @@ class Room < ActiveRecord::Base
   belongs_to :world
   has_one :background_instance, :dependent => :nullify
   has_many :in_world_object_instances, :dependent => :nullify
+  has_many :app_instances, :dependent => :nullify
   has_many :sharing_links, :dependent => :destroy
   
   has_one :permalink, :as => :linkable, :dependent => :destroy
