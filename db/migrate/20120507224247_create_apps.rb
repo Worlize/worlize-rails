@@ -23,7 +23,7 @@ class CreateApps < ActiveRecord::Migration
       t.timestamps
     end
     
-    add_column :users, :apps, :integer
+    add_column :users, :app_slots, :integer
     
     App.reset_column_information
     AppInstance.reset_column_information
@@ -63,7 +63,7 @@ class CreateApps < ActiveRecord::Migration
   end
 
   def self.down
-    drop_column :users, :apps
+    remove_column :users, :app_slots
     drop_table :app_instances
     drop_table :apps
   end
