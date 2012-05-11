@@ -1,2 +1,0 @@
-module InWorld::ObjectsHelper
-end

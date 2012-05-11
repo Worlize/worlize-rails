@@ -9,9 +9,14 @@ class AppInstance < ActiveRecord::Base
   
   def hash_for_api
     {
-      :app => self.app.hash_for_api,
-      :room => self.room ? self.room.basic_hash_for_api : nil,
-      :guid => self.guid
+      :app => app.hash_for_api,
+      :room => room ? {
+        :name => room.name,
+        :guid => room.guid,
+        :world_guid => room.world.guid,
+        :hidden => room.hidden
+      } : nil,
+      :guid => guid
     }
   end
   

@@ -87,6 +87,7 @@ Worlize::Application.routes.draw do |map|
     resources :backgrounds
     resources :avatars
     resources :in_world_objects
+    resources :apps
     resources :props
     resource :slots do
       member do

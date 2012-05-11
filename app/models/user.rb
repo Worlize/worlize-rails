@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   has_many :worlds, :dependent => :destroy
   has_many :background_instances, :dependent => :nullify
   has_many :in_world_object_instances, :dependent => :nullify
-  has_many :apps, :dependent => :nullify
+  has_many :app_instances, :dependent => :nullify
   has_many :avatar_instances, :dependent => :nullify
   has_many :prop_instances, :dependent => :nullify
   

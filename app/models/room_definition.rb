@@ -59,10 +59,6 @@ class RoomDefinition < RedisModel
     end
   end
   
-  def in_world_object_manager
-    @in_world_object_manager ||= RoomDefinition::InWorldObjectManager.new(self)
-  end
-  
   def youtube_manager
     @youtube_manager ||= RoomDefinition::EmbeddedYoutubeManager.new(self)
   end

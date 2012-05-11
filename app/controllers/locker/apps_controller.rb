@@ -2,7 +2,7 @@ class Locker::AppsController < ApplicationController
   before_filter :require_user
   
   def index
-    result = current_user.app_instances.includes(:app).order('created_at DESC').map do |o|
+    result = current_user.app_instances.includes(:app, :room => :world).order('created_at DESC').map do |o|
       o.hash_for_api
     end
     
@@ -29,7 +29,7 @@ class Locker::AppsController < ApplicationController
       :creator => current_user,
       :width => params[:width],
       :height => params[:height],
-      :app => params[:filedata],
+      :app => params[:filedata]
     )
     
     if @app.save

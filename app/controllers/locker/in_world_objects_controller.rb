@@ -2,7 +2,11 @@ class Locker::InWorldObjectsController < ApplicationController
   before_filter :require_user
 
   def index
-    result = current_user.in_world_object_instances.includes(:in_world_object).order('created_at DESC').map do |o|
+    result = current_user.in_world_object_instances.includes(:in_world_object, :room => :world).order('created_at DESC')
+    result = result.select do |o|
+      o.in_world_object.kind == 'image'
+    end
+    result = result.map do |o|
       o.hash_for_api
     end
     
