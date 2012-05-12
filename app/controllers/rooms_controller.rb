@@ -126,14 +126,15 @@ class RoomsController < ApplicationController
     
     @user = current_user
     interact_server_id = @room.interact_server_id
-    s = current_user.interactivity_session || InteractivitySession.new
+    s = current_user.interactivity_session
     respond_to do |format|
       if s.update_attributes(
           :username => @user.username,
           :user_guid => @user.guid,
           :room_guid => @room.guid,
           :world_guid => @room.world.guid,
-          :server_id => interact_server_id
+          :server_id => interact_server_id,
+          :facebook_id => @user.facebook_authentication.nil? ? nil : @user.facebook_authentication.uid
         )
         format.html do
           redirect_to enter_world_url
