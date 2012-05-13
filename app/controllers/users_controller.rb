@@ -121,6 +121,9 @@ class UsersController < ApplicationController
       
       if omniauth['provider'] == 'facebook'
         create_options[:profile_url] = omniauth['user_info']['urls']['Facebook']
+        @user.interactivity_session.update_attributes(
+          :facebook_id => omniauth['uid']
+        )
       elsif omniauth['provider'] == 'twitter'
         create_options[:profile_url] = omniauth['user_info']['urls']['Twitter']
       end

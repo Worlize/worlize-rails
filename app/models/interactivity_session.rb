@@ -14,7 +14,8 @@ class InteractivitySession
                   :world_guid,
                   :room_guid,
                   :username,
-                  :server_id
+                  :server_id,
+                  :facebook_id
                  ]
   
   @@schema_version = 1

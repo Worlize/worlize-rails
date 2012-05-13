@@ -742,7 +742,8 @@ class User < ActiveRecord::Base
       :user_guid => self.guid,
       :room_guid => room.guid,
       :world_guid => world.guid,
-      :server_id => server_id
+      :server_id => server_id,
+      :facebook_id => facebook_authentication.nil? ? nil : facebook_authentication.uid
     )
     return s
   end
