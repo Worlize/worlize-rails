@@ -196,51 +196,6 @@ class RoomsController < ApplicationController
       } and return
     end
   end
-
-  def set_background
-    success = false
-    error = ""
-    room = Room.find_by_guid!(params[:id])
-    
-    if current_user.can_edit? room
-      updated_background_instances = []
-      if params[:background_instance_guid]
-        background_instance = BackgroundInstance.find_by_guid(params[:background_instance_guid])
-        if background_instance.nil?
-          error = "Unable to find the specified background instance."
-        elsif !background_instance.room.nil?
-          error = "Background already in use in another room."
-        else
-          old_background_instance = room.background_instance
-          room.background_instance = background_instance
-          room.room_definition.background = background_instance.background.image.url
-          success = room.save
-          if old_background_instance
-            old_background_instance.room = nil
-            updated_background_instances.push(old_background_instance.hash_for_api)
-          end
-          updated_background_instances.push(background_instance.hash_for_api)
-        end
-      end
-
-      render :json => {
-        :success => success,
-        :data => {
-          :updated_background_instances => updated_background_instances
-        }
-      }
-      return
-      
-    else
-      error = "Permission denied"
-    end
-    
-    render :json => {
-      :success => success,
-      :description => error
-    }
-  end
-  
   
   def destroy
     room = Room.find_by_guid!(params[:id])
