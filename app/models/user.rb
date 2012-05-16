@@ -683,7 +683,7 @@ class User < ActiveRecord::Base
   
   def buy_slots(slot_kind, quantity)
     # Make sure slot_kind is valid
-    unless (['avatar','in_world_object','background','prop'].include?(slot_kind))
+    unless (['avatar','in_world_object','background','prop','app'].include?(slot_kind))
       raise StandardError.new("#{slot_kind} is not a valid slot_kind.")
     end
     

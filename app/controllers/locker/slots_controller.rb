@@ -15,7 +15,7 @@ class Locker::SlotsController < ApplicationController
     result = {
       :success => true
     }
-    %w(avatar background in_world_object prop).each do |slot_kind|
+    %w(avatar background in_world_object prop app).each do |slot_kind|
       price = LockerSlotPrice.find_by_slot_kind(slot_kind)
       result[slot_kind+'_slot_price'] = price.nil? ? 0 : price.bucks_amount.to_i
     end

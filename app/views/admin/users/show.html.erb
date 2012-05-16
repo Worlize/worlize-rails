@@ -45,9 +45,10 @@
       'avatar' => 'Avatars',
       'background' => 'Backgrounds',
       'in_world_object' => 'Objects',
-      'prop' => 'Props'
+      'prop' => 'Props',
+      'app' => 'Apps'
     } %>
-    <% ['avatar','background','in_world_object','prop'].each do |kind| %>
+    <% ['avatar','background','in_world_object','prop','app'].each do |kind| %>
       <tr class="<%= cycle('even','odd') %>">
         <td><%= kind_map[kind] %></td>
         <td>
