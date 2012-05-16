@@ -60,17 +60,12 @@ class Locker::AppsController < ApplicationController
     
     if instance.room
       # must yank it from the room where its currently used
-      manager = instance.room.room_definition.in_world_object_manager
-      begin
-        manager.remove_object_instance(instance)
-      rescue
-        # do nothing
-      end
+      # TODO: Implement this!
     end
     
-    num_instances_remaining = instance.in_world_object.in_world_object_instances.count
-    if num_instances_remaining == 1 && instance.in_world_object.marketplace_item.nil?
-      instance.in_world_object.destroy
+    num_instances_remaining = instance.app.app_instances.count
+    if num_instances_remaining == 1 && instance.app.marketplace_item.nil?
+      instance.app.destroy
     else
       instance.destroy
     end
