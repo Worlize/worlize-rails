@@ -27,6 +27,11 @@ class CreateApps < ActiveRecord::Migration
     
     App.reset_column_information
     AppInstance.reset_column_information
+    User.reset_column_information
+    
+    User.update_all("app_slots = '20'")
+    
+    LockerSlotPrice.create(:slot_kind => 'app', :bucks_amount => 5)
     
     say_with_time("Copying app objects to the new apps table") do
       InWorldObject.where(:kind => 'app').find_each do |obj|
