@@ -17,7 +17,7 @@ class App < ActiveRecord::Base
       :guid =>          self.guid,
       :width =>         self.width,
       :height =>        self.height,
-      :app =>           self.app.url,
+      :app_url =>           self.app.url,
       :icon =>          self.icon.url,
       :medium_icon =>   self.icon.medium.url,
       :small_icon =>    self.icon.small.url
