@@ -55,12 +55,7 @@ class Locker::InWorldObjectsController < ApplicationController
     
     if instance.room
       # must yank it from the room where its currently used
-      manager = instance.room.room_definition.in_world_object_manager
-      begin
-        manager.remove_object_instance(instance)
-      rescue
-        # do nothing
-      end
+      instance.room.room_definition.remove_item(instance.guid)
     end
     
     num_instances_remaining = instance.in_world_object.in_world_object_instances.count

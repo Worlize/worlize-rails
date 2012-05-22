@@ -1,106 +1,141 @@
-class RoomDefinition < RedisModel
-  redis_server :room_definitions
-  redis_hash_key 'roomDefinition'
-  schema_version 1
+class RoomDefinition
+  include HTTParty
   
-  initialize_attributes(
-    :guid,
-    :world_guid,
-    :name,
-    :background,
-    :properties,
-    :owner_guid,
-    :hidden
-  )
-  
-  define_method 'background', lambda {
-    attributes['background'] || Worlize.config['default_room_background_url']
-  }
-  
-  after_update :broadcast_update_notification
-  before_destroy :remove_dependent_objects
-  
-  validates :guid, :presence => true
-  validates :background, :presence => true
-  
-  def hash_for_api
-    serializable_hash.merge({
-      :hotspots => self.hotspots,
-      :objects => self.in_world_object_manager.object_instances,
-      :youtube_players => self.youtube_manager.youtube_players,
-      :properties => self.properties
-    })
-  end
-  
-  def initialize(attributes = {})
-    super
-    room_object = attributes[:room] || attributes['room']
-    self.room = room_object unless room_object.nil?
-    self.properties ||= {}
-  end
-  
-  def room
-    @room ||= Room.find_by_guid(self.guid)
-  end
-  
-  def hotspots
-    hotspots_raw = redis.hget('hotspots', self.guid)
-    begin
-      Yajl::Parser.parse(hotspots_raw)
-    rescue
-      []
-    end
-  end
-  
-  def hotspots=(new_array)
-    begin
-      redis.hset('hotspots', self.guid, Yajl::Encoder.encode(new_array))
-    rescue
-    end
-  end
-  
-  def youtube_manager
-    @youtube_manager ||= RoomDefinition::EmbeddedYoutubeManager.new(self)
-  end
-  
-  def room=(room)
-    @room = room
-    self.guid = room.guid
-    self.world_guid = room.world.guid
-    self.owner_guid = room.world.user ? room.world.user.guid : nil
-    self.name = room.name
-    self.hidden = room.hidden?
-    self.background = room.background_instance.nil? ? nil : room.background_instance.background.image.url
-  end
-  
-  def update_property(name, value)
-    self.properties[name] = value
-  end
-  
-  def broadcast_update_notification
-    # Worlize::PubSub.publish(
-    #   "room:#{self.guid}",
-    #   '{"msg":"room_definition_updated"}'
-    # )
-    Worlize::PubSub.publish(
-        "room:#{self.guid}",
-        Yajl::Encoder.encode({
-          :msg => 'room_definition_updated',
-          :data => {
-            :guid => self.guid,
-            :changes => previous_changes
-          }
-        })
-    )
-  end
-  
-  def remove_dependent_objects
-    in_world_object_manager.unlink_all
-    in_world_object_manager.destroy
-    app_manager.unlink_all
-    app_manager.destroy
-    youtube_manager.destroy
-  end
-  
-end
+  @@servers = Worlize.config['internal_api_servers']
+  base_uri @@servers[@@servers.length*rand]
 
+  headers 'Content-Type' => 'application/json'
+  format :json
+
+  attr_accessor :guid
+  attr_accessor :name
+  attr_accessor :background
+  attr_accessor :world_guid
+  attr_accessor :hidden
+  attr_accessor :properties
+  attr_accessor :items
+  
+  def self.find(guid)
+    rd = RoomDefinition.new
+    return rd.load(guid) ? rd : nil
+  end
+  
+  def self.create(room)
+    result = self.post(
+      "/rooms/#{room.guid}/definition",
+      :body => Yajl::Encoder.encode({
+        :name => room.name,
+        :hidden => room.hidden?,
+        :worldGuid => room.world.guid,
+        :ownerGuid => room.world.user.guid,
+        :properties => {}
+      })
+    )
+    code = result.response.code.to_i
+    if code >= 200 && code <= 299
+      if result.parsed_response && result.parsed_response['success']
+        rd = RoomDefinition.new(room.guid)
+        rd.update_data(result.parsed_response['room'])
+        return rd
+      end
+    end
+    return nil
+  end
+  
+  def self.clone(sourceGuid, destGuid, roomGuidMap, itemGuidMap)
+    result = self.post(
+      "/rooms/#{sourceGuid}/clone",
+      :body => Yajl::Encoder.encode({
+        :destRoomGuid => destGuid,
+        :roomGuidMap => roomGuidMap,
+        :itemGuidMap => itemGuidMap
+      })
+    )
+    code = result.response.code.to_i
+    if code >= 200 && code <= 299
+      if result.parsed_response && result.parsed_response['success']
+        return true
+      end
+    end
+    return false
+  end
+
+  def initialize(guid=nil)
+    self.guid = guid
+    self.properties = {}
+    self.items = []
+  end
+  
+  def load(guid)
+    begin
+      result = self.class.get("/rooms/#{guid}/definition")
+      code = result.response.code.to_i
+      if code >= 200 && code <= 299
+        if result.parsed_response && result.parsed_response['success']
+          update_data(result.parsed_response['room'])
+          return true
+        end
+      end
+    rescue
+    end
+    
+    return false
+  end
+  
+  def save
+    begin
+      result = self.class.put(
+        "/rooms/#{self.guid}/definition",
+        :body => Yajl::Encoder.encode({
+          :name => self.name,
+          :hidden => self.hidden,
+          :properties => self.properties
+        })
+      )
+      code = result.response.code.to_i
+      if code >= 200 && code <= 299
+        if result.parsed_response && result.parsed_response['success']
+          return true
+        end
+      end
+    rescue
+    end
+
+    return result
+  end
+  
+  def destroy
+    result = self.class.delete("/rooms/#{self.guid}/definition")
+    code = result.response.code.to_i
+    if code >= 200 && code <= 299
+      if result.parsed_response && result.parsed_response['success']
+        return true
+      end
+    end
+    
+    return false
+  end
+  
+  def remove_item(instance_guid)
+    result = self.class.delete("/rooms/#{self.guid}/definition/items/#{instance_guid}")
+    code = result.response.code.to_i
+    if code >= 200 && code <= 299
+      if result.parsed_response && result.parsed_response['success']
+        return true
+      end
+    end
+    require 'pp'
+    pp result.parsed_response
+    return false
+  end
+  
+  def update_data(data)
+    self.guid = data['guid']
+    self.name = data['name']
+    self.background = data['background']
+    self.world_guid = data['worldGuid']
+    self.hidden = data['hidden']
+    self.properties = data['properties']
+    self.items = data['items']
+  end
+end

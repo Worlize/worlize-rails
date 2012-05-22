@@ -15,6 +15,7 @@ gem 'fog', '0.3.33'
 gem 'nestful', '0.0.6'
 gem 'gibbon'
 gem 'nokogiri'
+gem 'httparty', '0.8.3'
 
 # TODO: Are we using this?
 gem 'activemerchant', '1.15.0'

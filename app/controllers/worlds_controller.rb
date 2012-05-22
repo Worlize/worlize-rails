@@ -151,16 +151,7 @@ class WorldsController < ApplicationController
         end
         rd = room.room_definition
         roomData['properties'].each do |key,value|
-          if rd.properties[key] != value
-            rd.update_property(key,value)
-            Worlize::InteractServerManager.instance.broadcast_to_room(room.guid, {
-              :msg => 'update_room_property',
-              :data => {
-                :name => key,
-                :value => value
-              }
-            })
-          end
+          rd.properties[key] = value
         end
         rd.save
       end

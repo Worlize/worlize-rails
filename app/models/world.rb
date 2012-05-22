@@ -30,17 +30,6 @@ class World < ActiveRecord::Base
     })
   end
   
-  def to_xml
-    builder = Nokogiri::XML::Builder.new do |xml|
-      xml.world(:name => self.name) {
-        self.rooms.each do |room|
-          room.build_xml(xml)
-        end
-      }
-    end
-    builder.to_xml
-  end
-  
   def can_be_edited_by?(user)
     owner = self.user
     return user == owner
@@ -125,59 +114,43 @@ class World < ActiveRecord::Base
       original_room = data[:original_room]
       # Create the new room
       new_room = self.rooms.create(
-        :name => original_room.name
+        :name => original_room.name,
+        :hidden => original_room.hidden
       )
       
       room_guid_map[original_room.guid] = new_room.guid
+
+      if original_room.background_instance
+        background = original_room.background_instance.background
       
-      background = original_room.background_instance.background
+        # Find an available instance of the background image in the user's locker
+        background_instance = self.user.background_instances.where([
+          'background_id = ? AND room_id IS NULL', background.id
+        ]).limit(1).first
       
-      # Find an available instance of the background image in the user's locker
-      background_instance = self.user.background_instances.where([
-        'background_id = ? AND room_id IS NULL', background.id
-      ]).limit(1).first
+        # ...or create one if the user doesn't have an available background instance
+        if background_instance.nil?
+          background_instance = self.user.background_instances.create(
+            :background => background
+          )
+        end
       
-      # ...or create one if the user doesn't have an available background instance
-      if background_instance.nil?
-        background_instance = self.user.background_instances.create(
-          :background => background
-        )
+        # Link the background instance to the new room
+        background_instance.room = new_room
+        background_instance.save
       end
-      
-      # Set the background url in the room definition
-      new_room.background_instance = background_instance
-      new_room.room_definition.background = background.image.url
-      new_room.save
       
       data[:new_room] = new_room
       new_rooms.push(new_room)
     end
     
     # Now that we have the base rooms created, we can start creating the
-    # hotspots, objects, and YouTube players and wiring them up.
+    # user's object and app instances and then call to the node servers to
+    # clone the room definition.
     room_data.each do |data|
-
-      # Clone the hotspots...
-      hotspots = data[:original_room].room_definition.hotspots
-
-      hotspots.each do |hs|
-        if hs['dest']
-          hs['dest'] = room_guid_map[hs['dest']]
-        end
-      end
+      item_guid_map = {}
       
-      # Save hotspots to redis
-      data[:new_room].room_definition.hotspots = hotspots
-    
-      
-      # Now to tackle objects...
-      original_objects = data[:original_room].room_definition.in_world_object_manager.object_instances
-      object_manager = data[:new_room].room_definition.in_world_object_manager
-      object_instance_guid_map = {}
-      
-      original_objects.each do |obj_data|
-        original_object_instance = InWorldObjectInstance.find_by_guid(obj_data['guid'])
-        next unless original_object_instance # just in case something's broken
+      data[:original_room].in_world_object_instances.each do |original_object_instance|
         in_world_object = original_object_instance.in_world_object
 
         # Find an available instance of the object in the user's locker...
@@ -192,31 +165,42 @@ class World < ActiveRecord::Base
           )
         end
         
-        object_manager.add_object_instance(
-          object_instance,
-          obj_data['x'],
-          obj_data['y'],
-          room_guid_map[obj_data['dest']]
-        )
+        object_instance.room = data[:new_room]
+        object_instance.save
+        
+        item_guid_map[original_object_instance.guid] = object_instance.guid
       end
       
-      # And finally, YouTube Players.
-      youtube_players = data[:original_room].room_definition.youtube_manager.youtube_players
-      youtube_manager = data[:new_room].room_definition.youtube_manager
+      data[:original_room].app_instances.each do |original_app_instance|
+        app = original_app_instance.app
+
+        # Find an available instance of the app in the user's locker...
+        app_instance = self.user.app_instances.where([
+          'app_id = ? AND room_id IS NULL', app.id
+        ]).limit(1).first
+        
+        # ...or create one if the user doesn't have an available object
+        if app_instance.nil?
+          app_instance = self.user.app_instances.create(
+            :app => app
+          )
+        end
+        
+        app_instance.room = data[:new_room]
+        app_instance.save
+        
+        item_guid_map[original_app_instance.guid] = app_instance.guid
+      end
       
-      youtube_players.each do |player_data|
-        new_player = youtube_manager.create_new_player
-        youtube_manager.move_player(
-          new_player['guid'],
-          player_data['x'],
-          player_data['y'],
-          player_data['width'],
-          player_data['height']
-        )
-        youtube_manager.update_player_data(
-          new_player['guid'],
-          player_data['data']
-        )
+      clone_result = RoomDefinition.clone(
+        data[:original_room].guid,
+        data[:new_room].guid,
+        room_guid_map,
+        item_guid_map
+      )
+      
+      if !clone_result
+        Rails.logger.error("Unable to clone room definition.")
       end
     end
 
