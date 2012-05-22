@@ -10,7 +10,7 @@ class AppUploader < CarrierWave::Uploader::Base
   }
   
   define_method 'fog_host', lambda {
-      'https://' + fog_directory + '.s3.amazonaws.com'
+      'https://s3.amazonaws.com/' + fog_directory
   }
   
   def store_dir
