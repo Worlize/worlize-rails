@@ -25,7 +25,7 @@ class World < ActiveRecord::Base
     basic_hash_for_api.merge({
       :can_create_new_room => current_user == self.user,
       :rooms => self.rooms.map do |room|
-        room.basic_hash_for_api
+        room.basic_hash_for_api(current_user)
       end
     })
   end

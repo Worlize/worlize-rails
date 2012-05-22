@@ -16,16 +16,19 @@ class Room < ActiveRecord::Base
   
   attr_accessible :name, :hidden
     
-  def basic_hash_for_api
-    {
+  def basic_hash_for_api(current_user=nil)
+    data = {
       :name => name,
       :guid => guid,
       :user_count => user_count,
       :world_guid => world.guid,
       :hidden => hidden,
-      :properties => self.room_definition.properties,
       :thumbnail => background_instance ? background_instance.background.image.thumb.url : nil
     }
+    if current_user && current_user.can_edit?(self)
+      data[:properties] = self.room_definition.properties
+    end
+    data
   end
 
   def hash_for_api(current_user)
