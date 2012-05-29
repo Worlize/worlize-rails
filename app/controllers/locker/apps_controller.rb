@@ -58,24 +58,76 @@ class Locker::AppsController < ApplicationController
   def destroy
     instance = current_user.app_instances.find_by_guid(params[:id])
     
-    if instance.room
-      # must yank it from the room where its currently used
-      # TODO: Implement this!
-    end
+    success = false
     
     num_instances_remaining = instance.app.app_instances.count
     if num_instances_remaining == 1 && instance.app.marketplace_item.nil?
       instance.app.destroy
+      success = instance.app.destroyed?
     else
       instance.destroy
+      success = instance.destroyed?
     end
 
     render :json => {
-      :success => instance.destroyed?,
+      :success => success,
       :balance => {
         :coins => current_user.coins,
         :bucks => current_user.bucks
       }
+    }
+  end
+  
+  def destroy_all_copies
+    app = App.find_by_guid(params[:id])
+    if app
+      instances = current_user.app_instances.where(:app_id => app.id)
+      instance_guids = instances.map { |ai| ai.guid }
+      
+      num_instances_remaining = app.app_instances.count
+      if num_instances_remaining == instances.count && app.marketplace_item.nil?
+        app.destroy
+      else
+        instances.destroy_all
+      end
+      
+      render :json => {
+        :success => true,
+        :instances => instance_guids
+      } and return
+    end
+    
+    render :json => {
+      :success => false,
+      :message => "Unable to find the specified app."
+    }
+  end
+  
+  def get_another_copy
+    app = App.find_by_guid(params[:id])
+    if app.nil?
+      render :json => {
+        :success => false,
+        :message => 'Cannot find the specified app.'
+      } and return
+    end
+    
+    ai = current_user.app_instances.create(:app => app)
+    
+    render :json => {
+      :success => ai.persisted?
+    }
+  end
+  
+  def remove_from_room
+    instance = current_user.app_instances.find_by_guid(params[:id])
+
+    success = !instance.room.nil? && instance.room.room_definition.remove_item(instance.guid)
+    
+    render :json => {
+      :success => true,
+      :guid => instance.guid,
+      :room => instance.room ? instance.room.basic_hash_for_api : nil
     }
   end
   

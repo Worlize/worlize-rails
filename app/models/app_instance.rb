@@ -6,6 +6,7 @@ class AppInstance < ActiveRecord::Base
   
   before_create :assign_guid
   after_create :notify_user
+  before_destroy :remove_from_room
   
   def hash_for_api
     {
@@ -32,6 +33,13 @@ class AppInstance < ActiveRecord::Base
   
   def assign_guid()
     self.guid = Guid.new.to_s if self.guid.nil?
+  end
+  
+  def remove_from_room
+    unless room.nil?
+      room.room_definition.remove_item(ai.guid)
+    end
+    true
   end
   
 end

@@ -14,10 +14,13 @@ class App < ActiveRecord::Base
   def hash_for_api
     return {
       :name =>          self.name,
+      :description =>   self.description,
+      :tagline =>       self.tagline,
+      :help =>          self.help,
       :guid =>          self.guid,
       :width =>         self.width,
       :height =>        self.height,
-      :app_url =>           self.app.url,
+      :app_url =>       self.app.url,
       :icon =>          self.icon.url,
       :medium_icon =>   self.icon.medium.url,
       :small_icon =>    self.icon.small.url

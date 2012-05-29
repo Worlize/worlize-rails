@@ -124,8 +124,6 @@ class RoomDefinition
         return true
       end
     end
-    require 'pp'
-    pp result.parsed_response
     return false
   end
   

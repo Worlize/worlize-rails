@@ -6,6 +6,7 @@ class CreateApps < ActiveRecord::Migration
       t.string :name, :limit => 64
       t.string :tagline
       t.text :description
+      t.text :help
       t.string :icon
       t.string :app
       t.integer :width, :limit => 8
@@ -29,7 +30,7 @@ class CreateApps < ActiveRecord::Migration
     AppInstance.reset_column_information
     User.reset_column_information
     
-    User.update_all("app_slots = '20'")
+    User.update_all("app_slots = '10000'")
     
     LockerSlotPrice.create(:slot_kind => 'app', :bucks_amount => 5)
     
@@ -38,6 +39,9 @@ class CreateApps < ActiveRecord::Migration
         app = App.new(
           :guid => obj.guid,
           :name => obj.name,
+          :description => 'No Description.',
+          :tagline => 'No Tagline.',
+          :help => 'No help available.',
           :width => obj.width,
           :height => obj.height,
           :active => obj.active,
