@@ -26,6 +26,7 @@ class WelcomeController < ApplicationController
     
     @configJSON = Yajl::Encoder.encode({
       'marketplace_enabled' => Worlize.config['marketplace_enabled'],
+      'marketplace' => Worlize.config['marketplace'],
       'user_guid' => current_user.guid,
       'username' => current_user.username,
       'admin' => current_user.admin?,

@@ -133,15 +133,22 @@ function namespace(namespace) {
     }
 }
 
-function openMarketplace() {
+function openMarketplace(categoryId) {
     if (marketplaceShowing) { return; }
     if (virtualCurrencyProductsShowing) { closeVirtualCurrencyProducts(); }
     showShim();
+    var url;
     marketplaceShowing = true;
+    if (categoryId) {
+        url = "/marketplace/categories/" + categoryId;
+    }
+    else {
+        url = "/marketplace";
+    }
     var marketplaceTemplate =
         '<div id="marketplace">' +
-            '<div id="marketplace-close-button">Return to Worlize</div>' +
-            '<iframe frameborder="0" sandbox="allow-forms allow-scripts allow-same-origin" src="/marketplace" id="marketplaceIframe">' +
+            '<div id="marketplace-close-button">Close Marketplace</div>' +
+            '<iframe frameborder="0" sandbox="allow-forms allow-scripts allow-same-origin" src="' + url + '" id="marketplaceIframe">' +
         '</div>';
 
     var marketplaceElement = $(marketplaceTemplate);
