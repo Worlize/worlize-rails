@@ -12,7 +12,10 @@
   <%- end %>
   <% if item.featured_item.item.respond_to? 'image' %>
     data-thumbnail-image-url="<%= item.featured_item.item.image.thumb.url %>"
+  <% elsif item.featured_item.item.respond_to? 'icon' %>
+    data-thumbnail-image-url="<%= item.featured_item.item.icon.url %>"
   <% end %>
+  
   <% if item.featured_item_type == 'MarketplaceItem' %>
     data-currency-id="<%= item.featured_item.currency_id %>"
     data-price="<%= item.featured_item.price %>"
@@ -24,6 +27,8 @@
       <% if item.featured_item_type == 'MarketplaceItem' %>
         <% if item.featured_item.item.respond_to? 'image' %>
           <%= image_tag item.featured_item.item.image.thumb.url %>
+        <% elsif item.featured_item.item.respond_to? 'icon' %>
+          <%= image_tag item.featured_item.item.icon.medium.url %>
         <% end %>
         <h3><%= item.featured_item.name %></h3>
         <h4><%= item.featured_item.marketplace_creator.display_name %></h4>

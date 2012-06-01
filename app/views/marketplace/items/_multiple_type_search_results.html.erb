@@ -1,4 +1,4 @@
-<% for item_type in %w(avatars backgrounds in_world_objects) %>
+<% for item_type in %w(apps avatars backgrounds in_world_objects props) %>
   <% items = @items.send(item_type) %>
   <% item_count = items.count %>
   <% if item_count > 0 %>

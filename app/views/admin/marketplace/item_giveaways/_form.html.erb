@@ -1,5 +1,11 @@
 <%= form_for [:admin, @item_giveaway] do |f| %>
-  <%= image_tag @item.item.image.medium.url %><br><br>
+  <h2><%= @item.item.name %></h2>
+
+  <% if @item.item.respond_to? 'image' %>
+    <%= image_tag @item.item.image.medium.url %><br><br>
+  <% elsif @item.item.respond_to? 'icon' %>
+    <%= image_tag @item.item.icon.url %><br><br>
+  <% end %>
   
   <% if !@item_giveaway.errors.empty? %>
     <%= error_messages_for(@item_giveaway) %>

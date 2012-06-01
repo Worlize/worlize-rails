@@ -75,6 +75,10 @@ Worlize::Application.routes.draw do |map|
       resources :props, :only => :index,
                         :controller => 'items',
                         :defaults => { :item_type => 'Prop' }
+
+      resources :apps, :only => :index,
+                       :controller => 'items',
+                       :defaults => { :item_type => 'App' }
     end
     resources :items do
       member do

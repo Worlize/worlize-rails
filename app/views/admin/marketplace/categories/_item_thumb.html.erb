@@ -9,11 +9,15 @@
       <div class="item_type_object">Object</div>
     <% elsif item.item_type == 'Prop' %>
       <div class="item_type_prop">Prop</div>
+    <% elsif item.item_type == 'App' %>
+      <div class="item_type_app">App</div>
     <% elsif item.item_type == 'MarketplaceCategory' %>
       <div class="item_type_category">Category</div>
     <% end %>
     <% if item.item.respond_to? 'image' %>
       <%= image_tag item.item.image.thumb.url %>
+    <% elsif item.item.respond_to? 'icon' %>
+      <%= image_tag item.item.icon.medium.url %>
     <% end %>
     <div class="status_badges">
       <% if !item.on_sale? %>

@@ -28,6 +28,18 @@ class MarketplaceFeaturedItem < ActiveRecord::Base
     where("#{connection.quote_table_name("marketplace_items")}.#{connection.quote_column_name("item_type")} = #{connection.quote("InWorldObject")}")
   }
   
+  scope :props, lambda {
+    joins("JOIN #{connection.quote_table_name("marketplace_items")} ON #{connection.quote_table_name("marketplace_items")}.#{connection.quote_column_name("id")} = #{connection.quote_table_name("marketplace_featured_items")}.#{connection.quote_column_name("featured_item_id")}").
+    where(:featured_item_type => 'MarketplaceItem').
+    where("#{connection.quote_table_name("marketplace_items")}.#{connection.quote_column_name("item_type")} = #{connection.quote("Prop")}")
+  }
+  
+  scope :apps, lambda {
+    joins("JOIN #{connection.quote_table_name("marketplace_items")} ON #{connection.quote_table_name("marketplace_items")}.#{connection.quote_column_name("id")} = #{connection.quote_table_name("marketplace_featured_items")}.#{connection.quote_column_name("featured_item_id")}").
+    where(:featured_item_type => 'MarketplaceItem').
+    where("#{connection.quote_table_name("marketplace_items")}.#{connection.quote_column_name("item_type")} = #{connection.quote("App")}")
+  }
+  
   scope :categories, lambda {
     where(:featured_item_type => 'MarketplaceCategory')
   }

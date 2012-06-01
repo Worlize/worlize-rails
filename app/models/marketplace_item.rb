@@ -40,6 +40,10 @@ class MarketplaceItem < ActiveRecord::Base
     where(:item_type => 'Prop')
   }
   
+  scope :apps, lambda {
+    where(:item_type => 'App')
+  }
+  
   validates :name,
               :presence => true,
               :if => :on_sale?
@@ -95,6 +99,10 @@ class MarketplaceItem < ActiveRecord::Base
   def sync_name_to_item
     if self.item
       self.item.update_attribute(:name, self.name)
+    end
+    
+    if self.item && self.item.respond_to?('description')
+      self.item.update_attribute(:description, self.description)
     end
   end
   

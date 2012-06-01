@@ -26,6 +26,10 @@ class Marketplace::ItemsController < ApplicationController
         @display_item_type = 'Props'
         @item_type = 'props'
         @items = @items.props
+      when 'App'
+        @display_item_type = 'Apps'
+        @item_type = 'apps'
+        @items = @items.apps
       else
         raise "Unknown item type"
     end
@@ -78,6 +82,8 @@ class Marketplace::ItemsController < ApplicationController
             @items = MarketplaceItem.backgrounds.active.tagged_with(@query)
           when 'props'
             @items = MarketplaceItem.props.active.tagged_with(@query)
+          when 'apps'
+            @items = MarketplaceItem.apps.active.tagged_with(@query)
           else
             @errors.push('Unknown item type!')
           end
@@ -121,6 +127,10 @@ class Marketplace::ItemsController < ApplicationController
         when 'Background'
           if current_user.background_slots <= current_user.background_instances.count
             raise 'You do not have enough open slots in your backgrounds locker.  Add more locker space and try again.'
+          end
+        when 'App'
+          if current_user.app_slots <= current_user.app_instances.count
+            raise 'You do not have enough open slots in your apps locker.  Add more locker space and try again.'
           end
         else
       end

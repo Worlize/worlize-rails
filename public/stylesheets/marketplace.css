@@ -1,4 +1,7 @@
-/* @override http://localhost/stylesheets/marketplace.css?v=3 */
+/* @override 
+	http://localhost/stylesheets/marketplace.css?v=3
+	https://turtle.office.worlize.com/stylesheets/marketplace.css?v=3
+*/
 
 /* 
   HTML5 ✰ Boilerplate 
@@ -684,13 +687,13 @@ form.big-search-field input[type=submit]:hover {
 
 .overlay-dialog img {
 	float: left;
-	margin: 5px 20px 20px 5px;
+	background-color: #EEEEEE;
+	margin: 5px 20px 5px 5px;
 	border: 4px solid white;
 	-webkit-box-shadow: 0px 2px 5px rgba(127,127,127,0.4);
 	-moz-box-shadow: 0px 2px 5px rgba(127,127,127,0.4);
 	-o-box-shadow: 0px 2px 5px rgba(127,127,127,0.4);
 	box-shadow: 0px 2px 5px rgba(127,127,127,0.4);
-	text-transform: capitalize;
 }
 
 .overlay-dialog .option-buttons {
@@ -777,6 +780,7 @@ section.item-list a {
 
 section.item-list img {
 	display: block;
+	background-color: #eee;
 }
 
 section.item-list h1 {
@@ -1137,4 +1141,3 @@ section.item-list ul li a:hover img {
   p, h2, h3 { orphans: 3; widows: 3; }
   h2, h3{ page-break-after: avoid; }
 }
-

@@ -54,6 +54,8 @@ class Admin::Marketplace::ItemsController < ApplicationController
         InWorldObject.new
       when 'Prop'
         Prop.new
+      when 'App'
+        App.new
     end
 
     respond_to do |wants|
@@ -90,6 +92,8 @@ class Admin::Marketplace::ItemsController < ApplicationController
         InWorldObject.create(params[:in_world_object])
       when 'Prop'
         Prop.create(params[:prop])
+      when 'App'
+        App.create(params[:app])
       else
         raise "Invalid item type #{params[:item_type]}"
     end
@@ -150,6 +154,10 @@ class Admin::Marketplace::ItemsController < ApplicationController
       @item.set_tag_list_on(tag_context.name.downcase, tag_contexts[tag_context.name.downcase.to_sym])
     end
     @item.save
+    
+    if @item.item_type == 'App'
+      @item.item.update_attributes(params[:app])
+    end
 
     respond_to do |wants|
       if @item.update_attributes(params[:marketplace_item])
@@ -202,6 +210,10 @@ class Admin::Marketplace::ItemsController < ApplicationController
             Avatar.new(:image => upload)
           when 'InWorldObject'
             InWorldObject.new(:image => upload)
+          when 'Prop'
+            Prop.new(:image => upload)
+          when 'App'
+            App.new(:app => upload)
         end
         if item.save
           marketplace_item = MarketplaceItem.create(:item => item, :name => 'Untitled Item')

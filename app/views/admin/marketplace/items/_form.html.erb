@@ -20,15 +20,35 @@
 
   <% if @item.new_record? %>
     <% if !@item.item.nil? %>
-      <%= fields_for @item.item do |item_fields| %>
-        <%= item_fields.label :image %><br>
-        <%= item_fields.file_field :image %><br>
+      <% if @item.item.respond_to? 'image' %>
+        <%= fields_for @item.item do |item_fields| %>
+          <%= item_fields.label :image %><br>
+          <%= item_fields.file_field :image %><br>
+        <% end %>
+        <br>
+      <% end %>
+      <% if @item.item.respond_to? 'app' %>
+        <%= fields_for @item.item do |item_fields| %>
+          <%= item_fields.label :app %><br>
+          <%= item_fields.file_field :app %><br>
+        <% end %>
+        <br>
+      <% end %>
+      <% if @item.item.respond_to? 'icon' %>
+        <%= fields_for @item.item do |item_fields| %>
+          <%= item_fields.label :icon %><br>
+          <%= item_fields.file_field :icon %><br>
+        <% end %>
       <% end %>
       <br>
     <% end %>
     
   <% elsif @item.item %>
-    <%= image_tag @item.item.image.medium.url %><br><br>
+    <% if @item.item.respond_to? 'image' %>
+      <%= image_tag @item.item.image.medium.url %><br><br>
+    <% elsif @item.item.respond_to? 'icon' %>
+      <%= image_tag @item.item.icon.url %><br><br>
+    <% end %>
   <% end %>
 
   <%= f.label :name %><br>
@@ -69,6 +89,14 @@
   <%= f.label :description %><br>
   <%= f.text_area :description, :cols => 40, :rows => 6 %><br>
   <br>
+  
+  <% if @item.item.respond_to? 'help' %>
+    <%= fields_for @item.item do |item_fields| %>
+      <%= item_fields.label :help %><br>
+      <%= item_fields.text_area :help, :cols => 40, :rows => 6 %><br>
+    <% end %>
+    <br>
+  <% end %>
   
   <%= f.label :marketplace_license_id, 'License' %><br>
   <%= f.select :marketplace_license_id,

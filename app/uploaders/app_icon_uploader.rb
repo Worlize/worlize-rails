@@ -30,7 +30,7 @@ class AppIconUploader < CarrierWave::Uploader::Base
     "/images/icons/app_icon/" + [version_name, "default.png"].compact.join('_')
   end
 
-  process :resize_to_limit => [128, 128]
+  process :resize_and_pad => [128, 128]
   process :set_content_type
 
   version :small do

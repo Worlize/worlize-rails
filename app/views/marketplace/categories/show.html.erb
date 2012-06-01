@@ -44,7 +44,7 @@
 
 <div id="left-column">
   <%# Featured items of each type %>
-  <% for item_type in %w(avatars backgrounds in_world_objects) %>
+  <% for item_type in %w(avatars backgrounds in_world_objects props apps) %>
     <% featured_items = @category.marketplace_featured_items.send(item_type).active %>
     <% if !featured_items.empty? %>
       <section class="featured item-list">
@@ -70,7 +70,7 @@
   <% end %>
   
   <%# List All Items %>
-  <% for item_type in %w(avatars backgrounds in_world_objects) %>
+  <% for item_type in %w(avatars backgrounds in_world_objects props apps) %>
     <% items = MarketplaceItem.active.send(item_type).where(:marketplace_category_id => @category_ids) %>
     <% items_count = items.count %>
     <% items = items.limit(30) %>

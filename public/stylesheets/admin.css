@@ -707,6 +707,12 @@ ul.user-friends img {
 	color: black;
 }
 
+.marketplace_thumbnail_container a .item_type_app {
+	font-size: 11px;
+	background-color: #d9f49e;
+	color: black;
+}
+
 .marketplace_thumbnail_container div.thumbnail {
 	position: relative;
 	float: left;

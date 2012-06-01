@@ -114,9 +114,14 @@ class Locker::AppsController < ApplicationController
     
     ai = current_user.app_instances.create(:app => app)
     
-    render :json => {
+    result = {
       :success => ai.persisted?
     }
+    if result[:success]
+      result[:app_instance] = ai.hash_for_api
+    end
+    
+    render :json => result
   end
   
   def remove_from_room

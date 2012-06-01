@@ -3,7 +3,12 @@
   data-currency-id="<%= @item.currency_id %>"
   data-price="<%= @item.price %>"
   data-marketplace-item-id="<%= @item.id %>"
-  data-thumbnail-image-url="<%= @item.item.image.thumb.url %>">
+  <% if @item.item.respond_to? 'image' %>
+    data-thumbnail-image-url="<%= @item.item.image.thumb.url %>"
+  <% elsif @item.item.respond_to? 'icon' %>
+    data-thumbnail-image-url="<%= @item.item.icon.url %>"
+  <% end %>
+  >
   <table cellpadding="0" cellspacing="0" border="0" width="100%">
     <tr>
       <td class="item-detail-left-column">
@@ -11,6 +16,10 @@
               @item.item.image.respond_to?('medium') %>
           <div class="preview-image">
             <%= image_tag @item.item.image.medium.url, :class => 'preview' %>
+          </div>
+        <% elsif @item.item.respond_to?('icon') %>
+          <div class="preview-image">
+            <%= image_tag @item.item.icon.url, :class => 'preview icon' %>
           </div>
         <% end %>
     
@@ -86,7 +95,11 @@
             <%- end %>
             <%= @item.copyright %>
           <% else %>
-            © <%= @item.item.created_at.year %> Worlize Inc.
+            © <%= @item.item.created_at.year %>
+            <% if @item.item.created_at.year < Date.today.year %>
+              - <%= Date.today.year %>
+            <% end %>
+            Worlize Inc.
           <% end %>
         </p>
       </td>

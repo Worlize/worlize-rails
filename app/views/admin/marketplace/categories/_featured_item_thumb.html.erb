@@ -2,6 +2,10 @@
 <%
   div_classes = ['thumbnail'] 
   div_classes.push('background') if item.item_type == 'Background'
+  div_classes.push('avatar') if item.item_type == 'Avatar'
+  div_classes.push('object') if item.item_type == 'InWorldObject'
+  div_classes.push('prop') if item.item_type == 'Prop'
+  div_classes.push('app') if item.item_type == 'App'
   div_classes.push('category') if item.featured_item_type == 'MarketplaceCategory'
 %>
 
@@ -22,6 +26,8 @@
           <div class="item_type_object">Object</div>
         <% elsif item.item_type == 'Prop' %>
           <div class="item_type_prop">Prop</div>
+        <% elsif item.item_type == 'App' %>
+          <div class="item_type_app">App</div>
         <% elsif item.featured_item_type == 'MarketplaceCategory' %>
           <div class="item_type_category">Category</div>
         <% end %>
@@ -29,6 +35,8 @@
       <% if item.featured_item_type == 'MarketplaceItem' %>
         <% if item.featured_item.item.respond_to? 'image' %>
           <%= image_tag item.featured_item.item.image.thumb.url %>
+        <% elsif item.featured_item.item.respond_to? 'icon' %>
+          <%= image_tag item.featured_item.item.icon.medium.url %>
         <% end %>
       <% end %>
       <% if item.featured_item_type == 'MarketplaceCategory' %>

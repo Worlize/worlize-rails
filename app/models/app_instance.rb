@@ -22,6 +22,13 @@ class AppInstance < ActiveRecord::Base
   end
   
   private
+  def remove_from_room
+    unless room.nil?
+      room.room_definition.remove_item(guid)
+    end
+    true
+  end
+
   def notify_user
     if self.user
       self.user.send_message({
@@ -33,13 +40,6 @@ class AppInstance < ActiveRecord::Base
   
   def assign_guid()
     self.guid = Guid.new.to_s if self.guid.nil?
-  end
-  
-  def remove_from_room
-    unless room.nil?
-      room.room_definition.remove_item(ai.guid)
-    end
-    true
   end
   
 end

@@ -5,11 +5,16 @@
   <meta property="og:type" content="product">
   <% if @item.item.respond_to? 'image' %>
     <meta property="og:image" content="<%= @item.item.image.thumb.url %>">
+  <% elsif @item.item.respond_to? 'icon' %>
+    <meta property="og:image" content="<%= @item.item.icon.url %>">
+  <% else %>
+    <meta property="og:image" content="<%= image_path('characters/blusey.jpg') %>">
   <% end %>
   <meta property="og:url" content="<%= marketplace_item_url(@item) %>">
   
   <% if !@item.description.nil? && !@item.description.empty? %>
-    <meta property="og:description" content="<%= truncate(@item.description, :length => 200) %>">
+    <%= content_tag(:meta, nil, :property => 'og:description', :content => truncate(@item.description, :length => 200)).html_safe %>
+    <%# <meta property="og:description" content=" ---truncate(@item.description, :length => 200)--- "> %>
   <% else %>
     <% og_type = @item.item_type
        og_type = 'Object' if og_type == 'InWorldObject' %>
