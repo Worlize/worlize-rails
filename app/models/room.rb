@@ -10,6 +10,7 @@ class Room < ActiveRecord::Base
   acts_as_list :scope => :world
   
   before_create :assign_guid
+  before_destroy :notify_user_of_items_removal
   after_create :notify_users_of_creation
   after_save [:update_room_definition, :notify_users_of_changes]
   after_destroy [:delete_room_definition, :notify_users_of_deletion]
@@ -121,6 +122,18 @@ class Room < ActiveRecord::Base
       :msg => 'room_updated',
       :data => basic_hash_for_api
     })
+  end
+  
+  def notify_user_of_items_removal
+    room_definition.items.each do |item|
+      Worlize::InteractServerManager.instance.broadcast_to_room(guid, {
+        :msg => 'remove_item',
+        :data => {
+            :room => guid,
+            :guid => item['guid']
+        }
+      })
+    end
   end
   
   # before_create :create_room_definition
