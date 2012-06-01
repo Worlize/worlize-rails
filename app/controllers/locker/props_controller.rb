@@ -70,6 +70,8 @@ class Locker::PropsController < ApplicationController
       # they could still be sitting in a room even after being
       # deleted from the person's locker, and subsequent people
       # who entered the room would get a broken image.
+      # Or.. it might be saved in an app that reconstitutes the
+      # props when the first person enters the empty room.
 
       # prop_instance.prop.destroy
       prop_instance.destroy
