@@ -823,7 +823,8 @@ section.item-list ul li .loading-spinner {
 }
 
 section.item-list ul li.Avatar,
-section.item-list ul li.InWorldObject {	
+section.item-list ul li.InWorldObject,
+section.item-list ul li.App {	
 	width: 105px;
 }
 
@@ -842,7 +843,8 @@ section.item-list ul li img {
 }
 
 section.item-list ul li.Avatar img,
-section.item-list ul li.InWorldObject img {
+section.item-list ul li.InWorldObject img,
+section.item-list ul li.App img {
 	width: 80px;
 	height: 80px;
 }
