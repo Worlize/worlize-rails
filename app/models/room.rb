@@ -69,7 +69,7 @@ class Room < ActiveRecord::Base
 
   def can_be_edited_by?(user)
     owner = self.world.user
-    return user == owner
+    return user.id == owner.id
   end
   
   def self.gate_room_guid=(guid)
