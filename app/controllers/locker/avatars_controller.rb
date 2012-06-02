@@ -12,6 +12,38 @@ class Locker::AvatarsController < ApplicationController
     }
   end
   
+  def save_instance
+    @avatar = Avatar.find_by_guid(params[:id])
+    
+    if @avatar.nil?
+      render :json => {
+        :success => false,
+        :description => "Unable to find an avatar with the specified guid."
+      } and return
+    end
+    
+    if current_user.avatar_instances.include? @avatar
+      render :json => {
+        :success => false,
+        :description => "You already have that avatar in your locker."
+      } and return
+    end
+    
+    ai = current_user.avatar_instances.create(:avatar => @avatar)
+    
+    if ai.persisted?
+      render :json => {
+        :success => true
+      }
+    else
+      render :json => {
+        :success => false,
+        :description => "Unable to create avatar instance.",
+        :errors => ai.errors
+      }
+    end
+  end
+  
   def create
     if current_user.avatar_slots <= current_user.avatar_instances.count
       render :json => {
@@ -71,6 +103,7 @@ class Locker::AvatarsController < ApplicationController
       # destroy the avatar itself if this is its last instance
       # but don't destroy the avatar if it exists in the marketplace
       # avatar_instance.avatar.destroy
+      avatar_instance.destroy
     else
       # otherwise just destroy the instance
       avatar_instance.destroy

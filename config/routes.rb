@@ -89,7 +89,11 @@ Worlize::Application.routes.draw do |map|
   
   namespace "locker" do
     resources :backgrounds
-    resources :avatars
+    resources :avatars do
+      member do
+        post :save_instance
+      end
+    end
     resources :in_world_objects
     resources :apps do
       member do
