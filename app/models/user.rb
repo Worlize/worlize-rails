@@ -770,6 +770,106 @@ class User < ActiveRecord::Base
     end
   end
   
+  ###################################################################
+  ## Permissions
+  ###################################################################
+  
+  def applied_permissions(world_guid)
+    permissions(world_guid, true)
+  end
+  
+  def permissions(world_guid=nil, do_union=false)
+    redis = Worlize::RedisConnectionPool.get_client(:permissions)
+    
+    if world_guid.nil?
+      permissions = redis.smembers("g:#{self.guid}")
+    elsif do_union
+      permissions = redis.sunion("g:#{self.guid}", "w:#{world_guid}:#{self.guid}")
+    else
+      permissions = redis.smembers("w:#{world_guid}:#{self.guid}")
+    end
+    
+    permission_names = permissions.map do |permission_id|
+      Worlize::PermissionLookup.permission_map[permission_id]
+    end
+    
+    permission_names.select do |permission_name|
+      !permission_name.nil?
+    end
+  end
+  
+  def set_permissions(list, world_guid=nil)
+    if !list.is_a?(Array)
+      raise ArgumentError.new("Permission list must be an array")
+    end
+    redis = Worlize::RedisConnectionPool.get_client(:permissions)
+    list = list.map { |perm| Worlize::PermissionLookup.normalize_to_permission_id(perm) }
+    
+    redis_key = world_guid.nil? ? "g:#{self.guid}" : "w:#{world_guid}:#{self.guid}"
+    
+    redis.multi do
+      redis.del redis_key
+      list.each do |perm|
+        redis.sadd redis_key, perm
+      end
+    end
+    
+    update_moderator_list(world_guid)
+    broadcast_user_permissions_changed_message(world_guid)
+    return self.permissions(world_guid)
+  end
+  
+  def add_permission(new_permission, world_guid=nil)
+    redis = Worlize::RedisConnectionPool.get_client(:permissions)
+    if world_guid.nil?
+      redis.sadd("g:#{self.guid}", Worlize::PermissionLookup.normalize_to_permission_id(new_permission))
+    else
+      redis.sadd("w:#{world_guid}:#{self.guid}", Worlize::PermissionLookup.normalize_to_permission_id(new_permission))
+    end
+    update_moderator_list(world_guid)
+    broadcast_user_permissions_changed_message(world_guid)
+    return self.permissions(world_guid)
+  end
+  
+  def remove_permission(permission, world_guid=nil)
+    redis = Worlize::RedisConnectionPool.get_client(:permissions)
+    redis.srem("g:#{self.guid}", Worlize::PermissionLookup.normalize_to_permission_id(permission))
+    update_moderator_list(world_guid)
+    broadcast_user_permissions_changed_message(world_guid)
+    return self.permissions(world_guid)
+  end
+  
+  def update_moderator_list(world_guid=nil)
+    redis = Worlize::RedisConnectionPool.get_client(:permissions)
+    permission_count = permissions(world_guid).length
+    redis.multi do
+      if world_guid.nil?
+        redis.zadd 'gml', permission_count, self.guid
+        redis.zremrangebyscore 'gml', '-inf', '0'
+      else
+        redis.zadd "wml:#{world_guid}", permission_count, self.guid
+        redis.zremrangebyscore "wml:#{world_guid}", '-inf', '0'
+      end
+    end
+    nil
+  end
+  
+  def broadcast_user_permissions_changed_message(world_guid=nil)
+    # Broadcast update is only relevant if the user is online
+    if online?
+      # Broadcast to the world that the user is currently in...
+      Worlize::InteractServerManager.instance.broadcast_to_world(
+        interactivity_session.world_guid,
+        {
+          :msg => 'user_permissions_changed',
+          :data => {
+            :guid => self.guid
+          }
+        }
+      )
+    end
+  end
+  
   private
   
   def mass_assignment_authorizer

@@ -20,6 +20,8 @@
 <% end %>
 <br>
 
+<%= button_to "View/Edit Permissions", admin_user_permissions_path(@user), :method => 'get' %><br>
+
 <%= form_for [:admin, @user] do |f| %>
   <%= f.label :username %><br>
   <%= f.text_field :username %><br>

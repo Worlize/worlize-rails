@@ -1,0 +1,31 @@
+<h1>Global Permissions for <%= @user.username %></h1>
+
+<%= form_tag admin_user_permissions_path, { :method => :put, :class => 'permissions-form' } %>
+
+<% Worlize::PermissionLookup.permission_names.each do |perm| %>
+  <%= check_box_tag("permissions[#{perm}]", "1", @permissions.include?(perm)) %>
+  <%= label_tag "permissions[#{perm}]", perm.humanize.split(/\s/).slice(1..-1).map { |w| w.capitalize }.join(' ') %><br><br>
+<% end %>
+
+<a href="#" id="select-all-button">Select All</a> |
+<a href="#" id="select-none-button">Select None</a><br><br>
+
+<%= submit_tag "Save" %>
+<br><br>
+<%= link_to "Back to #{@user.username}", admin_user_path(@user) %>
+
+</form>
+
+<script>
+jQuery(function($) {
+  $('#select-all-button').bind('click', function(event) {
+    event.preventDefault();
+    $('.permissions-form input[type=checkbox]').attr('checked', true);
+  });
+  
+  $('#select-none-button').bind('click', function(event) {
+    event.preventDefault();
+    $('.permissions-form input[type=checkbox]').attr('checked', false);
+  });
+});
+</script>

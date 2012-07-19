@@ -193,6 +193,8 @@ Worlize::Application.routes.draw do |map|
         post 'remove_from_public_worlds'
         post 'reactivate'
       end
+      resource :permissions do
+      end
     end
     
     resources :rooms do
