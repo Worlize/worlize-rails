@@ -15,7 +15,8 @@ module Worlize
       "can_lengthen_restriction_time",
       "can_edit_rooms",
       "can_create_rooms",
-      "can_delete_rooms"
+      "can_delete_rooms",
+      "can_moderate_globally"
     ]
     
     @permission_hash = {}

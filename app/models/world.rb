@@ -3,6 +3,7 @@ class World < ActiveRecord::Base
   has_many :rooms, :order => 'position, id', :dependent => :destroy
   has_one :public_world, :dependent => :destroy
   has_one :permalink, :as => :linkable, :dependent => :destroy
+  has_many :user_restrictions
 
   before_create :assign_guid
   before_destroy :check_destroy_preconditions

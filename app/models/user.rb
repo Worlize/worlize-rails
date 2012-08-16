@@ -35,6 +35,8 @@ class User < ActiveRecord::Base
   
   belongs_to :beta_code
   
+  has_many :user_restrictions
+  
   attr_accessible :username,
                   :email,
                   :newsletter_optin,
@@ -256,16 +258,16 @@ class User < ActiveRecord::Base
     room.save
   end
   
-  def permissions
-    if self.admin?
-      [
-        :may_author_everything
-      ]
-    else
-      []
-    end
-  end
-  
+  # def permissions
+  #   if self.admin?
+  #     [
+  #       :may_author_everything
+  #     ]
+  #   else
+  #     []
+  #   end
+  # end
+  # 
   def add_to_mailchimp
     if Rails.env != 'production'
       Rails.logger.info "Not adding #{self.email} to MailChimp because we're not in production"
@@ -779,6 +781,11 @@ class User < ActiveRecord::Base
   end
   
   def permissions(world_guid=nil, do_union=false)
+    if !world_guid.nil? && worlds.first.guid == world_guid
+      # A user always has all permissions within their own world
+      return Worlize::PermissionLookup.permission_names.clone
+    end
+    
     redis = Worlize::RedisConnectionPool.get_client(:permissions)
     
     if world_guid.nil?
