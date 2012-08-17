@@ -44,13 +44,12 @@ class UserRestriction < ActiveRecord::Base
   private
   
   def update_redis_cache
-    active_restrictions = UserRestriction.active.where(
-      :world_id => world_id,
-      :user_id => user_id
-    )
+    active_restrictions = UserRestriction.active.where(:user_id => user_id)
+    if !global
+      active_restrictions = active_restrictions.where(:world_id => world.id)
+    end
 
     expiration = 0
-    
     json = Yajl::Encoder.encode(active_restrictions.map { |restriction|
       expiration = [restriction.expires_at.to_i - Time.now.to_i, expiration].max
       {
@@ -59,15 +58,23 @@ class UserRestriction < ActiveRecord::Base
       }
     })
     
-    remove_from_redis_cache and return if expiration <= 0
+    remove_from_redis_cache and return if expiration == 0
     
     redis = Worlize::RedisConnectionPool.get_client(:restrictions)
-    redis.setex("r:#{self.world.guid}:#{self.user.guid}", expiration, json)
+    if global
+      redis.setex("g:#{self.user.guid}", expiration, json)
+    else
+      redis.setex("w:#{self.world.guid}:#{self.user.guid}", expiration, json)
+    end
   end
   
   def remove_from_redis_cache
     redis = Worlize::RedisConnectionPool.get_client(:restrictions)
-    redis.del("r:#{self.world.guid}:#{self.user.guid}")
+    if global
+      redis.del("g:#{self.user.guid}")
+    else
+      redis.del("w:#{self.world.guid}:#{self.user.guid}")
+    end
   end
   
   def publish_notification
@@ -84,14 +91,27 @@ class UserRestriction < ActiveRecord::Base
   end
   
   def check_has_permission
-    unless created_by.applied_permissions(world.guid).include?("can_#{name}")
+    if global
+      permissions = updated_by.permissions
+    else
+      permissions = updated_by.applied_permissions(world.guid)
+    end
+    
+    unless permissions.include?("can_#{name}")
       errors[:base] << "#{user.username} does not have permission to enforce #{name} restrictions."
     end
   end
   
   def check_can_lengthen_restriction_time
     if expires_at_changed? && expires_at > expires_at_was
-      unless updated_by.applied_permissions(world.guid).include?('can_lengthen_restriction_time')
+      
+      if global
+        permissions = updated_by.permissions
+      else
+        permissions = updated_by.applied_permissions(world.guid)
+      end
+      
+      unless permissions.include?('can_lengthen_restriction_time')
         errors[:base] << 'Only users with the "can_lengthen_restriction_time" permission can lengthen the restriction time.'
       end
     end
@@ -99,7 +119,13 @@ class UserRestriction < ActiveRecord::Base
   
   def check_can_reduce_restriction_time
     if expires_at_changed? && expires_at < expires_at_was
-      unless updated_by.applied_permissions(world.guid).include?('can_reduce_restriction_time')
+      if global
+        permissions = updated_by.permissions
+      else
+        permissions = updated_by.applied_permissions(world.guid)
+      end
+      
+      unless permissions.include?('can_reduce_restriction_time')
         errors[:base] << 'Only users with the "can_reduce_restriction_time" permission can reduce the restriction time.'
       end
     end
