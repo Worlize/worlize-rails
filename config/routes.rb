@@ -136,6 +136,7 @@ Worlize::Application.routes.draw do |map|
       post :check_username_availability
     end
     resources :friends
+    resources :restrictions
   end
   
   resource :me, :only => [:show], :controller => 'Users' do

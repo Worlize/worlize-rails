@@ -10,7 +10,7 @@ class UserRestriction < ActiveRecord::Base
   
   after_save :update_redis_cache
   after_save :publish_notification
-  after_destroy :remove_from_redis_cache
+  after_destroy :update_redis_cache
   after_destroy :publish_notification
   
   validates :name,
@@ -29,14 +29,8 @@ class UserRestriction < ActiveRecord::Base
   validates :user, :presence => true
   validates :created_by, :presence => true
   validates :updated_by, :presence => true
-  validates :expires_at,
-    :presence => true,
-    :timeliness => {
-      :on_or_after => lambda { 50.seconds.from_now },
-      :if => Proc.new { |r| r.expires_at_changed? },
-      :message => "must be at least 50 seconds in the future.",
-      :on => :create
-    }
+  validates :expires_at, :presence => true
+  
   validate :check_can_lengthen_restriction_time, :on => :update
   validate :check_can_reduce_restriction_time, :on => :update  
   validate :check_has_permission, :on => :create
@@ -45,20 +39,24 @@ class UserRestriction < ActiveRecord::Base
   
   def update_redis_cache
     active_restrictions = UserRestriction.active.where(:user_id => user_id)
-    if !global
+    if global
+      active_restrictions = active_restrictions.where(:global => true)
+    else
       active_restrictions = active_restrictions.where(:world_id => world.id)
     end
+
+    remove_from_redis_cache and return if active_restrictions.length == 0
 
     expiration = 0
     json = Yajl::Encoder.encode(active_restrictions.map { |restriction|
       expiration = [restriction.expires_at.to_i - Time.now.to_i, expiration].max
       {
         :name => restriction.name,
-        :expires => restriction.expires_at.utc
+        :expires => restriction.expires_at.utc,
+        :created_by => created_by.guid,
+        :updated_by => updated_by.guid
       }
     })
-    
-    remove_from_redis_cache and return if expiration == 0
     
     redis = Worlize::RedisConnectionPool.get_client(:restrictions)
     if global
@@ -98,7 +96,7 @@ class UserRestriction < ActiveRecord::Base
     end
     
     unless permissions.include?("can_#{name}")
-      errors[:base] << "#{user.username} does not have permission to enforce #{name} restrictions."
+      errors[:base] << "#{updated_by.username} does not have permission to enforce #{name} restrictions."
     end
   end
   
@@ -111,8 +109,11 @@ class UserRestriction < ActiveRecord::Base
         permissions = updated_by.applied_permissions(world.guid)
       end
       
+      # Allow moderators to change the time of their own enforcements
+      return if updated_by.id == created_by.id
+
       unless permissions.include?('can_lengthen_restriction_time')
-        errors[:base] << 'Only users with the "can_lengthen_restriction_time" permission can lengthen the restriction time.'
+        errors[:base] << 'Permission to lengthen the restriction time denied.'
       end
     end
   end
@@ -125,8 +126,11 @@ class UserRestriction < ActiveRecord::Base
         permissions = updated_by.applied_permissions(world.guid)
       end
       
+      # Allow moderators to change the time of their own enforcements
+      return if updated_by.id == created_by.id
+      
       unless permissions.include?('can_reduce_restriction_time')
-        errors[:base] << 'Only users with the "can_reduce_restriction_time" permission can reduce the restriction time.'
+        errors[:base] << 'Permission to reduce the restriction time or lift the restriction denied.'
       end
     end
   end
