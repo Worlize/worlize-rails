@@ -378,12 +378,16 @@ function hideShim() {
             var notification = this.createNotificationInstance(options);
             activeNotifications[notification.worlizeId] = notification;
             notification.show();
+            setTimeout(function() {
+                delete activeNotifications[notification.worlizeId];
+                notification.cancel();
+            }, 8000);
             return notification.worlizeId;
         },
         clearNotification: function(notificationId) {
             var notification = activeNotifications[notificationId];
             if (notification) {
-                notification.clear();
+                notification.cancel();
                 delete activeNotifications[notificationId];
             }
         },
