@@ -59,10 +59,20 @@ class ApplicationController < ActionController::Base
     
     def require_user
       unless current_user
-        store_location
-        flash[:notice] = "You must be logged in to access this page"
-        redirect_to new_user_session_url
-        return false
+        respond_to do |format|
+          format.html do
+            store_location
+            flash[:notice] = "You must be logged in to access this page"
+            redirect_to new_user_session_url
+          end
+          format.json do
+            render :json => {
+              :success => false,
+              :message => "An active user session is required to access this resource."
+            }
+          end
+        end
+        return false          
       end
     end
 
