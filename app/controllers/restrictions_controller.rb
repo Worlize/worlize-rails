@@ -1,8 +1,29 @@
 class RestrictionsController < ApplicationController
   before_filter :require_user
   
+  def index
+    world = World.find_by_guid!(params[:world_id])
+    
+    permissions = current_user.applied_permissions(world.guid)
+    has_permission = permissions.include?('can_access_moderation_dialog')
+    
+    if !has_permission
+      render :json => {
+        :success => false,
+        :message => "Permission denied"
+      } and return
+    end
+    
+    active_restrictions = world.user_restrictions.active
+    
+    render :json => {
+      :success => true,
+      :restrictions => active_restrictions.map { |ur| ur.hash_for_api }
+    }
+  end
+  
   def create
-    target_user = User.find_by_guid(params[:user_id])
+    target_user = User.find_by_guid!(params[:user_id])
 
     # Check for an existing active restriction that matches.
     ur = UserRestriction.active.limit(1).where(
@@ -11,7 +32,7 @@ class RestrictionsController < ApplicationController
       :global => params[:global]
     )
     if params[:world_guid]
-      world = World.find_by_guid(params[:world_guid])
+      world = World.find_by_guid!(params[:world_guid])
       ur = ur.where(:world_id => world.id)
     end
     ur = ur.first
@@ -35,8 +56,12 @@ class RestrictionsController < ApplicationController
       if params[:world_guid]
         options[:world] = world
       end
-      ur = UserRestriction.create(options)
-      success = ur.valid? && !ur.new_record?
+      if (options[:expires_at] > Time.now)
+        ur = UserRestriction.create(options)
+        success = ur.valid? && !ur.new_record?
+      else
+        success = true
+      end
     end
     
     if success

@@ -226,6 +226,13 @@ class World < ActiveRecord::Base
       }
     })
   end
+  
+  def moderators
+    redis = Worlize::RedisConnectionPool.get_client(:permissions)
+    user_guids = redis.zrange("wml:#{guid}", 0, -1)
+    user_guids.push(user.guid)
+    return User.where(:guid => user_guids).select { |u| !u.nil? }
+  end
 
   private
   def assign_guid()

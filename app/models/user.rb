@@ -102,7 +102,7 @@ class User < ActiveRecord::Base
     {
       :guid => self.guid,
       :username => self.username,
-      :created_at => self.created_at
+      :created_at => self.created_at.utc
     }
   end
   
@@ -110,7 +110,7 @@ class User < ActiveRecord::Base
     world = self.worlds.first
     data = {
       :name => self.name,
-      :password_changed_at => self.password_changed_at,
+      :password_changed_at => self.password_changed_at.utc,
       :developer => self.developer?,
       :background_slots => self.background_slots,
       :avatar_slots => self.avatar_slots,
@@ -258,16 +258,6 @@ class User < ActiveRecord::Base
     room.save
   end
   
-  # def permissions
-  #   if self.admin?
-  #     [
-  #       :may_author_everything
-  #     ]
-  #   else
-  #     []
-  #   end
-  # end
-  # 
   def add_to_mailchimp
     if Rails.env != 'production'
       Rails.logger.info "Not adding #{self.email} to MailChimp because we're not in production"
@@ -783,7 +773,7 @@ class User < ActiveRecord::Base
   def permissions(world_guid=nil, do_union=false)
     if !world_guid.nil? && worlds.first.guid == world_guid
       # A user always has all permissions within their own world
-      return Worlize::PermissionLookup.permission_names.clone
+      return Worlize::PermissionLookup.world_owner_permission_names.clone
     end
     
     redis = Worlize::RedisConnectionPool.get_client(:permissions)

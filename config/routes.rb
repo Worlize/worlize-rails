@@ -136,7 +136,8 @@ Worlize::Application.routes.draw do |map|
       post :check_username_availability
     end
     resources :friends
-    resources :restrictions
+    resources :restrictions, :only => [:create]
+    resources :permissions, :controller => 'user_permissions'
   end
   
   resource :me, :only => [:show], :controller => 'Users' do
@@ -262,6 +263,8 @@ Worlize::Application.routes.draw do |map|
   
   resources :worlds, :only => [:show, :update] do
     resources :rooms, :only => [:index, :create, :show, :update, :destroy]
+    resources :restrictions, :only => [:index]
+    resources :moderators
     member do
       get :user_list
       post :set_permalink

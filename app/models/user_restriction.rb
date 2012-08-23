@@ -35,6 +35,19 @@ class UserRestriction < ActiveRecord::Base
   validate :check_can_reduce_restriction_time, :on => :update  
   validate :check_has_permission, :on => :create
   
+  def hash_for_api
+    return {
+      :id => id,
+      :name => name,
+      :user => user.nil? ? nil : user.public_hash_for_api,
+      :created_by => created_by.nil? ? nil : created_by.public_hash_for_api,
+      :updated_by => updated_by.nil? ? nil : updated_by.public_hash_for_api,
+      :expires => expires_at.utc,
+      # :world => world.nil? ? nil : world.basic_hash_for_api,
+      :global => global?
+    }
+  end
+  
   private
   
   def update_redis_cache
@@ -52,9 +65,7 @@ class UserRestriction < ActiveRecord::Base
       expiration = [restriction.expires_at.to_i - Time.now.to_i, expiration].max
       {
         :name => restriction.name,
-        :expires => restriction.expires_at.utc,
-        :created_by => created_by.guid,
-        :updated_by => updated_by.guid
+        :expires => restriction.expires_at.utc
       }
     })
     

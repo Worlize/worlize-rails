@@ -19,6 +19,23 @@ module Worlize
       "can_moderate_globally"
     ]
     
+    @world_owner_permission_names = [
+      "can_access_moderation_dialog",
+      "can_bless_moderators",
+      "can_grant_permissions",
+      "can_ban",
+      "can_pin",
+      "can_gag",
+      "can_block_avatars",
+      "can_block_webcams",
+      "can_block_props",
+      "can_reduce_restriction_time",
+      "can_lengthen_restriction_time",
+      "can_edit_rooms",
+      "can_create_rooms",
+      "can_delete_rooms"
+    ]
+    
     @permission_hash = {}
     
     @permission_names.each_index do |index|
@@ -35,6 +52,10 @@ module Worlize
     
     def self.permission_names
       return @permission_names
+    end
+    
+    def self.world_owner_permission_names
+      return @world_owner_permission_names
     end
     
     def self.normalize_to_permission_id(perm)
