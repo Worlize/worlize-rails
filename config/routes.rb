@@ -264,7 +264,11 @@ Worlize::Application.routes.draw do |map|
   resources :worlds, :only => [:show, :update] do
     resources :rooms, :only => [:index, :create, :show, :update, :destroy]
     resources :restrictions, :only => [:index]
-    resources :moderators
+    resources :moderators do
+      collection do
+        post :update_moderation_data
+      end
+    end
     member do
       get :user_list
       post :set_permalink
