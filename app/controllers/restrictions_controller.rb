@@ -24,7 +24,7 @@ class RestrictionsController < ApplicationController
   
   def create
     target_user = User.find_by_guid!(params[:user_id])
-
+    
     # Check for an existing active restriction that matches.
     ur = UserRestriction.active.limit(1).where(
       :user_id => target_user.id,
@@ -34,6 +34,15 @@ class RestrictionsController < ApplicationController
     if params[:world_guid]
       world = World.find_by_guid!(params[:world_guid])
       ur = ur.where(:world_id => world.id)
+      if world.user.id == target_user.id && params[:name] == 'ban'
+        render :json => {
+          :success => false,
+          :errors => [
+            'You cannot ban a user from their own world.'
+          ]
+        }
+        return
+      end
     end
     ur = ur.first
     
