@@ -110,7 +110,7 @@ class User < ActiveRecord::Base
     world = self.worlds.first
     data = {
       :name => self.name,
-      :password_changed_at => self.password_changed_at.utc,
+      :password_changed_at => self.password_changed_at.nil? ? nil : self.password_changed_at.utc,
       :developer => self.developer?,
       :background_slots => self.background_slots,
       :avatar_slots => self.avatar_slots,
