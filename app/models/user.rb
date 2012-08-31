@@ -37,6 +37,8 @@ class User < ActiveRecord::Base
   
   has_many :user_restrictions
   
+  has_many :event_comments
+  
   attr_accessible :username,
                   :email,
                   :newsletter_optin,
