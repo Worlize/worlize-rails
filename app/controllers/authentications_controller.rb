@@ -68,17 +68,17 @@ class AuthenticationsController < ApplicationController
           :provider => omniauth['provider'],
           :uid => omniauth['uid'],
           :token => omniauth['credentials']['token'],
-          :display_name => omniauth['user_info']['name']
+          :display_name => omniauth['info']['name']
         }
         
         if omniauth['provider'] == 'facebook'
-          create_options[:profile_url] = omniauth['user_info']['urls']['Facebook']
+          create_options[:profile_url] = omniauth['info']['urls']['Facebook']
           current_user.interactivity_session.update_attributes(
             :facebook_id => omniauth['uid']
           )
         elsif omniauth['provider'] == 'twitter'
-          create_options[:profile_url] = omniauth['user_info']['urls']['Twitter']
-          create_options[:profile_picture] = omniauth['user_info']['image']
+          create_options[:profile_url] = omniauth['info']['urls']['Twitter']
+          create_options[:profile_picture] = omniauth['info']['image']
         end
         
         success = current_user.authentications.create(create_options)
@@ -104,16 +104,16 @@ class AuthenticationsController < ApplicationController
       # get changed back and forth when the one of the user's friends loads
       # their friends list and when the user logs in.
       if omniauth['provider'] != 'facebook'
-        authentication.profile_picture = omniauth['user_info']['image']
+        authentication.profile_picture = omniauth['info']['image']
       end
-      authentication.display_name = omniauth['user_info']['name']
+      authentication.display_name = omniauth['info']['name']
       if omniauth['credentials'] && omniauth['credentials']['token']
         authentication.token = omniauth['credentials']['token']
       end
       if omniauth['provider'] == 'facebook'
-        authentication.profile_url = omniauth['user_info']['urls']['Facebook']
+        authentication.profile_url = omniauth['info']['urls']['Facebook']
       elsif omniauth['provider'] == 'twitter'
-        authentication.profile_url = omniauth['user_info']['urls']['Twitter']
+        authentication.profile_url = omniauth['info']['urls']['Twitter']
       end
       authentication.save
       
@@ -125,7 +125,7 @@ class AuthenticationsController < ApplicationController
     else
       Rails.logger.debug "Unable to find matching omniauth authentication"
       if omniauth['provider'] == 'facebook'
-        omniauth['user_info']['birthday'] = omniauth['extra']['user_hash']['birthday']
+        omniauth['info']['birthday'] = omniauth['extra']['raw_info']['birthday']
       end
       session[:omniauth] = omniauth.except('extra')
       redirect_to new_user_url

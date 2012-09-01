@@ -1,46 +1,47 @@
 source :rubygems
 
 gem 'newrelic_rpm'
-gem 'rails', '3.0.10'
-gem 'SystemTimer', '1.2.3'
-gem 'mysql', '2.8.1'
-gem 'guid', '0.1.1'
-gem 'hiredis', '~> 0.3.1'
-gem 'redis', '~> 2.2.0', :require => ['redis/connection/hiredis', 'redis']
+gem 'rails', '~> 3.0.15'
+gem 'mysql2', '~> 0.2.7'
+gem 'guid', '~> 0.1.1'
+gem 'hiredis', '~> 0.4.5'
+gem 'redis', '~> 3.0.1'
 gem 'yajl-ruby', :require => 'yajl'
-gem 'RedCloth', '4.2.3'
-gem 'carrierwave', '0.5.7'
-gem 'mini_magick', '3.1'
-gem 'fog', '0.3.33'
-gem 'nestful', '0.0.6'
-gem 'gibbon'
-gem 'nokogiri'
-gem 'httparty', '0.8.3'
+gem 'carrierwave', '~> 0.5.7'
+gem 'mini_magick', '~> 3.4'
+gem 'fog', '~> 1.5.0'
+gem 'nestful', '~> 0.0.8'
+gem 'gibbon', '~> 0.3.5'
+gem 'nokogiri', '~> 1.5.5'
+gem 'httparty', '~> 0.8.3'
 
 # TODO: Are we using this?
-gem 'activemerchant', '1.15.0'
+gem 'activemerchant', '~> 1.28.0'
 
 # Facebook Graph API support
-gem "koala", "~> 1.2.0beta"
+gem "koala", "~> 1.5.0"
 
 # Plugins
-gem 'omniauth', '>= 0.3.0.rc', '<0.4'
+gem 'omniauth', '~> 1.1.0'
+gem 'omniauth-facebook', '~> 1.4.1'
+gem 'omniauth-twitter', '~> 0.0.12'
 gem 'will_paginate', '~> 3.0.2'
-gem 'acts-as-taggable-on', '2.0.6'
-gem 'acts_as_list', '0.1.2'
-gem 'acts_as_tree', '0.1.1'
+gem 'acts-as-taggable-on', '~> 2.3.3'
+gem 'acts_as_list', '~> 0.1.8'
+gem 'acts_as_tree', '~> 1.1.0'
 
 # Yay, jQuery!
 gem 'jquery-rails', '>= 1.0.12'
 
-gem 'validates_timeliness', '~> 3.0.0'
-gem 'state_machine', :git => 'git://github.com/pluginaweek/state_machine.git', :tag => 'v0.9.4'
+gem 'validates_timeliness', '~> 3.0.14'
+gem 'validate_as_email', '~> 1.0.3'
+gem 'state_machine', :git => 'git://github.com/pluginaweek/state_machine.git', :tag => 'v1.1.2'
 
 # I applied a couple manual fixes to be able to use the official release of
 # authlogic rather than an unknown and less-maintained fork.
 # gem "authlogic", :git => "git://github.com/odorcicd/authlogic.git", :branch => "rails3"
 # gem 'authlogic', '2.1.6'
-gem 'authlogic', '3.0.3'
+gem 'authlogic', '~> 3.1.2'
 
 # Use unicorn as the web server
-gem 'unicorn', '3.1.0'
+gem 'unicorn', '~> 4.3.1'

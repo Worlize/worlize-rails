@@ -1,4 +1,6 @@
 class UserSession < Authlogic::Session::Base
+  httponly true
+  secure true
   
   before_destroy :force_client_logout
   

@@ -12,15 +12,15 @@ class UsersController < ApplicationController
     
     # Pre-fill as much information as we can from an omniauth login
     oa = session[:omniauth]
-    if oa && oa['user_info']
+    if oa && oa['info']
       if oa['provider'] == 'facebook'
-        @user.first_name = oa['user_info']['first_name']
-        @user.last_name = oa['user_info']['last_name']
-        @user.username = oa['user_info']['nickname']
-        @user.email = oa['user_info']['email']
+        @user.first_name = oa['info']['first_name']
+        @user.last_name = oa['info']['last_name']
+        @user.username = oa['info']['nickname']
+        @user.email = oa['info']['email']
         @email_autofilled = true
       elsif oa['provider'] == 'twitter'
-        @user.username = oa['user_info']['nickname']
+        @user.username = oa['info']['nickname']
         @email_autofilled = false
       end
     end
@@ -92,7 +92,7 @@ class UsersController < ApplicationController
 
     @user = User.new(params[:user])
     if session[:omniauth]['provider'] == 'facebook'
-      @user.birthday = session[:omniauth]['user_info']['birthday']
+      @user.birthday = session[:omniauth]['info']['birthday']
     end
     if @beta_invitation
       @user.inviter = @beta_invitation.inviter
@@ -116,16 +116,16 @@ class UsersController < ApplicationController
         :provider => omniauth['provider'],
         :uid => omniauth['uid'],
         :token => omniauth['credentials']['token'],
-        :profile_picture => omniauth['user_info']['image']
+        :profile_picture => omniauth['info']['image']
       }
       
       if omniauth['provider'] == 'facebook'
-        create_options[:profile_url] = omniauth['user_info']['urls']['Facebook']
+        create_options[:profile_url] = omniauth['info']['urls']['Facebook']
         @user.interactivity_session.update_attributes(
           :facebook_id => omniauth['uid']
         )
       elsif omniauth['provider'] == 'twitter'
-        create_options[:profile_url] = omniauth['user_info']['urls']['Twitter']
+        create_options[:profile_url] = omniauth['info']['urls']['Twitter']
       end
       
       success = @user.authentications.create(create_options)
