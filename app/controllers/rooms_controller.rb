@@ -31,11 +31,8 @@ class RoomsController < ApplicationController
 
     room_population = Hash.new
 
-    active_room_guids_with_score = redis.zrangebyscore('activeRooms', '(0', '+inf', :withscores => true)
-    active_room_guids_with_score.each_index do |index|
-      if index % 2 == 0
-        room_population[active_room_guids_with_score[index]] = active_room_guids_with_score[index+1].to_i
-      end
+    redis.zrangebyscore('activeRooms', '(0', '+inf', :withscores => true).each do |pair|
+      room_population[pair[0]] = pair[1].to_i
     end
     
     room_info = []
