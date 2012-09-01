@@ -871,7 +871,9 @@ class User < ActiveRecord::Base
   
   private
   
-  def mass_assignment_authorizer
+  # TODO: Apply this modification globally or use the new technique from
+  # http://launchware.com/articles/whats-new-in-edge-scoped-mass-assignment-in-rails-3-1
+  def mass_assignment_authorizer(role = :default)
     if accessible == :all
       self.class.protected_attributes
     else

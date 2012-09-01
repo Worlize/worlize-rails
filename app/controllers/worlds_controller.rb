@@ -85,10 +85,6 @@ class WorldsController < ApplicationController
   def update
     begin
       data = Yajl::Parser.parse(params[:data])
-      if Rails.env == 'development'
-        require 'pp'
-        pp data
-      end
     rescue
       render :json => {
         :success => false,
@@ -167,7 +163,7 @@ class WorldsController < ApplicationController
     })
     
     render :json => {
-      :success => errors.length == 0,
+      :success => errors.empty?,
       :errors => errors
     }
   end

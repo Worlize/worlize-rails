@@ -33,7 +33,13 @@ class WelcomeController < ApplicationController
       'current_user' => current_user.hash_for_api,
       'interactivity_session' => current_user.interactivity_session.serializable_hash,
       'authenticity_token' => form_authenticity_token,
-      'cookies' => cookies,
+      'cookies' => begin
+        o = {}
+        cookies.each do |c|
+          o[c[0]] = c[1]
+        end
+        o
+      end,
       'interactivity_hostname' => Worlize.config['interactivity_hostname'],
       'interactivity_port' => request.ssl? ? 443 : 80,
       'interactivity_tls' => request.ssl?

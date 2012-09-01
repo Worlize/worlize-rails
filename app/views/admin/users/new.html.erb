@@ -1,6 +1,6 @@
 <h1>Create New User</h1>
 
-<% if @user.errors.length > 0 %>
+<% unless @user.errors.empty? %>
 <%= error_messages_for @user %>
 <% end %>
 
