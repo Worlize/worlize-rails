@@ -10,7 +10,15 @@ class ClientErrorsController < ApplicationController
       params[:log_text] = a[a.length-60000..a.length]
     end
     
-    @client_error_log_item = ClientErrorLogItem.new(params)
+    @client_error_log_item = ClientErrorLogItem.new(
+      :name => params[:name],
+      :error_type => params[:error_type],
+      :stack_trace => params[:stack_trace],
+      :log_text => params[:log_text],
+      :message => params[:message],
+      :error_id => params[:error_id],
+      :flash_version => params[:flash_version]
+    )
     @client_error_log_item.user = current_user
 
     Worlize.event_logger.info("action=flash_client_error user=#{current_user.guid} user_username=\"#{current_user.username}\"")
