@@ -63,7 +63,6 @@ class Admin::UsersController < ApplicationController
   
   def update
     @user = User.find(params[:id])
-    @user.accessible = :all
     respond_to do |format|
       if !params[:user]
         format.html { redirect_to(admin_user_url(@user), :notice => 'No attributes provided to update') }
@@ -212,7 +211,6 @@ class Admin::UsersController < ApplicationController
   def create
     User.transaction do
       @user = User.new(params[:user])
-      @user.password = params[:user][:password]
       @user.accepted_tos = true
       @user.save
     end
