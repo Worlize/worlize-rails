@@ -1,4 +1,4 @@
-Worlize::Application.routes.draw do |map|
+Worlize::Application.routes.draw do
 
   get "client_errors/create"
 

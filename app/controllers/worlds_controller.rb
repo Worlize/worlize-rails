@@ -167,7 +167,7 @@ class WorldsController < ApplicationController
     })
     
     render :json => {
-      :success => errors.length == 0,
+      :success => errors.empty?,
       :errors => errors
     }
   end

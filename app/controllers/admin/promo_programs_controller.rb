@@ -22,7 +22,7 @@ class Admin::PromoProgramsController < ApplicationController
   
   def show
     @promo_program = PromoProgram.find(params[:id])
-    @image_asset = @promo_program.image_assets.new
+    @image_asset = ImageAsset.new(:imageable => @promo_program)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -32,7 +32,7 @@ class Admin::PromoProgramsController < ApplicationController
     
   def update
     @promo_program = PromoProgram.find(params[:id])
-    @image_asset = @promo_program.image_assets.new
+    @image_asset = ImageAsset.new(:imageable => @promo_program)
 
     respond_to do |format|
       if @promo_program.update_attributes(params[:promo_program])

@@ -1,8 +1,8 @@
 source :rubygems
 
 gem 'newrelic_rpm'
-gem 'rails', '~> 3.0.15'
-gem 'mysql2', '~> 0.2.7'
+gem 'rails', '~> 3.1.0'
+gem 'mysql2', '~> 0.3.11'
 gem 'guid', '~> 0.1.1'
 gem 'hiredis', '~> 0.4.5'
 gem 'redis', '~> 3.0.1'
