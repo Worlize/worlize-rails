@@ -2,8 +2,8 @@ class Authentication < ActiveRecord::Base
   belongs_to :user
   validates :uid, :uniqueness => { :scope => :provider }
   
-  after_create [:notify_user_of_creation, :log_creation]
-  after_destroy [:notify_user_of_destruction, :log_destruction]
+  after_create :notify_user_of_creation, :log_creation
+  after_destroy :notify_user_of_destruction, :log_destruction
   
   def hash_for_api
     {

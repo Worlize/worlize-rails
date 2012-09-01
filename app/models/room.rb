@@ -12,8 +12,8 @@ class Room < ActiveRecord::Base
   before_create :assign_guid
   before_destroy :notify_user_of_items_removal
   after_create :notify_users_of_creation
-  after_save [:update_room_definition, :notify_users_of_changes]
-  after_destroy [:delete_room_definition, :notify_users_of_deletion]
+  after_save :update_room_definition, :notify_users_of_changes
+  after_destroy :delete_room_definition, :notify_users_of_deletion
   
   attr_accessible :name, :hidden
     

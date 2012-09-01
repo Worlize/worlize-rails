@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   after_create :initialize_currency
   after_create :log_creation
   before_destroy :unlink_friendships
-  after_save [:update_interactivity_session, :notify_users_of_changes]
+  after_save :update_interactivity_session, :notify_users_of_changes
   
   scope :active, lambda {
     where(:suspended => false)
