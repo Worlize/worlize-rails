@@ -1,6 +1,11 @@
 # Be sure to restart your server when you modify this file.
 
-session_options = { :key => '_ses' }
+session_options = {}
+if Rails.env == 'production'
+  session_options[:key] = '_wzses'
+else
+  session_options[:key] = '_dev_wzses'
+end
 session_options[:domain] = :all
 session_options[:secure] = true
 
