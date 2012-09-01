@@ -48,6 +48,7 @@ module Worlize
         
         # If the transaction fails, repeat until it doesn't.
         if result.nil?
+          sleep 0.05
           return self.server_for_room(room_guid)
         end
       end
