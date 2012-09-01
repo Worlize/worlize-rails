@@ -46,10 +46,6 @@ class ModeratorsController < ApplicationController
     
     begin
       data = Yajl::Parser.parse(params[:data])
-      if Rails.env == 'development'
-        require 'pp'
-        pp data
-      end
     rescue
       render :json => {
         :success => false,
