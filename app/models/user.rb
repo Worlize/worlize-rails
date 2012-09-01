@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   after_create :initialize_currency
   after_create :log_creation
   before_destroy :unlink_friendships
-  after_save [:update_interactivity_session, :notify_users_of_changes]
+  after_save :update_interactivity_session, :notify_users_of_changes
   
   scope :active, lambda {
     where(:suspended => false)
@@ -42,10 +42,10 @@ class User < ActiveRecord::Base
   attr_accessible :username,
                   :email,
                   :newsletter_optin,
-                  :accepted_tos
+                  :accepted_tos,
+                  :password,
+                  :password_confirmation
                   
-  attr_accessor :accessible
-  
   # validates :birthday, :timeliness => {
   #       :before => :thirteen_years_ago,
   #       :type => :date
@@ -870,16 +870,6 @@ class User < ActiveRecord::Base
   end
   
   private
-  
-  # TODO: Apply this modification globally or use the new technique from
-  # http://launchware.com/articles/whats-new-in-edge-scoped-mass-assignment-in-rails-3-1
-  def mass_assignment_authorizer(role = :default)
-    if accessible == :all
-      self.class.protected_attributes
-    else
-      super + (accessible || [])
-    end
-  end
   
   def redis_relationships
     @redis_relationships ||= Worlize::RedisConnectionPool.get_client(:relationships)

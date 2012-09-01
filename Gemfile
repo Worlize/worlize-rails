@@ -1,7 +1,7 @@
 source :rubygems
 
 gem 'newrelic_rpm'
-gem 'rails', '~> 3.1.0'
+gem 'rails', '3.2.8'
 gem 'mysql2', '~> 0.3.11'
 gem 'guid', '~> 0.1.1'
 gem 'hiredis', '~> 0.4.5'
@@ -29,9 +29,10 @@ gem 'will_paginate', '~> 3.0.2'
 gem 'acts-as-taggable-on', '~> 2.3.3'
 gem 'acts_as_list', '~> 0.1.8'
 gem 'acts_as_tree', '~> 1.1.0'
+gem 'dynamic_form', '~> 1.1.4'
 
 # Yay, jQuery!
-gem 'jquery-rails', '>= 1.0.12'
+gem 'jquery-rails'
 
 gem 'validates_timeliness', '~> 3.0.14'
 gem 'validate_as_email', '~> 1.0.3'

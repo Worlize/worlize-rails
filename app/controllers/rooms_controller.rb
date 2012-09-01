@@ -1,6 +1,7 @@
 class RoomsController < ApplicationController
   
   before_filter :require_user
+  skip_before_filter :verify_authenticity_token, :only => [:enter]
   
   def index
     world = World.find_by_guid(params[:world_id])
