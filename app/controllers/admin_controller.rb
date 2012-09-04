@@ -41,7 +41,7 @@ class AdminController < ApplicationController
     
     data_hash = {}
     data_points.each do |point|
-      data_hash[point['day']] = {
+      data_hash[point['day'].to_s] = {
         :signups => point['signups'].to_i,
         :running_total => point['running_total'].to_i
       }
