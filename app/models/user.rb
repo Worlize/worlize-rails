@@ -453,7 +453,7 @@ class User < ActiveRecord::Base
       redis_relationships.srem("#{self.guid}:nosyncFriends", new_friend.guid)
     end
     
-    if result[0] > 0 || result[1] > 0
+    if result[0] || result[1]
       if options[:send_notification]
         # send notification to current user
         self.send_message({
@@ -563,7 +563,7 @@ class User < ActiveRecord::Base
       redis_relationships.sismember "#{self.guid}:friends", user.guid
       redis_relationships.sismember "#{self.guid}:fbFriends", user.guid
     end
-    (result[0] == 1) || (result[1] == 1)
+    (result[0]) || (result[1])
   end
   
   def nosync_friend_guids
