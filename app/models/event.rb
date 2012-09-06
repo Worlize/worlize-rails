@@ -3,7 +3,7 @@ class Event < ActiveRecord::Base
   belongs_to :event_theme
   belongs_to :event_room_option
   belongs_to :room
-  has_many :comments
+  has_many :comments, :as => :commentable
   
   before_create :assign_guid
 

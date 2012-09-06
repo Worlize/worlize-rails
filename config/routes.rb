@@ -225,6 +225,10 @@ Worlize::Application.routes.draw do
     resource :status, :controller => 'status' do
     end
     
+    resources :event_categories do
+      resources :event_themes
+    end
+    
     namespace "marketplace" do
       resources :licenses
       resources :categories do

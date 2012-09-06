@@ -1,0 +1,20 @@
+<h1>Event Category</h1>
+
+<%= render 'form' %><br>
+
+<% if @event_category.event_themes.count == 0 %>
+  <p>There are no themes in this category.</p>
+<% else %>
+  <h2>Themes in this category</h2>
+  <ul class="event-themes">
+    <% for event_theme in @event_category.event_themes do %>
+      <li><%= link_to event_theme.name, [:admin, @event_category, event_theme] %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<br>
+<%= link_to "Create New Theme", new_admin_event_category_event_theme_path(@event_category) %>
+
+<br><br>
+<%= link_to "Back to Event Categories", [:admin, :event_categories] %>

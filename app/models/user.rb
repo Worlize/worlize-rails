@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
   
   has_many :user_restrictions
   
-  has_many :event_comments
+  has_many :comments
   
   attr_accessible :username,
                   :email,

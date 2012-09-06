@@ -1,0 +1,9 @@
+<h1>Event Theme: <%= @event_theme.name %></h1>
+
+<%= render "form" %>
+<br>
+
+<%= link_to "Delete #{@event_theme.name}", admin_event_category_event_theme_path(@event_theme.event_category_id, @event_theme), :method => :delete, :confirm => "Are you sure you want to delete the theme \"#{@event_theme.name}\"?" %><br><br>
+
+<%= link_to "Back to Category: #{@event_theme.event_category.name}", [:admin, @event_theme.event_category] %>
+

@@ -1,0 +1,40 @@
+<%= form_for [:admin, @event_category, @event_theme], :html => { :multipart => true } do |f| %>
+  
+  <% if @event_theme.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@event_theme.errors.count, "error") %> prohibited this theme from being saved:</h2>
+
+      <ul>
+      <% @event_theme.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <%= f.label :name %><br>
+  <%= f.text_field :name %><br><br>
+  
+  <%= f.label :thumbnail %><br>
+  <% if @event_theme.thumbnail.present? %>
+    <%= image_tag @event_theme.thumbnail.thumb.url %><br>
+  <% end %>
+  <%= f.file_field :thumbnail %><br><br>
+  <br>
+
+  <%= f.label :header_image %><br>
+  <% if @event_theme.header_image.present? %>
+    <%= image_tag @event_theme.header_image.thumb.url %><br>
+  <% end %>
+  <%= f.file_field :header_image %><br><br>
+  <br>
+
+  <%= f.label :header_background %><br>
+  <% if @event_theme.header_background.present? %>
+    <%= image_tag @event_theme.header_background.thumb.url %><br>
+  <% end %>
+  <%= f.file_field :header_background %><br><br>
+  <br>
+  
+  <%= f.submit 'Save Event Theme' %>
+<% end %>

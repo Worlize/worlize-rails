@@ -1,0 +1,15 @@
+<h1>Event Categories</h1>
+
+<% if @categories.count == 0 %>
+  <p>There are no event categories.</p>
+<% else %>
+  <ul class="event-categories">
+  <% for @category in @categories do %>
+    <li><%= link_to @category.name, [:admin, @category] %></li>
+  <% end %>
+  </ul>
+<% end %>
+
+<br>
+<h2>Create new Category</h2>
+<%= render 'form' %>
