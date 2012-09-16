@@ -226,7 +226,9 @@ Worlize::Application.routes.draw do
     end
     
     resources :event_categories do
-      resources :event_themes
+      resources :event_themes do
+        resources :event_room_options
+      end
     end
     
     namespace "marketplace" do
