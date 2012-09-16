@@ -1,0 +1,2 @@
+class EventRoomsController < ApplicationController
+end
