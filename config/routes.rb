@@ -227,9 +227,11 @@ Worlize::Application.routes.draw do
     
     resources :event_categories do
       resources :event_themes do
-        resources :event_room_options
+        resources :event_room_options, :only => [:index, :create]
       end
     end
+    
+    resources :event_room_options, :only => [:show, :destroy]
     
     namespace "marketplace" do
       resources :licenses
