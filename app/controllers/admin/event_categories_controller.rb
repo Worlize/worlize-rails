@@ -28,4 +28,8 @@ class Admin::EventCategoriesController < ApplicationController
       render :action => 'show'
     end
   end
+  
+  def destroy
+    
+  end
 end

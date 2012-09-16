@@ -1,4 +1,6 @@
 class EventTheme < ActiveRecord::Base
+  acts_as_list :scope => :event_category_id
+  
   attr_accessible :name, :thumbnail, :header_image, :header_background
   has_one :thumbnail, :as => :imageable
   belongs_to :event_category
