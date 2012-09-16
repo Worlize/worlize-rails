@@ -72,7 +72,6 @@ class User < ActiveRecord::Base
     :if => Proc.new { !self.new_record? }
   }
 
-
   state_machine :initial => :new_user do
     
     event :first_time_login do
