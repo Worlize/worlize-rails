@@ -1,2 +1,0 @@
-class EventRoomsController < ApplicationController
-end
