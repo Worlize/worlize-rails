@@ -142,6 +142,7 @@ class WorldsController < ApplicationController
       unless room.nil?
         room.name = roomData['name']
         room.hidden = roomData['hidden']
+        room.no_direct_entry = roomData['no_direct_entry']
         if room.changed? && !room.save
           errors.push("Unable to update room name for room #{room.guid} to #{room['name']}")
         end

@@ -118,7 +118,16 @@ class RoomsController < ApplicationController
     if @room.locked? && @room.world.user.id != current_user.id
       render :json => {
         :success => false,
-        :room_locked => true
+        :failure_reason => 'room_locked',
+        :message => "Sorry, the room is locked."
+      } and return
+    end
+    
+    if @room.no_direct_entry && params[:using_hotspot] != 'true' && @room.world.user.id != current_user.id
+      render :json => {
+        :success => false,
+        :failure_reason => 'no_direct_entry',
+        :message => "Sorry, you must go through a door to access that room."
       } and return
     end
     

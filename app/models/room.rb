@@ -15,7 +15,9 @@ class Room < ActiveRecord::Base
   after_save :update_room_definition, :notify_users_of_changes
   after_destroy :delete_room_definition, :notify_users_of_deletion
   
-  attr_accessible :name, :hidden
+  # no_direct_entry means the user has to enter the room via a hotspot.
+  
+  attr_accessible :name, :hidden, :no_direct_entry
     
   def basic_hash_for_api(current_user=nil)
     data = {
@@ -24,6 +26,7 @@ class Room < ActiveRecord::Base
       :user_count => user_count,
       :world_guid => world.guid,
       :hidden => hidden,
+      :no_direct_entry => no_direct_entry,
       :thumbnail => background_instance ? background_instance.background.image.thumb.url : nil
     }
     if current_user && current_user.can_edit?(self)
@@ -38,6 +41,7 @@ class Room < ActiveRecord::Base
       :user_count => user_count,
       :can_author => world.user == current_user,
       :hidden => hidden,
+      :no_direct_entry => no_direct_entry,
       :thumbnail => background_instance ? background_instance.background.image.thumb.url : nil,
       :world_guid => world.guid,
       :guid => guid
