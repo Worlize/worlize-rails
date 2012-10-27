@@ -329,22 +329,64 @@ function hideShim() {
 
 // Desktop Notifications
 (function() {
-    var notifications = window.webkitNotifications;
-    
     var activeNotifications = {};
+    if (window.Notification) {
+        var optionNames = {
+            title: 'title',
+            titleDir: 'titleDir',
+            iconUrl: 'iconUrl',
+            body: 'body',
+            bodyDir: 'bodyDir',
+            tag: 'tag',
+            onshow: 'onshow',
+            onclose: 'onclose',
+            onclick: 'onclick',
+            onerror: 'onerror'
+        };
+    }
+    else if (window.webkitNotifications) {
+        var optionNames = {
+            title: 'title',
+            titleDir: 'titleDir',
+            iconUrl: 'icon',
+            body: 'content',
+            bodyDir: 'bodyDir',
+            tag: 'tag',
+            onshow: 'onshow',
+            onclose: 'onclose',
+            onclick: 'onclick',
+            onerror: 'onerror'
+        };
+    }
     
     NotificationManager = {
         currentId: 0,
         isSupported: function() {
-            return (window.webkitNotifications) ? true : false;
+            return (window.Notification || window.webkitNotifications) ? true : false;
         },
         hasPermission: function() {
             if (!this.isSupported()) { return false; }
-            return notifications.checkPermission() === 0;
+            if (window.Notification) {
+                return Notification.permissionLevel() === 'granted';
+            }
+            else if (window.webkitNotifications) {
+                return webkitNotifications.checkPermission() === 0;
+            }
+            return false;
+        },
+        isPermissionDenied: function() {
+            if (!this.isSupported()) { return true; }
+            if (window.Notification) {
+                return Notification.permissionLevel() === 'denied';
+            }
+            else if (window.webkitNotifications) {
+                return webkitNotifications.checkPermission() === 2; // 2 == PERMISSION_DENIED
+            }
+            return false;
         },
         displayPermissionRequestDialog: function() {
             if (!this.isSupported()) { return; }
-            if (notifications.checkPermission() === 2) { return; } // 2 == PERMISSION_DENIED
+            if (this.isPermissionDenied()) { return; }
             var el = $('<div class="notifications-permission-prompt">' + 
                         '<div class="text-container">' +
                          '<h1>Enable Desktop Notifications</h1> - ' +
@@ -370,7 +412,12 @@ function hideShim() {
         requestPermission: function() {
             // console.log("requestPermission");
             if (!this.isSupported() || this.hasPermission()) { return; }
-            notifications.requestPermission();
+            if (window.Notification) {
+                Notification.requestPermission(function(){});
+            }
+            else if (window.webkitNotifications) {
+                webkitNotifications.requestPermission();
+            }
         },
         displayNotification: function(options) {
             // console.log("displayNotification", options);
@@ -378,10 +425,12 @@ function hideShim() {
             var notification = this.createNotificationInstance(options);
             activeNotifications[notification.worlizeId] = notification;
             notification.show();
-            setTimeout(function() {
-                delete activeNotifications[notification.worlizeId];
-                notification.cancel();
-            }, 8000);
+            if (!window.Notification) {
+                setTimeout(function() {
+                    delete activeNotifications[notification.worlizeId];
+                    notification.cancel();
+                }, 8000);
+            }
             return notification.worlizeId;
         },
         clearNotification: function(notificationId) {
@@ -392,7 +441,6 @@ function hideShim() {
             }
         },
         clearAllNotifications: function() {
-            if (!this.isSupported()) { return; }
             // console.log("Clearing notifications", activeNotifications);
             for (var notificationId in activeNotifications) {
                 var notification = activeNotifications[notificationId];
@@ -402,28 +450,43 @@ function hideShim() {
         },
         createNotificationInstance: function(options) {
             // console.log("createNotificationInstance", options);
+            var params = {
+                tag: 'worlize-notification'
+            };
+            
             if (!this.isSupported()) { return; }
             
             if (typeof(options.icon) !== 'string') {
                 var server = document.location.protocol + "//" + document.location.host;
-                options.icon = server + "/images/notifications/default_icon.jpg"
+                params[optionNames['iconUrl']] = server + "/images/notifications/default_icon.jpg"
                 // console.log(options.icon);
             }
             if (typeof(options.title) !== 'string') {
-                options.title = "Worlize";
+                params[optionNames['title']] = "Worlize";
             }
-            if (typeof(options.content) !== 'string') {
-                options.content = "";
+            if (typeof(options.content) === 'string') {
+                params[optionNames['body']] = options.content;
             }
             var notification;
             if (options.notificationType == 'simple') {
-                notification = notifications.createNotification(
-                    options.icon,
-                    options.title,
-                    options.content
-                );
+                if (window.Notification) {
+                    console.log(options.title, params, options);
+                    notification = new Notification(options.title, params);
+                }
+                else if (window.webkitNotifications) {
+                    notification = notifications.createNotification(
+                        params[optionNames['iconUrl']],
+                        params[optionNames['title']],
+                        params[optionNames['body']]
+                    );
+                }
             } else if (options.notificationType == 'html') {
-                notification = notifications.createHTMLNotification(options.htmlContentURL);
+                if (window.console) {
+                    console.warn("Deprecated use of notificationType == 'html'");
+                }
+                if (window.webkitNotifications) {
+                    notification = notifications.createHTMLNotification(options.htmlContentURL);
+                }
             }
             notification.worlizeId = this.currentId++;
             notification.onclose = function() {
