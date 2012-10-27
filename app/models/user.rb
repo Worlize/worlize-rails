@@ -323,6 +323,21 @@ class User < ActiveRecord::Base
     self.interactivity_session.room_guid
   end
   
+  def main_world_entrance
+    main_world = self.worlds.first
+    if main_world
+      world_entrance = main_world.rooms.first
+      return world_entrance if world_entrance
+    end
+    
+    # If we can't find the user's main world entrance, return the main gate
+    gate_room = Room.find_by_guid(Room.gate_room_guid)
+    return gate_room if gate_room
+    
+    # If there's not even a gate room, return the first room we can find!?!
+    return Room.first
+  end
+  
   def send_message(message)
     Worlize::PubSub.publish("user:#{self.guid}", message)
   end

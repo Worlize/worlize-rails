@@ -70,14 +70,14 @@ class UsersController < ApplicationController
         if @user.online?
           redirect_to enter_room_url(@user.current_room_guid)
         else
-          redirect_to enter_room_url(@user.worlds.first.rooms.first.guid)
+          redirect_to enter_room_url(@user.main_world_entrance.guid)
         end
       end
       format.json do
         render :json => {
           :success => true,
           :online => @user.online?,
-          :room_guid => @user.online? ? @user.current_room_guid : @user.worlds.first.rooms.first.guid
+          :room_guid => @user.online? ? @user.current_room_guid : @user.main_world_entrance.guid
         }
       end
     end
