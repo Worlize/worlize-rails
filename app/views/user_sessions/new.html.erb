@@ -6,96 +6,64 @@
   	  <h1>Oh Boy!</h1>
   	  <h2>You're almost there!</h2>
 	  </div>
-	  <h3>Pick your favorite social network to get started</h3>
-	  <div class="facebook-login">
-	    <a href="/auth/facebook">
-	      <img src="/images/login-overlay/facebook-icon.png">
-	      Sign in with Facebook
-	    </a>
-	  </div>
-	  <div class="social-network-or">
-	    or
-	  </div>
-	  <div class="twitter-login">
-	    <a href="/auth/twitter">
-	      <img src="/images/login-overlay/twitter-icon.png">
-	      Sign in with Twitter
-	    </a>
-	  </div>
-	  <p class="username-login">
-	    <a href="#username-login">
-	      ...or sign in with username and password
-	    </a>
-	  </p>
-	</div>
-	<div id="username-login-page" style="display:none;">
-	  <div class="character">
-	    <h1>Old fashioned, huh?</h1>
-	  </div>
-	  <h3>
-	    <br>
-	    Enter your username and password to log in.
-	  </h3>
+
+    <div class="social-network-buttons">
+      <p class="social-network-or">or sign in with:</p>
+  	  <div class="facebook-login">
+	      <a href="/auth/facebook">
+  	      <img src="/images/homepage-facebook-icon.png">
+  	    </a>
+      </div>
+      <div class="twitter-login">
+  	    <a href="/auth/twitter">
+  	      <img src="/images/homepage-twitter-icon.png">
+  	    </a>
+  	  </div>
+    </div>
 	  
-	  <div class="login-error" style="display:none;">
-	    Invalid username or password.
+	  <div class="login-form">
+  	  <div class="login-error" style="display:none;">
+  	    Invalid username or password.
+  	  </div>
+      <%= form_for @user_session, :url => user_session_path, :html => {:id => 'username-login-form', :class => 'standard_form'} do |f| %>
+    	  <table>
+    	    <tr>
+            <td>
+              <label id="username-label" for="login-form-username-field">Username:</label>
+            </td>
+            <td>
+              <input type="text" name="user_session[username]" id="login-form-username-field">
+            </td>
+    	    </tr>
+    	    <tr>
+            <td>
+              <label id="password-label" for="login-form-password-field">Password:</label>
+            </td>
+            <td>
+              <input type="password" name="user_session[password]" id="login-form-password-field">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              
+            </td>
+            <td style="text-align: right;">
+              <input type="submit" name="submit" id="login-form-submit-button" value="Let's Go!">
+            </td>
+    	    </tr>
+    	  </table>
+      <% end %>
 	  </div>
 	  
-    <%= form_for @user_session, :url => user_session_path, :html => {:id => 'username-login-form', :class => 'standard_form'} do |f| %>
-  	  <table>
-  	    <tr>
-          <th>
-            <label id="username-label" for="login-form-username-field">Username:</label>
-          </th>
-          <th>
-            <label id="password-label" for="login-form-password-field">Password:</label>
-          </th>
-          <th></th>
-  	    </tr>
-  	    <tr>
-          <td>
-            <input type="text" name="user_session[username]" id="login-form-username-field">
-          </td>
-          <td>
-            <input type="password" name="user_session[password]" id="login-form-password-field">
-          </td>
-          <td>
-            <input type="submit" name="submit" id="login-form-submit-button" value="Let's Go!">
-          </td>
-  	    </tr>
-  	  </table>
-    <% end %>
-    
-    <p class="social-login">
-      <a href="#social-login">
-        ...or sign in with facebook or twitter
-      </a>
-    </p>
+	  <div class="sign-up-link-container">
+      <%= link_to 'Sign up with username/password.', new_user_path, :class => "sign-up-link"  %>
+    </div>
 	</div>
 </div>
 
 <% content_for :page_script do %>
 <script>
   jQuery(function($) {
-    $('.username-login a').click(function(event) {
-      event.preventDefault();
-      $('#main-login-1').fadeOut('fast', function() {
-        $('#username-login-page .login-error').hide();
-        $('#login-form-username-field,#login-form-password-field').val('');
-        $('#username-login-page').fadeIn('fast', function() {
-          $('#login-form-username-field').focus();
-        });
-      });
-    });
-    
-    $('.social-login a').click(function(event) {
-      event.preventDefault();
-      $('#username-login-page').fadeOut('fast', function() {
-        $('#main-login-1').fadeIn('fast');
-      });
-    })
-    
-    
     $('#username-login-form').bind('submit', function(event) {
       event.preventDefault();
 
@@ -106,18 +74,15 @@
             top.location.href = data.redirect_to;
           }
           else {
-            $('#username-login-page .login-error').show();
-            $('#username-login-page .login-error').addClass('highlight');
+            $('#main-login-1  .login-error').show();
+            $('#main-login-1  .login-error').addClass('highlight');
             setTimeout(function() {
-              $('#username-login-page .login-error').removeClass('highlight');
+              $('#main-login-1  .login-error').removeClass('highlight');
             }, 250);
           }
         }
       );
     });
-    
-    
-    
   });
 </script>
 <% end %>

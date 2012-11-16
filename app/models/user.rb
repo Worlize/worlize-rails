@@ -71,6 +71,7 @@ class User < ActiveRecord::Base
     :greater_than_or_equal_to => 0, 
     :if => Proc.new { !self.new_record? }
   }
+  validates :password, { :confirmation => true }
 
 
   state_machine :initial => :new_user do

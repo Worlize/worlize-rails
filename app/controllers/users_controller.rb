@@ -23,7 +23,11 @@ class UsersController < ApplicationController
         @user.username = oa['info']['nickname']
         @email_autofilled = false
       end
+      @require_password = false
+    else
+      @require_password = true
     end
+
     
   end
   
@@ -84,41 +88,40 @@ class UsersController < ApplicationController
   end
 
   def create
-    if !session[:omniauth]
-      redirect_to new_user_url and return
-    end
-
-    @beta_invitation = BetaInvitation.find_by_invite_code(params[:invite_code])
-
     @user = User.new(params[:user])
-    if session[:omniauth]['provider'] == 'facebook'
+    
+    if session[:omniauth] && session[:omniauth]['provider'] == 'facebook'
       @user.birthday = session[:omniauth]['info']['birthday']
     end
-    if @beta_invitation
-      @user.inviter = @beta_invitation.inviter
-    end
 
-    if @user.save
-      if @beta_invitation
-        @beta_invitation.destroy
+    if !@user.save
+      if session[:omniauth]
+        if session[:omniauth]['provider'] == 'facebook'
+          @email_autofilled = true
+        end
+        @require_password = false
+      else
+        @email_authofilled = false
+        @require_password = true
       end
-      @user.first_time_login
-      @user.create_world
-      if @user.inviter
-        @user.befriend(@user.inviter)
-      end
-      
+      render "users/new" and return
+    end
+    
+    @user.first_time_login
+    @user.create_world
+
+    if session[:omniauth]
       # Make sure to link the external account!
       Rails.logger.debug("Omniauth:\n#{session[:omniauth].to_yaml}") if Rails.env == 'development'
       omniauth = session[:omniauth]
-      
+
       create_options = {
         :provider => omniauth['provider'],
         :uid => omniauth['uid'],
         :token => omniauth['credentials']['token'],
         :profile_picture => omniauth['info']['image']
       }
-      
+
       if omniauth['provider'] == 'facebook'
         create_options[:profile_url] = omniauth['info']['urls']['Facebook']
         @user.interactivity_session.update_attributes(
@@ -127,23 +130,20 @@ class UsersController < ApplicationController
       elsif omniauth['provider'] == 'twitter'
         create_options[:profile_url] = omniauth['info']['urls']['Twitter']
       end
-      
+
       success = @user.authentications.create(create_options)
-      
-      if @user.newsletter_optin
-        @user.add_to_mailchimp
-      end
 
       if !success
         flash[:alert] = "Unable to associate your #{omniauth['provider'].capitalize} account."
       end
       session.delete(:omniauth)
-      
-      redirect_back_or_default dashboard_url
-    else
-      @email_autofilled = (session[:omniauth]['provider'] == 'facebook')
-      render "users/new"
     end
+    
+    if @user.newsletter_optin
+      @user.add_to_mailchimp
+    end
+
+    redirect_back_or_default dashboard_url
   end
 
   def show

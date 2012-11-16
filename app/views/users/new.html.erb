@@ -8,7 +8,7 @@
 	  </div>
 	  <% if @user.errors.any? %>
       <div class="errorExplanation">
-        <h3>There was a problem with your submission.<br>Please try again.</h3>
+        <h3>There was a problem with your submission.  Please try again.</h3>
       </div>
     <% else %>
 	    <h3>Pick a screen name to identify yourself.</h3>    
@@ -36,17 +36,35 @@
             <%= f.text_field :email, :tabindex => 2 %>
           </td>
   	    </tr>
+  	    <% if @require_password %>
+  	    <tr>
+  	      <th style="padding-top: 7px;">
+  	        <%= f.label :password, 'Password' %>
+  	      </th>
+  	      <th style="padding-top: 7px;">
+  	        <%= f.label :password_confirmation, 'Confirm Password' %>
+  	      </th>
+  	    </tr>
+  	    <tr>
+  	     <td>
+  	       <%= f.password_field :password, :tabindex => 3 %>
+  	     </td>
+  	     <td>
+  	       <%= f.password_field :password_confirmation, :tabindex => 4 %>
+  	     </td>
+  	    </tr>
+  	    <% end %>
   	    <tr>
   	      <td colspan="2">
         	  <div class="submit-button">
-              <%= f.submit 'Let\'s Go!', :tabindex => 5 %>
+              <%= f.submit 'Let\'s Go!', :tabindex => 7 %>
         	  </div>
         	  <div class="newsletter-checkbox">
-        	    <%= f.check_box :newsletter_optin, :tabindex => 3 %>
+        	    <%= f.check_box :newsletter_optin, :tabindex => 5 %>
         	    <%= f.label :newsletter_optin, 'Send me Worlize updates (3-4 emails/mo.)' %>
         	  </div>
         	  <div class="tos-checkbox">
-              <%= f.check_box :accepted_tos, :tabindex => 4, :checked => true %>
+              <%= f.check_box :accepted_tos, :tabindex => 6, :checked => true %>
               <%= f.label :accepted_tos, 'I agree to the' %><%= link_to('terms and conditions', '/tos.html', :class => 'tos_link', :target => '_BLANK').html_safe %>
         	  </div>
   	      </td>
@@ -123,7 +141,54 @@
       hideValidationTooltip();
     });
     
-    
+    $('input#user_password').bind('keyup', function(event) {
+      if (keyTimer) {
+        clearTimeout(keyTimer);
+      }
+      keyTimer = setTimeout(function() {
+        var password = $('input#user_password').val();
+        validatePassword(password, true);
+      }, 350);
+    });
+    $('input#user_password').bind('focus', function(event) {
+      if (keyTimer) {
+        clearTimeout(keyTimer);
+      }
+      var password = $('input#user_password').val();
+      validatePassword(password, true);
+    });
+    $('input#user_password').bind('blur', function(event) {
+      var password = $('input#user_password').val();
+      validatePassword(password, false);
+      hideValidationTooltip();
+    });
+
+    $('input#user_password_confirmation').bind('keyup', function(event) {
+      if (keyTimer) {
+        clearTimeout(keyTimer);
+      }
+      keyTimer = setTimeout(function() {
+        var password = $('input#user_password').val();
+        var passwordConfirmation = $('input#user_password_confirmation').val();
+        validatePasswordConfirmation(password, passwordConfirmation, true);
+      }, 350);
+    });
+    $('input#user_password_confirmation').bind('focus', function(event) {
+      if (keyTimer) {
+        clearTimeout(keyTimer);
+      }
+      var password = $('input#user_password').val();
+      var passwordConfirmation = $('input#user_password_confirmation').val();
+      validatePasswordConfirmation(password, passwordConfirmation, true);
+    });
+    $('input#user_password_confirmation').bind('blur', function(event) {
+      var password = $('input#user_password').val();
+      var passwordConfirmation = $('input#user_password_confirmation').val();
+      validatePasswordConfirmation(password, passwordConfirmation, false);
+      hideValidationTooltip();
+    });
+
+        
     function validateUsername(username, showTooltip) {
       if (username.length > 0) {
         $.get('/users/validate_field',
@@ -192,6 +257,63 @@
           }
         }
       );
+    }
+    
+    function validatePassword(password, showTooltip) {
+      if (typeof(password) === 'string' && password.length > 0) {
+        $('input#user_password').removeClass('error').addClass('valid');
+        if (showTooltip) {
+          hideValidationTooltip();
+        }
+        return;
+      }
+      
+      $('input#user_password').removeClass('valid').addClass('error');
+      if (showTooltip) {
+        var field = $('input#user_password');
+        var position = field.position();
+        showValidationTooltip(
+          'You must choose a password',
+          {
+            top: position.top + field.outerHeight(),
+            left: position.left + 20
+          }
+        );
+      }
+    }
+    
+    function validatePasswordConfirmation(password, confirmation, showTooltip) {
+      var message;
+      var error = false;
+      if (typeof(confirmation) !== 'string' || confirmation.length <= 0) {
+        message = "You must confirm your password.";
+        error = true;
+      }
+      else if (confirmation !== password) {
+        message = "Password doesn't match confirmation.";
+        error = true;
+      }
+      
+      if (!error) {
+        $('input#user_password_confirmation').removeClass('error').addClass('valid');
+        if (showTooltip) {
+          hideValidationTooltip();
+        }
+        return;
+      }
+      
+      $('input#user_password_confirmation').removeClass('valid').addClass('error');
+      if (showTooltip) {
+        var field = $('input#user_password_confirmation');
+        var position = field.position();
+        showValidationTooltip(
+          message,
+          {
+            top: position.top + field.outerHeight(),
+            left: position.left + 20
+          }
+        );
+      }
     }
     
     function showValidationTooltip(message, position) {
