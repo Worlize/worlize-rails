@@ -23,8 +23,6 @@ Worlize::Application.routes.draw do
   match '/paypal/ipn' => 'paypal#ipn', :via => :post
   match '/paypal/return' => 'paypal#return', :via => :get, :as => :paypal_return
   
-  match '/aviary/edit_complete' => 'aviary#edit_complete', :via => :post, :as => :aviary_edit_complete
-  
   match '/fb-canvas' => 'facebook_canvas#index', :via => :post
   match '/fb-canvas/ignore_request/:id' => 'facebook_canvas#ignore_request', :via => :post
   match '/fb-canvas/handle_request/:id' => 'facebook_canvas#handle_request', :via => :post

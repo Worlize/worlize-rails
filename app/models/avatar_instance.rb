@@ -13,7 +13,6 @@ class AvatarInstance < ActiveRecord::Base
       :guid => self.guid,
       :user_guid => self.user.guid,
       :edit_guid => self.edit_guid,
-      :aviary_guid => self.aviary_guid,
       :gifter => self.gifter.nil? ? nil : self.gifter.public_hash_for_api
     }
   end
