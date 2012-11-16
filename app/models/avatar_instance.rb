@@ -12,7 +12,6 @@ class AvatarInstance < ActiveRecord::Base
       :avatar => self.avatar.hash_for_api,
       :guid => self.guid,
       :user_guid => self.user.guid,
-      :edit_guid => self.edit_guid,
       :gifter => self.gifter.nil? ? nil : self.gifter.public_hash_for_api
     }
   end
@@ -39,7 +38,6 @@ class AvatarInstance < ActiveRecord::Base
   
   def assign_guid()
     self.guid = Guid.new.to_s
-    self.edit_guid = Guid.new.to_s if self.edit_guid.nil?
   end
 
 end
