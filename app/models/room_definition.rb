@@ -11,7 +11,6 @@ class RoomDefinition
   attr_accessor :name
   attr_accessor :background
   attr_accessor :world_guid
-  attr_accessor :hidden
   attr_accessor :properties
   attr_accessor :items
   
@@ -25,7 +24,6 @@ class RoomDefinition
       "/rooms/#{room.guid}/definition",
       :body => Yajl::Encoder.encode({
         :name => room.name,
-        :hidden => room.hidden?,
         :worldGuid => room.world.guid,
         :ownerGuid => room.world.user.guid,
         :properties => {}
@@ -88,7 +86,6 @@ class RoomDefinition
         "/rooms/#{self.guid}/definition",
         :body => Yajl::Encoder.encode({
           :name => self.name,
-          :hidden => self.hidden,
           :properties => self.properties
         })
       )
@@ -132,7 +129,6 @@ class RoomDefinition
     self.name = data['name']
     self.background = data['background']
     self.world_guid = data['worldGuid']
-    self.hidden = data['hidden']
     self.properties = data['properties']
     self.items = data['items']
   end

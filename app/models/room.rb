@@ -104,7 +104,6 @@ class Room < ActiveRecord::Base
   def update_room_definition
     if !new_record? && (name_changed? || hidden_changed?)
       room_definition.name = self.name
-      room_definition.hidden = self.hidden?
       room_definition.save
     end
   end
