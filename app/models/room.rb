@@ -9,6 +9,7 @@ class Room < ActiveRecord::Base
   
   acts_as_list :scope => :world
   
+  after_initialize :set_defaults
   before_create :assign_guid
   before_destroy :notify_user_of_items_removal
   after_create :notify_users_of_creation
@@ -18,6 +19,9 @@ class Room < ActiveRecord::Base
   # no_direct_entry means the user has to enter the room via a hotspot.
   
   attr_accessible :name, :hidden, :no_direct_entry
+  
+  validates :max_occupancy, :numericality => { :greater_than_or_equal_to => 1,
+                                               :less_than_or_equal_to    => 75 }
     
   def basic_hash_for_api(current_user=nil)
     data = {
@@ -26,6 +30,7 @@ class Room < ActiveRecord::Base
       :user_count => user_count,
       :world_guid => world.guid,
       :hidden => hidden,
+      :max_occupancy => max_occupancy,
       :no_direct_entry => no_direct_entry,
       :thumbnail => background_instance ? background_instance.background.image.thumb.url : nil
     }
@@ -41,6 +46,7 @@ class Room < ActiveRecord::Base
       :user_count => user_count,
       :can_author => world.user == current_user,
       :hidden => hidden,
+      :max_occupancy => max_occupancy,
       :no_direct_entry => no_direct_entry,
       :thumbnail => background_instance ? background_instance.background.image.thumb.url : nil,
       :world_guid => world.guid,
@@ -87,6 +93,10 @@ class Room < ActiveRecord::Base
   end
   
   private
+  def set_defaults
+    self.max_occupancy = 20 if self.max_occupancy.nil?
+  end
+  
   def assign_guid()
     self.guid = Guid.new.to_s
   end
