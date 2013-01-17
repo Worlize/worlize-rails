@@ -143,8 +143,13 @@ class WorldsController < ApplicationController
         room.name = roomData['name']
         room.hidden = roomData['hidden']
         room.no_direct_entry = roomData['no_direct_entry']
+        room.max_occupancy = roomData['max_occupancy']
+        room.moderators_only = roomData['moderators_only']
+        room.allow_cascade_when_full = roomData['allow_cascade_when_full']
         if room.changed? && !room.save
-          errors.push("Unable to update room name for room #{room.guid} to #{room['name']}")
+          errors.push("Unable to update room #{room.guid}, #{room['name']}. " + room.errors.full_messages.to_s)
+          puts "#{room.guid} #{room.name}"
+          puts room.errors.full_messages
         end
         rd = room.room_definition
         roomData['properties'].each do |key,value|

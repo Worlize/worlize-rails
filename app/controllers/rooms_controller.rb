@@ -39,7 +39,7 @@ class RoomsController < ApplicationController
     room_info = []
     Room.where(:guid => room_population.keys).all.each do |room|
 
-      next if room.hidden? || room.no_direct_entry?
+      next if room.hidden? || room.no_direct_entry? || room.moderators_only?
       
       # Check to see if any of our friends are in the room and include them
       # in the response if they are.
@@ -115,7 +115,7 @@ class RoomsController < ApplicationController
       @room = Room.find_by_guid!(params[:id])
     end
     
-    if @room.locked? && @room.world.user.id != current_user.id
+    if @room.locked? && !@room.world.user_is_moderator?(current_user)
       respond_to do |format|
         format.html do
           redirect_to enter_world_url
@@ -131,7 +131,7 @@ class RoomsController < ApplicationController
       return
     end
     
-    if @room.no_direct_entry && params[:using_hotspot] != 'true' && @room.world.user.id != current_user.id
+    if @room.no_direct_entry && params[:using_hotspot] != 'true' && !@room.world.user_is_moderator?(current_user)
       respond_to do |format|
         format.html do
           redirect_to enter_world_url
@@ -145,6 +145,66 @@ class RoomsController < ApplicationController
         end
       end
       return
+    end
+    
+    if @room.moderators_only? && !@room.world.user_is_moderator?(current_user)
+      respond_to do |format|
+        format.html do
+          redirect_to enter_world_url
+        end
+        format.json do
+          render :json => {
+            :success => false,
+            :failure_reason => 'moderators_only',
+            :message => "Sorry, only moderators can enter that room."
+          }
+        end
+      end
+      return
+    end
+    
+    # Is the room full?
+    if !@room.world.user_is_moderator?(current_user) && @room.full?
+      no_substitutes = params.include?(:no_substitues)
+      world = @room.world
+      requested_room = @room
+      
+      # Unless requested otherwise, send them to the next room in the list
+      if no_substitutes || !@room.allow_cascade_when_full?
+        error_message = "Sorry, the room is full."
+      else
+        error_message = "Sorry, the room is full and there were no alternatives."
+        found_requested_room = false
+        world.rooms.each do |room|
+          unless found_requested_room
+            found_requested_room = true if room.id == @room.id
+            next
+          end
+        
+          unless room.moderators_only? || room.full?
+            @room = room
+            break
+          end
+        end
+      end
+      
+      # If we couldn't find another room to send the user to,
+      # we will fail.
+      if @room == requested_room
+        respond_to do |format|
+          format.html do
+            redirect_to enter_world_url
+          end
+          format.json do
+            render :json => {
+              :success => false,
+              :failure_reason => 'room_full',
+              :message => error_message
+            }
+          end
+        end
+        return
+      end
     end
     
     @user = current_user
@@ -170,7 +230,13 @@ class RoomsController < ApplicationController
           flash[:notice] = "Unable to enter #{@room.name}."
           redirect_to admin_world_rooms_url(@room.world)
         end
-        format.json { render :json => { :success => false } }
+        format.json do
+          render :json => {
+            :success => false,
+            :failure_reason => 'unknown',
+            :message => 'There was an error while trying to enter the requested room.'
+          }
+        end
       end
     end
   end

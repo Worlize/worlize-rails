@@ -22,6 +22,8 @@ class Room < ActiveRecord::Base
   
   validates :max_occupancy, :numericality => { :greater_than_or_equal_to => 1,
                                                :less_than_or_equal_to    => 75 }
+  validates :allow_cascade_when_full, :inclusion => { :in => [true, false] }
+  validates :moderators_only, :inclusion => { :in => [true, false] }
     
   def basic_hash_for_api(current_user=nil)
     data = {
@@ -31,7 +33,10 @@ class Room < ActiveRecord::Base
       :world_guid => world.guid,
       :hidden => hidden,
       :max_occupancy => max_occupancy,
-      :no_direct_entry => no_direct_entry,
+      :moderators_only => moderators_only?,
+      :no_direct_entry => no_direct_entry?,
+      :full => full?,
+      :allow_cascade_when_full => allow_cascade_when_full?,
       :thumbnail => background_instance ? background_instance.background.image.thumb.url : nil
     }
     if current_user && current_user.can_edit?(self)
@@ -47,7 +52,10 @@ class Room < ActiveRecord::Base
       :can_author => world.user == current_user,
       :hidden => hidden,
       :max_occupancy => max_occupancy,
-      :no_direct_entry => no_direct_entry,
+      :moderators_only => moderators_only?,
+      :no_direct_entry => no_direct_entry?,
+      :full => full?,
+      :allow_cascade_when_full => allow_cascade_when_full?,
       :thumbnail => background_instance ? background_instance.background.image.thumb.url : nil,
       :world_guid => world.guid,
       :guid => guid
@@ -76,6 +84,10 @@ class Room < ActiveRecord::Base
     redis = Worlize::RedisConnectionPool.get_client(:room_server_assignments)
     redis.get("lock:#{self.guid}") == '1'
   end
+  
+  def full?
+    self.user_count >= self.max_occupancy
+  end
 
   def can_be_edited_by?(user)
     owner = self.world.user
@@ -95,6 +107,8 @@ class Room < ActiveRecord::Base
   private
   def set_defaults
     self.max_occupancy = 20 if self.max_occupancy.nil?
+    self.allow_cascade_when_full = true if self.allow_cascade_when_full.nil?
+    self.moderators_only = false if self.moderators_only.nil?
   end
   
   def assign_guid()

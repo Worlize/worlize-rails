@@ -208,6 +208,12 @@ class User < ActiveRecord::Base
     redis.sismember("global_moderators", self.guid)
   end
   
+  def is_moderator_for_world?(world_or_guid)
+    world = world_or_guid.is_a?(World) ? world_or_guid : World.find_by_guid(world_or_guid)
+    raise "You must specify a world or world guid" if world.nil?
+    world.user_is_moderator?(self)
+  end
+  
   def set_as_global_moderator
     redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
     redis.sadd("global_moderators", self.guid)

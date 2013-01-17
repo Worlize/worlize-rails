@@ -227,11 +227,21 @@ class World < ActiveRecord::Base
     })
   end
   
-  def moderators
+  def user_is_moderator?(user)
+    user_guid = user.respond_to?(:guid) ? user.guid : user
+    return moderator_guids.include?(user_guid)
+  end
+  
+  def moderator_guids
+    return @moderator_guids unless @moderator_guids.nil?
     redis = Worlize::RedisConnectionPool.get_client(:permissions)
-    user_guids = redis.zrange("wml:#{guid}", 0, -1)
-    user_guids.push(user.guid)
-    return User.where(:guid => user_guids).select { |u| !u.nil? }
+    @moderator_guids = redis.zrange("wml:#{guid}", 0, -1)
+    @moderator_guids.push(self.user.guid)
+    return @moderator_guids
+  end
+  
+  def moderators
+    return User.where(:guid => moderator_guids).all.select { |u| !u.nil? }
   end
 
   private
