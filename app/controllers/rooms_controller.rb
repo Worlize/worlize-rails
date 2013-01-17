@@ -39,7 +39,7 @@ class RoomsController < ApplicationController
     room_info = []
     Room.where(:guid => room_population.keys).all.each do |room|
 
-      next if room.hidden?
+      next if room.hidden? || room.no_direct_entry?
       
       # Check to see if any of our friends are in the room and include them
       # in the response if they are.
