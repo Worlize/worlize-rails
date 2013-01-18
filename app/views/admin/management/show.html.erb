@@ -6,3 +6,6 @@
     <%= text_field_tag :message, nil, :size => 40 %>
     <%= submit_tag "Send Message" %>
 <% end %>
+
+<br><br>
+<%= button_to "Force Clients to Refresh", force_reload_admin_management_path, :method => 'post' %>

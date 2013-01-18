@@ -217,6 +217,7 @@ Worlize::Application.routes.draw do
     resource :management, :controller => 'management' do
       member do
         post 'broadcast_message'
+        post 'force_reload'
       end
     end
     

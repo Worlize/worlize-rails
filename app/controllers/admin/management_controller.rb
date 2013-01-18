@@ -19,4 +19,12 @@ class Admin::ManagementController < ApplicationController
     redirect_to admin_management_path
   end
   
+  def force_reload
+    Worlize::PubSub.publish('globalBroadcast', {
+      :msg => 'force_reload_app'
+    })
+    flash[:notice] = "Force reload message sent."
+    redirect_to admin_management_path
+  end
+  
 end

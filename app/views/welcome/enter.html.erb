@@ -7,7 +7,7 @@
           path = '/flash'
         end
         
-        cache_bust = '107'
+        cache_bust = '108'
     -%>
     <head>
         <meta name="google" value="notranslate" />         
@@ -30,6 +30,10 @@
         <script>
           function configData() {
             return <%= @configJSON.html_safe %>;
+          }
+          
+          function forcePageReload() {
+            top.location.href=top.location.href;
           }
         </script>
     </head>
