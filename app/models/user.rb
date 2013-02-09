@@ -97,6 +97,12 @@ class User < ActiveRecord::Base
     }
   end
   
+  def self.global_moderators
+    redis = Worlize::RedisConnectionPool.get_client(:permissions)
+    guids = redis.zrange('gml', '0', '-1')
+    self.where(:guid => guids).order(:username)
+  end
+  
   def active?
     !self.suspended?
   end

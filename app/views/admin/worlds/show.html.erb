@@ -1,0 +1,41 @@
+<h1>World: <%= @world.name %></h1>
+
+<p>Owner: <%= link_to @world.user.username, admin_user_path(@world.user) %></p>
+<br>
+
+<% if World.initial_template_world_guid == @world.guid %>
+  <p>(This world is the template world for new users.)</p>
+<% else %>
+  <%= link_to "Set as template world for new users", set_world_as_initial_template_world_admin_user_url(@world.user),
+              :method => :post,
+              :confirm => "Are you sure you want to set this user's world as the template for the initial world created for new users?" %>
+<% end %>
+<br><br>
+<% if @world.public_world %>
+  <p>This world is a public world.<br>
+     <%= link_to "Remove from public worlds", remove_from_public_worlds_admin_user_url(@world.user),
+                 :method => :post,
+                 :confirm => "Are you sure you want to remove this user's world from the list of public worlds?  It will no longer show up in the directory." %></p>
+<% else %>
+  <p><%= link_to "Add to list of public worlds", add_to_public_worlds_admin_user_url(@world.user),
+                 :method => :post,
+                 :confirm => "Are you sure you want to add this user's world to the list of public worlds?  It will always show up in the directory." %></p>
+<% end %>
+<br>
+
+<table class="datagrid">
+  <tr>
+    <th>Room Name</th>
+    <th>Users</th>
+    <th></th>
+  </tr>
+  <% for room in @world.rooms do %>
+  <tr class="<%= cycle('even','odd') %>">
+    <td><%= room.name %></td>
+    <td><%= room.user_count %></td>
+    <td><%= link_to "Enter", enter_room_path(room.guid), :method => :post %> |
+        <%= link_to "Set as Worlize Gate", set_as_gate_room_admin_room_path(room), :method => :post,
+                    :confirm => "Are you sure you want to set #{room.name} as the main Worlize entry room?"%></td>
+  </tr>
+  <% end %>
+</table>

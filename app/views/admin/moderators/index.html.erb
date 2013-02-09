@@ -1,0 +1,28 @@
+<h1>Global Moderators</h1>
+
+<table id="user-results-table" class="datagrid" width="100%">
+  <tr>
+    <th class="online-column">Online</th>
+    <th class="username-column">Username</th>
+    <th class="time-spent-column">Total Time</th>
+    <th class="email-column">Email</th>
+    <th class="time-column">Signed Up</th>
+    <th class="suspended-column">Suspended</th>
+  </tr>
+  <% for user in @moderators %>
+  <%
+       row_classes = [ cycle('even', 'odd') ]
+       if user.suspended?
+         row_classes.push('suspended')
+       end
+  %>
+  <tr class="<%= row_classes.join(' ') %>">
+    <td class="online-column"><%= user.online? ? "✓" : "" %></td>
+    <td class="username-column"><%= link_to user.username, admin_user_path(user) %></td>
+    <td class="time-spent-column"><%= user.total_time_spent_online_hms %></td>
+    <td class="email-column"><%= user.email %></td>
+    <td class="time-column"><%= user.created_at.strftime("%Y-%m-%d %I:%M%p") %></td>
+    <td class="suspended-column"><%= user.suspended? ? "✓" : "" %></td>
+  </tr>
+  <% end %>
+</table>

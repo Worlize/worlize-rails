@@ -76,6 +76,11 @@
 
 <% end %>
 
+<br>
+<h2>Transactions</h2>
+<p>Coins: <%= @coins_balance %></p>
+<p>Bucks: <%= @bucks_balance %></p>
+<p><%= button_to 'See all transactions', transactions_admin_user_path(@user), :method => 'get' %></p>
 
 <br><br>
 <h2>Linked Authentication Services</h2>
@@ -109,119 +114,6 @@
   <% end %>
 <% end %>
 
-<br>
-<h2>Payment History</h2>
-<% if @payments.count > 0 %>
-  <table cellpadding="0" cellspacing="0" class="datagrid financial-table">
-      <tr>
-        <th>Time</th>
-        <th>Comment</th>
-        <th>Amount</th>
-      </tr>
-      <% @payments.each do |payment| %>
-        <tr class="<%= cycle('even','odd') %>">
-          <td><%= payment.created_at.localtime.strftime('%Y-%m-%d %I:%M %p') %></td>
-          <td><%= payment.comment %></td>
-          <td style="text-align: right;">
-            <p style="float: left;">$</p>
-            <%= sprintf('%.2f', payment.amount) %>
-          </td>
-        </tr>
-      <% end %>
-      <tr class="<%= cycle('even','odd') %>">
-        <td colspan="2" style="text-align: right; font-weight: bold;">Total</td>
-        <td style="text-align: right;">
-          <p style="float: left;">$</p>
-          <%= sprintf('%.2f', @total_payments) %>
-        </td>
-      </tr>
-  </table>
-<% else %>
-<p>(There are no payments on this account)</p>
-<% end %>
-
-<br>
-<h2>Virtual Curency Transactions</h2>
-<% if @virtual_financial_transactions.count > 0 %>
-  <table cellpadding="0" cellspacing="0" class="datagrid financial-table">
-    <tr>
-      <th>Time</th>
-      <th>Kind</th>
-      <th>Comment</th>
-      <th>Coins</th>
-      <th>Bucks</th>
-    </tr>
-    <% @virtual_financial_transactions.each do |t| %>
-      <tr class="<%= cycle('even','odd') %>">
-        <td><%= t.created_at.localtime.strftime('%Y-%m-%d %I:%M %p') %></td>
-        <td><%= VirtualFinancialTransaction::KINDS[t.kind] %></td>
-        <td><%= t.comment %></td>
-        <td style="text-align: right;"><%= t.coins_amount.nil? ? '' : t.coins_amount %></td>
-        <td style="text-align: right;"><%= t.bucks_amount.nil? ? '' : t.bucks_amount %></td>
-      </tr>
-    <% end %>
-    <tr class="<%= cycle('even','odd') %>">
-      <td colspan="3" style="text-align: right; font-weight: bold;">Balance</td>
-      <td style="font-weight: bold; text-align: right;"><%= @coins_balance %></td>
-      <td style="font-weight: bold; text-align: right;"><%= @bucks_balance %></td>
-    </tr>
-  </table>
-<% else %>
-  <p>(There are no virtual currency transactions on this account)</p>
-<% end %>
-
-<br>
-<h2>Credit Virtual Currency</h2>
-<%= form_tag give_currency_admin_user_path(@user), :method => 'post' do %>
-  <%= label_tag :comment %><br>
-  <%= text_field_tag :comment, 'Given by admin'  %><br>
-  <%= label_tag :amount %><br>
-  <%= text_field_tag :amount, '', :size => 4 %>
-  <%= select_tag('currency_type', options_for_select([
-    ['Coins', 'coins'],
-    ['Bucks', 'bucks']
-  ], 'coins')) %>
-  <%= submit_tag 'Give Currency' %>
-<% end %>
-
-<br>
-<h2>World</h2>
-Name: <%= @world.name %><br>
-<% if World.initial_template_world_guid == @world.guid %>
-  <p>(This world is the template world for new users.)</p>
-<% else %>
-  <%= link_to "Set as template world for new users", set_world_as_initial_template_world_admin_user_url(@user),
-              :method => :post,
-              :confirm => "Are you sure you want to set this user's world as the template for the initial world created for new users?" %>
-<% end %>
-<br><br>
-<% if @world.public_world %>
-  <p>This world is a public world.<br>
-     <%= link_to "Remove from public worlds", remove_from_public_worlds_admin_user_url(@user),
-                 :method => :post,
-                 :confirm => "Are you sure you want to remove this user's world from the list of public worlds?  It will no longer show up in the directory." %></p>
-<% else %>
-  <p><%= link_to "Add to list of public worlds", add_to_public_worlds_admin_user_url(@user),
-                 :method => :post,
-                 :confirm => "Are you sure you want to add this user's world to the list of public worlds?  It will always show up in the directory." %></p>
-<% end %>
-<br>
-
-<table class="datagrid">
-  <tr>
-    <th>Room Name</th>
-    <th>Users</th>
-    <th></th>
-  </tr>
-  <% for room in @rooms do %>
-  <tr class="<%= cycle('even','odd') %>">
-    <td><%= room.name %></td>
-    <td><%= room.user_count %></td>
-    <td><%= link_to "Enter", enter_room_path(room.guid), :method => :post %> |
-        <%= link_to "Set as Worlize Gate", set_as_gate_room_admin_room_path(room), :method => :post %></td>
-  </tr>
-  <% end %>
-</table>
 
 <br>
 <h2>Friends</h2>

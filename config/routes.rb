@@ -192,10 +192,13 @@ Worlize::Application.routes.draw do
         post 'add_to_public_worlds'
         post 'remove_from_public_worlds'
         post 'reactivate'
+        get 'transactions'
       end
       resource :permissions do
       end
     end
+    
+    resources :moderators, :only => [:index]
     
     resources :rooms do
       member do

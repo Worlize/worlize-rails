@@ -107,6 +107,23 @@ class Admin::UsersController < ApplicationController
     end
   end
   
+  def transactions
+    @user = User.find(params[:id])
+    
+    @total_payments = 0
+    @user.payments.each do |p|
+      @total_payments += p.amount
+    end
+    
+    @coins_balance = 0
+    @bucks_balance = 0
+    @user.virtual_financial_transactions.each do |t|
+      @coins_balance += t.coins_amount unless t.coins_amount.nil?
+      @bucks_balance += t.bucks_amount unless t.bucks_amount.nil?
+    end
+    
+  end
+  
   def login_as_user
     @user = User.find(params[:id])
     Worlize.audit_logger.info("action=admin_logged_in_as_user user=#{@user.guid} user_username=\"#{@user.username}\" admin=#{current_user.guid} admin_username=\"#{current_user.username}\"")
@@ -133,23 +150,23 @@ class Admin::UsersController < ApplicationController
     @user = User.find(params[:id])
     if params[:amount].nil? || params[:amount].to_i <= 0
       flash[:error] = "Amount must be a positive integer."
-      redirect_to admin_user_url(@user) and return
+      redirect_to transactions_admin_user_url(@user) and return
     end
     if params[:currency_type] == 'coins'
       transaction = @user.virtual_financial_transactions.create(
         :kind => VirtualFinancialTransaction::KIND_CREDIT_ADJUSTMENT,
-        :comment => params[:comment],
+        :comment => "#{params[:comment]} (#{current_user.username})",
         :coins_amount => params[:amount]
       )
     elsif params[:currency_type] == 'bucks'
       transaction = @user.virtual_financial_transactions.create(
         :kind => VirtualFinancialTransaction::KIND_CREDIT_ADJUSTMENT,
-        :comment => params[:comment],
+        :comment => "#{params[:comment]} (#{current_user.username})",
         :bucks_amount => params[:amount]
       )
     else
       flash[:error] = "Currency type must be either coins or bucks"
-      redirect_to admin_user_url(@user) and return
+      redirect_to transactions_admin_user_url(@user) and return
     end
 
     if transaction.persisted?
@@ -162,7 +179,7 @@ class Admin::UsersController < ApplicationController
       flash[:error] = "There was an error while crediting #{@user.username}'s account: <br>".html_safe +
                       "#{transaction.errors.full_messages.join(', ')}"
     end
-    redirect_to admin_user_url(@user)
+    redirect_to transactions_admin_user_url(@user)
   end
   
   def destroy
