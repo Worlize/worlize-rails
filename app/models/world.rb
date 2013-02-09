@@ -228,15 +228,18 @@ class World < ActiveRecord::Base
   end
   
   def user_is_moderator?(user)
-    user_guid = user.respond_to?(:guid) ? user.guid : user
-    return moderator_guids.include?(user_guid)
+    user = User.find_by_guid(user) unless user.is_a?(User)
+    return true if moderator_guids.include?(user.guid)
+    global_moderation_permission = Worlize::PermissionLookup.normalize_to_permission_id('can_moderate_globally')
+    redis = Worlize::RedisConnectionPool.get_client(:permissions)
+    return redis.sismember("g:#{user.guid}", global_moderation_permission)
   end
   
   def moderator_guids
     return @moderator_guids unless @moderator_guids.nil?
     redis = Worlize::RedisConnectionPool.get_client(:permissions)
     @moderator_guids = redis.zrange("wml:#{guid}", 0, -1)
-    @moderator_guids.push(self.user.guid)
+    @moderator_guids.push(self.user.guid) unless @moderator_guids.include?(self.user.guid)
     return @moderator_guids
   end
   
