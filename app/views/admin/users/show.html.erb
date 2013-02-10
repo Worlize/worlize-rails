@@ -22,6 +22,10 @@
 
 <%= button_to "View/Edit Permissions", admin_user_permissions_path(@user), :method => 'get' %><br>
 
+<h2>World: <%= link_to @world.name, admin_world_path(@world) %></h2>
+
+<br>
+
 <%= form_for [:admin, @user] do |f| %>
   <%= f.label :username %><br>
   <%= f.text_field :username %><br>
