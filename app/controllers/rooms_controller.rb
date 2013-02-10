@@ -39,7 +39,7 @@ class RoomsController < ApplicationController
     room_info = []
     Room.where(:guid => room_population.keys).all.each do |room|
 
-      next if room.hidden? || room.no_direct_entry? || room.moderators_only?
+      next if room.hidden? || room.no_direct_entry? || room.moderators_only? || room.locked?
       
       # Check to see if any of our friends are in the room and include them
       # in the response if they are.
@@ -85,9 +85,17 @@ class RoomsController < ApplicationController
       })
     end
     
+    total_user_count = 0
+    server_manager = Worlize::InteractServerManager.instance
+    interactivity_servers = server_manager.active_servers
+    interactivity_servers.each do |server|
+      total_user_count += server['user_count']
+    end
+    
     render :json => {
       :success => true,
       :data => {
+        :population => total_user_count,
         :rooms => room_info
       }
     }
