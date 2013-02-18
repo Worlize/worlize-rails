@@ -46,6 +46,20 @@ class User < ActiveRecord::Base
                   :password,
                   :password_confirmation
                   
+  attr_accessible :username,
+                  :email,
+                  :newsletter_optin,
+                  :accepted_tos,
+                  :password,
+                  :password_confirmation,
+                  :developer,
+                  :avatar_slots,
+                  :background_slots,
+                  :in_world_object_slots,
+                  :prop_slots,
+                  :app_slots,
+                    :as => :admin
+                  
   # validates :birthday, :timeliness => {
   #       :before => :thirteen_years_ago,
   #       :type => :date

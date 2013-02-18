@@ -1,7 +1,7 @@
 <h1>Users</h1>
 
 <%= form_tag(admin_users_path, :method => 'get') do %>
-  <%= text_field_tag :q, params[:q], :size => 45 %>
+  <%= text_field_tag :q, params[:q], :size => 45, :id => 'user-search-field' %>
   <%= submit_tag 'Search' %>
 <% end %>
 
@@ -56,3 +56,9 @@
 <% else %>
 <h2>There are no users to show</h2>
 <% end %>
+
+<script type="text/javascript" charset="utf-8">
+  jQuery(function($) {
+    $('#user-search-field').focus();
+  });
+</script>

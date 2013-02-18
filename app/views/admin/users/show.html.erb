@@ -26,6 +26,17 @@
 
 <br>
 
+<% unless @user.valid? %>
+<div class="errorExplanation">
+  <h1>Unable to save the user</h1>
+  <ul>
+    <% @user.errors.full_messages.each do |error_message| %>
+    <li><%= error_message %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+
 <%= form_for [:admin, @user] do |f| %>
   <%= f.label :username %><br>
   <%= f.text_field :username %><br>
