@@ -9,7 +9,23 @@ class World < ActiveRecord::Base
   before_destroy :check_destroy_preconditions
   after_update :notify_users_of_changes
   
+  RATINGS = {
+    'Not Rated' => {
+      :min_age => 13
+    },
+    'All Ages' => {
+      :min_age => 13
+    },
+    '18+' => {
+      :min_age => 18
+    },
+    '21+' => {
+      :min_age => 21
+    }
+  }
+  
   validates :name, :presence => true
+  # validates :rating, :inclusion => { :in => RATINGS.keys }
   
   attr_accessible :name
 
