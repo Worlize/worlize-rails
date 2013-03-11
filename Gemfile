@@ -36,7 +36,7 @@ gem 'jquery-rails'
 
 gem 'validates_timeliness', '~> 3.0.14'
 gem 'validate_as_email', '~> 1.0.3'
-gem 'state_machine', :git => 'git://github.com/pluginaweek/state_machine.git', :tag => 'v1.1.2'
+gem 'state_machine', '~> 1.1.2'
 
 # I applied a couple manual fixes to be able to use the official release of
 # authlogic rather than an unknown and less-maintained fork.

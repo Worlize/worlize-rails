@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   after_create :initialize_currency
   after_create :log_creation
   before_destroy :unlink_friendships
+  before_save :synchronize_username_changed_at
   after_save :update_interactivity_session, :notify_users_of_changes
   
   scope :active, lambda {
@@ -44,7 +45,8 @@ class User < ActiveRecord::Base
                   :newsletter_optin,
                   :accepted_tos,
                   :password,
-                  :password_confirmation
+                  :password_confirmation,
+                  :birthday
                   
   attr_accessible :username,
                   :email,
@@ -60,10 +62,10 @@ class User < ActiveRecord::Base
                   :app_slots,
                     :as => :admin
                   
-  # validates :birthday, :timeliness => {
-  #       :before => :thirteen_years_ago,
-  #       :type => :date
-  #   }
+  validates :birthday, :timeliness => {
+    :before => :thirteen_years_ago,
+    :type => :date
+  }
   
   validates :avatar_slots, :numericality => {
     :greater_than_or_equal_to => 0, 
@@ -86,7 +88,8 @@ class User < ActiveRecord::Base
     :if => Proc.new { !self.new_record? }
   }
   validates :password, { :confirmation => true }
-
+  
+  validate :username_cannot_have_been_changed_in_the_last_month
 
   state_machine :initial => :new_user do
     
@@ -106,9 +109,11 @@ class User < ActiveRecord::Base
       :message => 'can only contain letters, numbers, spaces, and the dash or underscore characters'
     }
     c.validate_password_field = false
-    c.validates_uniqueness_of_email_field_options = {
-      :if => Proc.new { |user| false }
-    }
+
+    # We're now requiring email addresses to be unique.
+    # c.validates_uniqueness_of_email_field_options = {
+    #   :if => Proc.new { |user| false }
+    # }
   end
   
   def self.global_moderators
@@ -116,7 +121,7 @@ class User < ActiveRecord::Base
     guids = redis.zrange('gml', '0', '-1')
     self.where(:guid => guids).order(:username)
   end
-  
+    
   def active?
     !self.suspended?
   end
@@ -1008,6 +1013,20 @@ class User < ActiveRecord::Base
       friend_guids.each do |friend_guid|
         Worlize::PubSub.publish("user:#{friend_guid}", message)
       end
+    end
+  end
+  
+  def username_cannot_have_been_changed_in_the_last_month
+    if self.username_changed?
+      if self.username_changed_at != nil && self.username_changed_at > 30.days.ago
+        errors.add(:username, "can only be changed once every 30 days.");
+      end
+    end
+  end
+  
+  def synchronize_username_changed_at
+    if self.username_changed?
+      self.username_changed_at = Time.now
     end
   end
 end

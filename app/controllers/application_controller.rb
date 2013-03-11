@@ -62,7 +62,7 @@ class ApplicationController < ActionController::Base
         respond_to do |format|
           format.html do
             store_location
-            flash[:notice] = "You must be logged in to access this page"
+            flash[:notice] = "You must be logged in."
             redirect_to new_user_session_url
           end
           format.json do
@@ -73,6 +73,42 @@ class ApplicationController < ActionController::Base
           end
         end
         return false          
+      end
+    end
+    
+    def require_user_without_storing_location
+      unless current_user
+        respond_to do |format|
+          format.html do
+            flash[:notice] = "You must be logged in."
+            redirect_to new_user_session_url
+          end
+          format.json do
+            render :json => {
+              :success => false,
+              :message => "An active user session is required to access this resource."
+            }
+          end
+        end
+        return false
+      end
+    end
+    
+    def require_birthday_set
+      if current_user && (current_user.birthday.nil? || current_user.birthday > 13.years.ago.to_date)
+        respond_to do |format|
+          format.html do
+            store_location
+            redirect_to birthday_me_url
+          end
+          format.json do
+            render :json => {
+              :success => false,
+              :message => "You must add your birthday to your profile to perform this action."
+            }
+          end
+        end
+        return false
       end
     end
 

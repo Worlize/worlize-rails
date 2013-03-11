@@ -12,16 +12,16 @@ ValidatesTimeliness.setup do |config|
   # config.ignore_restriction_errors = false
   #
   # Re-display invalid values in date/time selects
-  config.enable_date_time_select_extension!
+  # config.enable_date_time_select_extension!
   #
   # Handle multiparameter date/time values strictly
-  config.enable_multiparameter_extension!
+  # config.enable_multiparameter_extension!
   #
   # Shorthand date and time symbols for restrictions
   config.restriction_shorthand_symbols.update(
     :now   => lambda { Time.current },
     :today => lambda { Date.current },
-    :thirteen_years_ago => lambda { Date.current - 13.years }
+    :thirteen_years_ago => lambda { 13.years.ago }
   )
   #
   # Use the plugin date/time parser which is stricter and extendable

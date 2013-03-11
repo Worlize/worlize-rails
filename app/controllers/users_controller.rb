@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  before_filter :require_user, :except => [:new, :create, :validate_field]
+  before_filter :require_user, :except => [:new, :create, :validate_field, :birthday, :set_birthday]
+  before_filter :require_user_without_storing_location, :only => [:birthday, :set_birthday]
 
   layout 'login'
 
@@ -176,6 +177,28 @@ class UsersController < ApplicationController
           :data => @object
         }
       end
+    end
+  end
+  
+  def birthday
+    @user = current_user
+    render :layout => 'bootstrap'
+  end
+  
+  def set_birthday
+    @user = current_user
+
+    unless params[:verify_age_checkbox] == 'true'
+      flash.now[:alert] = "You must check the box to indicate that you are 13 years of age or older."
+      render :birthday, :layout => 'bootstrap' and return
+    end
+    
+    success = @user.update_attributes(params[:user])
+    
+    if success
+      redirect_back_or_default(root_url)
+    else
+      render :birthday, :layout => 'bootstrap'
     end
   end
   

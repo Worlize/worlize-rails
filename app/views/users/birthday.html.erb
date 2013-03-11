@@ -1,0 +1,52 @@
+<style type="text/css" media="screen">
+
+  .birthday-form {
+    max-width: 475px;
+    padding: 19px 29px 29px;
+    margin: 0 auto 20px;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+       -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  }
+  .birthday-form .birthday-form-heading,
+  .birthday-form .checkbox {
+    margin-bottom: 10px;
+  }
+  .birthday-form input[type="text"],
+  .birthday-form input[type="password"] {
+    font-size: 16px;
+    height: auto;
+    margin-bottom: 15px;
+    padding: 7px 9px;
+  }
+  
+  .birthday-form select {
+    width: 90px;
+  }
+</style>
+
+<%= form_for @user, :url => birthday_me_path, :method => :put, :html => {:class => 'birthday-form'} do |form| %>
+
+<h1>Birthday</h1>
+<p>Please enter your birthday below.  Worlize is for ages 13 and up.</p>
+
+<%= form.date_select :birthday,
+                     :class => 'date-select',
+                     :use_short_month => true,
+                     :prompt => true,
+                     :end_year => Time.now.year - 110,
+                     :start_year => Time.now.year - 13,
+                     :order => [:month, :day, :year] %>
+
+<label class="checkbox">
+  <input type="checkbox" name="verify_age_checkbox" value="true"> By checking this box you verify that you are 13 years of age or older.
+</label>
+
+<%= form.submit "Submit", :class => 'btn btn-large btn-primary' %>
+
+<% end %>

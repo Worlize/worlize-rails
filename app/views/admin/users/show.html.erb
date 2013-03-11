@@ -1,7 +1,9 @@
 <h1><%= @user.username %></h1>
-<p>guid: <%= @user.guid %></p><br>
-<p>User is <strong><%= @user.online? ? 'online' : 'offline' %></strong>.</p><br>
-<p><%= @user.total_time_spent_online_hms_long %> spent online</p><br>
+<p>guid: <%= @user.guid %></p>
+<p>User is <strong><%= @user.online? ? 'online' : 'offline' %></strong>.</p>
+<p><%= @user.total_time_spent_online_hms_long %> spent online</p>
+<p>Login Count: <%= @user.login_count %></p>
+<p>Failed Login Count: <%= @user.failed_login_count %></p><br>
 
 <% if @user.active? %>
   <%= button_to "Suspend Account", admin_user_path(@user), :method => :delete, :confirm => "Are you sure you want to suspend this account?" %><br>

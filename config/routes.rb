@@ -142,6 +142,8 @@ Worlize::Application.routes.draw do
     member do
       post :change_password
       put :settings
+      get :birthday
+      put :birthday, :action => :set_birthday
     end
   end
   

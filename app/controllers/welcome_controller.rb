@@ -1,6 +1,7 @@
 class WelcomeController < ApplicationController
   
   before_filter :require_user, :only => [:enter]
+  before_filter :require_birthday_set, :only => [:enter]
   
   def index
     characters = {
