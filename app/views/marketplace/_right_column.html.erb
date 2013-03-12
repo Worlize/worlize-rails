@@ -18,9 +18,9 @@
     <% if current_user %>
       Welcome, <%= current_user.username %>!
       <div class="balance">
-        <img src="/images/marketplace/coins-icon.png" alt="Coins">
+        <%= image_tag 'marketplace/coins-icon.png', :alt => 'Coins' %>
           <span id="coins-balance"><%= number_with_delimiter(current_user.coins) %></span>
-        <img src="/images/marketplace/bucks-icon.png" alt="Bucks">
+        <%= image_tag 'marketplace/bucks-icon.png', :alt => 'Bucks' %>
           <span id="bucks-balance"><%= number_with_delimiter(current_user.bucks) %></span>
       </div>
       

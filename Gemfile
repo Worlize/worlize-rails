@@ -33,6 +33,8 @@ gem 'dynamic_form', '~> 1.1.4'
 
 # Yay, jQuery!
 gem 'jquery-rails'
+gem 'modernizr-rails'
+gem 'fancybox2-rails'
 
 gem 'validates_timeliness', '~> 3.0.14'
 gem 'validate_as_email', '~> 1.0.3'

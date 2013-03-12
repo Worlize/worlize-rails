@@ -6,5 +6,6 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require fancybox
 //= require plugins
 //= require script

@@ -27,7 +27,7 @@
 
 <script type="text/javascript" charset="utf-8">
   jQuery(function($) {
-    $('#client-errors-results-table tr').live('click', function(event) {
+    $(document).on('click', '#client-errors-results-table tr', function(event) {
       var id = $(event.target).closest('tr').attr('data-id');
       window.location.href = "/admin/client_errors/" + id;
     });

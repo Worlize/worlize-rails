@@ -2,19 +2,23 @@
     var previousContent;
     jQuery('<a>').fancybox({
         content: "<%= escape_javascript(render(:partial => 'item_detail_overlay')) %>",
-        overlayOpacity: 0.2,
-        transitionIn: 'elastic',
-        transitionOut: 'fade',
-        orig: "#item_thumb_<%= @item.id %> img",
-        speedIn: 200,
-        speedOut: 300,
-        overlayShow: false,
-        onComplete: function() {
+        openEffect: 'fade',
+        closeEffect: 'fade',
+        openSpeed: 200,
+        closeSpeed: 300,
+        afterShow: function() {
             previousContent = jQuery('.item-detail-overlay');
             previousContent.css('visibility','').hide().fadeIn();
         },
-        onCleanup: function() {
+        afterClose: function() {
 
+        },
+        helpers: {
+          overlay: {
+            css: {
+              "background": "rgba(0,0,0,0.3)"
+            }
+          }
         }
-    }).click();    
+    }).click(); 
 })();
