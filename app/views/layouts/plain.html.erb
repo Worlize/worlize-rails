@@ -16,26 +16,22 @@
   <% end %>
 
   <!--  Mobile viewport optimized: j.mp/bplateviewport -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta name="viewport" content="width=980">
+  
   <!-- Place favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-  <link rel="stylesheet" href="/stylesheets/main-fonts.css?v=2">
+  <%= stylesheet_link_tag "plain" %>
 
-  <!-- CSS : implied media="all" -->
-  <link rel="stylesheet" href="/stylesheets/plain.css?v=3">
- 
   <style type="text/css">
   <%= yield :extra_styles %>
   </style>
  
   <%= yield :extra_head_items %>
  
-  <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
-  <script src="/javascripts/libs/modernizr-1.6.min.js"></script>
-    
+  <%= javascript_include_tag "modernizr" %>
+
   <script>
   <% if current_user %>
     loggedIn = true;
@@ -94,22 +90,12 @@
 
 
   <!-- Javascript at the bottom for fast page loading -->
-  <% if Rails.env == 'production' -%>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-    <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <%- else -%>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
-    <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.js"%3E%3C/script%3E'))</script>
-  <% end -%>
-  
-  
-  <script src="/javascripts/plugins.js"></script>
-  <script src="/javascripts/script.js"></script>
+  <%= javascript_include_tag 'application' %>
   
   <%= yield :page_script %>
   
   <!--[if lt IE 7 ]>
-    <script src="javascripts/libs/dd_belatedpng.js"></script>
+    <%= javascript_include_tag 'dd_belatedpng' %>
     <script> DD_belatedPNG.fix('img, .png_bg'); //fix any <img> or .png_bg background-images </script>
   <![endif]-->
 

@@ -22,11 +22,9 @@
             #flashContent { display:none; }
         </style>
 
-        <link rel="stylesheet" href="/stylesheets/enter.css?cb=<%= cache_bust %>">
-        <link rel="stylesheet" href="/stylesheets/main-fonts.css?cb=<%= cache_bust %>">
+        <%= stylesheet_link_tag 'enter' %>
         <link rel="stylesheet" href="/dialogs/css" type="text/css" media="screen" title="no title" charset="utf-8">
-        <script type="text/javascript" src="/javascripts/swfobject.js"></script>
-
+        
         <script>
           function configData() {
             return <%= @configJSON.html_safe %>;
@@ -156,20 +154,8 @@
       </div>
       
 	    <!-- Javascript at the bottom for fast page loading -->
-      <% if Rails.env == 'production' -%>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-        <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-      <%- else -%>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
-        <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.js"%3E%3C/script%3E'))</script>
-      <% end -%>
+	    <%= javascript_include_tag "enter" %>
       
-      <script src="/javascripts/enter.js?cb=<%= cache_bust %>" type="text/javascript" charset="utf-8"></script>
-      <script src="/javascripts/promo_dialog.js?cb=<%= cache_bust %>" type="text/javascript" charset="utf-8"></script>
-      
-      <script src="/fancybox/jquery.fancybox-1.3.4.pack.js" type="text/javascript" charset="utf-8"></script>
-      <link rel="stylesheet" href="/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
-
       <div id="loading-overlay-container">
         <div id="loading-overlay">
           <div class="character"> </div>
