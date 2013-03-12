@@ -1,14 +1,5 @@
 <!doctype html>  
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml" lang="en" xml:lang="en"> 
-    <%
-        if ::Rails.env == 'production' 
-          path = '/client' 
-        else
-          path = '/flash'
-        end
-        
-        cache_bust = '110'
-    -%>
     <head>
         <meta name="google" value="notranslate" />         
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -124,7 +115,7 @@
           }
           
           // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
-          var xiSwfUrlStr = "<%= path %>/playerProductInstall.swf";
+          var xiSwfUrlStr = "<%= asset_path 'playerProductInstall.swf' %>";
           var flashvars = {};
           var params = {};
           params.quality = "high";
@@ -137,7 +128,7 @@
           attributes.name = "FlashClient";
           attributes.align = "middle";
           swfobject.embedSWF(
-              "<%= path %>/FlashClient.swf?cb=<%= cache_bust %>", "flashContent", 
+              "<%= asset_path 'FlashClient.swf' %>", "flashContent", 
               "100%", "100%", 
               swfVersionStr, xiSwfUrlStr, 
               flashvars, params, attributes);

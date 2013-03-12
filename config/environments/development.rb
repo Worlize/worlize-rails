@@ -31,4 +31,7 @@ Worlize::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+  
+  # Add clash client path
+  config.assets.paths << Rails.root.join('lib', 'flash_client_dev')
 end

@@ -40,6 +40,9 @@ Worlize::Application.configure do
   # Generate digests for assets URLs
   config.assets.digest = true
   
+  # Add clash client path
+  config.assets.paths << Rails.root.join('lib', 'flash_client')
+  
   # Notify deprecation notices
   config.active_support.deprecation = :notify
   
