@@ -31,6 +31,15 @@ Worlize::Application.configure do
   # In production, Apache or nginx will already do this
   config.serve_static_assets = false
   
+  # Compress JavaScript and CSS
+  config.assets.compress = true
+
+  # Don't fallback to assets pipeline
+  config.assets.compile = false
+
+  # Generate digests for assets URLs
+  config.assets.digest = true
+  
   # Notify deprecation notices
   config.active_support.deprecation = :notify
   

@@ -132,6 +132,8 @@
 
 
   <!-- Javascript at the bottom for fast page loading -->
+  <%= javascript_include_tag "application" %>
+  
   <% if Rails.env == 'production' -%>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
     <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>

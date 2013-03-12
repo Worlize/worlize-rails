@@ -11,3 +11,5 @@ doc/**/*
 **/.DS_Store
 config/config.yml
 config/database.yml
+.sass_cache/
+public/assets/
