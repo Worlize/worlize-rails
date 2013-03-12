@@ -9,6 +9,6 @@
 //= require jquery-ui
 //= require plugins
 //= require script
-//= require jqplot/jquery.jqplot
-//= require jqplot/plugins/jqplot.dateAxisRenderer
+//= require jquery.jqplot
+//= require plugins/jqplot.dateAxisRenderer
 //= require_tree ./admin

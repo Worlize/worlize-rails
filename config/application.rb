@@ -57,7 +57,16 @@ module Worlize
     # Manually add web fonts path
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
     
+    # Add clash client path
+    config.assets.paths << Rails.root.join('lib', 'flash_client')
+    
+    # Add vendor assets path
+    config.assets.paths << Rails.root.join('vendor')
+    
     # Precompile additional assets
     config.assets.precompile += %w( .svg .eot .woff .ttf )
+    
+    # Precompile flash assets
+    config.assets.precompile += %w( .swf .swc .swz )
   end
 end
