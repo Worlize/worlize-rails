@@ -35,6 +35,10 @@ Worlize::Application.routes.draw do
   match '/dialogs/check_for_dialogs' => 'dialogs#check_for_dialogs', :via => :get
   match '/dialogs/css' => 'dialogs#css', :via => :get
   
+  # Require data updates from existing users...
+  match '/birthday_required' => 'users#birthday', :via => :get, :as => :birthday_required
+  match '/birthday_required' => 'users#set_birthday', :via => :put
+  
   resources :authentications do
     collection do
       post :connect_facebook_via_js
@@ -142,8 +146,6 @@ Worlize::Application.routes.draw do
     member do
       post :change_password
       put :settings
-      get :birthday
-      put :birthday, :action => :set_birthday
     end
   end
   

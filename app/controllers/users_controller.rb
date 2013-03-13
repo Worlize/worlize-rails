@@ -189,7 +189,7 @@ class UsersController < ApplicationController
     @user = current_user
 
     unless params[:verify_age_checkbox] == 'true'
-      flash.now[:alert] = "You must check the box to indicate that you are 13 years of age or older."
+      @user.errors.add(:birthday, "must be confirmed by checking the box to indicate that you are 13 years of age or older.")
       render :birthday, :layout => 'bootstrap' and return
     end
     
@@ -198,9 +198,6 @@ class UsersController < ApplicationController
     if success
       redirect_back_or_default(root_url)
     else
-      if @user.errors.include?(:birthday)
-        flash.now[:alert] = "You must be at least 13 years old to use Worlize."
-      end
       render :birthday, :layout => 'bootstrap'
     end
   end

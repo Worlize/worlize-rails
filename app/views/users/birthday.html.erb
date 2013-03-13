@@ -27,9 +27,12 @@
   }
 </style>
 
-<%= simple_form_for @user, :url => birthday_me_path, :method => :put, :html => {:class => 'form-vertical birthday-form'} do |form| %>
+<%= simple_form_for @user, :url => birthday_required_path, :method => :put, :html => {:class => 'form-vertical birthday-form'} do |form| %>
 
 <h1>Birthday</h1>
+<% if @user.errors.include?(:birthday) %>
+<p class="alert alert-error">You must be at least 13 years old to use Worlize.</p>
+<% end %>
 <p>Please enter your birthday below.  Worlize is for ages 13 and up.</p>
 
 <%= form.input :birthday, :as => :date,

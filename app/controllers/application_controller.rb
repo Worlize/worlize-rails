@@ -99,7 +99,7 @@ class ApplicationController < ActionController::Base
         respond_to do |format|
           format.html do
             store_location
-            redirect_to birthday_me_url
+            redirect_to birthday_required_path
           end
           format.json do
             render :json => {
