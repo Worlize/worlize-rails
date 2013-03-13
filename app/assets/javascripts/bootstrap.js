@@ -6,5 +6,8 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require twitter/bootstrap
 //= require fancybox
+//= require plugins
+//= require twitter/bootstrap
+//= require twitter/bootstrap-init
+//= require script

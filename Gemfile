@@ -30,6 +30,7 @@ gem 'acts-as-taggable-on', '~> 2.3.3'
 gem 'acts_as_list', '~> 0.1.8'
 gem 'acts_as_tree', '~> 1.1.0'
 gem 'dynamic_form', '~> 1.1.4'
+gem 'simple_form', '~> 2.1.0'
 
 # Yay, jQuery!
 gem 'jquery-rails'
