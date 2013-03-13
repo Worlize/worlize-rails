@@ -198,6 +198,9 @@ class UsersController < ApplicationController
     if success
       redirect_back_or_default(root_url)
     else
+      if @user.errors.include?(:birthday)
+        flash.now[:alert] = "You must be at least 13 years old to use Worlize."
+      end
       render :birthday, :layout => 'bootstrap'
     end
   end
