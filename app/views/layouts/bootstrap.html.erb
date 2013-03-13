@@ -17,16 +17,8 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-    <link rel="stylesheet" href="/stylesheets/main-fonts.css?v=2">
+    <%= stylesheet_link_tag "bootstrap" %>
     
-    <% if Rails.env == 'production' -%>
-    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <%- else -%>
-    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
-    <% end -%>
-    
-    <link href="/stylesheets/bootstrap/main.css" rel="stylesheet" media="screen">
-
     <style type="text/css">
     <%= yield :extra_styles %>
     </style>
@@ -35,7 +27,7 @@
 
     <%= yield :extra_head_items %>
     
-    <script src="/javascripts/libs/modernizr-1.6.min.js"></script>
+    <%= javascript_include_tag "modernizr" %>
     
     <%= csrf_meta_tag %>
   </head>

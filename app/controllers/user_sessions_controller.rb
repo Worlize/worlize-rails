@@ -1,5 +1,5 @@
 class UserSessionsController < ApplicationController
-  layout 'login'
+  layout 'bootstrap'
   
   def new
     if params[:redirect_to]
