@@ -101,6 +101,9 @@ class User < ActiveRecord::Base
     :uniqueness => {
       :case_sensitive => false
     },
+    :length => {
+      :in => 3..36
+    },
     :format => {
       :with => /^[a-zA-Z0-9_\-\ ]+$/,
       :message => "can only contain letters, numbers, spaces, and the dash or underscore characters"
