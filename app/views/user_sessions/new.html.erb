@@ -15,7 +15,6 @@
 .social-login-button {
   font-size: 20pt;
 }
-
 <% end %>
 
 <% title 'Log In' %>
@@ -43,10 +42,10 @@
         </script>
       <% end %>
     <div class="alert alert-error">
-      Oops – the provided Login Name or Password was incorrect!
+      Oops – your Login Name or Password was incorrect!
     </div>
     <% end %>
-    <%= simple_form_for @user_session, :url => user_session_path, :html => {:class => 'login-form form-inline'} do |f| %>
+    <%= simple_form_for @user_session, :url => user_session_path, :html => {:class => 'login-form form-inline text-center'} do |f| %>
       <%= f.input_field :login_name, :label => false, :placeholder => 'Login Name' %>
       <%= f.input_field :password, :label => false, :placeholder => 'Password' %>
       <%= f.submit "Log In", :class => 'btn btn-primary' %>
