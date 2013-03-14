@@ -32,10 +32,23 @@
     </div>
     
     <h2>Old Fashioned?</h2>
+    <% if @user_session.errors.empty? %>
     <p>Use your login name and password.</p>
-    <%= form_for @user_session, :url => user_session_path, :html => {:class => 'login-form form-inline'} do |f| %>
-      <%= f.text_field :login_name, :label => false, :placeholder => 'Login Name' %>
-      <%= f.password_field :password, :label => false, :placeholder => 'Password' %>
+    <% else %>
+      <% content_for :page_script do %>
+        <script type="text/javascript" charset="utf-8">
+          $(function() {
+            $('#user_session_login_name').focus();
+          });
+        </script>
+      <% end %>
+    <div class="alert alert-error">
+      Oops – the provided Login Name or Password was incorrect!
+    </div>
+    <% end %>
+    <%= simple_form_for @user_session, :url => user_session_path, :html => {:class => 'login-form form-inline'} do |f| %>
+      <%= f.input_field :login_name, :label => false, :placeholder => 'Login Name' %>
+      <%= f.input_field :password, :label => false, :placeholder => 'Password' %>
       <%= f.submit "Log In", :class => 'btn btn-primary' %>
     <% end %>
   
