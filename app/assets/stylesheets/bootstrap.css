@@ -42,3 +42,7 @@ header h1#worlize-logo {
     background: url(/images/logo.png);
     text-indent: -20000px;
 }
+
+footer {
+    margin-top: 40px;
+}

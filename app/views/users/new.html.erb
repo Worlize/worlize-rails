@@ -33,6 +33,8 @@
 <% content_for :page_script do %>
 <script type="text/javascript" charset="utf-8">
   $(function() {
+    $('a.fancybox').fancybox();
+    
     $('form.signup-form').bind('submit', function() {
       $('#signup-submit-button').attr('disabled','disabled');
     });
@@ -72,17 +74,11 @@
   <% end %>
 
   <%= f.input :accepted_tos, :label => false,
-                             :inline_label => "I agree to the Terms and Conditions." %>
+                             :inline_label => 'I agree to the <a href="/tos.html" class="fancybox" data-fancybox-type="iframe" target="_BLANK">Terms and Conditions</a>.'.html_safe %>
   <%= f.input :newsletter_optin, :label => false,
                                  :inline_label => "I'd like to receive occasional emails about Worlize updates." %>
   <div class="controls">
     <%= f.submit "Let's Go!", :class => 'btn btn-primary btn-large', :id => 'signup-submit-button' %>
     <br><br>
-    <p>
-      <small>
-        <%= link_to "Terms and Conditions", '/tos.html', :target => '_BLANK' %> | 
-        <%= link_to "Privacy Policy", '/privacy-policy.html', :target => '_BLANK' %>
-      </small>
-    </p>
   </div>
 <% end %>
