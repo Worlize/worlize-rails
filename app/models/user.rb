@@ -40,6 +40,8 @@ class User < ActiveRecord::Base
   
   has_many :event_comments
   
+  attr_accessor :skip_password_requirement
+  
   attr_accessible :username,
                   :login_name,
                   :email,
@@ -88,7 +90,12 @@ class User < ActiveRecord::Base
     :greater_than_or_equal_to => 0, 
     :if => Proc.new { !self.new_record? }
   }
-  validates :password, { :confirmation => true }
+
+  validates :password,
+    :confirmation => true,
+    :presence => {
+      :if => Proc.new { self.state?(:new_user) && !self.skip_password_requirement }
+    }
   
   validates :username,
     :uniqueness => true,
@@ -113,6 +120,14 @@ class User < ActiveRecord::Base
     event :confirm_login_name do
       transition :login_name_unconfirmed => :user_ready
     end
+    
+    before_transition :new_user => any do |user, transition|
+      # Let the user change their password once after signup
+      user.username_changed_at = nil
+      
+      # Update the password last changed date
+      user.password_changed_at = Time.now unless user.crypted_password.nil?
+    end
   end
 
   acts_as_authentic do |c|
@@ -132,7 +147,7 @@ class User < ActiveRecord::Base
     # }
     
     c.validates_uniqueness_of_email_field_options = {
-      :message => "is in use by an existing account."
+      :message => "is already in use by an existing account."
     }
   end
   

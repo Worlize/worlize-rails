@@ -36,18 +36,21 @@
   <% else %>
   <h1>Update Account</h1>
   <% end %>
-  <p class="lead">We'll need just a little bit of information to get started.</p>
+  <p class="lead">Just a few more things before we can get started.</p>
   
   <%= f.input :username, :required => true,
-                         :hint => "This is the name people will see inside Worlize.",
+                         :hint => "This is the name <b>people will see</b> inside Worlize.",
                          :label => "Screen Name" %>
   <%= f.input :login_name, :required => true,
-                           :hint => "This is the name you will use to log in to your account." %>
+                           :hint => "This is the name you will use to <b>log in to your account</b>.",
+                           :label => "Login Name" %>
   <%= f.input :email, :required => true %>
-  <% if @require_password %>
-    <%= f.input :password, :required => true %>
-    <%= f.input :password_confirmation, :required => true %>
+  
+  <% unless @require_password %>
+    <p class="lead">You'll always be able to use your <%= @provider.capitalize %> account to log in to Worlize, but we recommend that you optionally choose a password as an alternate way to log in.</p>
   <% end %>
+  <%= f.input :password, :required => @require_password %>
+  <%= f.input :password_confirmation, :required => @require_password %>
   <% unless @email_autofilled %>
     <%= f.input :birthday, :as => :date,
                            :start_year => Time.now.year - 13,

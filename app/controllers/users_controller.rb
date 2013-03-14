@@ -14,6 +14,7 @@ class UsersController < ApplicationController
     # Pre-fill as much information as we can from an omniauth login
     oa = session[:omniauth]
     if oa && oa['info']
+      @provider = oa['provider']
       if oa['provider'] == 'facebook'
         @user.first_name = oa['info']['first_name']
         @user.last_name = oa['info']['last_name']
@@ -89,14 +90,24 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(params[:user])
-    
-    if session[:omniauth] && session[:omniauth]['provider'] == 'facebook'
-      @user.birthday = session[:omniauth]['info']['birthday']
+    if params[:user] && params[:user][:password].blank?
+      params[:user].delete(:password) and params[:user].delete(:password_confirmation)
     end
+    
+    @user = User.new(params[:user])
+    if session[:omniauth]
+      # Password not explicitly required if using social login
+      @user.skip_password_requirement = true
+      
+      if session[:omniauth]['provider'] == 'facebook'
+        @user.birthday = session[:omniauth]['info']['birthday']
+      end
+    end
+    
 
     if !@user.save
       if session[:omniauth]
+        @provider = session[:omniauth]['provider']
         if session[:omniauth]['provider'] == 'facebook'
           @email_autofilled = true
         end
