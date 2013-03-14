@@ -1,88 +1,45 @@
-<% title 'Sign in' %>
+<% content_for :extra_styles do %>
 
-<div id="login-overlay">
-	<div id="main-login-1">
-	  <div class="character">
-  	  <h1>Oh Boy!</h1>
-  	  <h2>You're almost there!</h2>
-	  </div>
+.white-box {
+  padding: 19px 29px 29px;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+     -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+          box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
 
-    <div class="social-network-buttons">
-      <p class="social-network-or">or sign in with:</p>
-  	  <div class="facebook-login">
-	      <a href="/auth/facebook">
-  	      <img src="/images/homepage-facebook-icon.png">
-  	    </a>
-      </div>
-      <div class="twitter-login">
-  	    <a href="/auth/twitter">
-  	      <img src="/images/homepage-twitter-icon.png">
-  	    </a>
-  	  </div>
+.social-login-button {
+  font-size: 20pt;
+}
+
+<% end %>
+
+<% title 'Log In' %>
+
+<div class="row">
+  <div class="span6 offset3">
+    <div class="hero-unit white-box">
+      <h1>Hi there!</h1>
+      <h3>Use your Facebook or Twitter account to get started the easy way!<br>
+          <small>(Don't worry, we promise we'll never spam your friends.)</small></h3>
+      
+      <a class="btn btn-large btn-block btn-primary social-login-button" href="/auth/facebook"><i class="icon-facebook"></i>&nbsp; Login with Facebook</a>
+      <a class="btn btn-large btn-block btn-info social-login-button" href="/auth/twitter"><i class="icon-twitter"></i>&nbsp; Login with Twitter</a>
     </div>
-	  
-	  <div class="login-form">
-  	  <div class="login-error" style="display:none;">
-  	    Invalid username or password.
-  	  </div>
-      <%= form_for @user_session, :url => user_session_path, :html => {:id => 'username-login-form', :class => 'standard_form'} do |f| %>
-    	  <table>
-    	    <tr>
-            <td>
-              <label id="username-label" for="login-form-username-field">Username:</label>
-            </td>
-            <td>
-              <input type="text" name="user_session[username]" id="login-form-username-field">
-            </td>
-    	    </tr>
-    	    <tr>
-            <td>
-              <label id="password-label" for="login-form-password-field">Password:</label>
-            </td>
-            <td>
-              <input type="password" name="user_session[password]" id="login-form-password-field">
-            </td>
-          </tr>
-          <tr>
-            <td>
-              
-            </td>
-            <td style="text-align: right;">
-              <input type="submit" name="submit" id="login-form-submit-button" value="Let's Go!">
-            </td>
-    	    </tr>
-    	  </table>
-      <% end %>
-	  </div>
-	  
-	  <div class="sign-up-link-container">
-      <%= link_to 'Sign up with username/password.', new_user_path, :class => "sign-up-link"  %>
-    </div>
-	</div>
+    
+    <h2>Old Fashioned?</h2>
+    <p>Use your login name and password.</p>
+    <%= form_for @user_session, :url => user_session_path, :html => {:class => 'login-form form-inline'} do |f| %>
+      <%= f.text_field :login_name, :label => false, :placeholder => 'Login Name' %>
+      <%= f.password_field :password, :label => false, :placeholder => 'Password' %>
+      <%= f.submit "Log In", :class => 'btn btn-primary' %>
+    <% end %>
+  
+    <p>Don't have an account yet? <%= link_to 'Sign up now', signup_path %>!</p>
+  </div>
 </div>
 
-<% content_for :page_script do %>
-<script>
-  jQuery(function($) {
-    $('#username-login-form').bind('submit', function(event) {
-      event.preventDefault();
-
-      $.post('<%= user_session_path(:format => :json) %>',
-        $('#username-login-form').serialize(),
-        function(data, textStatus, jqXHR) {
-          if (data.success) {
-            top.location.href = data.redirect_to;
-          }
-          else {
-            $('#main-login-1  .login-error').show();
-            $('#main-login-1  .login-error').addClass('highlight');
-            setTimeout(function() {
-              $('#main-login-1  .login-error').removeClass('highlight');
-            }, 250);
-          }
-        }
-      );
-    });
-  });
-</script>
-<% end %>

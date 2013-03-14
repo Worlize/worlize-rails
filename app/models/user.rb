@@ -41,6 +41,7 @@ class User < ActiveRecord::Base
   has_many :event_comments
   
   attr_accessible :username,
+                  :login_name,
                   :email,
                   :newsletter_optin,
                   :accepted_tos,
@@ -60,7 +61,7 @@ class User < ActiveRecord::Base
                   :in_world_object_slots,
                   :prop_slots,
                   :app_slots,
-                    :as => :admin
+                  :as => :admin
                   
   validates :birthday, :timeliness => {
     :before => :thirteen_years_ago,
@@ -89,24 +90,39 @@ class User < ActiveRecord::Base
   }
   validates :password, { :confirmation => true }
   
+  validates :username,
+    :uniqueness => true,
+    :format => {
+      :with => /^[a-zA-Z0-9_\-\ ]+$/,
+      :message => "can only contain letters, numbers, spaces, and the dash or underscore characters"
+    }
+  
+  validates :accepted_tos, :inclusion => {
+    :in => [true],
+    :if => Proc.new { self.state?(:new_user) },
+    :message => "must be checked"
+  }
+  
   validate :username_cannot_have_been_changed_in_the_last_month
 
   state_machine :initial => :new_user do
-    
     event :first_time_login do
       transition :new_user => :user_ready
     end
     
+    event :confirm_login_name do
+      transition :login_name_unconfirmed => :user_ready
+    end
   end
 
   acts_as_authentic do |c|
-    c.login_field = 'username'
+    c.login_field = 'login_name'
     c.validates_length_of_login_field_options = {
       :in => 3..50
     }
     c.validates_format_of_login_field_options = {
-      :with => /^[a-zA-Z\d_\-\ ]+$/,
-      :message => 'can only contain letters, numbers, spaces, and the dash or underscore characters'
+      :with => /^[a-zA-Z0-9_\-]+$/,
+      :message => 'can only contain letters, numbers, and the dash or underscore characters'
     }
     c.validate_password_field = false
 
@@ -114,6 +130,10 @@ class User < ActiveRecord::Base
     # c.validates_uniqueness_of_email_field_options = {
     #   :if => Proc.new { |user| false }
     # }
+    
+    c.validates_uniqueness_of_email_field_options = {
+      :message => "is in use by an existing account."
+    }
   end
   
   def self.global_moderators

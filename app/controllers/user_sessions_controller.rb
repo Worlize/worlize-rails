@@ -6,6 +6,8 @@ class UserSessionsController < ApplicationController
       session[:return_to] = params[:redirect_to]
     end
     
+    session.delete(:omniauth)
+    
     if Rails.env == 'development'
       Rails.logger.debug "Cookies:\n" + cookies.to_yaml
       Rails.logger.debug "Session:\n" + session.to_yaml

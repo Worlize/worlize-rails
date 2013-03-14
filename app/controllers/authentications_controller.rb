@@ -125,7 +125,7 @@ class AuthenticationsController < ApplicationController
     else
       Rails.logger.debug "Unable to find matching omniauth authentication"
       if omniauth['provider'] == 'facebook'
-        omniauth['info']['birthday'] = omniauth['extra']['raw_info']['birthday']
+        omniauth['info']['birthday'] = Date.strptime(omniauth['extra']['raw_info']['birthday'], '%m/%d/%Y')
       end
       session[:omniauth] = omniauth.except('extra')
       redirect_to new_user_url

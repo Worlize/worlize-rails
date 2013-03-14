@@ -2,14 +2,14 @@ class UsersController < ApplicationController
   before_filter :require_user, :except => [:new, :create, :validate_field, :birthday, :set_birthday]
   before_filter :require_user_without_storing_location, :only => [:birthday, :set_birthday]
 
-  layout 'login'
+  layout 'bootstrap'
 
   def new
     if current_user
       redirect_to dashboard_url and return
     end
 
-    @user = User.new
+    @user = User.new(:newsletter_optin => true)
     
     # Pre-fill as much information as we can from an omniauth login
     oa = session[:omniauth]
@@ -18,6 +18,7 @@ class UsersController < ApplicationController
         @user.first_name = oa['info']['first_name']
         @user.last_name = oa['info']['last_name']
         @user.username = oa['info']['nickname']
+        @user.login_name = oa['info']['nickname']
         @user.email = oa['info']['email']
         @email_autofilled = true
       elsif oa['provider'] == 'twitter'
@@ -28,7 +29,6 @@ class UsersController < ApplicationController
     else
       @require_password = true
     end
-
     
   end
   
