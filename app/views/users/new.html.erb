@@ -1,6 +1,6 @@
 <% title 'Sign Up' %>
 
-<style>
+<% content_for :extra_styles do %>
 .signup-form {
   width: 550px;
   padding: 19px 29px 29px;
@@ -28,7 +28,17 @@
 .signup-form .error p.help-block {
   color: #333;
 }
-</style>
+<% end %>
+
+<% content_for :page_script do %>
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+    $('form.signup-form').bind('submit', function() {
+      $('#signup-submit-button').attr('disabled','disabled');
+    });
+  });
+</script>
+<% end %>
 
 <%= simple_form_for @user, :html => { :class => 'form-horizontal signup-form' } do |f| %>
   <% if @user.new_record? %>
@@ -66,7 +76,7 @@
   <%= f.input :newsletter_optin, :label => false,
                                  :inline_label => "I'd like to receive occasional emails about Worlize updates." %>
   <div class="controls">
-    <%= f.submit "Let's Go!", :class => 'btn btn-primary btn-large' %>
+    <%= f.submit "Let's Go!", :class => 'btn btn-primary btn-large', :id => 'signup-submit-button' %>
     <br><br>
     <p>
       <small>
