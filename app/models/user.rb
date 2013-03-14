@@ -98,7 +98,9 @@ class User < ActiveRecord::Base
     }
   
   validates :username,
-    :uniqueness => true,
+    :uniqueness => {
+      :case_sensitive => false
+    },
     :format => {
       :with => /^[a-zA-Z0-9_\-\ ]+$/,
       :message => "can only contain letters, numbers, spaces, and the dash or underscore characters"
@@ -147,6 +149,7 @@ class User < ActiveRecord::Base
     # }
     
     c.validates_uniqueness_of_email_field_options = {
+      :case_sensitive => false,
       :message => "is already in use by an existing account."
     }
   end
