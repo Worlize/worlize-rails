@@ -27,6 +27,9 @@ class UsersController < ApplicationController
         @email_autofilled = false
       end
       @require_password = false
+      @user.skip_password_requirement = true
+      @user.valid?
+      @user.errors.delete(:accepted_tos)
     else
       @require_password = true
     end
