@@ -36,9 +36,9 @@ class ApplicationController < ActionController::Base
       unless current_user && current_user.admin?
         store_location
         if current_user
-          flash[:notice] = "You must have administrator privileges to access this page"
+          flash[:notice] = "You must have administrator privileges to access that page"
         else
-          flash[:notice] = "You must be logged in to access this page"
+          flash[:notice] = "You must be logged in to access that page"
         end
         redirect_to new_user_session_url
         return false
@@ -48,9 +48,9 @@ class ApplicationController < ActionController::Base
     def require_admin_without_storing_location
       unless current_user && current_user.admin?
         if current_user
-          flash[:notice] = "You must have administrator privileges to access this page"
+          flash[:notice] = "You must have administrator privileges to access that page"
         else
-          flash[:notice] = "You must be logged in to access this page"
+          flash[:notice] = "You must be logged in to access that page"
         end
         redirect_to new_user_session_url
         return false
@@ -62,7 +62,6 @@ class ApplicationController < ActionController::Base
         respond_to do |format|
           format.html do
             store_location
-            flash[:notice] = "You must be logged in."
             redirect_to new_user_session_url
           end
           format.json do
@@ -80,7 +79,6 @@ class ApplicationController < ActionController::Base
       unless current_user
         respond_to do |format|
           format.html do
-            flash[:notice] = "You must be logged in."
             redirect_to new_user_session_url
           end
           format.json do
@@ -115,7 +113,7 @@ class ApplicationController < ActionController::Base
     def require_no_user
       if current_user
         store_location
-        flash[:notice] = "You must be logged out to access this page"
+        flash[:notice] = "You must be logged out to access that page"
         redirect_to account_url
         return false
       end

@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="span6 offset3">
+    <h1>Password Reset</h1>
+    <p class="lead">Check your email to find your password reset link.  Emails may take a few minutes to arrive.</p>
+
+
+    <% if params[:email] %>
+    <p>If you do not receive your password reset email, make sure you entered the correct email address, exactly as you entered it when you originally signed up. Also, check your email spam folder – just in case.</p>
+    <% else %>
+    <p>If you do not receive your password reset email, make sure you entered the correct Login Name, exactly as you entered it when you originally signed up. Also, check your email spam folder – just in case.</p>
+    <p>Can't remember your login name?  <%= link_to 'Click here.', forgot_login_name_password_resets_path %></p>    
+    <% end %>
+    
+    <br>
+    <p class="lead">All set?  <%= link_to 'Log in again.', login_path %></p>
+  </div>
+</div>

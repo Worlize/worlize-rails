@@ -149,6 +149,13 @@ Worlize::Application.routes.draw do
     end
   end
   
+  resources :password_resets do
+    collection do
+      get :forgot_login_name, :as => 'forgot_login_name'
+      post :forgot_login_name, :action => 'forgot_login_name_submit'
+    end
+  end
+
   resource :preferences
   
   resources :gifts do

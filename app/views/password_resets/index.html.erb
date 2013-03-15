@@ -1,0 +1,31 @@
+<% content_for :extra_styles do %>
+.reset-password-form {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+<% end %>
+
+<div class="row">
+  <div class="span6 offset3">
+    <h1>Reset Password</h1>
+    <p>To reset your password, enter your Login Name and click Submit.  We will send you an email containing a link that will allow you to choose a new password for your account.</p>
+    <p>Can't remember your login name? <%= link_to 'Click here.', forgot_login_name_password_resets_path %></p>
+
+    <%= form_tag password_resets_path, :method => :post, :class => 'reset-password-form form-horizontal' do %>
+      <div class="control-group">
+        <%= label_tag :login_name, 'Login Name', :class => 'control-label' %>
+        <div class="controls">
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-user"></i></span>
+            <%= text_field_tag :login_name, nil, :class => 'span2' %>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <%= submit_tag "Submit", :class => 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

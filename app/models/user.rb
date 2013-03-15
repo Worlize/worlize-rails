@@ -99,7 +99,8 @@ class User < ActiveRecord::Base
   
   validates :username,
     :uniqueness => {
-      :case_sensitive => false
+      :case_sensitive => false, 
+      :if => Proc.new { self.username_changed? }
     },
     :length => {
       :in => 3..36
@@ -153,7 +154,8 @@ class User < ActiveRecord::Base
     
     c.validates_uniqueness_of_email_field_options = {
       :case_sensitive => false,
-      :message => "is already in use by an existing account."
+      :message => "is already in use by an existing account.",
+      :if => Proc.new { self.email_changed? }
     }
   end
   

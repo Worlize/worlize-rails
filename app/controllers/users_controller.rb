@@ -298,7 +298,7 @@ class UsersController < ApplicationController
     else
       render :json => {
         :success => false,
-        :message => current_user.errors.map { |k,v| "- #{k.to_s.humanize} #{v}" }.join(".\n")
+        :message => current_user.errors.full_messages.map { |msg| "#{msg}" }.join(".\n")
       }
     end
   end
