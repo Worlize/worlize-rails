@@ -307,6 +307,8 @@ Worlize::Application.routes.draw do
   resources :virtual_currency_products do
   end
 
+  match '/user_session' => 'user_sessions#new', :via => :get
+
   resource :user_session do
     member do
       get :vanilla_sso
