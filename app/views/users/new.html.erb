@@ -79,6 +79,7 @@
                                  :inline_label => "I'd like to receive occasional emails about Worlize updates." %>
   <div class="controls">
     <%= f.submit "Let's Go!", :class => 'btn btn-primary btn-large', :id => 'signup-submit-button' %>
+    <%= link_to "Cancel", login_path, :class => 'btn btn-large' %>
     <br><br>
   </div>
 <% end %>
