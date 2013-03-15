@@ -18,7 +18,10 @@ Worlize::Application.configure do
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
-
+  
+  # Configure default url generation options for mailers
+  config.action_mailer.default_url_options = { :host => 'turtle.office.worlize.com', :protocol => 'https' }
+  
   # Raise exception on mass assignment protection for Active Record models
   config.active_record.mass_assignment_sanitizer = :strict
   

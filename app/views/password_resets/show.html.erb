@@ -1,0 +1,16 @@
+<%= title "Password Reset" %>
+
+<div class="row">
+  <div class="span6 offset3">
+    <h1>Reset Password</h1>
+    <p class="lead">Login Name: <b><%= @user.login_name %></b></p>
+    <p>Choose a new password for your account.</p>
+    <%= simple_form_for @user, :url => password_reset_path(@user.perishable_token), :html => { :method => 'put', :class => 'form-horizontal password-reset-form' } do |f| %>
+      <%= f.input :password, :required => @require_password %>
+      <%= f.input :password_confirmation, :required => @require_password %>
+      <div class="controls">
+        <%= f.submit "Reset Password", :class => 'btn btn-primary btn-large', :id => 'reset-password-submit-button' %>
+      </div>
+    <% end %>
+  </div>
+</div>

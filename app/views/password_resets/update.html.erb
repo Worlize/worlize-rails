@@ -1,0 +1,12 @@
+<%= title "Password Reset" %>
+
+<div class="row">
+  <div class="span6 offset3">
+    <h1>Reset Password</h1>
+    <p class="lead text-success">You're all set!</p>
+    <p>Your password was successfully changed.</p>
+    <p>Login Name: <b><%= @user.login_name %></b></p>
+    <br>
+    <p class="lead">Ready to go? <%= link_to "Log in again.", login_path %></p>
+  </div>
+</div>

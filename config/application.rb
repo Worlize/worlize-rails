@@ -44,6 +44,9 @@ module Worlize
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
 
+    # Configure default url generation options for mailers
+    config.action_mailer.default_url_options = { :host => 'www.worlize.com', :protocol => 'https' }
+
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password, :password_confirmation]
     
