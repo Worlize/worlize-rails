@@ -1,6 +1,6 @@
 <% content_for :extra_styles do %>
-.signup-form p.help-block,
-.signup-form .error p.help-block {
+.confirm-login-form p.help-block,
+.confirm-login-form .error p.help-block {
   color: #333;
 }
 <% end %>
@@ -9,24 +9,24 @@
   <div class="span6 offset3">
     <h1>Hold Up!</h1>
     <p class="lead">It's <b>extremely important</b> that you make sure this is correct!</p>
-    <p>We've recently separated your user name into a <b>Screen Name</b> and a <b>Login Name</b>.  Previously, you had to use your <b><i>exact</i></b> user name to log in, which made it difficult to remember for people whose user names were long, or were changed often.</p>
+    <p>We've recently separated your user name into a <b>Login Name</b> and a <b>Screen Name</b>.  Previously, you had to use your <b><i>exact</i></b> user name to log in.  This made it difficult to remember if your user name was long, or you changed it often.</p>
     <p>From now on, <i>you will use your </i><b>Login Name</b><i> to log in</i>, while your <b>Screen Name</b> is <i>how people will know you inside Worlize.</i></p>
     <ul>
-      <li>Your <b>Screen Name</b> may contain spaces, and may be changed once per month.</li>
       <li>Your <b>Login Name</b> must <b>not</b> contain spaces, and <b>may never be changed</b>.</li>
-      <li>If you use Facebook or Twitter to log in, you may continue to do so.</li>
+      <li>Your <b>Screen Name</b> may contain spaces, and may be changed once per month.</li>
     </ul>
-    <p class="lead">Please make <b>absolutely certain</b> that your Screen Name and Login Name are correct, then click Continue.</p>
+    <p>If you use Facebook or Twitter to log in, you may continue to do so.  However, you still need to choose a <b>Login Name</b> and <b>Screen Name</b>.</p>
+    <p class="lead">Please make <b>absolutely certain</b> that your Screen Name and Login Name are correct, before clicking <i>Continue</i>.</p>
     <br>
-    <%= simple_form_for @user, :url => confirm_login_name_path, :html => { :class => 'form-horizontal signup-form' } do |f| %>
-      <%= f.input :username, :required => true,
-                             :hint => "This is the name <b>people will see</b> inside Worlize.",
-                             :label => "Screen Name" %>
+    <%= simple_form_for @user, :url => confirm_login_name_path, :html => { :class => 'form-horizontal confirm-login-form' } do |f| %>
       <%= f.input :login_name, :required => true,
                                :hint => "This is the name you will use to <b>log in to your account</b>.",
                                :label => "Login Name" %>
+      <%= f.input :username, :required => true,
+                             :hint => "This is the name <b>people will see</b> inside Worlize.",
+                             :label => "Screen Name" %>
       <div class="controls">
-        <%= f.submit "Continue", :class => 'btn btn-primary btn-large', :id => 'signup-submit-button' %>
+        <%= f.submit "Continue", :class => 'btn btn-primary btn-large', :id => 'confirm-login-submit-button' %>
       </div>
     <% end %>
   </div>

@@ -93,15 +93,17 @@ class ApplicationController < ActionController::Base
     end
     
     def check_user_migration_required
-      require_birthday_set
-      require_login_name_confirmed
+      return false unless require_birthday_set
+      return false unless require_login_name_confirmed
     end
     
     def require_login_name_confirmed
       if current_user.state?(:login_name_unconfirmed)
         store_location
         redirect_to confirm_login_name_path
+        return false
       end
+      return true
     end
 
     def require_birthday_set
@@ -120,6 +122,7 @@ class ApplicationController < ActionController::Base
         end
         return false
       end
+      return true
     end
 
     def require_no_user

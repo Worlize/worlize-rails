@@ -1,0 +1,28 @@
+<% content_for :extra_styles do %>
+.confirm-login-form p.help-block,
+.confirm-login-form .error p.help-block {
+  color: #333;
+}
+<% end %>
+
+<div class="row">
+  <div class="span6 offset3">
+    <h1>Confirm</h1>
+    <p class="lead">Are these correct? You will not be able to change your <b>Login Name</b> after you confirm.</p>
+    <p>If you want to make any changes, you must do so now.</p>
+    <br>
+    <%= simple_form_for @user, :url => confirm_login_name_path, :html => { :class => 'form-horizontal confirm-login-form' } do |f| %>
+      <%= hidden_field_tag :confirmed, '1' %>
+      <%= f.input :login_name, :required => true,
+                               :hint => "This is the name you will use to <b>log in to your account</b>.",
+                               :label => "Login Name" %>
+      <%= f.input :username, :required => true,
+                             :hint => "This is the name <b>people will see</b> inside Worlize.",
+                             :label => "Screen Name" %>
+      <div class="controls">
+        <%= f.submit "Confirm", :class => 'btn btn-primary btn-large', :id => 'confirm-login-submit-button' %>
+      </div>
+    <% end %>
+  </div>
+</div>
+

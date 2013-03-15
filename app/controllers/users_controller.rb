@@ -230,17 +230,21 @@ class UsersController < ApplicationController
     end
     
     @user = current_user
-    success = @user.update_attributes({
-      :username => params[:user][:username],
-      :login_name => params[:user][:login_name]
-    })
     
-    if success
-      @user.confirm_login_name!
-      redirect_back_or_default(root_url)
+    @user.username = params[:user][:username]
+    @user.login_name = params[:user][:login_name]
+    
+    if params[:confirmed]
+      if @user.save
+        @user.confirm_login_name!
+        redirect_back_or_default(root_url)
+        return
+      end
+    elsif @user.valid?
+      render :action => 'double_confirm_login'
       return
     end
-    
+        
     render :action => 'confirm_login' and return
   end
   
