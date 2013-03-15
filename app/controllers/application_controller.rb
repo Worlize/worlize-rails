@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
       return @current_user if defined?(@current_user)
       @current_user = current_user_session && current_user_session.record
     end
-    
+        
     def require_admin
       unless current_user && current_user.admin?
         store_location
@@ -92,6 +92,18 @@ class ApplicationController < ActionController::Base
       end
     end
     
+    def check_user_migration_required
+      require_birthday_set
+      require_login_name_confirmed
+    end
+    
+    def require_login_name_confirmed
+      if current_user.state?(:login_name_unconfirmed)
+        store_location
+        redirect_to confirm_login_name_path
+      end
+    end
+
     def require_birthday_set
       if current_user && (current_user.birthday.nil? || current_user.birthday > 13.years.ago.to_date)
         respond_to do |format|

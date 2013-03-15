@@ -139,7 +139,7 @@ class User < ActiveRecord::Base
   acts_as_authentic do |c|
     c.login_field = 'login_name'
     c.validates_length_of_login_field_options = {
-      :in => 3..50
+      :in => 3..36
     }
     c.validates_format_of_login_field_options = {
       :with => /^[a-zA-Z0-9_\-]+$/,
@@ -1060,7 +1060,7 @@ class User < ActiveRecord::Base
   end
   
   def username_cannot_have_been_changed_in_the_last_month
-    if self.username_changed?
+    if !self.state?(:login_name_unconfirmed) && self.username_changed?
       if self.username_changed_at != nil && self.username_changed_at > 30.days.ago
         errors.add(:username, "can only be changed once every 30 days.");
       end

@@ -38,6 +38,9 @@ Worlize::Application.routes.draw do
   # Require data updates from existing users...
   match '/birthday_required' => 'users#birthday', :via => :get, :as => :birthday_required
   match '/birthday_required' => 'users#set_birthday', :via => :put
+  match '/confirm_login_name' => 'users#confirm_login', :via => :get, :as => :confirm_login_name
+  match '/confirm_login_name' => 'users#confirm_login_save', :via => :put
+  
   
   resources :authentications do
     collection do
