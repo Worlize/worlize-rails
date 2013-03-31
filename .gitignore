@@ -12,4 +12,3 @@ doc/**/*
 config/config.yml
 config/database.yml
 .sass_cache/
-public/assets/
