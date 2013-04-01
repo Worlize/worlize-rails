@@ -35,7 +35,7 @@
   <%= yield :extra_head_items %>
  
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
-  <script src="/javascripts/libs/modernizr-1.6.min.js"></script>
+  <%= javascript_include_tag "modernizr" %>
     
   <script>
   <% if current_user %>
