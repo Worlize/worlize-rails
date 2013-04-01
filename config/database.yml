@@ -21,6 +21,6 @@ production:
   adapter: mysql2
   encoding: utf8
   database: worlize_development
-  username: worlize
-  password: abcdefg
+  username: root
+  password:
   socket: /tmp/mysql.sock
