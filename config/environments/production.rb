@@ -29,7 +29,7 @@ Worlize::Application.configure do
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
-  config.serve_static_assets = false
+  config.serve_static_assets = true
   
   # Compress JavaScript and CSS
   config.assets.compress = true
@@ -39,6 +39,9 @@ Worlize::Application.configure do
 
   # Generate digests for assets URLs
   config.assets.digest = true
+  
+  # Don't fallback to assets pipeline if a precompiled asset is missed
+  config.assets.initialize_on_precompile = false
   
   # Add flash client path
   config.assets.paths << Rails.root.join('lib', 'flash_client')
