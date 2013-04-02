@@ -11,4 +11,3 @@
 //= require script
 //= require jquery.jqplot
 //= require plugins/jqplot.dateAxisRenderer
-//= require_tree ./admin

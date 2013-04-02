@@ -67,5 +67,15 @@ module Worlize
     
     # Precompile flash assets
     config.assets.precompile += %w( .swf .swc .swz )
+    
+    # Add extra manifests for precompilation
+    config.assets.precompile += [
+      /admin.(css|js)$/,
+      /bootstrap.(css|js)$/,
+      /enter.(css|js)$/,
+      /facebook_canvas.(css|js)$/,
+      /marketplace.(css|js)$/,
+      /plain.(css|js)$/
+    ]
   end
 end

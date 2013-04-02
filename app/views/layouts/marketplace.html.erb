@@ -125,11 +125,6 @@
 
   <%= yield :page_script %>
   
-  <!--[if lt IE 7 ]>
-    <%= javascript_include_tag 'dd_belatedpng' %>
-    <script> DD_belatedPNG.fix('img, .png_bg'); //fix any <img> or .png_bg background-images </script>
-  <![endif]-->
-
   <%- if Rails.env == 'production' -%>
     <script type="text/javascript">
 
