@@ -49,10 +49,11 @@ gem 'unicorn', '~> 4.3.1'
 
 group :assets do
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
+  gem 'sprockets'
   gem 'therubyracer'
   # gem 'sass-rails', '~> 3.2.6'
   gem 'less-rails', '~> 2.3.2'
-  gem 'coffee-rails', '~> 3.2.2'
+  # gem 'coffee-rails', '~> 3.2.2'
   gem 'uglifier', '~> 1.3.0'
   gem 'twitter-bootstrap-rails'
   gem 'modernizr-rails'
