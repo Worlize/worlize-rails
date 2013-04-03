@@ -40,9 +40,6 @@ Worlize::Application.configure do
   # Generate digests for assets URLs
   config.assets.digest = true
   
-  # Don't fallback to assets pipeline if a precompiled asset is missed
-  config.assets.initialize_on_precompile = false
-  
   # Add flash client path
   config.assets.paths << Rails.root.join('lib', 'flash_client')
   

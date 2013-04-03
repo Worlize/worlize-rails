@@ -68,6 +68,9 @@ module Worlize
     # Precompile flash assets
     config.assets.precompile += %w( .swf .swc .swz )
     
+    # Don't initialize full rails app during precompilation
+    config.assets.initialize_on_precompile = false
+
     # Add extra manifests for precompilation
     config.assets.precompile += [
       /admin.(css|js)$/,
