@@ -40,6 +40,9 @@ Worlize::Application.configure do
   # Generate digests for assets URLs
   config.assets.digest = true
   
+  # Use a manifest path that's checked into git
+  config.assets.manifest = Rails.root.join('config')
+  
   # Add flash client path
   config.assets.paths << Rails.root.join('lib', 'flash_client')
   
