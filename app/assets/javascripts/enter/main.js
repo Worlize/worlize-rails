@@ -367,7 +367,19 @@ function hideShim() {
         hasPermission: function() {
             if (!this.isSupported()) { return false; }
             if (window.Notification) {
-                return Notification.permissionLevel() === 'granted';
+                if ("permission" in Notification) {
+                    // Chrome newer than Chrome 26?
+                    return Notification.permission === 'granted';
+                }
+                else if ("permissionLevel" in Notification) {
+                    return Notification.permissionLevel() === 'granted';
+                }
+                else if (window.webkitNotifications) {
+                    // Workaround for chrome bug:
+                    // https://code.google.com/p/chromium/issues/detail?id=163226
+                    // We fall back to the old API if available.
+                    return webkitNotifications.checkPermission() === 0;
+                }
             }
             else if (window.webkitNotifications) {
                 return webkitNotifications.checkPermission() === 0;
@@ -377,7 +389,19 @@ function hideShim() {
         isPermissionDenied: function() {
             if (!this.isSupported()) { return true; }
             if (window.Notification) {
-                return Notification.permissionLevel() === 'denied';
+                if ("permission" in Notification) {
+                    // Chrome newer than Chrome 26?
+                    return Notification.permission === 'denied';
+                }
+                else if ("permissionLevel" in Notification) {
+                    return Notification.permissionLevel() === 'denied';
+                }
+                else if (window.webkitNotifications) {
+                    // Workaround for chrome bug:
+                    // https://code.google.com/p/chromium/issues/detail?id=163226
+                    // We fall back to the old API if available.
+                    return webkitNotifications.checkPermission() === 2; // 2 == PERMISSION_DENIED
+                }
             }
             else if (window.webkitNotifications) {
                 return webkitNotifications.checkPermission() === 2; // 2 == PERMISSION_DENIED

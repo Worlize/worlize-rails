@@ -5,6 +5,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Worlize</title>
 
+        <%= javascript_include_tag "modernizr" %>
+
         <style type="text/css" media="screen"> 
             html, body  { height:100%; overflow:hidden; }
             body { margin:0; padding:0;
@@ -25,6 +27,9 @@
             top.location.href=top.location.href;
           }
         </script>
+
+  	    <!-- Javascript at the bottom for fast page loading -->
+  	    <%= javascript_include_tag "enter" %>
     </head>
     <body>
       <div id="fb-root"></div>
@@ -143,9 +148,6 @@
 			    11.1.0 or greater is installed. 
 		    </p>
       </div>
-      
-	    <!-- Javascript at the bottom for fast page loading -->
-	    <%= javascript_include_tag "enter" %>
       
       <div id="loading-overlay-container">
         <div id="loading-overlay">
