@@ -93,8 +93,8 @@ class ApplicationController < ActionController::Base
     end
     
     def check_user_migration_required
-      return false unless require_birthday_set
       return false unless require_login_name_confirmed
+      return false unless require_birthday_set
     end
     
     def require_login_name_confirmed

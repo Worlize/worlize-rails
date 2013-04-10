@@ -68,7 +68,10 @@ class User < ActiveRecord::Base
   validates :birthday, :timeliness => {
     :before => :thirteen_years_ago,
     :type => :date,
-    :if => Proc.new { !self.state?(:login_name_unconfirmed) }
+    :if => Proc.new {
+      !self.state?(:login_name_unconfirmed) &&
+      !self.state_was == 'login_name_unconfirmed'
+    }
   }
   
   validates :avatar_slots, :numericality => {
