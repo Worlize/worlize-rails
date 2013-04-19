@@ -219,8 +219,8 @@ marketplace.js: marketplace-a4e54c6a66361d6b6e57b030688147c6.js
 marketplace/index.js: marketplace-a4e54c6a66361d6b6e57b030688147c6.js
 marketplace/marketplace.js: marketplace/marketplace-f88375d3b688d955c561c9fd0d17686d.js
 marketplace/marketplace/index.js: marketplace/marketplace-f88375d3b688d955c561c9fd0d17686d.js
-admin.css: admin-6b54f8eaa91a5bf2df721ffb40d8d74e.css
-admin/index.css: admin-6b54f8eaa91a5bf2df721ffb40d8d74e.css
+admin.css: admin-f2167243f92fb805ffae90d86539f1ea.css
+admin/index.css: admin-f2167243f92fb805ffae90d86539f1ea.css
 application.css: application-ff881480cbf58c8d26d78091d0db627c.css
 application/index.css: application-ff881480cbf58c8d26d78091d0db627c.css
 bootstrap.css: bootstrap-d754c56db3f5b6065cc5309b8fb61110.css
