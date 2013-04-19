@@ -41,6 +41,7 @@ class User < ActiveRecord::Base
   has_many :event_comments
   
   attr_accessor :skip_password_requirement
+  attr_accessor :skip_login_name_validation
   
   attr_accessible :username,
                   :login_name,
@@ -156,7 +157,8 @@ class User < ActiveRecord::Base
     }
     c.validates_format_of_login_field_options = {
       :with => /^[a-zA-Z0-9_\-]+$/,
-      :message => 'can only contain letters, numbers, and the dash or underscore characters'
+      :message => 'can only contain letters, numbers, and the dash or underscore characters',
+      :if => Proc.new { !self.skip_login_name_validation }
     }
     c.validate_password_field = false
 

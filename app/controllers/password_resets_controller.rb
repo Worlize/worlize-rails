@@ -12,10 +12,11 @@ class PasswordResetsController < ApplicationController
   end
   
   def show
-    
   end
   
   def update
+    @user.skip_login_name_validation = true
+    
     @success = @user.update_attributes({
       :password => params[:user][:password],
       :password_confirmation => params[:user][:password_confirmation]
