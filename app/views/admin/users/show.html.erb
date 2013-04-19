@@ -1,9 +1,67 @@
 <h1><%= @user.username %></h1>
-<p>guid: <%= @user.guid %></p>
-<p>User is <strong><%= @user.online? ? 'online' : 'offline' %></strong>.</p>
-<p><%= @user.total_time_spent_online_hms_long %> spent online</p>
-<p>Login Count: <%= @user.login_count %></p>
-<p>Failed Login Count: <%= @user.failed_login_count %></p><br>
+<table>
+  <tr>
+    <td>Screen Name:</td>
+    <td><%= @user.username %></td>
+  </tr>
+  <tr>
+    <td>Login Name:</td>
+    <td><%= @user.login_name %></td>
+  </tr>
+  <tr>
+    <td>Guid:</td>
+    <td><%= @user.guid %></td>
+  </tr>
+  <tr>
+    <td>Status:</td>
+    <td><strong><%= @user.online? ? 'online' : 'offline' %></strong></td>
+  </tr>
+  <tr>
+    <td>Time Spent:</td>
+    <td><%= @user.total_time_spent_online_hms_long %></td>
+  </tr>
+  <tr>
+    <td>Login Count:</td>
+    <td><%= @user.login_count %></td>
+  </tr>
+  <tr>
+    <td>Failed Logins:</td>
+    <td><%= @user.failed_login_count %></td>
+  </tr>
+  <tr>
+    <td>Current Login:</td>
+    <td><%= @user.current_login_at.strftime("%Y-%m-%d %I:%M%p") %></td>
+  </tr>
+  <tr>
+    <td>Prev Login:</td>
+    <td><%= @user.last_login_at.strftime("%Y-%m-%d %I:%M%p") %></td>
+  </tr>
+  <tr>
+    <td>Current Login IP:</td>
+    <td><%= @user.current_login_ip %>&nbsp;
+      <form action="http://whois.arin.net/ui/query.do" method="post" target="_BLANK" style="display: inline;">
+        <input type="hidden" name="xslt" value="http://whois.arin.net/ui/arin.xsl">
+        <input type="hidden" name="flushCache" value="false">
+        <input type="hidden" name="queryinput" value="<%= @user.current_login_ip %>">
+        <input type="hidden" name="whoisSubmitButton" value=" ">
+        <input type="submit" value="Lookup IP">
+      </form>
+    </td>
+  </tr>
+  <tr>
+    <td>Last Login IP:</td>
+    <td><%= @user.last_login_ip %>&nbsp;
+      <form action="http://whois.arin.net/ui/query.do" method="post" target="_BLANK" style="display: inline;">
+        <input type="hidden" name="xslt" value="http://whois.arin.net/ui/arin.xsl">
+        <input type="hidden" name="flushCache" value="false">
+        <input type="hidden" name="queryinput" value="<%= @user.last_login_ip %>">
+        <input type="hidden" name="whoisSubmitButton" value=" ">
+        <input type="submit" value="Lookup IP">
+      </form>
+    </td>
+  </tr>
+</table>
+<br>
 
 <% if @user.active? %>
   <%= button_to "Suspend Account", admin_user_path(@user), :method => :delete, :confirm => "Are you sure you want to suspend this account?" %><br>

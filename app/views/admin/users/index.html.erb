@@ -11,8 +11,8 @@
 <table id="user-results-table" class="datagrid" width="100%">
   <tr>
     <th class="online-column">Online</th>
-    <th class="username-column">
-      <%= link_to 'Username', params.merge(
+    <th class="sn-column">
+      <%= link_to 'Screen Name', params.merge(
             :sort => 'username',
             :sort_direction => params[:sort] == 'username' ? @opposite_sort_direction : params[:sort_direction]
           ) %>
@@ -21,6 +21,7 @@
         <% if params[:sort_direction] == 'desc' %>▼<% end %>
       <% end %>
     </th>
+    <th class="login-column">Login</th>
     <th class="time-spent-column">Total Time</th>
     <th class="email-column">Email</th>
     <th class="time-column">
@@ -44,7 +45,8 @@
   %>
   <tr class="<%= row_classes.join(' ') %>">
     <td class="online-column"><%= user.online? ? "✓" : "" %></td>
-    <td class="username-column"><%= link_to user.username, admin_user_path(user) %></td>
+    <td class="sn-column"><%= link_to user.username, admin_user_path(user) %></td>
+    <td class="login-column"><%= user.login_name %></td>
     <td class="time-spent-column"><%= user.total_time_spent_online_hms %></td>
     <td class="email-column"><%= user.email %></td>
     <td class="time-column"><%= user.created_at.strftime("%Y-%m-%d %I:%M%p") %></td>
