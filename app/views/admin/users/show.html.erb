@@ -10,7 +10,13 @@
   </tr>
   <tr>
     <td>Birthday:</td>
-    <td><%= @user.birthday.strftime('%b. %d, %Y') %></td>
+    <td>
+      <% if @user.birthday.nil? %>
+        (Birthday not set)
+      <% else %>
+        <%= @user.birthday.strftime('%b. %d, %Y') %> (Age: <%= @user.age %>)
+      <% end %>
+    </td>
   </tr>
   <tr>
     <td>Guid:</td>

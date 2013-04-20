@@ -286,6 +286,13 @@ class User < ActiveRecord::Base
     redis.zscore('userTime', self.guid).to_i
   end
   
+  def age
+    return 0 if self.birthday.nil?
+    dob = self.birthday
+    now = Time.now.utc.to_date
+    now.year - dob.year - ((now.month > dob.month || (now.month == dob.month && now.day >= dob.day)) ? 0 : 1)
+  end
+  
   def is_global_moderator?
     redis = Worlize::RedisConnectionPool.get_client(:room_definitions)
     redis.sismember("global_moderators", self.guid)
