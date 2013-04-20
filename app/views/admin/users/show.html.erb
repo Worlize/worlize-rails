@@ -9,6 +9,10 @@
     <td><%= @user.login_name %></td>
   </tr>
   <tr>
+    <td>Birthday:</td>
+    <td><%= @user.birthday.strftime('%b. %d, %Y') %></td>
+  </tr>
+  <tr>
     <td>Guid:</td>
     <td><%= @user.guid %></td>
   </tr>
