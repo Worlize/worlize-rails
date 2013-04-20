@@ -8,6 +8,14 @@ class UserRestriction < ActiveRecord::Base
     where(['expires_at > ?', Time.now])
   }
   
+  scope :inactive, lambda {
+    where(['expires_at <= ?', Time.now])
+  }
+  
+  scope :global, lambda {
+    where(['global = ?', true])
+  }
+  
   after_save :update_redis_cache
   after_save :publish_notification
   after_destroy :update_redis_cache
@@ -46,6 +54,10 @@ class UserRestriction < ActiveRecord::Base
       # :world => world.nil? ? nil : world.basic_hash_for_api,
       :global => global?
     }
+  end
+  
+  def active?
+    self.expires_at > Time.now
   end
   
   private

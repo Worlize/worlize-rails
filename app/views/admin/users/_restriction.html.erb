@@ -1,0 +1,12 @@
+<tr class="<%= cycle('even', 'odd') %>">
+  <td><%= restriction.name %></td>
+  <td><%= restriction.global? ? "✓" : '' %></td>
+  <td><%= distance_of_time_in_words Time.now, restriction.expires_at %> <%= Time.now <= restriction.expires_at ? '' : 'ago' %></td>
+  <td><%= link_to restriction.created_by.username, admin_user_path(restriction.created_by) %></td>
+  <td><%= restriction.created_at.strftime("%Y-%m-%d %I:%M%p") %></td>
+  <td><%= link_to 'Detail', admin_user_restriction_path(restriction) %>
+    <% if restriction.active? && current_user.permissions.include?('can_reduce_restriction_time') %>
+      | <%= link_to 'Cancel', admin_user_restriction_path(restriction), :method => 'delete', :confirm => "Are you sure you want to lift this restriction?" %>
+    <% end %>
+  </td>
+</tr>

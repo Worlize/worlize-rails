@@ -57,6 +57,23 @@ class ApplicationController < ActionController::Base
       end
     end
     
+    def require_global_moderator_permission
+      if current_user
+        return true if current_user.admin?
+        perms = current_user.permissions
+        return true if perms.include?('can_moderate_globally') && perms.include?('can_access_moderation_dialog')
+      end
+
+      store_location
+      if current_user
+        flash[:notice] = "You must have global moderator privileges to access that page"
+      else
+        flash[:notice] = "You must be logged in to access that page"
+      end
+      redirect_to new_user_session_url
+      return false
+    end
+    
     def require_user
       unless current_user
         respond_to do |format|

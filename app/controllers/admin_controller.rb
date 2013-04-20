@@ -1,7 +1,7 @@
 class AdminController < ApplicationController
   layout 'admin'
   
-  before_filter :require_admin
+  before_filter :require_global_moderator_permission
 
   def index
     @user_count = User.count;

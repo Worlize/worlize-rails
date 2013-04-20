@@ -207,10 +207,13 @@ Worlize::Application.routes.draw do
         post 'remove_from_public_worlds'
         post 'reactivate'
         get 'transactions'
+        get 'restrictions'
       end
       resource :permissions do
       end
     end
+    
+    resources :user_restrictions
     
     resources :moderators, :only => [:index]
     

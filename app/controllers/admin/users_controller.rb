@@ -1,7 +1,8 @@
 class Admin::UsersController < ApplicationController
   layout 'admin'
   
-  before_filter :require_admin, :except => ['login_as_user']
+  before_filter :require_admin, :except => ['login_as_user','show','index','restrictions']
+  before_filter :require_global_moderator_permission, :only => ['show','index','restrictions']
   before_filter :require_admin_without_storing_location, :only => ['login_as_user']
   
   def index
@@ -15,7 +16,7 @@ class Admin::UsersController < ApplicationController
         @users = User.where(['username LIKE ? OR email LIKE ?', query, query])
       end
     else
-      @users = User.where('1=1') # start with a base no-op query
+      @users = User.scoped
     end
     
     # Apply pagination
@@ -59,6 +60,11 @@ class Admin::UsersController < ApplicationController
       @coins_balance += t.coins_amount unless t.coins_amount.nil?
       @bucks_balance += t.bucks_amount unless t.bucks_amount.nil?
     end
+  end
+  
+  def restrictions
+    @user ||= User.find(params[:id])
+    @restrictions = @user.user_restrictions.order('`user_restrictions`.`created_at` DESC')
   end
   
   def update

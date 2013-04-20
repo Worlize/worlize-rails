@@ -1,0 +1,33 @@
+<h1>Global User Restrictions</h1>
+
+<h2>Currenctly Active Restrictions</h2>
+<table width="100%" class="datagrid">
+  <tr>
+    <th>Kind</th>
+    <th>Global?</th>
+    <th>Expires in</th>
+    <th>Created By</th>
+    <th>Created At</th>
+    <th>&nbsp;</th>
+  </tr>
+  <% for restriction in @restrictions.active %>
+    <%= render :partial => 'restriction', :object => restriction %>
+  <% end %>
+</table>
+
+<br>
+
+<h2>Expired Restrictions</h2>
+<table width="100%" class="datagrid">
+  <tr>
+    <th>Kind</th>
+    <th>Global?</th>
+    <th>Expires in</th>
+    <th>Created By</th>
+    <th>Created At</th>
+    <th>&nbsp;</th>
+  </tr>
+  <% for restriction in @restrictions.inactive %>
+    <%= render :partial => 'restriction', :object => restriction %>
+  <% end %>
+</table>

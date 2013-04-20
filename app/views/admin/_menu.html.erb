@@ -1,16 +1,25 @@
+<% is_admin = current_user.admin? %>
+<% is_gm = is_admin || current_user.permissions.include?('can_moderate_globally') && current_user.permissions.include?('can_access_moderation_dialog') %>
+
 <nav id="adminNav">
   <ul>
     <li class="mainCategory">
       General
       <ul>
+        <% if is_gm %>
         <li><%= link_to "Users", admin_users_path %></li>
         <li><%= link_to "Global Moderator List", admin_moderators_path %></li>
+        <li><%= link_to "Global Restrictions", admin_user_restrictions_path %></li>
+        <% end %>
+        <% if is_admin %>
         <li><%= link_to "Create New User", new_admin_user_path %></li>
         <li><%= link_to "Beta Registrations", admin_beta_registrations_path %></li>
         <li><%= link_to "Status", admin_status_path %></li>
         <li><%= link_to "Manage", admin_management_path %></li>
+        <% end %>
       </ul>
     </li>
+    <% if is_admin %>
     <li class="mainCategory">
       Marketplace
       <ul>
@@ -39,6 +48,7 @@
         <li><%= link_to "Flash Client Errors", admin_client_errors_path %></li>
       </ul>
     </li>
+    <% end %>
   </ul>
   <div style="clear:both;"></div>
 </nav>

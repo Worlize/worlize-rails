@@ -16,21 +16,15 @@
   <title>Worlize - Admin</title>
   <meta name="description" content="Worlize Admin">
 
+  <%= csrf_meta_tag %>
+  
   <!--  Mobile viewport optimized: j.mp/bplateviewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <%= javascript_include_tag "modernizr" %>
 
   <!-- CSS : implied media="all" -->
   <%= stylesheet_link_tag "admin" %>
-  <%= javascript_include_tag "admin" %>
-  
-<!--
-  <script src="/javascripts/jqplot/jquery.jqplot.min.js" type="text/javascript" charset="utf-8"></script>
-  <script src="/javascripts/jqplot/plugins/jqplot.dateAxisRenderer.min.js" type="text/javascript" charset="utf-8"></script>
-  <link rel="stylesheet" href="/javascripts/jqplot/jquery.jqplot.min.css" type="text/css" title="JQPlot Stylesheet" charset="utf-8">
--->
-  
-  <%= csrf_meta_tag %>
+  <%= javascript_include_tag "admin" %>  
 </head>
 <body>
   <div id="fb-root"></div>

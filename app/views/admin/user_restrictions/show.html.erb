@@ -1,0 +1,34 @@
+<h1>Restriction Detail</h1>
+
+<table>
+  <tr>
+    <td>User:</td>
+    <td><%= link_to @restriction.user.username, admin_user_path(@restriction.user) %></td>
+  </tr>
+  <tr>
+    <td>Kind:</td>
+    <td><%= @restriction.name %></td>
+  </tr>
+  <tr>
+    <td>Expires:</td>
+    <td><%= @restriction.expires_at.strftime("%Y-%m-%d %I:%M%p") %> -
+        <%= distance_of_time_in_words Time.now, @restriction.expires_at %>
+        <%= Time.now <= @restriction.expires_at ? 'from now' : 'ago' %>
+    </td>
+  </tr>
+  <tr>
+    <td>Originally Created:</td>
+    <td>by <%= link_to @restriction.created_by.username, admin_user_path(@restriction.created_by) %>
+      at <%= @restriction.created_at.strftime("%Y-%m-%d %I:%M%p %Z") %> (<%= time_ago_in_words(@restriction.created_at) %> ago)</td>
+  </tr>
+  <tr>
+    <td>Last Updated:</td>
+    <td>by <%= link_to @restriction.updated_by.username, admin_user_path(@restriction.updated_by) %>
+      at <%= @restriction.updated_at.strftime("%Y-%m-%d %I:%M%p %Z") %> (<%= time_ago_in_words(@restriction.updated_at) %> ago)</td>
+  </tr>
+</table>
+<br>
+
+<% if @restriction.active? %>
+<%= button_to "Cancel Restriction", admin_user_restriction_path(@restriction), :method => 'delete', :confirm => "Are you sure you want to lift this restriction?" %>
+<% end %>
