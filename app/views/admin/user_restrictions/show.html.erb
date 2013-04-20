@@ -10,6 +10,16 @@
     <td><%= @restriction.name %></td>
   </tr>
   <tr>
+    <td>World:</td>
+    <td>
+      <% if @restriction.global? %>
+        (global)
+      <% else %>
+        <%= link_to @restriction.world.name, admin_world_path(@restriction.world) %>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
     <td>Expires:</td>
     <td><%= @restriction.expires_at.strftime("%Y-%m-%d %I:%M%p") %> -
         <%= distance_of_time_in_words Time.now, @restriction.expires_at %>
