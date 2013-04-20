@@ -1,13 +1,16 @@
 <% is_admin = current_user.admin? %>
 <% is_gm = is_admin || current_user.permissions.include?('can_moderate_globally') && current_user.permissions.include?('can_access_moderation_dialog') %>
+<% can_view_admin_user_detail = is_admin || current_user.permissions.include?('can_view_admin_user_detail') %>
 
 <nav id="adminNav">
   <ul>
     <li class="mainCategory">
       General
       <ul>
-        <% if is_gm %>
+        <% if can_view_admin_user_detail %>
         <li><%= link_to "Users", admin_users_path %></li>
+        <% end %>
+        <% if is_gm %>
         <li><%= link_to "Global Moderator List", admin_moderators_path %></li>
         <li><%= link_to "Global Restrictions", admin_user_restrictions_path %></li>
         <% end %>

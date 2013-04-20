@@ -16,7 +16,9 @@ module Worlize
       "can_edit_rooms",
       "can_create_rooms",
       "can_delete_rooms",
-      "can_moderate_globally"
+      "can_moderate_globally",
+      "can_view_admin_user_detail",
+      "can_view_admin_user_list"
     ]
     
     @world_owner_permission_names = [

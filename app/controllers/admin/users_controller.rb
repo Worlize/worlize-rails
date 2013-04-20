@@ -6,6 +6,11 @@ class Admin::UsersController < ApplicationController
   before_filter :require_admin_without_storing_location, :only => ['login_as_user']
   
   def index
+    unless current_user.admin? || current_user.permissions.include?('can_view_admin_user_list')
+      flash[:error] = "You do not have permission to view the user list."
+      redirect_to admin_index_url and return
+    end
+    
     # Handle query parameter
     if params[:q]
       # If the user pastes a GUID, then they're looking for a specific user.
@@ -43,6 +48,11 @@ class Admin::UsersController < ApplicationController
   end
   
   def show
+    unless current_user.admin? || current_user.permissions.include?('can_view_admin_user_detail')
+      flash[:error] = "You do not have permission to view user profiles."
+      redirect_to admin_index_url and return
+    end
+    
     @user ||= User.find(params[:id])
     @world = @user.worlds.first
     @rooms = @world.rooms
