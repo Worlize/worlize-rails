@@ -40,11 +40,23 @@
   </tr>
   <tr>
     <td>Current Login:</td>
-    <td><%= @user.current_login_at.strftime("%Y-%m-%d %I:%M%p") %></td>
+    <td>
+      <% if @user.current_login_at.nil? %>
+        (none)
+      <% else %>
+        <%= @user.current_login_at.strftime("%Y-%m-%d %I:%M%p") %>
+      <% end %>
+    </td>
   </tr>
   <tr>
     <td>Prev Login:</td>
-    <td><%= @user.last_login_at.strftime("%Y-%m-%d %I:%M%p") %></td>
+    <td>
+    <% if @user.last_login_at.nil? %>
+      (none)
+    <% else %>
+      <%= @user.last_login_at.strftime("%Y-%m-%d %I:%M%p") %>
+    <% end %>
+    </td>
   </tr>
   <tr>
     <td>Current Login IP:</td>
