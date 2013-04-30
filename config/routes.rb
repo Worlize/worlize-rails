@@ -211,6 +211,7 @@ Worlize::Application.routes.draw do
       end
       resource :permissions do
       end
+      resources :avatars
     end
     
     resources :user_restrictions

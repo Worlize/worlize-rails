@@ -116,6 +116,8 @@
 
 <%= button_to "View Restrictions", restrictions_admin_user_path(@user), :method => 'get' %><br>
 
+<%= button_to "See Avatars", admin_user_avatars_path(@user), :method => 'get' %><br>
+
 <h2>World: <%= link_to @world.name, admin_world_path(@world) %></h2>
 
 <br>

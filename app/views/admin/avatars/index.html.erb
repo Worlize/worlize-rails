@@ -1,0 +1,24 @@
+<h1>Avatars for user: <%= @user.username %></h1>
+<style>
+  .avatar-list {
+    list-style:none;
+  }
+  
+  .avatar-list li {
+    float: left;
+    margin: 3px;
+  }
+  
+  .avatar-list li img {
+    display: block;
+    border: 2px solid #666;
+    padding: 0px;
+    margin: 0px;
+  }
+</style>
+<ul class='avatar-list'>
+  <% for avatar in @avatars %>
+<!--    <li><%= link_to image_tag(avatar.image.thumb.url), avatar.image.url, :target => '_blank' %></li> -->
+    <li><%= link_to image_tag(avatar.image.medium.url, :alt => "Guid: #{avatar.guid}"), avatar_url(avatar.guid) %></li>
+  <% end %>
+</ul>
