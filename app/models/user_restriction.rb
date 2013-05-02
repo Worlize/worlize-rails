@@ -31,7 +31,8 @@ class UserRestriction < ActiveRecord::Base
         block_avatars
         block_webcams
         block_props
-      )
+      ),
+      :message => "%{value} is not a valid restriction"
     }
   validates :world, :presence => { :if => Proc.new { |ur| !ur.global? } }
   validates :user, :presence => true
@@ -42,6 +43,7 @@ class UserRestriction < ActiveRecord::Base
   validate :check_can_lengthen_restriction_time, :on => :update
   validate :check_can_reduce_restriction_time, :on => :update  
   validate :check_has_permission, :on => :create
+  validate :protect_global_moderators, :on => :create
   
   def hash_for_api
     return {
@@ -120,6 +122,13 @@ class UserRestriction < ActiveRecord::Base
     
     unless permissions.include?("can_#{name}")
       errors[:base] << "#{updated_by.username} does not have permission to enforce #{name} restrictions."
+    end
+  end
+  
+  def protect_global_moderators
+    if user.permissions.include?('can_moderate_globally') &&
+       !created_by.permissions.include?('can_moderate_globally')
+      errors[:base] << 'You cannot place restrictions on a global moderator.'
     end
   end
   
