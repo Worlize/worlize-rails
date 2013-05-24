@@ -89,6 +89,8 @@ class Admin::UsersController < ApplicationController
       params[:user].delete(:password_confirmation)
     end
     
+    @user.skip_username_change_date_validation = true
+    
     @user.update_attributes(params[:user], :as => :admin)
     if @user.save
       should_notify_client_that_slots_changed = false

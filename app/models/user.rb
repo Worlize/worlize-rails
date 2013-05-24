@@ -42,6 +42,7 @@ class User < ActiveRecord::Base
   
   attr_accessor :skip_password_requirement
   attr_accessor :skip_login_name_validation
+  attr_accessor :skip_username_change_date_validation
   
   attr_accessible :username,
                   :login_name,
@@ -53,6 +54,7 @@ class User < ActiveRecord::Base
                   :birthday
                   
   attr_accessible :username,
+                  :login_name,
                   :email,
                   :newsletter_optin,
                   :accepted_tos,
@@ -1082,6 +1084,7 @@ class User < ActiveRecord::Base
   end
   
   def username_cannot_have_been_changed_in_the_last_month
+    return if self.skip_username_change_date_validation
     if !self.state?(:login_name_unconfirmed) && self.username_changed?
       if self.username_changed_at != nil && self.username_changed_at > 30.days.ago
         errors.add(:username, "can only be changed once every 30 days.");
