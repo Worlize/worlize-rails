@@ -8,6 +8,7 @@
 <div class="row">
   <div class="span6 offset3">
     <h1>Hold Up!</h1>
+    <% if @user.state?(:login_name_unconfirmed) %>
     <p class="lead">It's <b>extremely important</b> that you make sure this is correct!</p>
     <p>We've recently separated your user name into a <b>Login Name</b> and a <b>Screen Name</b>.  Previously, you had to use your <b><i>exact</i></b> user name to log in.  This made it difficult to remember if your user name was long, or you changed it often.</p>
     <p>From now on, <i>you will use your </i><b>Login Name</b><i> to log in</i>, while your <b>Screen Name</b> is <i>how people will know you inside Worlize.</i></p>
@@ -15,6 +16,18 @@
       <li>Your <b>Login Name</b> must <b>not</b> contain spaces, and <b>may never be changed</b>.</li>
       <li>Your <b>Screen Name</b> may contain spaces, and may be changed once per month.</li>
     </ul>
+    <% end %>
+    <% if @user.state?(:username_invalid) %>
+    <p class="lead">You <b>must</b> choose a <b>new screen name</b> to continue!</p>
+    <p>Due to some problems with users masquerading as other people as well as a few other issues, we've tightened the restrictions on screen names.  Spaces may no longer be used at the beginning or end of the screen name. Starting now, all screen name choices will have any spaces stripped from the beginning and end before being saved.</p>
+    <p>Additionally, certain offensive words have now been restricted from being used in screen names.</p>
+    <p class="lead"><em>Your account was flagged as violating one of the new restrictions, and you will need to select a new screen name in order to continue.</em></p>
+    <ul>
+      <li>Your <b>Login Name</b> must <b>not</b> contain spaces, and <b>may never be changed</b>.</li>
+      <li>Your <b>Screen Name</b> may contain spaces <b>but not at the beginning or end</b>, and may be changed once per month.</li>
+    </ul>
+    <% end %>
+
     <p>If you use Facebook or Twitter to log in, you may continue to do so.  However, you still need to choose a <b>Login Name</b> and <b>Screen Name</b>.</p>
     <p class="lead">Please make <b>absolutely certain</b> that your Screen Name and Login Name are correct, before clicking <i>Continue</i>.</p>
     <br>

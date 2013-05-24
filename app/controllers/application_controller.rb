@@ -115,7 +115,7 @@ class ApplicationController < ActionController::Base
     end
     
     def require_login_name_confirmed
-      if current_user.state?(:login_name_unconfirmed)
+      if current_user.state?(:login_name_unconfirmed) || current_user.state?(:username_invalid)
         store_location
         redirect_to confirm_login_name_path
         return false

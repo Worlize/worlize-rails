@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   before_destroy :unlink_friendships
   before_save :synchronize_username_changed_at
   after_save :update_interactivity_session, :notify_users_of_changes
+  before_validation :strip_username_whitespace
   
   scope :active, lambda {
     where(:suspended => false)
@@ -43,6 +44,7 @@ class User < ActiveRecord::Base
   attr_accessor :skip_password_requirement
   attr_accessor :skip_login_name_validation
   attr_accessor :skip_username_change_date_validation
+  attr_accessor :skip_username_offensive_language_validation
   
   attr_accessible :username,
                   :login_name,
@@ -113,7 +115,7 @@ class User < ActiveRecord::Base
       :in => 3..36
     },
     :format => {
-      :with => /^[a-zA-Z0-9_\-\ ]+$/,
+      :with => /^[^\s][a-zA-Z0-9_\-\ ]+[^\s]$/,
       :message => "can only contain letters, numbers, spaces, and the dash or underscore characters"
     }
   
@@ -124,6 +126,7 @@ class User < ActiveRecord::Base
   }
   
   validate :username_cannot_have_been_changed_in_the_last_month
+  validate :username_cannot_contain_offensive_language
 
   state_machine :initial => :new_user do
     event :first_time_login do
@@ -132,6 +135,7 @@ class User < ActiveRecord::Base
     
     event :confirm_login_name do
       transition :login_name_unconfirmed => :user_ready
+      transition :username_invalid => :user_ready
     end
     
     before_transition :new_user => any do |user, transition|
@@ -1092,9 +1096,48 @@ class User < ActiveRecord::Base
     end
   end
   
+  def username_cannot_contain_offensive_language
+    return if self.skip_username_offensive_language_validation
+    words = [
+      /asshole/,
+      /\bass\b/,
+      /shit/,
+      /fuck/,
+      /fuk/,
+      /cunt/,
+      /nigger/,
+      /nigga/,
+      /\bspick?s?\b(?! and span)/,
+      /wetback/,
+      /fag/,
+      /fagg?ot/,
+      /trann?y/,
+      /dyke/,
+      /cocksucker/,
+      /\bcock\b/,
+      /bitch/,
+      /pussy/,
+      /piss/,
+      /whore/,
+      /\bcum\b/,
+      /douche?y?/,
+      /slut/
+    ]
+    words.each do |word|
+      if self.username.match(word)
+        errors.add(:username, "must not contain any offensive words.");
+        return
+      end
+    end
+  end
+  
   def synchronize_username_changed_at
     if self.username_changed?
       self.username_changed_at = Time.now
     end
+  end
+  
+  def strip_username_whitespace
+    attributes['username'].strip!
   end
 end

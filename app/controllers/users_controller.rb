@@ -217,7 +217,7 @@ class UsersController < ApplicationController
   end
   
   def confirm_login
-    unless current_user.state?(:login_name_unconfirmed)
+    unless current_user.state?(:login_name_unconfirmed) || current_user.state?(:username_invalid)
       redirect_to root_url and return
     end
 
@@ -225,7 +225,7 @@ class UsersController < ApplicationController
   end
   
   def confirm_login_save
-    unless current_user.state?(:login_name_unconfirmed)
+    unless current_user.state?(:login_name_unconfirmed) || current_user.state?(:username_invalid)
       redirect_to root_url and return
     end
     
