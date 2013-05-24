@@ -36,6 +36,14 @@
     <td>by <%= link_to @restriction.updated_by.username, admin_user_path(@restriction.updated_by) %>
       at <%= @restriction.updated_at.strftime("%Y-%m-%d %I:%M%p %Z") %> (<%= time_ago_in_words(@restriction.updated_at) %> ago)</td>
   </tr>
+  <tr>
+    <td>Reason:</td>
+    <% if @restriction.reason.blank? %>
+    <td><p><em>(none given)</em></p></td>
+    <% else %>
+    <td><p><%= @restriction.reason %></p></td>
+    <% end %>
+  </tr>
 </table>
 <br>
 

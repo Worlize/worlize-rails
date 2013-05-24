@@ -54,7 +54,8 @@ class UserRestriction < ActiveRecord::Base
       :updated_by => updated_by.nil? ? nil : updated_by.public_hash_for_api,
       :expires => expires_at.utc,
       # :world => world.nil? ? nil : world.basic_hash_for_api,
-      :global => global?
+      :global => global?,
+      :reason => reason
     }
   end
   

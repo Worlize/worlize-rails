@@ -50,10 +50,10 @@ class RestrictionsController < ApplicationController
     
     if !ur.nil?
       # If one is already in effect, update it instead of creating a new one.
-      success = ur.update_attributes(
-        :expires_at => params[:minutes].to_i.minutes.from_now,
-        :updated_by => current_user
-      )
+      new_attrs = { :updated_by => current_user }
+      new_attrs[:expires_at] = params[:minutes].to_i.minutes.from_now if params.include?(:minutes)
+      new_attrs[:reason] = params[:reason] if params.include?(:reason)
+      success = ur.update_attributes(new_attrs) 
     else
       # Otherwise create a new restriction
       options = {
@@ -63,10 +63,11 @@ class RestrictionsController < ApplicationController
         :created_by => current_user,
         :updated_by => current_user,
         :expires_at => params[:minutes].to_i.minutes.from_now
+        :reason => params[:reason]
       }
-      if params[:world_guid]
-        options[:world] = world
-      end
+      
+      options[:world] = world if params[:world_guid]
+
       if (options[:expires_at] > Time.now)
         ur = UserRestriction.create(options)
         success = ur.valid? && !ur.new_record?
