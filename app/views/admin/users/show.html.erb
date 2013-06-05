@@ -23,6 +23,10 @@
     <td><%= @user.guid %></td>
   </tr>
   <tr>
+    <td>Acct. State:</td>
+    <td><%= @user.state %></td>
+  </tr>
+  <tr>
     <td>Status:</td>
     <td><strong><%= @user.online? ? 'online' : 'offline' %></strong></td>
   </tr>
@@ -77,6 +81,10 @@
           <input type="hidden" name="whoisSubmitButton" value=" ">
           <input type="submit" value="Lookup IP">
         </form>
+        <form action="http://geomaplookup.net/" method="get" target="_BLANK" style="display: inline;">
+          <input type="hidden" value="<%= @user.current_login_ip %>" name="ip">
+          <input type="submit" value="Show Geolocation">
+        </form>
     <% end %>
     </td>
   </tr>
@@ -93,6 +101,10 @@
           <input type="hidden" name="queryinput" value="<%= @user.last_login_ip %>">
           <input type="hidden" name="whoisSubmitButton" value=" ">
           <input type="submit" value="Lookup IP">
+        </form>
+        <form action="http://geomaplookup.net/" method="get" target="_BLANK" style="display: inline;">
+          <input type="hidden" value="<%= @user.last_login_ip %>" name="ip">
+          <input type="submit" value="Show Geolocation">
         </form>
     <% end %>
     </td>
@@ -121,7 +133,7 @@
 
 <%= button_to "View Restrictions", restrictions_admin_user_path(@user), :method => 'get' %><br>
 
-<%= button_to "See Avatars", admin_user_avatars_path(@user), :method => 'get' %><br>
+<%= button_to "See Avatars (#{@user.avatar_instances.count})", admin_user_avatars_path(@user), :method => 'get' %><br>
 
 <h2>World: <%= link_to @world.name, admin_world_path(@world) %></h2>
 
