@@ -62,7 +62,7 @@ class RestrictionsController < ApplicationController
         :global => params[:global],
         :created_by => current_user,
         :updated_by => current_user,
-        :expires_at => params[:minutes].to_i.minutes.from_now
+        :expires_at => params[:minutes].to_i.minutes.from_now,
         :reason => params[:reason]
       }
       
