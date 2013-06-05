@@ -26,8 +26,10 @@
     <td><%= banned_ip.created_by.nil? ? '(nobody)' : link_to(banned_ip.created_by.username, admin_user_path(banned_ip.created_by)) %></td>
     <td><%= banned_ip.created_at.strftime("%Y-%m-%d %I:%M%p") %></td>
     <td>
-      <%= link_to "Details", admin_banned_ip_path(banned_ip), :method => :get %> |
-      <%= link_to "Unban", admin_banned_ip_path(banned_ip), :method => :delete, :confirm => "Are you sure you want to unban this IP address?" %>
+      <%= link_to "Details", admin_banned_ip_path(banned_ip), :method => :get %>
+      <% if current_user.permissions.include?('can_ban_ip') %> |
+        <%= link_to "Unban", admin_banned_ip_path(banned_ip), :method => :delete, :confirm => "Are you sure you want to unban this IP address?" %>
+      <% end %>
     </td>
   </tr>
   <% end %>
@@ -38,5 +40,7 @@
 
 <br>
 <p>
-  <%= link_to "Ban an IP", new_admin_banned_ip_path %>
+  <% if current_user.permissions.include?('can_ban_ip') %>
+    <%= link_to "Ban an IP", new_admin_banned_ip_path %>
+  <% end %>
 </p>

@@ -3,6 +3,7 @@
 <%= form_tag(admin_users_path, :method => 'get') do %>
   <%= text_field_tag :q, params[:q], :size => 45, :id => 'user-search-field' %>
   <%= submit_tag 'Search' %>
+  <p style="margin-top: 5px;"><em>Tip: You can search for screen names, email addresses, IP addresses, or user GUIDs.</em></p>
 <% end %>
 
 <br/>

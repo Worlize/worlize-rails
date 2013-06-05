@@ -9,6 +9,7 @@ class BannedIp < ActiveRecord::Base
   after_destroy :publish_notification
   
   validates :ip, :presence => true, :uniqueness => { :message => 'has already been banned' }
+  validates :reason, :presence => true
   validates :created_by, :presence => true
   validates :updated_by, :presence => true
   validate :check_has_permission, :on => :create

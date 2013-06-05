@@ -16,6 +16,11 @@ class Admin::UsersController < ApplicationController
       # If the user pastes a GUID, then they're looking for a specific user.
       if /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.match(params[:q].downcase)
         @users = User.where(['guid = ?', params[:q]])
+        
+      # If the user pastes an IP address, they're looking for users who last logged in from that IP.
+      elsif /^\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b$/.match(params[:q])
+        @users = User.where(:current_login_ip => params[:q])
+        
       else
         query = "#{params[:q]}%"
         @users = User.where(['username LIKE ? OR email LIKE ?', query, query])

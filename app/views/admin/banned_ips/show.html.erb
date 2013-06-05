@@ -6,5 +6,7 @@
 <h2>Reason:</h2>
 <p><%= @banned_ip.reason %></p>
 <br>
+<% if current_user.permissions.include?('can_ban_ip') %>
 <%= link_to "Unban", admin_banned_ip_path(@banned_ip), :method => :delete, :confirm => "Are you sure you want to unban this IP address?" %> |
+<% end %>
 <%= link_to "Back to list", admin_banned_ips_path %>
