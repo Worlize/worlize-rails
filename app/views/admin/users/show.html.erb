@@ -27,6 +27,11 @@
     <td><strong><%= @user.online? ? 'online' : 'offline' %></strong></td>
   </tr>
   <tr>
+    <td>Signed Up:</td>
+    <td><%= @user.created_at.strftime("%Y-%m-%d %I:%M%p") %>
+        (<%= distance_of_time_in_words Time.now, @user.created_at %> ago)</td>
+  </tr>
+  <tr>
     <td>Time Spent:</td>
     <td><%= @user.total_time_spent_online_hms_long %></td>
   </tr>
