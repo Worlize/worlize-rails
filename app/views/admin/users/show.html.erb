@@ -85,6 +85,7 @@
           <input type="hidden" value="<%= @user.current_login_ip %>" name="ip">
           <input type="submit" value="Show Geolocation">
         </form>
+        <%= link_to "Ban User's Current IP", new_admin_banned_ip_path(:user => @user.guid), :method => 'get' %><br>
     <% end %>
     </td>
   </tr>

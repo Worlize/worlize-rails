@@ -216,6 +216,8 @@ Worlize::Application.routes.draw do
     
     resources :user_restrictions
     
+    resources :banned_ips
+    
     resources :moderators, :only => [:index]
     
     resources :rooms do

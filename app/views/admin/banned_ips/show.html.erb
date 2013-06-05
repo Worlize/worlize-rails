@@ -1,0 +1,10 @@
+<h1>Banned IP: <%= @banned_ip.human_ip %></h1>
+<% unless @banned_ip.user.nil? %>
+<h2>Associated User:</h2>
+<p><%= link_to @banned_ip.user.username, admin_user_path(@banned_ip.user) %></p><br>
+<% end %>
+<h2>Reason:</h2>
+<p><%= @banned_ip.reason %></p>
+<br>
+<%= link_to "Unban", admin_banned_ip_path(@banned_ip), :method => :delete, :confirm => "Are you sure you want to unban this IP address?" %> |
+<%= link_to "Back to list", admin_banned_ips_path %>

@@ -1,0 +1,25 @@
+<h1>Ban an IP</h1>
+
+<%= form_for [:admin, @banned_ip] do |f| %>
+  <% unless @banned_ip.errors.empty? %>
+    <ul class="error_explanation">
+    <% @banned_ip.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  <% end %>
+  <% unless @banned_ip.user.nil? %>
+    <p><strong>Associated User:</strong><br>
+    <%= link_to @banned_ip.user.username, admin_user_path(@banned_ip.user) %> (guid: <%= @banned_ip.user.guid %>)</p><br>
+    <%= f.hidden_field :user_id %>
+    <%= f.label :human_ip, 'IP Address' %><br>
+    <p><%= @banned_ip.human_ip %></p><br>
+    <%= f.hidden_field :human_ip %>
+  <% else %>
+    <%= f.label :human_ip, 'IP Address' %><br>
+    <%= f.text_field :human_ip %><br><br>
+  <% end %>
+  <%= f.label :reason %><br>
+  <%= f.text_area :reason %><br>
+  <%= f.submit %>
+<% end %>

@@ -13,6 +13,7 @@
         <% if is_gm %>
         <li><%= link_to "Global Moderator List", admin_moderators_path %></li>
         <li><%= link_to "Global Restrictions", admin_user_restrictions_path %></li>
+        <li><%= link_to "Banned IPs", admin_banned_ips_path %></li>
         <% end %>
         <% if is_admin %>
         <li><%= link_to "Create New User", new_admin_user_path %></li>

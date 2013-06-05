@@ -1,0 +1,42 @@
+<h1>Banned IPs</h1>
+
+<%= form_tag(admin_banned_ips_path, :method => 'get') do %>
+  <%= text_field_tag :q, params[:q], :size => 45, :id => 'banned-ip-search-field' %>
+  <%= submit_tag 'Search' %>
+<% end %>
+
+<br/>
+
+<% if @banned_ips.count > 0 %>
+<table id="banned-ip-results-table" class="datagrid" width="100%">
+  <tr>
+    <th>IP Address</th>
+    <th>User</th>
+    <th>Created By</th>
+    <th>Banned At</th>
+    <th>&nbsp;</th>
+  </tr>
+  <% for banned_ip in @banned_ips %>
+  <%
+       row_classes = [ cycle('even', 'odd') ]
+  %>
+  <tr class="<%= row_classes.join(' ') %>">
+    <td><%= banned_ip.human_ip %></td>
+    <td><%= banned_ip.user.nil? ? '(none)' : link_to(banned_ip.user.username, admin_user_path(banned_ip.user)) %></td>
+    <td><%= banned_ip.created_by.nil? ? '(nobody)' : link_to(banned_ip.created_by.username, admin_user_path(banned_ip.created_by)) %></td>
+    <td><%= banned_ip.created_at.strftime("%Y-%m-%d %I:%M%p") %></td>
+    <td>
+      <%= link_to "Details", admin_banned_ip_path(banned_ip), :method => :get %> |
+      <%= link_to "Unban", admin_banned_ip_path(banned_ip), :method => :delete, :confirm => "Are you sure you want to unban this IP address?" %>
+    </td>
+  </tr>
+  <% end %>
+</table>
+<% else %>
+<p>There are no banned IPs to show.</p>
+<% end %>
+
+<br>
+<p>
+  <%= link_to "Ban an IP", new_admin_banned_ip_path %>
+</p>
