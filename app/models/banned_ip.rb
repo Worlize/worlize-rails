@@ -12,7 +12,7 @@ class BannedIp < ActiveRecord::Base
   validates :reason, :presence => true
   validates :created_by, :presence => true
   validates :updated_by, :presence => true
-  validate :check_has_permission, :on => :create
+  validate  :check_has_permission, :on => :create
   
   attr_accessible :user_id, :ip, :human_ip, :created_by, :updated_by, :reason, :as => :admin
   
@@ -72,6 +72,9 @@ class BannedIp < ActiveRecord::Base
     permissions = updated_by.permissions
     unless permissions.include?("can_ban_ip")
       errors[:base] << "#{updated_by.username} does not have permission to ban IP addresses."
+    end
+    if user_id.blank? && !permissions.include?('can_ban_arbitrary_ip')
+      errors[:base] << "#{updated_by.username} does not have permission to ban arbitrary IP addresses."
     end
   end
 

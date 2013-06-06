@@ -19,7 +19,8 @@ module Worlize
       "can_moderate_globally",
       "can_view_admin_user_detail",
       "can_view_admin_user_list",
-      "can_ban_ip"
+      "can_ban_ip",
+      "can_ban_arbitrary_ip"
     ]
     
     @world_owner_permission_names = [

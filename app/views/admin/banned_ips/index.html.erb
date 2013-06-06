@@ -40,7 +40,7 @@
 
 <br>
 <p>
-  <% if current_user.permissions.include?('can_ban_ip') %>
+  <% if current_user.permissions.include?('can_ban_ip') && current_user.permissions.include?('can_ban_arbitrary_ip') %>
     <%= link_to "Ban an IP", new_admin_banned_ip_path %>
   <% end %>
 </p>

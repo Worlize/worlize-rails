@@ -32,6 +32,12 @@ class Admin::BannedIpsController < ApplicationController
         @banned_ip.human_ip = @banned_ip.user.current_login_ip unless @banned_ip.user.current_login_ip.nil?
       end
     end
+    
+    if @banned_ip.user.blank? && !current_user.permissions.include?('can_ban_arbitrary_ip')
+      flash[:error] = "You do not have permission to ban IP addresses."
+      redirect_to admin_banned_ips_url
+      return
+    end
   end
   
   def create
