@@ -120,7 +120,7 @@ GEM
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-ssh (2.6.6)
-    newrelic_rpm (3.6.0.78)
+    newrelic_rpm (3.6.3.111)
     nokogiri (1.5.9)
     oauth (0.4.7)
     oauth2 (0.8.1)
