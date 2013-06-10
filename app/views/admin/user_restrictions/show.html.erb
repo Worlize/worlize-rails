@@ -48,6 +48,6 @@
 <br>
 
 <% if @restriction.active? %>
-<%= link_to "Ban User's Current IP", new_banned_ip_path(:user => @restriction.user.guid) %><br>
+<%= link_to "Ban User's Current IP", new_admin_banned_ip_path(:user => @restriction.user.guid) %><br>
 <%= button_to "Cancel Restriction", admin_user_restriction_path(@restriction), :method => 'delete', :confirm => "Are you sure you want to lift this restriction?" %>
 <% end %>
