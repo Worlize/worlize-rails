@@ -27,6 +27,10 @@ class RoomsController < ApplicationController
     # Get list of active rooms
     redis = Worlize::RedisConnectionPool.get_client(:room_server_assignments)
     
+    permissions = current_user.permissions
+    is_moderator = permissions.include?('can_moderate_globally') &&
+                   permissions.include?('can_access_moderation_dialog')
+    
     current_user_friend_guids = current_user.friend_guids
     current_user_facebook_friend_guids = current_user.facebook_friend_guids
 
@@ -39,7 +43,7 @@ class RoomsController < ApplicationController
     room_info = []
     Room.where(:guid => room_population.keys).all.each do |room|
 
-      next if room.hidden? || room.no_direct_entry? || room.moderators_only? || room.locked?
+      next if !is_moderator && (room.hidden? || room.no_direct_entry? || room.moderators_only? || room.locked?)
       
       # Check to see if any of our friends are in the room and include them
       # in the response if they are.
