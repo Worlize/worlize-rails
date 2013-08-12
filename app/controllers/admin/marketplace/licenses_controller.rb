@@ -1,6 +1,7 @@
 class Admin::Marketplace::LicensesController < ApplicationController
   layout 'admin'
-  before_filter :require_admin
+  before_filter(:only => [:index, :show]) { |c| c.require_all_permissions(:can_administrate_marketplace) }
+  before_filter :require_admin, :except => [:index, :show]
   
   # GET /marketplace_licenses
   # GET /marketplace_licenses.xml

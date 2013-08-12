@@ -23,7 +23,7 @@ class Admin::UsersController < ApplicationController
         
       else
         query = "#{params[:q]}%"
-        @users = User.where(['username LIKE ? OR email LIKE ?', query, query])
+        @users = User.where(['username LIKE ? OR email LIKE ? OR login_name LIKE ?', query, query, query])
       end
     else
       @users = User.scoped

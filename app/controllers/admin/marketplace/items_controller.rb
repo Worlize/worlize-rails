@@ -1,6 +1,6 @@
 class Admin::Marketplace::ItemsController < ApplicationController
   layout 'admin'
-  before_filter :require_admin
+  before_filter { |c| c.require_all_permissions(:can_administrate_marketplace) }
   before_filter :find_marketplace_item, :only => [:show, :edit, :update, :destroy]
 
   # GET /marketplace_items

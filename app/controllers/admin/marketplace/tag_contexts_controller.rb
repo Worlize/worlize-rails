@@ -1,6 +1,7 @@
 class Admin::Marketplace::TagContextsController < ApplicationController
   layout 'admin'
-  before_filter :require_admin
+  before_filter(:only => [:index, :show]) { |c| c.require_all_permissions(:can_administrate_marketplace) }
+  before_filter :require_admin, :except => [:index, :show]
   before_filter :find_marketplace_tag_context, :only => [:show, :update, :destroy]
 
   def index

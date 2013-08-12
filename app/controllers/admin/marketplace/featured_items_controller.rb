@@ -1,6 +1,6 @@
 class Admin::Marketplace::FeaturedItemsController < ApplicationController
   layout "admin"
-  before_filter :require_admin
+  before_filter { |c| c.require_all_permissions(:can_administrate_marketplace) }
   before_filter :load_featured_item, :only => [:show, :update, :destroy]
   
   def index

@@ -11,7 +11,7 @@ class Avatar < ActiveRecord::Base
   mount_uploader :image, AvatarUploader
   
   validates :image,
-              :presence => true, :if => lambda { self.kind == 'image' }
+              :presence => true
   
   def hash_for_api
     {

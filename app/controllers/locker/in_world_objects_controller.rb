@@ -3,9 +3,6 @@ class Locker::InWorldObjectsController < ApplicationController
 
   def index
     result = current_user.in_world_object_instances.includes(:in_world_object, :room => :world).order('created_at DESC')
-    result = result.select do |o|
-      o.in_world_object.kind == 'image'
-    end
     result = result.map do |o|
       o.hash_for_api
     end

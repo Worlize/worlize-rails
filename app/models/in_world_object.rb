@@ -9,45 +9,22 @@ class InWorldObject < ActiveRecord::Base
   after_destroy :log_destruction
 
   mount_uploader :image, InWorldObjectUploader
-  mount_uploader :app, AppUploader
-  mount_uploader :icon, AppIconUploader
   
   validates :image,
-              :presence => true, :if => lambda { self.kind == 'image' }
-
-  validates :app,
-              :presence => true, :if => lambda { self.kind == 'app' }
+              :presence => true
 
   
   def hash_for_api
-    if self.kind == 'app'
-      return {
-        :name =>          self.name,
-        :guid =>          self.guid,
-        :kind =>          self.kind,
-        :width =>         self.width,
-        :height =>        self.height,
-        
-        :app =>           self.app.url,
-        :icon =>          self.icon.url,
-        :medium_icon =>   self.icon.medium.url,
-        :small_icon =>    self.icon.small.url,
-      }
-    elsif self.kind == 'image'
-      return {
-        :name =>          self.name,
-        :guid =>          self.guid,
-        :kind =>          self.kind,
-        :width =>         self.width,
-        :height =>        self.height,
-        
-        :thumbnail =>     self.image.thumb.url,
-        :medium =>        self.image.medium.url,
-        :fullsize =>      self.image.url
-      }
-    else
-      raise "unknown kind: #{self.kind}"
-    end
+    return {
+      :name =>          self.name,
+      :guid =>          self.guid,
+      :width =>         self.width,
+      :height =>        self.height,
+      
+      :thumbnail =>     self.image.thumb.url,
+      :medium =>        self.image.medium.url,
+      :fullsize =>      self.image.url
+    }
   end
   
   def instances

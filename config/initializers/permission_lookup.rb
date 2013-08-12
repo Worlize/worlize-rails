@@ -20,7 +20,8 @@ module Worlize
       "can_view_admin_user_detail",
       "can_view_admin_user_list",
       "can_ban_ip",
-      "can_ban_arbitrary_ip"
+      "can_ban_arbitrary_ip",
+      "can_administrate_marketplace"
     ]
     
     @world_owner_permission_names = [

@@ -24,7 +24,7 @@
           <span id="bucks-balance"><%= number_with_delimiter(current_user.bucks) %></span>
       </div>
       
-      <% if current_user.admin? %>
+      <% if current_user.admin? || current_user.permissions.include?('can_administrate_marketplace') %>
         <nav class="marketplace-admin-list">
           <h1>Admin Options</h1>
           <ul>

@@ -23,7 +23,7 @@
         <% end %>
       </ul>
     </li>
-    <% if is_admin %>
+    <% if current_user.permissions.include?('can_administrate_marketplace') || is_admin %>
     <li class="mainCategory">
       Marketplace
       <ul>
@@ -34,6 +34,8 @@
         <li><%= link_to "Licenses", admin_marketplace_licenses_path %></li>
       </ul>
     </li>
+    <% end %>
+    <% if is_admin %>
     <li class="mainCategory">
       Promotion
       <ul>

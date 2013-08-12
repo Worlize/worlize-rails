@@ -1,6 +1,6 @@
 class Admin::Marketplace::CreatorsController < ApplicationController
   layout "admin"
-  before_filter :require_admin
+  before_filter { |c| c.require_all_permissions(:can_administrate_marketplace) }
     
   def search
     results = []
