@@ -21,7 +21,6 @@ class Locker::InWorldObjectsController < ApplicationController
     @in_world_object = InWorldObject.new(
       :name => name,
       :creator => current_user,
-      :requires_approval => false,
       :image => params[:filedata]
     )
     

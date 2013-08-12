@@ -22,21 +22,21 @@
     <% if !@item.item.nil? %>
       <% if @item.item.respond_to? 'image' %>
         <%= fields_for @item.item do |item_fields| %>
-          <%= item_fields.label :image %><br>
+          <%= item_fields.label :image %>*<br>
           <%= item_fields.file_field :image %><br>
         <% end %>
         <br>
       <% end %>
       <% if @item.item.respond_to? 'app' %>
         <%= fields_for @item.item do |item_fields| %>
-          <%= item_fields.label :app %><br>
+          <%= item_fields.label :app %>*<br>
           <%= item_fields.file_field :app %><br>
         <% end %>
         <br>
       <% end %>
       <% if @item.item.respond_to? 'icon' %>
         <%= fields_for @item.item do |item_fields| %>
-          <%= item_fields.label :icon %><br>
+          <%= item_fields.label :icon %>*<br>
           <%= item_fields.file_field :icon %><br>
         <% end %>
       <% end %>
@@ -51,11 +51,12 @@
     <% end %>
   <% end %>
 
-  <%= f.label :name %><br>
+  <%= f.label :name %>*<br>
   <%= f.text_field :name %><br>
   <br>
   
-  <%= f.label :marketplace_creator, 'Artist' %><br>
+  <%= f.label :marketplace_creator, 'Artist' %>*<br>
+  <small>(Free-form name, will autocomplete with existing artists.)</small><br>
   <%= text_field_tag 'marketplace_item[marketplace_creator]',
         @item.marketplace_creator ? @item.marketplace_creator.display_name : nil %><br>
   <br>
@@ -82,7 +83,8 @@
   <%= f.label :currency_id_2, 'Coins', :class => 'light_label' %><br>
   <br>
   
-  <%= f.label :price %><br>
+  <%= f.label :price %>*<br>
+  <small>(Use 0 for free.)</small><br>
   <%= f.text_field :price %><br>
   <br>
   
@@ -105,6 +107,7 @@
   <br>
   
   <%= f.label :copyright %><br>
+  <small>(Leave blank to show "© <%= Time.now.year %> Worlize Inc.")</small><br>
   <%= f.text_field :copyright %><br>
   <br>
   

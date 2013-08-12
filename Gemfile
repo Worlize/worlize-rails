@@ -33,6 +33,7 @@ gem 'simple_form', '~> 2.1.0'
 
 # Yay, jQuery!
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 
 gem 'validates_timeliness', '~> 3.0.14'
 gem 'validate_as_email', '~> 1.0.3'

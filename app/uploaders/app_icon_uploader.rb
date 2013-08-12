@@ -27,7 +27,7 @@ class AppIconUploader < CarrierWave::Uploader::Base
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
   def default_url
-    "/images/icons/app_icon/" + [version_name, "default.png"].compact.join('_')
+    "/assets/icons/app_icon/" + [version_name, "default.png"].compact.join('_')
   end
 
   process :resize_and_pad => [128, 128]
