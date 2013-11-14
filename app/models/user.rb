@@ -364,6 +364,9 @@ class User < ActiveRecord::Base
   end
   
   def add_to_mailchimp
+    # We're not doing this anymore
+    return true
+    
     if Rails.env != 'production'
       Rails.logger.info "Not adding #{self.email} to MailChimp because we're not in production"
       return true
