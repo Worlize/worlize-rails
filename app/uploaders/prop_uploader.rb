@@ -23,16 +23,64 @@ class PropUploader < CarrierWave::Uploader::Base
   end
 
   process :set_content_type
+  process :calculate_image_phash
   
   version :medium do
     process :resize_to_limit => [200, 200]
-    process :set_content_type
+    process :save_version_dimensions_to_model
   end
 
   version :thumb do
-    process :resize_and_pad => [80, 80, "#F0F0F0"]
-    process :set_content_type
+    process :efficient_build_thumb
   end
+
+  def efficient_build_thumb
+    manipulate! do |img|
+      if img.mime_type.match /gif/
+        img.collapse!
+      end
+      img.combine_options do |c|
+        c.thumbnail "80x80>"
+        c.background '#F0F0F0'
+        c.gravity 'Center'
+        c.extent '80x80'
+      end
+      img = yield(img) if block_given?
+      img
+    end
+  end
+
+  def save_version_dimensions_to_model
+    result = `identify -format "%wx%h" "#{file.path}"[0]`
+    width, height = result.split(/x/)
+    model.width = width
+    model.height = height
+  rescue
+    Rails.logger.warn("Unable to get version image dimensions for avatar " + model.guid)
+  end
+  
+  def calculate_image_phash
+    Rails.logger.info("Calculating has for prop #{current_path}")
+    if !file.content_type.blank? && file.content_type.match(/gif/)
+      # Copy file to temp location
+      path_parts = File.split(current_path)
+      path_parts[1] = "dcthash-#{path_parts[1]}"
+      tmp_file_path = File.join(path_parts)
+      `cp #{current_path} #{tmp_file_path}`
+      image = MiniMagick::Image.open(current_path)
+      image.collapse!
+      image.write(tmp_file_path)
+      image_fingerprint = (model.image_fingerprint ||= ImageFingerprint.new)
+      image_fingerprint.dct_fingerprint = Phash.image_hash(tmp_file_path).data
+      image.destroy!
+      File.unlink(tmp_file_path) if File.exists?(tmp_file_path)
+    else
+      image_fingerprint = (model.image_fingerprint ||= ImageFingerprint.new)
+      image_fingerprint.dct_fingerprint = Phash.image_hash(current_path).data
+    end
+  end
+
+
   
   # version :medium do
   #   process :resize_to_limit => [200, 200]

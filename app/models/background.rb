@@ -30,7 +30,7 @@ class Background < ActiveRecord::Base
       :guid =>          self.guid,
       :thumbnail =>     self.image.thumb.url,
       :medium =>        self.image.medium.url,
-      :fullsize =>      self.image.url
+      :fullsize =>      self.image.fullsize.url
     }
   end
   

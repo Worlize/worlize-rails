@@ -22,18 +22,61 @@ class InWorldObjectUploader < CarrierWave::Uploader::Base
     "#{model.guid}"
   end
 
+  process :calculate_image_phash
   process :resize_to_limit => [950, 570]
   process :set_content_type
+  process :save_version_dimensions_to_model
   
   version :thumb do
-    process :resize_and_pad => [80, 80, "#F0F0F0"]
-    process :set_content_type
+    process :efficient_build_thumb
   end
   
   version :medium do
     process :resize_to_limit => [200,200]
-    process :set_content_type
   end
+  
+  def efficient_build_thumb
+    manipulate! do |img|
+      if img.mime_type.match /gif/
+        img.collapse!
+      end
+      img.combine_options do |c|
+        c.thumbnail "80x80>"
+        c.background '#F0F0F0'
+        c.gravity 'Center'
+        c.extent '80x80'
+      end
+      img = yield(img) if block_given?
+      img
+    end
+  end
+
+  def save_version_dimensions_to_model
+    result = `identify -format "%wx%h" "#{file.path}"[0]`
+    width, height = result.split(/x/)
+    model.width = width
+    model.height = height
+  rescue
+    Rails.logger.warn("Unable to get version image dimensions for avatar " + model.guid)
+  end
+  
+  def calculate_image_phash
+    Rails.logger.info("Calculating has for object #{current_path}")
+    # Copy file to temp location
+    path_parts = File.split(current_path)
+    path_parts[1] = "dcthash-#{path_parts[1]}"
+    tmp_file_path = File.join(path_parts)
+    `cp #{current_path} #{tmp_file_path}`
+    image = MiniMagick::Image.open(current_path)
+    image.collapse!
+    image.write(tmp_file_path)
+    image_fingerprint = (model.image_fingerprint ||= ImageFingerprint.new)
+    image_fingerprint.dct_fingerprint = Phash.image_hash(tmp_file_path).data
+    image.destroy!
+    File.unlink(tmp_file_path) if File.exists?(tmp_file_path)
+  end
+
+
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
   # def default_url

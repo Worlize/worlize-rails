@@ -19,8 +19,6 @@ class Avatar < ActiveRecord::Base
       :name =>          self.name,
       :guid =>          self.guid,
       :thumbnail =>     self.image.thumb.url,
-      :small =>         self.image.small.url,
-      :tiny =>          self.image.tiny.url,
       :medium =>        self.image.medium.url,
       :fullsize =>      self.image.url,
       :creator_guid =>  self.creator.nil? ? nil : self.creator.guid,

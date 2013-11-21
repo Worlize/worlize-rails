@@ -27,9 +27,12 @@ class BackgroundUploader < CarrierWave::Uploader::Base
   #       "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   #     end
 
-  process :resize_to_fill => [950, 570]
+  process :collapse
+  process :calculate_image_phash
   process :convert => 'jpg'#, :quality => 90
+  process :resize_to_fill => [950, 570]
   process :set_content_type
+  process :save_version_dimensions_to_model
   
   version :thumb do
     process :resize_to_fill => [133, 80]
@@ -49,6 +52,35 @@ class BackgroundUploader < CarrierWave::Uploader::Base
     process :convert => 'jpg'#, :quality => 90
     process :set_content_type
   end
+  
+  version :fullsize do
+    process :resize_to_fill => [950, 570]
+    process :convert => 'jpg'#, :quality => 90
+    process :set_content_type
+  end
+  
+  def collapse
+    manipulate! do |img|
+      img.collapse!
+      img
+    end
+  end
+  
+  def save_version_dimensions_to_model
+    result = `identify -format "%wx%h" "#{file.path}"[0]`
+    width, height = result.split(/x/)
+    model.width = width
+    model.height = height
+  rescue
+    Rails.logger.warn("Unable to get version image dimensions for avatar " + model.guid)
+  end
+  
+  def calculate_image_phash
+    Rails.logger.info("Calculating has for background #{current_path}")
+    image_fingerprint = (model.image_fingerprint ||= ImageFingerprint.new)
+    image_fingerprint.dct_fingerprint = Phash.image_hash(current_path).data
+  end
+
   
   # Process files as they are uploaded.
   #     process :scale => [200, 300]

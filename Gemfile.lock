@@ -63,6 +63,7 @@ GEM
       railties (>= 3.1.0)
     faraday (0.8.7)
       multipart-post (~> 1.1)
+    ffi (1.9.3)
     fog (1.5.0)
       builder
       excon (~> 0.14)
@@ -113,7 +114,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.23)
-    mini_magick (3.5.0)
+    mini_magick (3.6.0)
       subexec (~> 0.2.1)
     modernizr-rails (2.6.2.1)
     money (5.1.1)
@@ -148,6 +149,8 @@ GEM
     omniauth-twitter (0.0.15)
       multi_json (~> 1.3)
       omniauth-oauth (~> 1.0)
+    pHash (1.1.4)
+      ffi (~> 1.0)
     polyglot (0.3.3)
     rack (1.4.5)
     rack-cache (1.2)
@@ -187,7 +190,7 @@ GEM
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
     state_machine (1.1.2)
-    subexec (0.2.2)
+    subexec (0.2.3)
     therubyracer (0.11.4)
       libv8 (~> 3.11.8.12)
       ref
@@ -238,7 +241,7 @@ DEPENDENCIES
   jquery-ui-rails
   koala (~> 1.5.0)
   less-rails (~> 2.3.2)
-  mini_magick (~> 3.4)
+  mini_magick (~> 3.6)
   modernizr-rails
   mysql2 (~> 0.3.11)
   newrelic_rpm
@@ -246,6 +249,7 @@ DEPENDENCIES
   omniauth (~> 1.1.0)
   omniauth-facebook (~> 1.4.1)
   omniauth-twitter (~> 0.0.12)
+  pHash (~> 1.1.4)
   rails (= 3.2.13)
   redis (~> 3.0.1)
   simple_form (~> 2.1.0)
