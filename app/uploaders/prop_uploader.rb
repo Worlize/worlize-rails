@@ -60,24 +60,21 @@ class PropUploader < CarrierWave::Uploader::Base
   end
   
   def calculate_image_phash
-    Rails.logger.info("Calculating has for prop #{current_path}")
-    if !file.content_type.blank? && file.content_type.match(/gif/)
-      # Copy file to temp location
-      path_parts = File.split(current_path)
-      path_parts[1] = "dcthash-#{path_parts[1]}"
-      tmp_file_path = File.join(path_parts)
-      `cp #{current_path} #{tmp_file_path}`
-      image = MiniMagick::Image.open(current_path)
-      image.collapse!
-      image.write(tmp_file_path)
-      image_fingerprint = (model.image_fingerprint ||= ImageFingerprint.new)
-      image_fingerprint.dct_fingerprint = Phash.image_hash(tmp_file_path).data
-      image.destroy!
-      File.unlink(tmp_file_path) if File.exists?(tmp_file_path)
-    else
-      image_fingerprint = (model.image_fingerprint ||= ImageFingerprint.new)
-      image_fingerprint.dct_fingerprint = Phash.image_hash(current_path).data
-    end
+    Rails.logger.info("Calculating hash for prop #{current_path}")
+    # Copy file to temp location
+    path_parts = File.split(current_path)
+    path_parts[1] = "dcthash-#{path_parts[1]}.tiff"
+    tmp_file_path = File.join(path_parts)
+    `cp #{current_path} #{tmp_file_path}`
+    image = MiniMagick::Image.open(current_path)
+    image.collapse!
+    image.format('tiff', 0)
+    image.write(tmp_file_path)
+    image_fingerprint = (model.image_fingerprint ||= ImageFingerprint.new)
+    image_fingerprint.dct_fingerprint = Phash.image_hash(tmp_file_path).data
+    Rails.logger.info("Fingerprint for #{current_path} is #{image_fingerprint.dct_fingerprint}")
+    image.destroy!
+    File.unlink(tmp_file_path) if File.exists?(tmp_file_path)
   end
 
 
