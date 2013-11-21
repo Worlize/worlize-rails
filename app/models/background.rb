@@ -7,6 +7,7 @@ class Background < ActiveRecord::Base
   before_create :assign_guid
   before_create :log_creation
   after_destroy :log_destruction
+  has_one :image_fingerprint, :as => :fingerprintable
 
   mount_uploader :image, BackgroundUploader
 
