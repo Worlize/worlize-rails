@@ -5,7 +5,7 @@ gem 'rails', '3.2.13'
 gem 'mysql2', '~> 0.3.11'
 gem 'guid', '~> 0.1.1'
 gem 'hiredis', '~> 0.4.5'
-gem 'redis', '~> 3.0.1'
+gem 'redis', '~> 3.0.6'
 gem 'yajl-ruby', :require => 'yajl'
 gem 'carrierwave', '~> 0.5.7'
 gem 'mini_magick', '~> 3.6'
@@ -35,6 +35,9 @@ gem 'simple_form', '~> 2.1.0'
 # Yay, jQuery!
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
+
+# Asynchronous job processing
+gem 'sidekiq', '~> 2.17.0'
 
 gem 'validates_timeliness', '~> 3.0.14'
 gem 'validate_as_email', '~> 1.0.3'
