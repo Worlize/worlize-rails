@@ -12,8 +12,6 @@ class User < ActiveRecord::Base
     where(:suspended => false)
   }
   
-  has_one :user_profile, :dependent => :destroy
-  
   has_many :authentications, :dependent => :destroy
   
   has_many :worlds, :dependent => :destroy
