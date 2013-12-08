@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
-  before_filter :require_user, :except => [:new, :create, :validate_field, :birthday, :set_birthday]
+  before_filter :require_user, :except => [:show, :new, :create, :validate_field, :birthday, :set_birthday]
+  before_filter(:only => :show) do |controller|
+    require_user if controller.request.format.json?
+  end
   before_filter :require_user_without_storing_location, :only => [:birthday, :set_birthday, :confirm_login, :confirm_login_save]
 
   layout 'bootstrap'
