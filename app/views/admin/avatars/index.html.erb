@@ -19,6 +19,6 @@
 <ul class='avatar-list'>
   <% for avatar in @avatars %>
 <!--    <li><%= link_to image_tag(avatar.image.thumb.url), avatar.image.url, :target => '_blank' %></li> -->
-    <li><%= link_to image_tag(avatar.image.medium.url, :alt => "Guid: #{avatar.guid}"), avatar_url(avatar.guid) %></li>
+    <li><%= link_to image_tag(avatar.image.medium.url, :alt => "Guid: #{avatar.guid}"), admin_user_avatar_url(@user, avatar.guid) %></li>
   <% end %>
 </ul>

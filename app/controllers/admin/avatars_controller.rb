@@ -11,4 +11,16 @@ class Admin::AvatarsController < ApplicationController
     @user = User.find(params[:user_id])
     @avatars = @user.avatar_instances.includes(:avatar).map(&:avatar)
   end
+  
+  def show
+    @user = User.find(params[:user_id])
+    @avatar = Avatar.find_by_guid!(params[:id])
+  end
+  
+  def destroy
+    @user = User.find(params[:user_id])
+    @avatar = Avatar.find_by_guid!(params[:id])
+    @avatar.destroy
+    redirect_to admin_user_avatars_url(@user)
+  end
 end
