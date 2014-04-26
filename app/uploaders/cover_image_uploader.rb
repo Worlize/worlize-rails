@@ -56,6 +56,7 @@ class ProfileImageUploader < CarrierWave::Uploader::Base
       '/cover-default-1.jpg'
     when 'thumb'
       '/thumb_cover-default-1.jpg'
+    end
   end
 
   # Process files as they are uploaded.
