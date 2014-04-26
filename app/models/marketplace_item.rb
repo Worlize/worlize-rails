@@ -9,6 +9,8 @@ class MarketplaceItem < ActiveRecord::Base
   
   acts_as_taggable_on :tags
   
+  attr_accessor :user_submission
+  
   before_destroy :delete_actual_item
   before_save :sync_name_to_item
   
@@ -46,7 +48,7 @@ class MarketplaceItem < ActiveRecord::Base
   
   validates :name,
               :presence => true,
-              :if => :on_sale?
+              :if => lambda { self.on_sale? || self.user_submission }
 
   validates :description,
               :length => {
@@ -72,7 +74,7 @@ class MarketplaceItem < ActiveRecord::Base
                 :only_integer => true,
                 :greater_than_or_equal_to => 0
               },
-              :if => :on_sale?
+              :if => lambda { self.on_sale? || self.user_submission }
   
   validates :on_sale,
               :exclusion => { :in => [true],

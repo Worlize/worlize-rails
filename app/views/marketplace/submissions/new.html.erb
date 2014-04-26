@@ -1,0 +1,64 @@
+<% title 'Submit Marketplace Item' %>
+
+<% content_for :extra_styles do %>
+.form-horizontal .help-inline {
+  display:block;
+  padding-left: 0px;
+}
+.signup-form p.help-block,
+.signup-form .error p.help-block {
+  color: #333;
+}
+
+<% end %>
+
+<div class="span6 offset3">
+  
+  <%= simple_form_for @item, :url => marketplace_submissions_path, :html => { :multipart => true, :class => 'form-horizontal' } do |f| %>
+    <h1>Upload
+      <% if params[:item_type] == 'InWorldObject' -%>
+        Object
+      <%- else -%>
+        <%= params[:item_type] %>
+      <%- end -%>
+    </h1>
+
+    <%= hidden_field_tag :item_type, @item.item_type %>
+
+    <% if @item.new_record? %>
+      <% if !@item.item.nil? %>
+        <% if @item.item.respond_to? 'image' %>
+          <%= simple_fields_for @item.item do |item_fields| %>
+            <%= item_fields.input :image, type: :file, required: true %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% elsif @item.item %>
+      <% if @item.item.respond_to? 'image' %>
+        <%= image_tag @item.item.image.medium.url %><br>
+      <% elsif @item.item.respond_to? 'icon' %>
+        <%= image_tag @item.item.icon.url %><br>
+      <% end %>
+    <% end %>
+
+    <%= f.input :name, required: true %>
+    
+    <%= f.input :currency_id,
+                collection: [ ['Bucks', 1], ['Coins', 2] ],
+                as: :radio_buttons,
+                required: true,
+                label: 'Currency Type' %>
+  
+    <%= f.input :price,
+                hint: 'Use 0 for free',
+                required: true %>
+                
+    <%= f.input :description, input_html: { rows: 4 } %>
+  
+    <div class="controls">
+      <%= f.button :submit, 'Submit', class: 'btn-primary' %>
+      <%= link_to 'Back to Item Type Selection', marketplace_submissions_path, class: 'btn' %>
+    </div>
+  <% end %>
+</div>
+

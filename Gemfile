@@ -10,10 +10,13 @@ gem 'yajl-ruby', :require => 'yajl'
 gem 'carrierwave', '~> 0.5.7'
 gem 'mini_magick', '~> 3.6'
 gem 'pHash', '~> 1.1.4', :require => 'phash/image'
-gem 'fog', '~> 1.5.0'
+gem 'fog', '~> 1.19.0'
+gem 'unf', '~> 0.1.3'
 gem 'gibbon', '~> 0.3.5'
 gem 'nokogiri', '~> 1.5.5'
 gem 'httparty', '~> 0.8.3'
+
+gem 'quiet_assets', :group => 'development'
 
 # TODO: Are we using this?
 gem 'activemerchant', '~> 1.28.0'

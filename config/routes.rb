@@ -61,6 +61,9 @@ Worlize::Application.routes.draw do
   match "/marketplace" => 'marketplace/categories#index'
   match "/marketplace/search" => 'marketplace/items#search'
   namespace "marketplace" do
+    if Worlize.config['marketplace_submissions_enabled']
+      resources :submissions, :only => [:new, :create, :index]
+    end
     resources :themes, :only => :show
     resources :categories do
       resources :items, :only => :index

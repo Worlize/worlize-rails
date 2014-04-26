@@ -1,0 +1,2 @@
+module Marketplace::SubmissionsHelper
+end

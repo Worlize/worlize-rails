@@ -7,7 +7,7 @@ class InWorldObject < ActiveRecord::Base
   before_create :assign_guid
   before_create :log_creation
   after_destroy :log_destruction
-  has_one :image_fingerprint, :as => :fingerprintable
+  has_one :image_fingerprint, :as => :fingerprintable, :dependent => :destroy
 
   mount_uploader :image, InWorldObjectUploader
   

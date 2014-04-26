@@ -33,6 +33,8 @@ class User < ActiveRecord::Base
   
   has_many :marketplace_item_giveaway_receipts, :dependent => :destroy
   
+  has_one :marketplace_creator, :dependent => :nullify
+  
   has_many :sharing_links, :dependent => :destroy
   
   belongs_to :inviter, :class_name => 'User'
