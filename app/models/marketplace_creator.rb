@@ -1,6 +1,7 @@
 class MarketplaceCreator < ActiveRecord::Base
   
-  belongs_to :user has_many :marketplace_items
+  belongs_to :user
+  has_many :marketplace_items
 
   validates :display_name, :presence => true, :uniqueness => true
   validates :first_name,   :presence => true, :if => lambda { !self.user_id.nil? }
