@@ -11,6 +11,14 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
+# Fixes fog cname s3 certificate issue
+# Excon::Errors::SocketError (hostname does not match the server certificate (OpenSSL::SSL::SSLError)):
+#   app/controllers/locker/avatars_controller.rb:65:in `create'
+#   config/initializers/flash_json_content_type_middleware.rb:13:in `call'
+#   config/initializers/flash_session_cookie_middleware.rb:16:in `call'
+Fog.credentials = { path_style: true }
+
+
 module Worlize
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
