@@ -90,9 +90,17 @@ class AvatarUploader < CarrierWave::Uploader::Base
     image.collapse!
     image.format('tiff', 0)
     image.write(tmp_file_path)
-    image_fingerprint = (model.image_fingerprint ||= ImageFingerprint.new)
-    image_fingerprint.dct_fingerprint = Phash.image_hash(tmp_file_path).data
-    Rails.logger.info("Fingerprint for #{current_path} is #{image_fingerprint.dct_fingerprint}")
+    dct_fingerprint = Phash.image_hash(tmp_file_path).data
+
+    if model.image_fingerprint
+      model.image_fingerprint.update_attribute(:dct_fingerprint, dct_fingerprint)
+    else
+      image_fingerprint = ImageFingerprint.new
+      image_fingerprint.dct_fingerprint = dct_fingerprint
+      model.image_fingerprint = image_fingerprint      
+    end
+    
+    Rails.logger.info("Fingerprint for #{current_path} is #{dct_fingerprint}")
     image.destroy!
     File.unlink(tmp_file_path) if File.exists?(tmp_file_path)
   end
