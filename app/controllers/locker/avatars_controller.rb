@@ -78,7 +78,7 @@ class Locker::AvatarsController < ApplicationController
     else
       render :json => {
         :success => false,
-        :description => "Avatar is invalid.",
+        :description => "Avatar rejected: #{@avatar.errors.full_messages.join(', ')}",
         :errors => @avatar.errors
       }
     end

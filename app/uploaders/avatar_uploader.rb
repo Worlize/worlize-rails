@@ -103,6 +103,10 @@ class AvatarUploader < CarrierWave::Uploader::Base
     Rails.logger.info("Fingerprint for #{current_path} is #{dct_fingerprint}")
     image.destroy!
     File.unlink(tmp_file_path) if File.exists?(tmp_file_path)
+
+    if (BannedImageFingerprint.where(:dct_fingerprint => dct_fingerprint).any?)
+      raise CarrierWave::ProcessingError.new('has been banned')
+    end
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded

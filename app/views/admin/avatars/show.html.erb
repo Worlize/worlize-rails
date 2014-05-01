@@ -10,6 +10,11 @@
   <li>Animated GIF:  <%= @avatar.animated_gif ? 'Yes' : 'No' %></li>
   <li>Created At: <%= @avatar.created_at.in_time_zone(Time.zone).to_s(:long) %> <%= Time.zone %></li>
   <li>Copies: <%= @avatar.avatar_instances.count %></li>
+  <% if @avatar.image_fingerprint %>
+    <li>PHash Fingerprint: <%= @avatar.image_fingerprint.dct_fingerprint %>.</li>
+  <% else %>
+    <li>(No fingerprint available for this image).</li>
+  <% end %>
 </ul>
 
 <ul>
@@ -32,5 +37,13 @@
 </ul>
 
 <br>
+
+<% if @avatar.image_fingerprint %>
+  <%= button_to 'Ban Image by Fingerprint', admin_user_avatar_ban_fingerprint_path(@user, @avatar.guid), :confirm => 'Are you sure you want to ban this image from being uploaded again?' %>
+  <br><br>
+<% else %>
+  <button disabled="disabled" style="opacity: 0.3; cursor: default;">Ban Image by Fingerprint</button><br>
+  (Cannot ban image fingerprint, because this avatar was uploaded before we started calculating fingerprints for uploaded images.)<br><br>
+<% end %>
 
 <%= button_to "Delete All Copies", admin_user_avatar_path(@user, @avatar.guid), :method => :delete, :confirm => "Are you sure you want to delete all #{@avatar.avatar_instances.count} copies of this Avatar?" %>

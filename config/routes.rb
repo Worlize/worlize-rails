@@ -214,7 +214,9 @@ Worlize::Application.routes.draw do
       end
       resource :permissions do
       end
-      resources :avatars
+      resources :avatars do
+        post 'ban_fingerprint'
+      end
     end
     
     resources :user_restrictions
