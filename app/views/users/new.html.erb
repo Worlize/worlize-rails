@@ -51,10 +51,10 @@
   <p class="lead">Just a few more things before we can get started.</p>
   
   <%= f.input :username, :required => true,
-                         :hint => "This is the name <b>people will see</b> inside Worlize.",
+                         :hint => raw("This is the name <b>people will see</b> inside Worlize."),
                          :label => "Screen Name" %>
   <%= f.input :login_name, :required => true,
-                           :hint => "This is the name you will use to <b>log in to your account</b>.",
+                           :hint => raw("This is the name you will use to <b>log in to your account</b>."),
                            :label => "Login Name" %>
   <%= f.input :email, :required => true %>
   
@@ -68,7 +68,7 @@
                            :start_year => Time.now.year - 13,
                            :end_year => Time.now.year - 110,
                            :order => [:month, :day, :year],
-                           :hint => "You must be at least 13 years old to use Worlize.",
+                           :hint => raw("You must be at least 13 years old to use Worlize."),
                            :prompt => true,
                            :required => true %>
   <% end %>

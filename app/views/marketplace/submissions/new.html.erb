@@ -50,7 +50,7 @@
                 label: 'Currency Type' %>
   
     <%= f.input :price,
-                hint: 'Use 0 for free',
+                hint: raw('Use 0 for free'),
                 required: true %>
                 
     <%= f.input :description, input_html: { rows: 4 } %>

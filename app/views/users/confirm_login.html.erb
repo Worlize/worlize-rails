@@ -33,10 +33,10 @@
     <br>
     <%= simple_form_for @user, :url => confirm_login_name_path, :html => { :class => 'form-horizontal confirm-login-form' } do |f| %>
       <%= f.input :login_name, :required => true,
-                               :hint => "This is the name you will use to <b>log in to your account</b>.",
+                               :hint => raw("This is the name you will use to <b>log in to your account</b>."),
                                :label => "Login Name" %>
       <%= f.input :username, :required => true,
-                             :hint => "This is the name <b>people will see</b> inside Worlize.",
+                             :hint => raw("This is the name <b>people will see</b> inside Worlize."),
                              :label => "Screen Name" %>
       <div class="controls">
         <%= f.submit "Continue", :class => 'btn btn-primary btn-large', :id => 'confirm-login-submit-button' %>
