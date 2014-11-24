@@ -36,6 +36,7 @@ class Room < ActiveRecord::Base
       :moderators_only => moderators_only?,
       :no_direct_entry => no_direct_entry?,
       :full => full?,
+      :locked => locked?,
       :allow_cascade_when_full => allow_cascade_when_full?,
       :thumbnail => background_instance ? background_instance.background.image.thumb.url : nil
     }
@@ -55,6 +56,7 @@ class Room < ActiveRecord::Base
       :moderators_only => moderators_only?,
       :no_direct_entry => no_direct_entry?,
       :full => full?,
+      :locked => locked?,
       :allow_cascade_when_full => allow_cascade_when_full?,
       :thumbnail => background_instance ? background_instance.background.image.thumb.url : nil,
       :world_guid => world.guid,

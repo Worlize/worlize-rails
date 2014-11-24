@@ -134,7 +134,11 @@
           attributes.name = "FlashClient";
           attributes.align = "middle";
           swfobject.embedSWF(
+            <% if Rails.env.development? %>
+              "/flash/FlashClient.swf", "flashContent",
+            <% else %>
               "<%= asset_path 'FlashClient.swf' %>", "flashContent", 
+            <% end %>
               "100%", "100%", 
               swfVersionStr, xiSwfUrlStr, 
               flashvars, params, attributes);
