@@ -1097,7 +1097,7 @@ class User < ActiveRecord::Base
   end
   
   def signups_disabled
-    return unless Worlize.config['signups_disabled']
+    return unless Worlize.config['signups_disabled'] && self.new_record?
     self.errors.add(:base, 'New user signups are temporarily disabled. ' +
                            'We apologize for the inconvenience! ' +
                            'Please try again later.')
