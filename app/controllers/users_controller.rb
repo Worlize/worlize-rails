@@ -11,6 +11,10 @@ class UsersController < ApplicationController
     if current_user
       redirect_to dashboard_url and return
     end
+    
+    if Worlize.config['signups_disabled']
+      render :signups_disabled and return
+    end
 
     @user = User.new(:newsletter_optin => true)
     

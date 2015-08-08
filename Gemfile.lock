@@ -63,7 +63,7 @@ GEM
       railties (>= 3.1.0)
     faraday (0.8.8)
       multipart-post (~> 1.2.0)
-    ffi (1.9.3)
+    ffi (1.9.6)
     fog (1.22.0)
       fog-brightbox
       fog-core (~> 1.21, >= 1.21.1)
@@ -82,6 +82,7 @@ GEM
     fog-json (1.0.0)
       multi_json (~> 1.0)
     formatador (0.2.4)
+    get_process_mem (0.2.0)
     gibbon (0.3.5)
       httparty (> 0.6.0)
       httparty (> 0.6.0)
@@ -155,7 +156,7 @@ GEM
     omniauth-twitter (0.0.18)
       multi_json (~> 1.3)
       omniauth-oauth (~> 1.0)
-    pHash (1.1.4)
+    pHash (1.1.5)
       ffi (~> 1.0)
     polyglot (0.3.3)
     quiet_assets (1.0.2)
@@ -232,6 +233,9 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    unicorn-worker-killer (0.4.3)
+      get_process_mem (~> 0)
+      unicorn (~> 4)
     validate_as_email (1.0.3)
       activemodel (~> 3)
       mail (~> 2)
@@ -269,7 +273,7 @@ DEPENDENCIES
   omniauth (~> 1.1.0)
   omniauth-facebook (~> 1.4.1)
   omniauth-twitter (~> 0.0.12)
-  pHash (~> 1.1.4)
+  pHash (~> 1.1.5)
   quiet_assets
   rails (= 3.2.13)
   redis (~> 3.0.6)
@@ -282,6 +286,7 @@ DEPENDENCIES
   uglifier (~> 1.3.0)
   unf (~> 0.1.3)
   unicorn (~> 4.3.1)
+  unicorn-worker-killer
   validate_as_email (~> 1.0.3)
   validates_timeliness (~> 3.0.14)
   will_paginate (~> 3.0.2)

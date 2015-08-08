@@ -74,6 +74,8 @@ class User < ActiveRecord::Base
                   :app_slots,
                   :as => :admin
                   
+  validate :signups_disabled
+  
   validates :birthday, :timeliness => {
     :before => :thirteen_years_ago,
     :type => :date,
@@ -1092,6 +1094,13 @@ class User < ActiveRecord::Base
         Worlize::PubSub.publish("user:#{friend_guid}", message)
       end
     end
+  end
+  
+  def signups_disabled
+    return unless Worlize.config['signups_disabled']
+    self.errors.add(:base, 'New user signups are temporarily disabled. ' +
+                           'We apologize for the inconvenience! ' +
+                           'Please try again later.')
   end
   
   def username_cannot_have_been_changed_in_the_last_month

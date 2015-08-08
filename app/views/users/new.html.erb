@@ -1,6 +1,17 @@
 <% title 'Sign Up' %>
 
 <% content_for :extra_styles do %>
+.base-errors {
+  padding: 10px;
+  border: 1px solid #AA0;
+  background: #FFA;
+  margin: 0px;
+}
+
+.base-errors li {
+  list-style-type: none;
+}
+
 .signup-form {
   width: 550px;
   padding: 19px 29px 29px;
@@ -43,6 +54,14 @@
 <% end %>
 
 <%= simple_form_for @user, :html => { :class => 'form-horizontal signup-form' } do |f| %>
+  <%- if @user.errors.include?(:base) %>
+  <ul class="base-errors">
+    <% @user.errors.get(:base).each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+  <% end %>
+
   <% if @user.new_record? %>
   <h1>Almost there!</h1>
   <% else %>

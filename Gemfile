@@ -9,7 +9,7 @@ gem 'redis', '~> 3.0.6'
 gem 'yajl-ruby', :require => 'yajl'
 gem 'carrierwave', '~> 0.5.7'
 gem 'mini_magick', '~> 3.6'
-gem 'pHash', '~> 1.1.4', :require => 'phash/image'
+gem 'pHash', '~> 1.1.5', :require => 'phash/image'
 gem 'fog', '~> 1.22.0'
 gem 'unf', '~> 0.1.3'
 gem 'gibbon', '~> 0.3.5'
@@ -54,6 +54,7 @@ gem 'authlogic', '~> 3.1.2'
 
 # Use unicorn as the web server
 gem 'unicorn', '~> 4.3.1'
+gem 'unicorn-worker-killer'
 
 group :assets do
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
