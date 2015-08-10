@@ -41,6 +41,10 @@ Worlize::Application.routes.draw do
   match '/confirm_login_name' => 'users#confirm_login', :via => :get, :as => :confirm_login_name
   match '/confirm_login_name' => 'users#confirm_login_save', :via => :put
   
+  match '/email_unverified' => 'users#email_unverified', :via => :get, :as => :email_unverified
+  match '/email_verified' => 'users#email_verified', :via => :get, :as => :email_verified
+  match '/send_verification_email' => 'users#send_verification_email', :via => :post, :as => :send_verification_email
+  match '/verify_email/:id' => 'users#verify_email', :via => :get, :as => :verify_email
   
   resources :authentications do
     collection do

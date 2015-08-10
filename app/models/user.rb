@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   before_create :assign_guid
   before_create :initialize_default_slots
+  before_create :reset_perishable_token
   after_create :initialize_currency
   after_create :log_creation
   before_destroy :unlink_friendships
@@ -136,7 +137,7 @@ class User < ActiveRecord::Base
 
   state_machine :initial => :new_user do
     event :first_time_login do
-      transition :new_user => :user_ready
+      transition :new_user => :email_unverified
     end
     
     event :confirm_login_name do
@@ -144,12 +145,25 @@ class User < ActiveRecord::Base
       transition :username_invalid => :user_ready
     end
     
+    event :verify_email do
+      transition :email_unverified => :user_ready
+      transition :user_ready => :user_ready
+    end
+    
     before_transition :new_user => any do |user, transition|
-      # Let the user change their password once after signup
+      # Let the user change their username once after signup
       user.username_changed_at = nil
       
       # Update the password last changed date
       user.password_changed_at = Time.now unless user.crypted_password.nil?
+    end
+    
+    after_transition any => :email_unverified do |user, transition|
+      user.send_verification_email
+    end
+    
+    after_transition :email_unverified => any do |user, transition|
+      user.reset_perishable_token!
     end
   end
 
@@ -173,6 +187,10 @@ class User < ActiveRecord::Base
       :if => Proc.new { !self.skip_login_name_validation }
     }
     c.validate_password_field = false
+    
+    c.perishable_token_valid_for = 3.days
+    
+    c.disable_perishable_token_maintenance = true
 
     # We're now requiring email addresses to be unique.
     # c.validates_uniqueness_of_email_field_options = {
@@ -994,6 +1012,12 @@ class User < ActiveRecord::Base
         }
       )
     end
+  end
+  
+  def send_verification_email
+    return if self.state? :user_ready
+    reset_perishable_token!
+    Notifier.verification_email(self).deliver
   end
   
   private

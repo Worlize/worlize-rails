@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :require_user, :except => [:show, :new, :create, :validate_field, :birthday, :set_birthday]
+  before_filter :require_user, :except => [:show, :new, :create, :validate_field, :birthday, :set_birthday, :verify_email]
   before_filter(:only => :show) do |controller|
     require_user if controller.request.format.json?
   end
@@ -114,8 +114,12 @@ class UsersController < ApplicationController
       end
     end
     
+    captcha_verified = verify_recaptcha(
+      model: @user, message: 'You must use reCAPTCHA to verify that you are not a robot.')
+      
+    flash.delete(:recaptcha_error)
 
-    if !@user.save
+    if !captcha_verified || !@user.save
       if session[:omniauth]
         @provider = session[:omniauth]['provider']
         if session[:omniauth]['provider'] == 'facebook'
@@ -123,7 +127,7 @@ class UsersController < ApplicationController
         end
         @require_password = false
       else
-        @email_authofilled = false
+        @email_autofilled = false
         @require_password = true
       end
       render "users/new" and return
@@ -255,6 +259,32 @@ class UsersController < ApplicationController
     render :action => 'confirm_login' and return
   end
   
+  def verify_email
+    @user = User.find_using_perishable_token(params[:id])
+    if !@user.nil?
+      @user.verify_email!
+      redirect_to email_verified_url
+    end
+  end
+  
+  def email_unverified
+    redirect_to email_verified_url unless current_user.state?(:email_unverified)
+  end
+  
+  def email_verified
+    redirect_to email_unverified_url if current_user.state?(:email_unverified)
+    render :verify_email
+  end
+  
+  def send_verification_email
+    if !current_user.state?(:email_unverified)
+      render :verify_email and return
+    end
+    current_user.send_verification_email
+    flash[:notice] = "Verification email sent to #{current_user.email}"
+    redirect_to email_unverified_url
+  end
+  
   def search
     if params[:q].nil?
       render :json => {
@@ -355,5 +385,4 @@ class UsersController < ApplicationController
       end
     end
   end
-
 end

@@ -21,4 +21,11 @@ class Notifier < ActionMailer::Base
     mail :to => email,
          :subject => 'Worlize Password Reset'
   end
+  
+  def verification_email(user)
+    @user = user
+    @activation_link = verify_email_url(id: user.perishable_token)
+    mail :to => user.email,
+         :subject => 'Verify Your Email Address'
+  end
 end

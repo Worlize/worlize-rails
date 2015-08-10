@@ -1,0 +1,36 @@
+<% content_for :extra_styles do %>
+<% end %>
+
+<% if @user || (current_user && current_user.state?(:user_ready)) %>
+<div class="row">
+  <div class="span6 offset3">
+    <h1>You're all set!</h1>
+    <p class="lead">
+      Your email address has been verified. You may now enter!
+    </p>
+    <div class="controls text-center">
+      <%= link_to 'Enter Worlize', enter_world_path, :class => 'btn btn-large btn-primary' %>
+    </div>
+  </div>
+</div>
+<% else %>
+<div class="row">
+  <div class="span6 offset3">
+    <h1>Uh oh!</h1>
+    <p class="lead">
+      That email verification link is broken. It might have expired.
+    </p>
+    <% if current_user %>
+      <% unless current_user.state?(:user_ready) %>
+        <div class="controls text-center">
+          <%= button_to 'Send me another one!', send_verification_email_path, :method => :post, :class => 'btn btn-large btn-primary' %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="controls text-center">
+        <%= link_to 'Log in', login_path, :class => 'btn btn-large btn-primary' %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<% end %>

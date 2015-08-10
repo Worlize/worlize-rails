@@ -39,6 +39,7 @@
 .signup-form .error p.help-block {
   color: #333;
 }
+
 <% end %>
 
 <% content_for :page_script do %>
@@ -96,6 +97,14 @@
                              :inline_label => 'I agree to the <a href="/tos.html" class="fancybox" data-fancybox-type="iframe" target="_BLANK">Terms and Conditions</a>.'.html_safe %>
   <%= f.input :newsletter_optin, :label => false,
                                  :inline_label => "I'd like to receive occasional emails about Worlize updates." %>
+                                 
+  <div class="control-group required">
+    <label class="required control-label"></label>
+    <div class="controls">
+      <%= recaptcha_tags %>
+    </div>
+  </div>
+
   <div class="controls">
     <%= f.submit "Let's Go!", :class => 'btn btn-primary btn-large', :id => 'signup-submit-button' %>
     <%= link_to "Cancel", login_path, :class => 'btn btn-large' %>

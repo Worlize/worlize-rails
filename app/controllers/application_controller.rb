@@ -143,6 +143,14 @@ class ApplicationController < ActionController::Base
       return false unless require_birthday_set
     end
     
+    def check_email_verification
+      if current_user.state?(:email_unverified)
+        store_location
+        redirect_to email_unverified_path
+        return false
+      end
+    end
+    
     def require_login_name_confirmed
       if current_user.state?(:login_name_unconfirmed) || current_user.state?(:username_invalid)
         store_location

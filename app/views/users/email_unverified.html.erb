@@ -1,0 +1,26 @@
+<% content_for :extra_styles do %>
+<% end %>
+
+<div class="row">
+  <div class="span6 offset3">
+    <h1>One last thing...</h1>
+    <p class="lead">
+      We need to verify your email address before you can continue.
+    </p>
+    <p>
+      We sent an email to <strong><%= current_user.email %></strong>.<br>
+      Subject: <strong>Verify Your Email Address</strong>
+    </p>
+    <p>
+      <em>Open it and click the link inside to activate your account.</em>
+    </p>
+    <br>
+    <div class="controls text-center">
+      <p class="lead">
+        Didn't get the email? Click here:<br>
+        <%= button_to 'Send it again!', send_verification_email_path, :method => :post, :class => 'btn btn-large btn-primary' %>
+        (Make sure to check your spam folder!)
+      </p>
+    </div>
+  </div>
+</div>

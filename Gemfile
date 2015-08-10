@@ -34,6 +34,7 @@ gem 'acts_as_list', '~> 0.1.8'
 gem 'acts_as_tree', '~> 1.1.0'
 gem 'dynamic_form', '~> 1.1.4'
 gem 'simple_form', '~> 2.1.0'
+gem 'recaptcha', :require => 'recaptcha/rails'
 
 # Yay, jQuery!
 gem 'jquery-rails'
