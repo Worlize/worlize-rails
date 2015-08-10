@@ -1178,6 +1178,6 @@ class User < ActiveRecord::Base
   end
   
   def strip_username_whitespace
-    attributes['username'].strip!
+    attributes['username'].strip! unless attributes['username'].nil?
   end
 end

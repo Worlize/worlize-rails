@@ -25,8 +25,9 @@ class UsersController < ApplicationController
       if oa['provider'] == 'facebook'
         @user.first_name = oa['info']['first_name']
         @user.last_name = oa['info']['last_name']
-        @user.username = oa['info']['nickname']
-        @user.login_name = oa['info']['nickname']
+        nickname = oa['info']['nickname'] || "#{@user.first_name.downcase}_#{@user.last_name.downcase}"
+        @user.username = nickname
+        @user.login_name = nickname
         @user.email = oa['info']['email']
         @email_autofilled = true
       elsif oa['provider'] == 'twitter'
