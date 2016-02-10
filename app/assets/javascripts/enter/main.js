@@ -65,14 +65,7 @@ function launchCenteredPopup(url, width, height) {
 }
 
 function logout() {
-    if (window.fbLoggedIn) {
-        FB.logout(function(response) {
-            top.location.href = "/logout";
-        });
-    }
-    else {
-        top.location.href = "/logout";
-    }
+    top.location.href = "/logout";
 }
 
 var marketplaceShowing = false;
@@ -530,16 +523,15 @@ function hideShim() {
             })
         });
     }
-
+    
+    window._gaqPush = function(data) {
+      _gaq.push(data);
+    };
+    window._trackEvent = function() {
+      var values = Array.prototype.slice.call(arguments);
+      values.unshift('_trackEvent');
+      _gaq.push(values);
+    };
+    
+    
 })();
-
-
-
-
-
-
-
-
-
-
-
