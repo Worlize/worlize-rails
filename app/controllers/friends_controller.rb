@@ -43,101 +43,101 @@ class FriendsController < ApplicationController
     end
     
     # Load Facebook Friends
-    if user == current_user
-      if (params[:access_token] && !user.facebook_authentication.nil? &&
-          user.facebook_authentication.uid == params[:facebook_user_id])
-        # Loads all facebook friends, both on worlize and otherwise
-        fb_friends = load_facebook_friends(params[:access_token])
+#     if user == current_user
+#       if (params[:access_token] && !user.facebook_authentication.nil? &&
+#           user.facebook_authentication.uid == params[:facebook_user_id])
+#         # Loads all facebook friends, both on worlize and otherwise
+#         fb_friends = load_facebook_friends(params[:access_token])
 
-        # Grab list of friend guids that we aren't supposed to automatically
-        # sync in from Facebook.
-        nosync_friend_guids = current_user.nosync_friend_guids
+#         # Grab list of friend guids that we aren't supposed to automatically
+#         # sync in from Facebook.
+#         nosync_friend_guids = current_user.nosync_friend_guids
         
-        # Filter to friends that are on Worlize
-        on_worlize = fb_friends.select { |f| f.has_key?('worlize_user') }
+#         # Filter to friends that are on Worlize
+#         on_worlize = fb_friends.select { |f| f.has_key?('worlize_user') }
 
-        on_worlize.each do |fb_data|
-          friend = fb_data['worlize_user']
+#         on_worlize.each do |fb_data|
+#           friend = fb_data['worlize_user']
           
-          fb_cached_data_changed = false
+#           fb_cached_data_changed = false
           
-          # Update cached Facebook data in the database
-          friend.facebook_authentication.profile_picture = fb_data['picture']
-          friend.facebook_authentication.display_name = fb_data['name']
-          friend.facebook_authentication.profile_url = fb_data['link']
+#           # Update cached Facebook data in the database
+#           friend.facebook_authentication.profile_picture = fb_data['picture']
+#           friend.facebook_authentication.display_name = fb_data['name']
+#           friend.facebook_authentication.profile_url = fb_data['link']
           
-          if friend.facebook_authentication.changed?
-            friend.facebook_authentication.save(:validate => false)
-            fb_cached_data_changed = true
-          end
+#           if friend.facebook_authentication.changed?
+#             friend.facebook_authentication.save(:validate => false)
+#             fb_cached_data_changed = true
+#           end
           
           
-          # Existing friend.  Proceed to fill in Facebook info
-          if friends_by_guid.has_key? friend.guid
-            Rails.logger.debug("Existing friend: #{friend.username}")
-            friend_data = friends_by_guid[friend.guid]
-            if fb_cached_data_changed
-              # Merge updated facebook data into existing hash
-              friend_data.merge! friend.hash_for_friends_list
-            end
-          else
+#           # Existing friend.  Proceed to fill in Facebook info
+#           if friends_by_guid.has_key? friend.guid
+#             Rails.logger.debug("Existing friend: #{friend.username}")
+#             friend_data = friends_by_guid[friend.guid]
+#             if fb_cached_data_changed
+#               # Merge updated facebook data into existing hash
+#               friend_data.merge! friend.hash_for_friends_list
+#             end
+#           else
             
-            # User isn't already friends with this user, befriend them.
-            # If the user explicitly removed this friend previously, don't
-            # auto-add them again.  Also, If the other user explicitly
-            # removed the current user, don't auto-add them.
-            if nosync_friend_guids.include?(friend.guid) || friend.nosync_friend?(current_user)
-              Rails.logger.debug("Skipping #{friend.username} due to nosync")
-              next
-            end
+#             # User isn't already friends with this user, befriend them.
+#             # If the user explicitly removed this friend previously, don't
+#             # auto-add them again.  Also, If the other user explicitly
+#             # removed the current user, don't auto-add them.
+#             if nosync_friend_guids.include?(friend.guid) || friend.nosync_friend?(current_user)
+#               Rails.logger.debug("Skipping #{friend.username} due to nosync")
+#               next
+#             end
 
-            # add facebook friend without sending a live notification
-            # If there's a problem adding them, just skip and move on.
-            next unless current_user.befriend(friend,
-                                              :facebook_friend => true,
-                                              :send_notification => false)
+#             # add facebook friend without sending a live notification
+#             # If there's a problem adding them, just skip and move on.
+#             next unless current_user.befriend(friend,
+#                                               :facebook_friend => true,
+#                                               :send_notification => false)
 
-            friend_data = friends_by_guid[friend.guid] = friend.hash_for_friends_list
-            autosynced_friend_guids.push(friend.guid)
-            friends.push(friend_data)
+#             friend_data = friends_by_guid[friend.guid] = friend.hash_for_friends_list
+#             autosynced_friend_guids.push(friend.guid)
+#             friends.push(friend_data)
             
-            # Send notification to new user of the friendship so that the
-            # current user will show up in their friends list right away
-            fb_profile = my_facebook_profile(params[:access_token])
-            my_friend_data = current_user.hash_for_friends_list
-            my_friend_data[:friend_type] = 'facebook'
-            my_friend_data[:auto_synced] = true
-            friend.send_message({
-              :msg => 'friend_request_accepted',
-              :data => {
-                :user => my_friend_data
-              }
-            })
+#             # Send notification to new user of the friendship so that the
+#             # current user will show up in their friends list right away
+#             fb_profile = my_facebook_profile(params[:access_token])
+#             my_friend_data = current_user.hash_for_friends_list
+#             my_friend_data[:friend_type] = 'facebook'
+#             my_friend_data[:auto_synced] = true
+#             friend.send_message({
+#               :msg => 'friend_request_accepted',
+#               :data => {
+#                 :user => my_friend_data
+#               }
+#             })
             
-            Rails.logger.debug("Added facebook friend #{friend.username}")
-          end
+#             Rails.logger.debug("Added facebook friend #{friend.username}")
+#           end
           
-          # Fill in friend data with extra information from Facebook.
-          friend_data[:friend_type] = 'facebook'
-          friend_data[:auto_synced] = autosynced_friend_guids.include?(friend.guid)
-        end
+#           # Fill in friend data with extra information from Facebook.
+#           friend_data[:friend_type] = 'facebook'
+#           friend_data[:auto_synced] = autosynced_friend_guids.include?(friend.guid)
+#         end
         
-        # Remove any automatically added friends that are no longer facebook
-        # friends.
-        new_list_of_facebook_friend_guids = on_worlize.map { |f| f['worlize_user'].guid }
-        current_user.facebook_friend_guids.each do |guid|
-          if !new_list_of_facebook_friend_guids.include?(guid)
-            current_user.unfriend(guid, :prevent_add_on_next_sync => false)
-          end
-        end
+#         # Remove any automatically added friends that are no longer facebook
+#         # friends.
+#         new_list_of_facebook_friend_guids = on_worlize.map { |f| f['worlize_user'].guid }
+#         current_user.facebook_friend_guids.each do |guid|
+#           if !new_list_of_facebook_friend_guids.include?(guid)
+#             current_user.unfriend(guid, :prevent_add_on_next_sync => false)
+#           end
+#         end
         
-        # Grab list of online Facebook friends to suggest that the user invite
-        online_facebook_friends = fb_friends.select do |f|
-          !f.has_key?('worlize_user') && f['fb_online_presence'] == 'active'
-        end
-        output[:data][:online_facebook_friends] = online_facebook_friends
-      end
-    end
+#         # Grab list of online Facebook friends to suggest that the user invite
+#         online_facebook_friends = fb_friends.select do |f|
+#           !f.has_key?('worlize_user') && f['fb_online_presence'] == 'active'
+#         end
+#         output[:data][:online_facebook_friends] = online_facebook_friends
+#       end
+#     end
     
     if user == current_user
       output[:data][:pending_friends] = user.pending_friends.map do |friend|
