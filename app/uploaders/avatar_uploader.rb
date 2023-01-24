@@ -23,7 +23,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
   end
 
   process :set_content_type
-  process :calculate_image_phash
+  #process :calculate_image_phash
   
   version :icon do
     process :efficient_build_icon
@@ -79,37 +79,37 @@ class AvatarUploader < CarrierWave::Uploader::Base
     Rails.logger.warn("Unable to get version image dimensions for avatar " + model.guid)
   end
   
-  def calculate_image_phash
-    Rails.logger.info("Calculating hash for avatar #{current_path}")
-    # Copy file to temp location
-    path_parts = File.split(current_path)
-    path_parts[1] = "dcthash-#{path_parts[1]}.tiff"
-    tmp_file_path = File.join(path_parts)
-    `cp #{current_path} #{tmp_file_path}`
-    image = MiniMagick::Image.open(current_path)
-    image.collapse!
-    image.format('tiff', 0)
-    image.write(tmp_file_path)
-    dct_fingerprint = Phash.image_hash(tmp_file_path).data
-
-    if dct_fingerprint != 0
-      if model.image_fingerprint
-        model.image_fingerprint.update_attribute(:dct_fingerprint, dct_fingerprint)
-      else
-        image_fingerprint = ImageFingerprint.new
-        image_fingerprint.dct_fingerprint = dct_fingerprint
-        model.image_fingerprint = image_fingerprint      
-      end
-    end
-    
-    Rails.logger.info("Fingerprint for #{current_path} is #{dct_fingerprint}")
-    image.destroy!
-    File.unlink(tmp_file_path) if File.exists?(tmp_file_path)
-
-    if (BannedImageFingerprint.where(:dct_fingerprint => dct_fingerprint).any?)
-      raise CarrierWave::ProcessingError.new('has been banned')
-    end
-  end
+#  def calculate_image_phash
+#    Rails.logger.info("Calculating hash for avatar #{current_path}")
+#    # Copy file to temp location
+#    path_parts = File.split(current_path)
+#    path_parts[1] = "dcthash-#{path_parts[1]}.tiff"
+#    tmp_file_path = File.join(path_parts)
+#    `cp #{current_path} #{tmp_file_path}`
+#    image = MiniMagick::Image.open(current_path)
+#    image.collapse!
+#    image.format('tiff', 0)
+#    image.write(tmp_file_path)
+#    dct_fingerprint = Phash.image_hash(tmp_file_path).data
+#
+#    if dct_fingerprint != 0
+#      if model.image_fingerprint
+#        model.image_fingerprint.update_attribute(:dct_fingerprint, dct_fingerprint)
+#      else
+#        image_fingerprint = ImageFingerprint.new
+#        image_fingerprint.dct_fingerprint = dct_fingerprint
+#        model.image_fingerprint = image_fingerprint      
+#      end
+#    end
+#    
+#    Rails.logger.info("Fingerprint for #{current_path} is #{dct_fingerprint}")
+#    image.destroy!
+#    File.unlink(tmp_file_path) if File.exists?(tmp_file_path)
+#
+#    if (BannedImageFingerprint.where(:dct_fingerprint => dct_fingerprint).any?)
+#      raise CarrierWave::ProcessingError.new('has been banned')
+#    end
+#  end
 
   # Provide a default URL as a default if there hasn't been a file uploaded
   #     def default_url

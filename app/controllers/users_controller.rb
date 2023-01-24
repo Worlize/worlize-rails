@@ -115,25 +115,6 @@ class UsersController < ApplicationController
       end
     end
     
-    captcha_verified = verify_recaptcha(
-      model: @user, message: 'You must use reCAPTCHA to verify that you are not a robot.')
-      
-    flash.delete(:recaptcha_error)
-
-    if !captcha_verified || !@user.save
-      if session[:omniauth]
-        @provider = session[:omniauth]['provider']
-        if session[:omniauth]['provider'] == 'facebook'
-          @email_autofilled = true
-        end
-        @require_password = false
-      else
-        @email_autofilled = false
-        @require_password = true
-      end
-      render "users/new" and return
-    end
-    
     @user.first_time_login
     @user.create_world
 

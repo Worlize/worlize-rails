@@ -10,11 +10,6 @@
   <li>Animated GIF:  <%= @avatar.animated_gif ? 'Yes' : 'No' %></li>
   <li>Created At: <%= @avatar.created_at.in_time_zone(Time.zone).to_s(:long) %> <%= Time.zone %></li>
   <li>Copies: <%= @avatar.avatar_instances.count %></li>
-  <% if @avatar.image_fingerprint %>
-    <li>PHash Fingerprint: <%= @avatar.image_fingerprint.dct_fingerprint %>.</li>
-  <% else %>
-    <li>(No fingerprint available for this image).</li>
-  <% end %>
 </ul>
 
 <ul>

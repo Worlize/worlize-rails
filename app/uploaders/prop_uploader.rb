@@ -23,7 +23,6 @@ class PropUploader < CarrierWave::Uploader::Base
   end
 
   process :set_content_type
-  process :calculate_image_phash
   
   version :medium do
     process :resize_to_limit => [200, 200]
@@ -58,26 +57,6 @@ class PropUploader < CarrierWave::Uploader::Base
   rescue
     Rails.logger.warn("Unable to get version image dimensions for avatar " + model.guid)
   end
-  
-  def calculate_image_phash
-    Rails.logger.info("Calculating hash for prop #{current_path}")
-    # Copy file to temp location
-    path_parts = File.split(current_path)
-    path_parts[1] = "dcthash-#{path_parts[1]}.tiff"
-    tmp_file_path = File.join(path_parts)
-    `cp #{current_path} #{tmp_file_path}`
-    image = MiniMagick::Image.open(current_path)
-    image.collapse!
-    image.format('tiff', 0)
-    image.write(tmp_file_path)
-    image_fingerprint = (model.image_fingerprint ||= ImageFingerprint.new)
-    image_fingerprint.dct_fingerprint = Phash.image_hash(tmp_file_path).data
-    Rails.logger.info("Fingerprint for #{current_path} is #{image_fingerprint.dct_fingerprint}")
-    image.destroy!
-    File.unlink(tmp_file_path) if File.exists?(tmp_file_path)
-  end
-
-
   
   # version :medium do
   #   process :resize_to_limit => [200, 200]

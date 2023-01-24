@@ -1,25 +1,25 @@
 source 'https://rubygems.org'
 
 gem 'newrelic_rpm'
-gem 'rails', '3.2.13'
-gem 'mysql2', '~> 0.3.11'
+gem 'rails', '~> 3.2'
+#gem 'mysql2', '~> 0.3.11'
+gem 'mysql2', git: 'https://github.com/makandra/mysql2', branch: '0.3.x-lts'
 gem 'guid', '~> 0.1.1'
 gem 'hiredis', '~> 0.4.5'
 gem 'redis', '~> 3.0.6'
 gem 'yajl-ruby', :require => 'yajl'
 gem 'carrierwave', '~> 0.5.7'
 gem 'mini_magick', '~> 3.6'
-gem 'pHash', '~> 1.1.5', :require => 'phash/image'
 gem 'fog', '~> 1.22.0'
 gem 'unf', '~> 0.1.3'
 gem 'gibbon', '~> 0.3.5'
-gem 'nokogiri', '~> 1.5.5'
+#gem 'nokogiri', '~> 1.5.5'
 gem 'httparty', '~> 0.8.3'
+gem 'net-ssh'
+gem 'xmlrpc'
+gem 'bigdecimal', '1.3.5'
 
 gem 'quiet_assets', :group => 'development'
-
-# TODO: Are we using this?
-gem 'activemerchant', '~> 1.28.0'
 
 # Facebook Graph API support
 gem "koala", "~> 1.5.0"
